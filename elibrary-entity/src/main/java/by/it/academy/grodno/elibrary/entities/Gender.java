@@ -22,7 +22,7 @@ public enum Gender {
     }
 
     public static Gender getGender(Character abbreviation) {
-        return genderMap.get(abbreviation);
+        return genderMap.getOrDefault(abbreviation, Gender.UNKNOWN);
     }
 
     public Character getAbbreviation() {

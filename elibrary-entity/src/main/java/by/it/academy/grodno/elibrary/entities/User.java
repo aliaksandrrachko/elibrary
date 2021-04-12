@@ -23,7 +23,7 @@ import java.util.Set;
 @SuperBuilder
 @Table(name = ("user"))
 @SecondaryTables(value = {
-        @SecondaryTable(name = "users_story", pkJoinColumns = {@PrimaryKeyJoinColumn(name = "user_id")}),
+        @SecondaryTable(name = "user_story", pkJoinColumns = {@PrimaryKeyJoinColumn(name = "user_id")}),
         @SecondaryTable(name = "user_social_id", pkJoinColumns = {@PrimaryKeyJoinColumn(name = "user_id")})})
 public class User extends AEntity<Long> implements UserDetails, Serializable {
 
@@ -69,16 +69,16 @@ public class User extends AEntity<Long> implements UserDetails, Serializable {
     @Column(name = "social_id", table = "user_social_id")
     private Long socialId;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JoinTable(name = "user_has_role",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles;
 
-    @Column(name = "created", table = "users_story")
+    @Column(name = "user_created", table = "user_story")
     private LocalDateTime created;
 
-    @Column(name = "updated", table = "users_story")
+    @Column(name = "user_updated", table = "user_story")
     private LocalDateTime updated;
 
     @Override

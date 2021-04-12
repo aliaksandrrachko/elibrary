@@ -14,7 +14,6 @@ public class PhoneNumber implements Serializable {
 
     public static final String COUNTRY_CODE = "+375";
 
-
     private String phoneCode;
     private String number;
 }

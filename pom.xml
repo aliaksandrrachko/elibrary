@@ -20,6 +20,8 @@
         <module>elibrary-main</module>
         <module>elibrary-entity</module>
         <module>elibrary-service</module>
+        <module>elibrary-dao</module>
+        <module>elibrary-api</module>
     </modules>
 
     <properties>
