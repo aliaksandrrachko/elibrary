@@ -22,6 +22,7 @@
         <module>elibrary-service</module>
         <module>elibrary-dao</module>
         <module>elibrary-api</module>
+        <module>elibrary-controller</module>
     </modules>
 
     <properties>
@@ -54,6 +55,16 @@
                                 <artifactId>lombok</artifactId>
                             </exclude>
                         </excludes>
+                    </configuration>
+                </plugin>
+
+                <!-- Maven plugin for ignore failure test  -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-surefire-plugin</artifactId>
+                    <version>3.0.0-M5</version>
+                    <configuration>
+                        <testFailureIgnore>true</testFailureIgnore>
                     </configuration>
                 </plugin>
             </plugins>

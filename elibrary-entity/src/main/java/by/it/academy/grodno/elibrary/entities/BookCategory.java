@@ -21,8 +21,6 @@ public class BookCategory extends AEntity<Integer> implements Serializable {
     private String categoryName;
 
     @OneToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "section",
-            joinColumns = @JoinColumn(name = "id"),
-            inverseJoinColumns = @JoinColumn(name = "category_id"))
+    @JoinColumn(name = "category_id")
     private Set<BookCategorySection> sections;
 }

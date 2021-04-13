@@ -8,9 +8,9 @@
         <groupId>by.it.academy.grodno.elibrary</groupId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
-    <artifactId>elibrary-service</artifactId>
-    <name>elibrary-service</name>
-    <description>The service.</description>
+    <artifactId>elibrary-controller</artifactId>
+    <name>elibrary-controller</name>
+    <description>The Controller module.</description>
     <packaging>jar</packaging>
 
     <dependencies>
@@ -22,8 +22,14 @@
 
         <dependency>
             <groupId>by.it.academy.grodno.elibrary</groupId>
-            <artifactId>elibrary-dao</artifactId>
+            <artifactId>elibrary-service</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
     </dependencies>
+
 </project>

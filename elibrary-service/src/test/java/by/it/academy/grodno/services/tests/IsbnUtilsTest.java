@@ -1,6 +1,6 @@
 package by.it.academy.grodno.services.tests;
 
-import by.it.academy.grodno.elibrary.services.utils.IsbnUtils;
+import by.it.academy.grodno.elibrary.service.utils.IsbnUtils;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 

@@ -17,4 +17,5 @@ import java.io.Serializable;
 @Table(name = ("address"))
 public class Address extends AEntity<Long> implements Serializable {
 
+    private String district;
 }

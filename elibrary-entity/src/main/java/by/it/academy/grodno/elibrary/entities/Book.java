@@ -24,6 +24,7 @@ public class Book extends AEntity<Long>{
     @Column(name = "isbn_13", length = 13)
     private String isbn13;
 
-    @OneToOne(optional = false)
+    @OneToOne
+    @JoinColumn(name = "section_id", referencedColumnName = "id")
     private BookCategorySection section;
 }

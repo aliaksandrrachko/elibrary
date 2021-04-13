@@ -15,6 +15,7 @@ CREATE TABLE IF NOT EXISTS user
     username     VARCHAR(45)     NOT NULL COMMENT 'User name',
     first_name   VARCHAR(45) COMMENT 'First name',
     last_name    VARCHAR(45) COMMENT 'Last name',
+    middle_name  VARCHAR(45) COMMENT 'Middle name',
     phone_number JSON COMMENT 'User phone number',
     address_id   BIGINT UNSIGNED COMMENT 'Id of address',
     gender       CHAR(1)         NOT NULL DEFAULT 'u' COMMENT 'Gender: m-male, f-female, u-unknown',
@@ -339,14 +340,20 @@ VALUES (1, 'ROLE_USER'),
        (6, 'ROLE_LIBRARIAN');
 
 # Fake users
-INSERT INTO user (username, email, password)
-VALUES ('Administrator_1', 'archive_administration@mail.ru',
-        '$2a$10$qgMgWz48ATUc8vxwpfoeu.Jh6HEihthp7RyZuZGlpDKonEFV1kas.'), /*Qwerty123*/
-       ('User1', 'User1@mail.ru', '$2a$10$Z1/.F4bRuyOGyL7NQrmjhufHf8XrHIEjPfBz9tlPbPcWrLpvPWKfq'), /*12345*/
-       ('User2', 'User2@mail.ru', '$2a$10$Z1/.F4bRuyOGyL7NQrmjhufHf8XrHIEjPfBz9tlPbPcWrLpvPWKfq'),
-       ('User3', 'User3@mail.ru', '$2a$10$Z1/.F4bRuyOGyL7NQrmjhufHf8XrHIEjPfBz9tlPbPcWrLpvPWKfq'),
-       ('User4', 'User4@mail.ru', '$2a$10$Z1/.F4bRuyOGyL7NQrmjhufHf8XrHIEjPfBz9tlPbPcWrLpvPWKfq'),
-       ('User5', 'User5@mail.ru', '$2a$10$Z1/.F4bRuyOGyL7NQrmjhufHf8XrHIEjPfBz9tlPbPcWrLpvPWKfq');
+INSERT INTO user (email, username, first_name, last_name, middle_name, phone_number, gender, birthday, password)
+VALUES ('admin@mail.ru', 'Admin', 'Dima', 'Petrov', 'Petrovich', '{"code":"29", "number":"2965416"}', 'm', '1995-04-05', '$2a$10$Z1/.F4bRuyOGyL7NQrmjhufHf8XrHIEjPfBz9tlPbPcWrLpvPWKfq'); /*12345*/
+
+INSERT INTO user (email, username, first_name, last_name, middle_name, phone_number, gender, birthday, password)
+VALUES ('eget.odio@Donec.ca','Armand Parrish','Cleo','Macias','Gretchen','{"code":"67", "number":"6908407"}','m','2021-03-01','$2a$10$Z1/.F4bRuyOGyL7NQrmjhufHf8XrHIEjPfBz9tlPbPcWrLpvPWKfq'),
+       ('ligula.eu@litoratorquent.net','Azalia Rosario','Raven','Barry','Jordan','{"code":"87", "number":"6270309"}','m','2022-02-25','$2a$10$Z1/.F4bRuyOGyL7NQrmjhufHf8XrHIEjPfBz9tlPbPcWrLpvPWKfq'),
+       ('id@acarcuNunc.edu','Leah Moody','Mark','Mckinney','Dalton','{"code":"97", "number":"9685203"}','m','2020-10-01','$2a$10$Z1/.F4bRuyOGyL7NQrmjhufHf8XrHIEjPfBz9tlPbPcWrLpvPWKfq'),
+       ('urna.Vivamus.molestie@suscipitest.ca','Isabella Ford','Keefe','Terry','Celeste','{"code":"44", "number":"3526222"}','m','2021-08-23','$2a$10$Z1/.F4bRuyOGyL7NQrmjhufHf8XrHIEjPfBz9tlPbPcWrLpvPWKfq'),
+       ('dictum@mus.net','Jaime Castillo','Fredericka','York','Armand','{"code":"24", "number":"8526313"}','f','2022-04-04','$2a$10$Z1/.F4bRuyOGyL7NQrmjhufHf8XrHIEjPfBz9tlPbPcWrLpvPWKfq'),
+       ('nec@dolorsit.co.uk','Hollee Mejia','Winter','Vasquez','Brenda','{"code":"73", "number":"7728818"}','f','2020-12-07','$2a$10$Z1/.F4bRuyOGyL7NQrmjhufHf8XrHIEjPfBz9tlPbPcWrLpvPWKfq'),
+       ('ac.mattis.ornare@elementumat.org','Octavius Case','Phyllis','Christian','Luke','{"code":"21", "number":"9467819"}','u','2021-04-02','$2a$10$Z1/.F4bRuyOGyL7NQrmjhufHf8XrHIEjPfBz9tlPbPcWrLpvPWKfq'),
+       ('erat.Sed.nunc@temporbibendum.org','Xena Albert','Fulton','Mcbride','Marny','{"code":"07", "number":"3555666"}','u','2022-03-22','$2a$10$Z1/.F4bRuyOGyL7NQrmjhufHf8XrHIEjPfBz9tlPbPcWrLpvPWKfq'),
+       ('dolor.nonummy.ac@neque.com','Ivy Whitfield','Lara','Forbes','Anjolie','{"code":"34", "number":"4574811"}','f','2022-03-21','$2a$10$Z1/.F4bRuyOGyL7NQrmjhufHf8XrHIEjPfBz9tlPbPcWrLpvPWKfq'),
+       ('mauris@malesuada.org','Claire Contreras','Kimberly','Castaneda','Darryl','{"code":"34", "number":"2424054"}','m','2021-10-23','$2a$10$Z1/.F4bRuyOGyL7NQrmjhufHf8XrHIEjPfBz9tlPbPcWrLpvPWKfq');
 
 # Filing table
 INSERT INTO user_story (user_id, user_created, user_updated)

@@ -15,6 +15,24 @@
 
     <dependencies>
         <dependency>
+            <groupId>by.it.academy.grodno.elibrary</groupId>
+            <artifactId>elibrary-api</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>by.it.academy.grodno.elibrary</groupId>
+            <artifactId>elibrary-controller</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>by.it.academy.grodno.elibrary</groupId>
+            <artifactId>elibrary-dao</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
             <scope>runtime</scope>
