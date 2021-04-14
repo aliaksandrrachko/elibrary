@@ -13,9 +13,7 @@ import javax.persistence.*;
 @EqualsAndHashCode(callSuper = true)
 @SuperBuilder
 @Table(name = ("book"))
-@SecondaryTables(value = {
-        @SecondaryTable(name = "book_story", pkJoinColumns = {@PrimaryKeyJoinColumn(name = "book_id")}),
-        @SecondaryTable(name = "book_has_author", pkJoinColumns = {@PrimaryKeyJoinColumn(name = "book_id")})})
+@SecondaryTables(value = { @SecondaryTable(name = "book_has_author", pkJoinColumns = {@PrimaryKeyJoinColumn(name = "book_id")})})
 public class Book extends AEntity<Long>{
 
     @Column(name = "isbn_10", length = 10)

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="Log in page">
+    <meta name="author" content="Ales'">
+    <title>Please sign up</title>
+    <link rel="shortcut icon" type="image/x-icon"  href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAYAAAA7MK6iAAAABmJLR0QA/wD/AP+gvaeTAAABEUlEQVRIie3UMUoDYRDF8Z8psqUpLBRrBS+gx7ATD6E5iSjeQQ/gJUzEwmChnZZaKZiQ0ljsLkhQM5/5Agr74DX7DfOfgZ1Hoz+qAl30Marcx2H1thCtY4DJN76parKqmAH9DM+6eTcArX2QE3yVAO7lBA8TwMNIw6UgeJI46My+rWCjUQL0LVIUBd8lgEO1UfBZAvg8oXamCuWNRu64nRNMmUo/wReSXLXayoDoKc9miMvqW/ZNG2VRNLla2MYudrCFTvX2intlnl/gGu/zDraGYzyLZ/UTjrD6G2AHpxgnAKc9xgmWo9BNPM4BnPYDNiLg24zQ2oNpyFdZvRKZLlGhnvvKPzXXti/Yy7hEo3+iD9EHtgdqxQnwAAAAAElFTkSuQmCC"/>
+    <link href="/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
+    <link href="/css/signin.css" rel="stylesheet" crossorigin="anonymous"/>
+</head>
+
+<body>
+<div class="container">
+    <div class="md-4 text-danger" th:if="${param.error}">
+        Invalid username and password.
+        <p th:text="${param.error}">
+    </div>
+    <div class="md-4 text-danger" th:if="${param.logout}">
+        You have been logged out.
+        <p th:text="${param.logout}">
+    </div>
+
+    <form action="#" class="form-signin" th:href="@{/singup}" th:method="post" th:object="${userDto}">
+        <h2>Please sign up</h2>
+        <div class="mb-3">
+            <label class="form-label visually-hidden" for="username">Username</label>
+            <input class="form-control" id="username" placeholder="Username" th:field="*{username}"
+                   th:value="${userDto.username}"
+                   type="text">
+            <span class="text-danger" th:errors="*{username}" th:if="${#fields.hasErrors('username')}"></span>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label visually-hidden" for="email">Email</label>
+            <input class="form-control" id="email" placeholder="Email" th:field="*{email}" th:value="${userDto.email}"
+                   type="email">
+            <span class="text-danger" th:errors="*{email}" th:if="${#fields.hasErrors('email')}"></span>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label visually-hidden" for="password">Password</label>
+            <input class="form-control" id="password" placeholder="Password" th:field="*{password}" type="password">
+            <span class="text-danger" th:errors="*{password}" th:if="${#fields.hasErrors('password')}"></span>
+        </div>
+
+        <div class="mb-3">
+            <label class="from-label visually-hidden" for="passwordConfirm">Confirm password</label>
+            <input class="form-control" id="passwordConfirm" placeholder="Confirm password"
+                   th:field="*{passwordConfirm}" type="password">
+            <span class="text-danger" th:errors="*{passwordConfirm}"
+                  th:if="${#fields.hasErrors('passwordConfirm')}"></span>
+        </div>
+
+        <div class="mt-4 d-grid gap-2">
+            <button class="btn btn-primary" type="submit">Sign up</button>
+        </div>
+
+        <p class="text-center text-body">Already a member? <a href="/login">Log in</a></p>
+
+        <p class="text-center"><a href="/">Home page</a></p>
+    </form>
+
+    <footer class="modal-footer">
+        <span>Copyright © 2021, All Right Reserved Ales'</span>
+    </footer>
+</div>
+</body>
+</html>

@@ -22,9 +22,7 @@ import java.util.Set;
 @EqualsAndHashCode(callSuper = true)
 @SuperBuilder
 @Table(name = ("user"))
-@SecondaryTables(value = {
-        @SecondaryTable(name = "user_story", pkJoinColumns = {@PrimaryKeyJoinColumn(name = "user_id")}),
-        @SecondaryTable(name = "user_social_id", pkJoinColumns = {@PrimaryKeyJoinColumn(name = "user_id")})})
+@SecondaryTables(value = {@SecondaryTable(name = "user_social_id", pkJoinColumns = {@PrimaryKeyJoinColumn(name = "user_id")})})
 public class User extends AEntity<Long> implements UserDetails, Serializable {
 
     @Column(name = "email", unique = true, length = 80)
@@ -75,10 +73,10 @@ public class User extends AEntity<Long> implements UserDetails, Serializable {
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles;
 
-    @Column(name = "user_created", table = "user_story")
+    @Column(name = "user_created")
     private LocalDateTime created;
 
-    @Column(name = "user_updated", table = "user_story")
+    @Column(name = "user_updated")
     private LocalDateTime updated;
 
     @Override

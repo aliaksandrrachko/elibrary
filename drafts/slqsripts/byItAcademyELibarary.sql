@@ -22,6 +22,8 @@ CREATE TABLE IF NOT EXISTS user
     birthday     DATE COMMENT 'Date of birthday',
     password     VARCHAR(64) COMMENT 'Password encoded with using BCryptPasswordEncoder',
     enabled      BOOLEAN                  DEFAULT TRUE COMMENT 'User lock',
+    user_created DATETIME        NOT NULL DEFAULT NOW() COMMENT 'Date of creating',
+    user_updated DATETIME        NOT NULL DEFAULT NOW() COMMENT 'Date of updated',
     CONSTRAINT pk_user PRIMARY KEY (id)
 );
 
@@ -36,35 +38,16 @@ CREATE TABLE IF NOT EXISTS user_social_id
 );
 
 -- -----------------------------------------------------
--- Table by_it_academy_grodno_elibrary.user_story
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS user_story
-(
-    user_id      BIGINT UNSIGNED NOT NULL UNIQUE COMMENT 'Users id',
-    user_created DATETIME        NOT NULL DEFAULT NOW() COMMENT 'Date of creating',
-    user_updated DATETIME        NOT NULL DEFAULT NOW() COMMENT 'Date of updated',
-    CONSTRAINT fk_user_user_story FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE ON UPDATE CASCADE
-);
-
--- -----------------------------------------------------
--- Trigger by insert or update user
+-- Trigger on update user
 -- -----------------------------------------------------
 CREATE
-    TRIGGER p_user_story_insert_user
-    AFTER INSERT
-    ON user
-    FOR EACH ROW
-    INSERT INTO user_story (user_id, user_created, user_updated)
-    VALUES (new.id, NOW(), NOW());
-
-CREATE
-    TRIGGER p_user_story_update_user
+    TRIGGER p_user_update
     AFTER UPDATE
     ON user
     FOR EACH ROW
-    UPDATE user_story
-    SET user_story.user_updated = NOW()
-    WHERE user_story.user_id = NEW.id;
+    UPDATE user
+    SET user.user_updated = NOW()
+    WHERE user.id = NEW.id;
 
 -- -----------------------------------------------------
 -- Table by_it_academy_grodno_elibrary.role
@@ -182,7 +165,10 @@ CREATE TABLE IF NOT EXISTS book
     picture_url     VARCHAR(2083) COMMENT 'Books cover image',
     total_count     TINYINT UNSIGNED COMMENT 'Total count of books',
     available_count TINYINT UNSIGNED COMMENT 'Available count',
-    available       BOOLEAN DEFAULT TRUE COMMENT 'Available for booking',
+    available       BOOLEAN                  DEFAULT TRUE COMMENT 'Available for booking',
+    book_rating     INT UNSIGNED DEFAULT 0 COMMENT 'Book rating, count of viewing',
+    book_created    DATETIME        NOT NULL DEFAULT NOW() COMMENT 'The date of adding book',
+    book_updated    DATETIME        NOT NULL DEFAULT NOW() COMMENT 'The date of adding book',
     #cover INT COMMENT 'The books cover',
     CONSTRAINT pk_book PRIMARY KEY (id),
     CONSTRAINT fk_book_section FOREIGN KEY (section_id) REFERENCES section (id) ON DELETE CASCADE ON UPDATE CASCADE,
@@ -199,29 +185,6 @@ CREATE TABLE IF NOT EXISTS attribute
     CONSTRAINT pk_attribute PRIMARY KEY (book_id),
     CONSTRAINT fk_attribute_book FOREIGN KEY (book_id) REFERENCES book (id) ON DELETE CASCADE ON UPDATE CASCADE
 );
-
--- -----------------------------------------------------
--- Table by_it_academy_grodno_elibrary.story
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS book_story
-(
-    book_id     BIGINT UNSIGNED NOT NULL UNIQUE COMMENT 'Books id',
-    book_rating INT UNSIGNED COMMENT 'Book rating, count of viewing',
-    book_added  DATETIME        NOT NULL DEFAULT NOW() COMMENT 'The date of adding book',
-    CONSTRAINT pk_books_story PRIMARY KEY (book_id),
-    CONSTRAINT fk_book_books_story FOREIGN KEY (book_id) REFERENCES book (id) ON DELETE CASCADE ON UPDATE CASCADE
-);
-
--- -----------------------------------------------------
--- Trigger by book insert
--- -----------------------------------------------------
-CREATE
-    TRIGGER book_insert
-    AFTER INSERT
-    ON book
-    FOR EACH ROW
-    INSERT INTO book_story (book_id, book_rating, book_added)
-    VALUES (new.id, 0, NOW());
 
 -- -----------------------------------------------------
 -- Table by_it_academy_grodno_elibrary.book_has_author
@@ -269,11 +232,11 @@ VALUES (1, 1),
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS sharing
 (
-    id          INT UNSIGNED    NOT NULL COMMENT 'Orders id',
-    status_code INT UNSIGNED    NOT NULL COMMENT 'Status',
-    user_id     BIGINT UNSIGNED NOT NULL COMMENT 'Users id',
-    sharing_created     DATETIME        NOT NULL DEFAULT NOW() COMMENT 'Date of creating',
-    sharing_deadline    DATETIME        NOT NULL DEFAULT NOW() COMMENT 'Deadline',
+    id               INT UNSIGNED    NOT NULL COMMENT 'Orders id',
+    status_code      INT UNSIGNED    NOT NULL COMMENT 'Status',
+    user_id          BIGINT UNSIGNED NOT NULL COMMENT 'Users id',
+    sharing_created  DATETIME        NOT NULL DEFAULT NOW() COMMENT 'Date of creating',
+    sharing_deadline DATETIME        NOT NULL DEFAULT NOW() COMMENT 'Deadline',
     CONSTRAINT pk_sharing PRIMARY KEY (id),
     CONSTRAINT fk_sharing_user FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE ON UPDATE CASCADE,
     CONSTRAINT fk_sharing_status FOREIGN KEY (status_code) REFERENCES status (status_code) ON DELETE CASCADE ON UPDATE CASCADE
@@ -291,12 +254,13 @@ CREATE TABLE IF NOT EXISTS sharing_has_book
 -- Trigger on sharing insert increment book_rating
 -- -----------------------------------------------------
 CREATE
-    TRIGGER p_book_story_sharing_has_book_insert
+    TRIGGER p_book_sharing_has_book_insert
     AFTER INSERT
     ON sharing_has_book
     FOR EACH ROW
-    INSERT INTO book_story (book_id, book_rating)
-    VALUES (new.book_id, (SELECT book_rating FROM book_story WHERE book_id = new.book_id) + 1);
+    UPDATE book
+    SET book.book_rating = ((SELECT book_rating FROM book WHERE id = NEW.book_id) + 1)
+    WHERE book.id = NEW.book_id;
 
 -- -----------------------------------------------------
 -- Trigger on sharing insert (adds duration for deadline)
@@ -341,19 +305,52 @@ VALUES (1, 'ROLE_USER'),
 
 # Fake users
 INSERT INTO user (email, username, first_name, last_name, middle_name, phone_number, gender, birthday, password)
-VALUES ('admin@mail.ru', 'Admin', 'Dima', 'Petrov', 'Petrovich', '{"code":"29", "number":"2965416"}', 'm', '1995-04-05', '$2a$10$Z1/.F4bRuyOGyL7NQrmjhufHf8XrHIEjPfBz9tlPbPcWrLpvPWKfq'); /*12345*/
+VALUES ('admin@mail.ru', 'Admin', 'Dima', 'Petrov', 'Petrovich', '{
+  "code": "29",
+  "number": "2965416"
+}', 'm', '1995-04-05', '$2a$10$Z1/.F4bRuyOGyL7NQrmjhufHf8XrHIEjPfBz9tlPbPcWrLpvPWKfq'); /*12345*/
 
 INSERT INTO user (email, username, first_name, last_name, middle_name, phone_number, gender, birthday, password)
-VALUES ('eget.odio@Donec.ca','Armand Parrish','Cleo','Macias','Gretchen','{"code":"67", "number":"6908407"}','m','2021-03-01','$2a$10$Z1/.F4bRuyOGyL7NQrmjhufHf8XrHIEjPfBz9tlPbPcWrLpvPWKfq'),
-       ('ligula.eu@litoratorquent.net','Azalia Rosario','Raven','Barry','Jordan','{"code":"87", "number":"6270309"}','m','2022-02-25','$2a$10$Z1/.F4bRuyOGyL7NQrmjhufHf8XrHIEjPfBz9tlPbPcWrLpvPWKfq'),
-       ('id@acarcuNunc.edu','Leah Moody','Mark','Mckinney','Dalton','{"code":"97", "number":"9685203"}','m','2020-10-01','$2a$10$Z1/.F4bRuyOGyL7NQrmjhufHf8XrHIEjPfBz9tlPbPcWrLpvPWKfq'),
-       ('urna.Vivamus.molestie@suscipitest.ca','Isabella Ford','Keefe','Terry','Celeste','{"code":"44", "number":"3526222"}','m','2021-08-23','$2a$10$Z1/.F4bRuyOGyL7NQrmjhufHf8XrHIEjPfBz9tlPbPcWrLpvPWKfq'),
-       ('dictum@mus.net','Jaime Castillo','Fredericka','York','Armand','{"code":"24", "number":"8526313"}','f','2022-04-04','$2a$10$Z1/.F4bRuyOGyL7NQrmjhufHf8XrHIEjPfBz9tlPbPcWrLpvPWKfq'),
-       ('nec@dolorsit.co.uk','Hollee Mejia','Winter','Vasquez','Brenda','{"code":"73", "number":"7728818"}','f','2020-12-07','$2a$10$Z1/.F4bRuyOGyL7NQrmjhufHf8XrHIEjPfBz9tlPbPcWrLpvPWKfq'),
-       ('ac.mattis.ornare@elementumat.org','Octavius Case','Phyllis','Christian','Luke','{"code":"21", "number":"9467819"}','u','2021-04-02','$2a$10$Z1/.F4bRuyOGyL7NQrmjhufHf8XrHIEjPfBz9tlPbPcWrLpvPWKfq'),
-       ('erat.Sed.nunc@temporbibendum.org','Xena Albert','Fulton','Mcbride','Marny','{"code":"07", "number":"3555666"}','u','2022-03-22','$2a$10$Z1/.F4bRuyOGyL7NQrmjhufHf8XrHIEjPfBz9tlPbPcWrLpvPWKfq'),
-       ('dolor.nonummy.ac@neque.com','Ivy Whitfield','Lara','Forbes','Anjolie','{"code":"34", "number":"4574811"}','f','2022-03-21','$2a$10$Z1/.F4bRuyOGyL7NQrmjhufHf8XrHIEjPfBz9tlPbPcWrLpvPWKfq'),
-       ('mauris@malesuada.org','Claire Contreras','Kimberly','Castaneda','Darryl','{"code":"34", "number":"2424054"}','m','2021-10-23','$2a$10$Z1/.F4bRuyOGyL7NQrmjhufHf8XrHIEjPfBz9tlPbPcWrLpvPWKfq');
+VALUES ('eget.odio@Donec.ca', 'Armand Parrish', 'Cleo', 'Macias', 'Gretchen', '{
+  "code": "67",
+  "number": "6908407"
+}', 'm', '2021-03-01', '$2a$10$Z1/.F4bRuyOGyL7NQrmjhufHf8XrHIEjPfBz9tlPbPcWrLpvPWKfq'),
+       ('ligula.eu@litoratorquent.net', 'Azalia Rosario', 'Raven', 'Barry', 'Jordan', '{
+         "code": "87",
+         "number": "6270309"
+       }', 'm', '2022-02-25', '$2a$10$Z1/.F4bRuyOGyL7NQrmjhufHf8XrHIEjPfBz9tlPbPcWrLpvPWKfq'),
+       ('id@acarcuNunc.edu', 'Leah Moody', 'Mark', 'Mckinney', 'Dalton', '{
+         "code": "97",
+         "number": "9685203"
+       }', 'm', '2020-10-01', '$2a$10$Z1/.F4bRuyOGyL7NQrmjhufHf8XrHIEjPfBz9tlPbPcWrLpvPWKfq'),
+       ('urna.Vivamus.molestie@suscipitest.ca', 'Isabella Ford', 'Keefe', 'Terry', 'Celeste', '{
+         "code": "44",
+         "number": "3526222"
+       }', 'm', '2021-08-23', '$2a$10$Z1/.F4bRuyOGyL7NQrmjhufHf8XrHIEjPfBz9tlPbPcWrLpvPWKfq'),
+       ('dictum@mus.net', 'Jaime Castillo', 'Fredericka', 'York', 'Armand', '{
+         "code": "24",
+         "number": "8526313"
+       }', 'f', '2022-04-04', '$2a$10$Z1/.F4bRuyOGyL7NQrmjhufHf8XrHIEjPfBz9tlPbPcWrLpvPWKfq'),
+       ('nec@dolorsit.co.uk', 'Hollee Mejia', 'Winter', 'Vasquez', 'Brenda', '{
+         "code": "73",
+         "number": "7728818"
+       }', 'f', '2020-12-07', '$2a$10$Z1/.F4bRuyOGyL7NQrmjhufHf8XrHIEjPfBz9tlPbPcWrLpvPWKfq'),
+       ('ac.mattis.ornare@elementumat.org', 'Octavius Case', 'Phyllis', 'Christian', 'Luke', '{
+         "code": "21",
+         "number": "9467819"
+       }', 'u', '2021-04-02', '$2a$10$Z1/.F4bRuyOGyL7NQrmjhufHf8XrHIEjPfBz9tlPbPcWrLpvPWKfq'),
+       ('erat.Sed.nunc@temporbibendum.org', 'Xena Albert', 'Fulton', 'Mcbride', 'Marny', '{
+         "code": "07",
+         "number": "3555666"
+       }', 'u', '2022-03-22', '$2a$10$Z1/.F4bRuyOGyL7NQrmjhufHf8XrHIEjPfBz9tlPbPcWrLpvPWKfq'),
+       ('dolor.nonummy.ac@neque.com', 'Ivy Whitfield', 'Lara', 'Forbes', 'Anjolie', '{
+         "code": "34",
+         "number": "4574811"
+       }', 'f', '2022-03-21', '$2a$10$Z1/.F4bRuyOGyL7NQrmjhufHf8XrHIEjPfBz9tlPbPcWrLpvPWKfq'),
+       ('mauris@malesuada.org', 'Claire Contreras', 'Kimberly', 'Castaneda', 'Darryl', '{
+         "code": "34",
+         "number": "2424054"
+       }', 'm', '2021-10-23', '$2a$10$Z1/.F4bRuyOGyL7NQrmjhufHf8XrHIEjPfBz9tlPbPcWrLpvPWKfq');
 
 # Filing table
 INSERT INTO user_story (user_id, user_created, user_updated)
