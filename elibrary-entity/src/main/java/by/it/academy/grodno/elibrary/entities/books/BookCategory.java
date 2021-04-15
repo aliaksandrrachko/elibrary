@@ -1,5 +1,6 @@
-package by.it.academy.grodno.elibrary.entities;
+package by.it.academy.grodno.elibrary.entities.books;
 
+import by.it.academy.grodno.elibrary.entities.AEntity;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 

@@ -1,5 +1,6 @@
-package by.it.academy.grodno.elibrary.entities;
+package by.it.academy.grodno.elibrary.entities.users;
 
+import by.it.academy.grodno.elibrary.entities.AEntity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

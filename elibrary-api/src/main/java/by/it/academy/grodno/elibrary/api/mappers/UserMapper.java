@@ -1,8 +1,8 @@
 package by.it.academy.grodno.elibrary.api.mappers;
 
 import by.it.academy.grodno.elibrary.api.dto.UserDto;
-import by.it.academy.grodno.elibrary.entities.Gender;
-import by.it.academy.grodno.elibrary.entities.User;
+import by.it.academy.grodno.elibrary.entities.users.Gender;
+import by.it.academy.grodno.elibrary.entities.users.User;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 

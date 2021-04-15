@@ -1,6 +1,6 @@
 package by.it.academy.grodno.elibrary.api.dto;
 
-import by.it.academy.grodno.elibrary.entities.Role;
+import by.it.academy.grodno.elibrary.entities.users.Role;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;

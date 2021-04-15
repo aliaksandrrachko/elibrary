@@ -77,8 +77,7 @@ CREATE TABLE IF NOT EXISTS user_has_role
 CREATE TABLE IF NOT EXISTS address
 (
     id           BIGINT UNSIGNED NOT NULL AUTO_INCREMENT UNIQUE COMMENT 'A surrogate primary key used to uniquely identify each address in the table.',
-    address_1    VARCHAR(50) COMMENT 'The first line of an address.',
-    address_2    VARCHAR(50) COMMENT 'An optional second line of an address.',
+    region       VARCHAR(50) COMMENT 'The first line of an address.',
     district     VARCHAR(50)     NOT NULL COMMENT 'The region of an address, this may be a state, province, prefecture, etc.',
     city_name    VARCHAR(20)     NOT NULL COMMENT 'A foreign key pointing to the city table.',
     postal_code  VARCHAR(32) COMMENT 'The postal code or ZIP code of the address (where applicable).',
@@ -163,10 +162,10 @@ CREATE TABLE IF NOT EXISTS book
     language        VARCHAR(3) COMMENT 'Language of book by alpha-3/ISO 639-2 Code',
     date_publishing DATE COMMENT 'The year and month of publishing',
     picture_url     VARCHAR(2083) COMMENT 'Books cover image',
-    total_count     TINYINT UNSIGNED COMMENT 'Total count of books',
-    available_count TINYINT UNSIGNED COMMENT 'Available count',
+    total_count     INT UNSIGNED COMMENT 'Total count of books',
+    available_count INT UNSIGNED COMMENT 'Available count',
     available       BOOLEAN                  DEFAULT TRUE COMMENT 'Available for booking',
-    book_rating     INT UNSIGNED DEFAULT 0 COMMENT 'Book rating, count of viewing',
+    book_rating     INT UNSIGNED             DEFAULT 0 COMMENT 'Book rating, count of viewing',
     book_created    DATETIME        NOT NULL DEFAULT NOW() COMMENT 'The date of adding book',
     book_updated    DATETIME        NOT NULL DEFAULT NOW() COMMENT 'The date of adding book',
     #cover INT COMMENT 'The books cover',
@@ -351,11 +350,6 @@ VALUES ('eget.odio@Donec.ca', 'Armand Parrish', 'Cleo', 'Macias', 'Gretchen', '{
          "code": "34",
          "number": "2424054"
        }', 'm', '2021-10-23', '$2a$10$Z1/.F4bRuyOGyL7NQrmjhufHf8XrHIEjPfBz9tlPbPcWrLpvPWKfq');
-
-# Filing table
-INSERT INTO user_story (user_id, user_created, user_updated)
-SELECT id, NOW(), NOW()
-FROM user;
 
 INSERT INTO user_has_role (user_id, role_id)
 VALUES (1, 2),

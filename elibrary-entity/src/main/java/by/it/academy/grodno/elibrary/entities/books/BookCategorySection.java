@@ -1,5 +1,6 @@
-package by.it.academy.grodno.elibrary.entities;
+package by.it.academy.grodno.elibrary.entities.books;
 
+import by.it.academy.grodno.elibrary.entities.AEntity;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
@@ -13,7 +14,7 @@ import javax.persistence.*;
 @EqualsAndHashCode(callSuper = true)
 @SuperBuilder
 @Table(name = ("section"))
-public class BookCategorySection extends AEntity<Integer>{
+public class BookCategorySection extends AEntity<Integer> {
 
     @Column(name = "section_name", length = 45)
     private String sectionName;

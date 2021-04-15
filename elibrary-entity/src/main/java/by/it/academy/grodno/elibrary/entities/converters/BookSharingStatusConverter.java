@@ -1,6 +1,6 @@
 package by.it.academy.grodno.elibrary.entities.converters;
 
-import by.it.academy.grodno.elibrary.entities.BookSharingStatus;
+import by.it.academy.grodno.elibrary.entities.books.BookSharingStatus;
 
 import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;

@@ -1,4 +1,4 @@
-package by.it.academy.grodno.elibrary.entities;
+package by.it.academy.grodno.elibrary.entities.users;
 
 import java.util.Map;
 import java.util.stream.Collectors;
