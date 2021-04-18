@@ -3,8 +3,11 @@ package by.it.academy.grodno.elibrary.entities.users;
 import by.it.academy.grodno.elibrary.entities.AEntity;
 import by.it.academy.grodno.elibrary.entities.converters.GenderConverter;
 import by.it.academy.grodno.elibrary.entities.converters.PhoneNumberJsonConverter;
+import com.vladmihalcea.hibernate.type.json.JsonStringType;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
+import org.hibernate.annotations.Type;
+import org.hibernate.annotations.TypeDef;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -15,15 +18,17 @@ import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Set;
 
-@Entity
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
 @EqualsAndHashCode(callSuper = true)
 @SuperBuilder
+@Entity
 @Table(name = ("user"))
-@SecondaryTables(value = {@SecondaryTable(name = "user_social_id", pkJoinColumns = {@PrimaryKeyJoinColumn(name = "user_id")})})
+@SecondaryTables(value = {
+        @SecondaryTable(name = "user_social_id", pkJoinColumns = {@PrimaryKeyJoinColumn(name = "user_id")}),
+        @SecondaryTable(name = "address", pkJoinColumns = {@PrimaryKeyJoinColumn(name = "id")})})
 public class User extends AEntity<Long> implements UserDetails, Serializable {
 
     @Column(name = "email", unique = true, length = 80)
@@ -38,8 +43,9 @@ public class User extends AEntity<Long> implements UserDetails, Serializable {
     @Column(name = "last_name")
     private String lastName;
 
-    @Column(name = "phone_number")
+    //@Type(type = "json")
     @Convert(converter = PhoneNumberJsonConverter.class)
+    @Column(name = "phone_number", columnDefinition = "json")
     private PhoneNumber phoneNumber;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST})

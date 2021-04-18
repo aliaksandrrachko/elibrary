@@ -10,32 +10,32 @@ import javax.persistence.Table;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
-@Entity
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
 @EqualsAndHashCode(callSuper = true)
 @SuperBuilder
-@Table(name = ("address"))
+@Entity
+@Table(name = "address")
 public class Address extends AEntity<Long> implements Serializable {
 
-    @Column(name = "address_1")
+    @Column(name = "region", length = 50)
     private String region;
 
-    @Column(name = "district")
+    @Column(name = "district", length = 50)
     private String district;
 
-    @Column(name = "city_name")
+    @Column(name = "city_name", length = 20)
     private String cityName;
 
-    @Column(name = "postal_code")
+    @Column(name = "postal_code", length = 32)
     private String postalCode;
 
-    @Column(name = "house")
+    @Column(name = "house", length = 10)
     private String houseNumber;
 
-    @Column(name = "apt")
+    @Column(name = "apt", length = 10)
     private String apartmentNumber;
 
     @Column(name = "last_updated")

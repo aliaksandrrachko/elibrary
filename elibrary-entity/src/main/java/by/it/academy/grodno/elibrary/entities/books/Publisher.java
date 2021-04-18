@@ -8,13 +8,13 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
-@Entity
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
 @EqualsAndHashCode(callSuper = true)
 @SuperBuilder
+@Entity
 @Table(name = "publisher")
 public class Publisher extends AEntity<Integer> {
 

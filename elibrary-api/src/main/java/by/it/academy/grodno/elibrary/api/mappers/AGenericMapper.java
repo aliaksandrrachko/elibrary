@@ -2,15 +2,15 @@ package by.it.academy.grodno.elibrary.api.mappers;
 
 
 import by.it.academy.grodno.elibrary.api.dto.AEntityDto;
-import by.it.academy.grodno.elibrary.api.dto.UserDto;
 import by.it.academy.grodno.elibrary.entities.AEntity;
 import org.modelmapper.Converter;
 import org.modelmapper.ModelMapper;
-import org.modelmapper.TypeToken;
+import org.springframework.data.domain.Page;
 
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 public abstract class AGenericMapper<E extends AEntity<K>,
         D extends AEntityDto<K>,
@@ -42,14 +42,19 @@ public abstract class AGenericMapper<E extends AEntity<K>,
     public List<E> toEntities(List<D> sources){
         return Objects.isNull(sources) ?
                 Collections.emptyList() :
-                modelMapper.map(sources, new TypeToken<List<E>>(){}.getType());
+                sources.stream().map(this::toEntity).collect(Collectors.toList());
     }
 
     @Override
     public List<D> toDtos(List<E> sources){
         return Objects.isNull(sources) ?
                 Collections.emptyList() :
-                modelMapper.map(sources, new TypeToken<List<UserDto>>(){}.getType());
+                sources.stream().map(this::toDto).collect(Collectors.toList());
+    }
+
+    @Override
+    public Page<D> toPageDto(Page<E> sources) {
+        return sources.map(this::toDto);
     }
 
     Converter<E, D> toDtoConverter() {

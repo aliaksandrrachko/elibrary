@@ -6,20 +6,20 @@ import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
 
-@Entity
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(callSuper = true, exclude = "category")
 @SuperBuilder
+@Entity
 @Table(name = ("section"))
-public class BookCategorySection extends AEntity<Integer> {
+public class Section extends AEntity<Integer> {
 
     @Column(name = "section_name", length = 45)
     private String sectionName;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id", nullable = false)
-    private BookCategory category;
+    private Category category;
 }

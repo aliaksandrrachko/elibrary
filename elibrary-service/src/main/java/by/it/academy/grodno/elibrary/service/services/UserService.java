@@ -58,12 +58,12 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public UserDto save(UserDto entityDto) {
+    public Optional<UserDto> create(UserDto entityDto) {
         return null;
     }
 
     @Override
-    public UserDto update(Long id, UserDto entityDto) {
+    public Optional<UserDto> update(Long id, UserDto entityDto) {
         return null;
     }
 }

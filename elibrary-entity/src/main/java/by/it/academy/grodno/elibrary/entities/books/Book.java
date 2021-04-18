@@ -1,49 +1,68 @@
 package by.it.academy.grodno.elibrary.entities.books;
 
 import by.it.academy.grodno.elibrary.entities.AEntity;
+import org.hibernate.annotations.Type;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 
-@Entity
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
 @EqualsAndHashCode(callSuper = true)
 @SuperBuilder
-@Table(name = ("book"))
-@SecondaryTables(value = { @SecondaryTable(name = "book_has_author", pkJoinColumns = {@PrimaryKeyJoinColumn(name = "book_id")})})
+@Entity
+@Table(name = "book")
+@SecondaryTables(value = {
+        @SecondaryTable(name = "section", pkJoinColumns = {@PrimaryKeyJoinColumn(name = "id")}),
+        @SecondaryTable(name = "publisher", pkJoinColumns = {@PrimaryKeyJoinColumn(name = "id")})})
 public class Book extends AEntity<Long> {
-
     @Column(name = "isbn_10", length = 10)
     private String isbn10;
 
     @Column(name = "isbn_13", length = 13)
     private String isbn13;
 
-    @OneToOne
-    @JoinColumn(name = "section_id", referencedColumnName = "id")
-    private BookCategorySection section;
+    @Column(name = "title")
+    private String title;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @Column(name = "description", columnDefinition = "TEXT")
+    private String description;
+
+    @ManyToOne
+    @JoinColumn(name = "section_id", referencedColumnName = "id")
+    private Section section;
+
+    @ManyToOne
+    @JoinColumn(name = "publisher_id", referencedColumnName = "id")
+    private Publisher publisher;
+
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "book_has_author",
             joinColumns = @JoinColumn(name = "book_id"),
             inverseJoinColumns = @JoinColumn(name = "author_id"))
     private Set<Author> authors;
 
-    @OneToOne
-    @JoinColumn(name = "publisher_id", referencedColumnName = "id")
-    private Publisher publisher;
+//    @Type(type = "json", typeClass = JsonStringType.class)
+//    @JoinTable(name = "attribute",
+//            joinColumns = {@JoinColumn(name = "attribute", columnDefinition = "json")})
+//    private Map<String, Object> attributes;
 
     @Column(name = "language", length = 3)
     private String language;
 
-    @Column(name = "date_publishing")
+    @Column(name = "publishing_date")
     private LocalDate datePublishing;
+
+    @Column(name = "print_length")
+    private int printLength;
 
     @Column(name = "picture_url")
     private String pictureUrl;
@@ -58,11 +77,11 @@ public class Book extends AEntity<Long> {
     private boolean available;
 
     @Column(name = "book_rating")
-    private int bookRating;
+    private int rating;
 
     @Column(name = "book_created")
-    private LocalDate created;
+    private LocalDateTime created;
 
     @Column(name = "book_updated")
-    private LocalDate updated;
+    private LocalDateTime updated;
 }

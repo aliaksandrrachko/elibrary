@@ -23,6 +23,7 @@
         <module>elibrary-dao</module>
         <module>elibrary-api</module>
         <module>elibrary-controller</module>
+        <module>elibrary-rest</module>
     </modules>
 
     <properties>
@@ -65,6 +66,7 @@
                     <version>3.0.0-M5</version>
                     <configuration>
                         <testFailureIgnore>true</testFailureIgnore>
+                        <skipTests>true</skipTests>
                     </configuration>
                 </plugin>
             </plugins>

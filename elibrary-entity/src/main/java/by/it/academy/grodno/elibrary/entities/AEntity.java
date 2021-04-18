@@ -18,7 +18,6 @@ import java.io.Serializable;
 public abstract class AEntity<K extends Number> implements Serializable {
 
     @Id
-    @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     protected K id;
 }

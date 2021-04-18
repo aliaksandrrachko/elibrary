@@ -35,7 +35,7 @@ public class SignUpController {
                 modelAndView.setViewName("signup");
                 modelAndView.addAllObjects(result.getModel());
             } else {
-                userService.save(userDto);
+                userService.create(userDto);
                 modelAndView = new ModelAndView();
                 modelAndView.setViewName("redirect:/login");
             }

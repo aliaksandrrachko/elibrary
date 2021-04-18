@@ -4,7 +4,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public enum BookSharingStatus {
+public enum SubscriptionStatus {
     BOOKING(1),
     READING(2),
     PROROGUE(3),
@@ -12,23 +12,22 @@ public enum BookSharingStatus {
 
     private final int statusCode;
 
-    BookSharingStatus(int statusCode) {
+    SubscriptionStatus(int statusCode) {
         this.statusCode = statusCode;
     }
 
-    private static final Map<Integer, BookSharingStatus> statusCodes;
+    private static final Map<Integer, SubscriptionStatus> statusCodes;
 
     static {
-        statusCodes = Stream.of(BookSharingStatus.values())
-                .collect(Collectors.toMap(BookSharingStatus::getStatusCode, status -> status));
-
+        statusCodes = Stream.of(SubscriptionStatus.values())
+                .collect(Collectors.toMap(SubscriptionStatus::getStatusCode, status -> status));
     }
 
     public int getStatusCode() {
         return statusCode;
     }
 
-    public static BookSharingStatus getBookSharingStatus(int statusCode){
+    public static SubscriptionStatus getBookSubscriptionStatus(int statusCode){
         if (statusCodes.containsKey(statusCode)){
             return statusCodes.get(statusCode);
         } else {

@@ -1,5 +1,9 @@
 package by.it.academy.grodno.elibrary.api.services;
 
+import by.it.academy.grodno.elibrary.api.dto.books.AuthorDto;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -11,10 +15,10 @@ import java.util.Optional;
 public interface IAGenericCrudService<T, K extends Number> {
     
     Class<T> getGenericClass();
-
     List<T> findAll();
     Optional<T> findById(K id);
     void delete(K id);
-    T save(T entityDto);
-    T update(K id, T entityDto);
+    Optional<T> create(T entityDto);
+    Optional<T> update(K id, T entityDto);
+    Page<T> findAll(Pageable pageable);
 }

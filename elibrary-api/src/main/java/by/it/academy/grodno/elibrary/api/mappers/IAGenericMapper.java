@@ -2,6 +2,7 @@ package by.it.academy.grodno.elibrary.api.mappers;
 
 import by.it.academy.grodno.elibrary.api.dto.AEntityDto;
 import by.it.academy.grodno.elibrary.entities.AEntity;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 
@@ -13,4 +14,5 @@ public interface IAGenericMapper<E extends AEntity<K>,
     D toDto(E entity);
     List<E> toEntities(List<D> sources);
     List<D> toDtos(List<E> sources);
+    Page<D> toPageDto(Page<E> sources);
 }
