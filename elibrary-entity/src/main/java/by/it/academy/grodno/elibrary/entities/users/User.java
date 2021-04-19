@@ -6,7 +6,6 @@ import by.it.academy.grodno.elibrary.entities.converters.PhoneNumberJsonConverte
 import com.vladmihalcea.hibernate.type.json.JsonStringType;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
-import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -43,12 +42,15 @@ public class User extends AEntity<Long> implements UserDetails, Serializable {
     @Column(name = "last_name")
     private String lastName;
 
+    @Column(name = "middle_name")
+    private String middleName;
+
     //@Type(type = "json")
     @Convert(converter = PhoneNumberJsonConverter.class)
     @Column(name = "phone_number", columnDefinition = "json")
     private PhoneNumber phoneNumber;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @OneToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JoinColumn(name = "address_id")
     private Address address;
 
@@ -74,7 +76,7 @@ public class User extends AEntity<Long> implements UserDetails, Serializable {
     @Column(name = "social_id", table = "user_social_id")
     private Long socialId;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @ManyToMany(fetch = FetchType.LAZY)//cascade = {CascadeType.MERGE, CascadeType.PERSIST}
     @JoinTable(name = "user_has_role",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))

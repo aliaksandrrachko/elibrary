@@ -1,6 +1,6 @@
 package by.it.academy.grodno.elibrary.api.dto;
 
-import by.it.academy.grodno.elibrary.entities.users.Role;
+import by.it.academy.grodno.elibrary.entities.users.PhoneNumber;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
@@ -18,6 +18,7 @@ import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.Set;
 
 @Data
@@ -48,7 +49,9 @@ public class UserDto extends AEntityDto<Long> {
     @NotBlank(message = "Field 'Middle name' can not be empty.")
     @Size(min = 2, max = 20, message = "The 'Middle name' must be between 2 and 20 characters.")
     private String middleName;
-    private PhoneNumberDto phoneNumberDto;
+    @NotBlank(message = "Field 'Phone' can not be empty.")
+    @Pattern(regexp = "^\\d{9}$", message = "'Phone' can be in format (xx)xxxxxxx")
+    private String phoneNumber;
     private AddressDto addressDto;
     private Character gender;
     private LocalDate birthday;
@@ -67,5 +70,13 @@ public class UserDto extends AEntityDto<Long> {
     @JsonSerialize(using = LocalDateSerializer.class)
     private LocalDateTime updated;
     private Long socialId;
-    private Set<Role> roles;
+    private Set<String> roles;
+
+    public Set<String> getRoles(){
+        if (roles == null){
+            return new HashSet<>();
+        } else {
+            return roles;
+        }
+    }
 }

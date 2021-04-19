@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -38,12 +39,14 @@ public class AuthorService implements IAuthorService {
     }
 
     @Override
+    @Transactional
     public void delete(Integer id) {
         Optional<Author> authorOptional = authorJpaRepository.findById(id);
         authorOptional.ifPresent(author -> authorJpaRepository.delete(author));
     }
 
     @Override
+    @Transactional
     public Optional<AuthorDto> create(AuthorDto entityDto) {
         return Optional.of(authorMapper.toDto(authorJpaRepository.save(
                 Author.builder()
@@ -52,6 +55,7 @@ public class AuthorService implements IAuthorService {
     }
 
     @Override
+    @Transactional
     public Optional<AuthorDto> update(Integer id, AuthorDto entityDto) {
         Optional<Author> authorOptional = authorJpaRepository.findById(id);
         if (entityDto != null &&

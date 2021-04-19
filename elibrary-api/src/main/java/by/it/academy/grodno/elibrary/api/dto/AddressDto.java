@@ -29,7 +29,6 @@ public class AddressDto extends AEntityDto<Long> {
     @NotBlank(message = "Field 'City' can not be empty.")
     private String cityName;
 
-
     private String postalCode;
 
     @NotBlank(message = "Field 'House number' can not be empty.")

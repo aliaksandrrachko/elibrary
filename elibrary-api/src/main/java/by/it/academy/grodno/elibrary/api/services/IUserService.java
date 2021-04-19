@@ -8,7 +8,7 @@ import java.util.Optional;
 
 public interface IUserService extends IAGenericCrudService<UserDto, Long> {
 
-    UserDto findUserByUserName(String username);
+    Optional<UserDto> findUserByUserName(String username);
     Page<UserDto> findAll(Pageable pageable);
     Optional<UserDto> getUserBySocialId(Long socialId);
     Optional<UserDto> findUserByEmail(String email);

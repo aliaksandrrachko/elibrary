@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -42,12 +43,14 @@ public class SectionService implements ISectionService {
     }
 
     @Override
+    @Transactional
     public void delete(Integer id) {
         Optional<Section> optionalSection = sectionJpaRepository.findById(id);
         optionalSection.ifPresent(section -> sectionJpaRepository.delete(section));
     }
 
     @Override
+    @Transactional
     public Optional<SectionDto> create(SectionDto entityDto) {
         Integer categoryId = entityDto.getCategoryId();
         String categoryName = entityDto.getCategoryName();
@@ -69,6 +72,7 @@ public class SectionService implements ISectionService {
     }
 
     @Override
+    @Transactional
     public Optional<SectionDto> update(Integer id, SectionDto entityDto) {
         Optional<Section> optionalSection = sectionJpaRepository.findById(id);
         if (entityDto != null &&

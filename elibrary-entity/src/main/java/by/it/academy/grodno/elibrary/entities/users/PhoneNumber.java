@@ -3,9 +3,8 @@ package by.it.academy.grodno.elibrary.entities.users;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import com.vladmihalcea.hibernate.type.json.JsonStringType;
 import lombok.*;
-import org.hibernate.annotations.TypeDef;
+import lombok.experimental.SuperBuilder;
 
 import java.io.Serializable;
 
@@ -15,6 +14,7 @@ import java.io.Serializable;
 @AllArgsConstructor
 @EqualsAndHashCode
 @ToString
+@SuperBuilder
 @JsonPropertyOrder(value = {"code", "number"})
 public class PhoneNumber implements Serializable {
 

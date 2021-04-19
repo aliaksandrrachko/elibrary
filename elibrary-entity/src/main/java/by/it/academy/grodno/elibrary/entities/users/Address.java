@@ -26,8 +26,11 @@ public class Address extends AEntity<Long> implements Serializable {
     @Column(name = "district", length = 50)
     private String district;
 
-    @Column(name = "city_name", length = 20)
+    @Column(name = "city_name", length = 50)
     private String cityName;
+
+    @Column(name = "street_name", length = 50)
+    private String streetName;
 
     @Column(name = "postal_code", length = 32)
     private String postalCode;

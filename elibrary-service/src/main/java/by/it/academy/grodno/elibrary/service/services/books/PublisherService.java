@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -46,6 +47,7 @@ public class PublisherService implements IPublisherService {
     }
 
     @Override
+    @Transactional
     public Optional<PublisherDto> create(PublisherDto entityDto) {
         return Optional.of(publisherMapper.toDto(publisherJpaRepository.save(
                 Publisher.builder()
@@ -54,6 +56,7 @@ public class PublisherService implements IPublisherService {
     }
 
     @Override
+    @Transactional
     public Optional<PublisherDto> update(Integer id, PublisherDto entityDto) {
         Optional<Publisher> optionalPublisher = publisherJpaRepository.findById(id);
         if (entityDto != null &&
