@@ -27,7 +27,7 @@ public class SignUpController {
     }
 
     @PostMapping()
-    public ModelAndView addUser(@Valid @ModelAttribute(value = "userDto") UserDto userDto, BindingResult result) {
+    public ModelAndView signUp(@Valid @ModelAttribute(value = "userDto") UserDto userDto, BindingResult result) {
         ModelAndView modelAndView;
         try {
             if (result.hasErrors()) {
@@ -40,7 +40,6 @@ public class SignUpController {
                 modelAndView.setViewName("redirect:/login");
             }
         } catch (Exception e) {
-
             modelAndView = new ModelAndView();
             modelAndView.addAllObjects(result.getModel());
             modelAndView.addObject("error",e.getMessage());

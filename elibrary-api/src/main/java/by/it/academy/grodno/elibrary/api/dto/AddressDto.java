@@ -29,6 +29,9 @@ public class AddressDto extends AEntityDto<Long> {
     @NotBlank(message = "Field 'City' can not be empty.")
     private String cityName;
 
+    @NotBlank(message = "Field 'Street' can not be empty.")
+    private String streetName;
+
     private String postalCode;
 
     @NotBlank(message = "Field 'House number' can not be empty.")
@@ -38,7 +41,5 @@ public class AddressDto extends AEntityDto<Long> {
     private String apartmentNumber;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
-    @JsonDeserialize(using = LocalDateDeserializer.class)
-    @JsonSerialize(using = LocalDateSerializer.class)
     private LocalDateTime updated;
 }

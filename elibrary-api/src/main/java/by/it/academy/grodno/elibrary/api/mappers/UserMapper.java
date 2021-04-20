@@ -1,7 +1,9 @@
 package by.it.academy.grodno.elibrary.api.mappers;
 
 import by.it.academy.grodno.elibrary.api.dao.RoleJpaRepository;
+import by.it.academy.grodno.elibrary.api.dto.AddressDto;
 import by.it.academy.grodno.elibrary.api.dto.UserDto;
+import by.it.academy.grodno.elibrary.entities.users.Address;
 import by.it.academy.grodno.elibrary.entities.users.Gender;
 import by.it.academy.grodno.elibrary.entities.users.Role;
 import by.it.academy.grodno.elibrary.entities.users.User;
@@ -36,6 +38,8 @@ public class UserMapper extends AGenericMapper<User, UserDto, Long>{
                     u.skip(UserDto::setAddressDto);
                     u.skip(UserDto::setRoles);
                     u.skip(UserDto::setPhoneNumber);
+                    u.skip(UserDto::setPassword);
+                    u.skip(UserDto::setPasswordConfirm);
                 }).setPostConverter(toDtoConverter());
         modelMapper.createTypeMap(UserDto.class, User.class)
                 .addMappings(m -> {
@@ -47,15 +51,15 @@ public class UserMapper extends AGenericMapper<User, UserDto, Long>{
 
     @Override
     public void mapSpecificFields(User source, UserDto destination) {
-        destination.setGender(source.getGender().getAbbreviation());
-        destination.setAddressDto(addressMapper.toDto(source.getAddress()));
+        destination.setGender(source.getGender().name().toLowerCase());
+        setAddressToUserDto(source, destination);
         destination.setRoles(source.getRoles().stream().map(Role::getRoleName).collect(Collectors.toSet()));
         destination.setPhoneNumber(PhoneNumberMapper.toStringNumber(source.getPhoneNumber()));
     }
 
     @Override
     public void mapSpecificFields(UserDto source, User destination) {
-        destination.setGender(Gender.getGender(source.getGender()));
+        destination.setGender(Gender.getGender(source.getGender().charAt(0)));
         destination.setAddress(addressMapper.toEntity(source.getAddressDto()));
 
         Set<Role> roles = new HashSet<>();
@@ -63,7 +67,17 @@ public class UserMapper extends AGenericMapper<User, UserDto, Long>{
             Optional<Role> roleOptional = roleJpaRepository.findByRoleName(role);
             roleOptional.ifPresent(roles::add);
         });
+
         destination.setRoles(roles);
         destination.setPhoneNumber(PhoneNumberMapper.toEntity(source.getPhoneNumber()));
+    }
+
+    private void setAddressToUserDto(User source, UserDto destination){
+        Address address = source.getAddress();
+        if (address == null){
+            destination.setAddressDto(new AddressDto());
+        } else {
+            destination.setAddressDto(addressMapper.toDto(source.getAddress()));
+        }
     }
 }

@@ -22,7 +22,7 @@ public class MainController {
         UserDto userDto = null;
         if (principal != null){
             String userName = principal.getName();
-            //userDto = userService.getB(userName);
+            userDto = userService.findById(userName).orElse(null);
         }
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("home");

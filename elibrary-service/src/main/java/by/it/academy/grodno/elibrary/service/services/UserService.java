@@ -5,6 +5,7 @@ import by.it.academy.grodno.elibrary.api.dto.UserDto;
 import by.it.academy.grodno.elibrary.api.mappers.UserMapper;
 import by.it.academy.grodno.elibrary.api.services.IUserService;
 import by.it.academy.grodno.elibrary.entities.users.User;
+import by.it.academy.grodno.elibrary.service.exceptions.PasswordMatchException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -12,6 +13,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -52,6 +54,13 @@ public class UserService implements IUserService {
     }
 
     @Override
+    public Optional<UserDto> findById(String userId) {
+        Long userIdNumber = Long.parseLong(userId);
+        Optional<User> optionalUser = userJpaRepository.findById(userIdNumber);
+        return optionalUser.map(user -> userMapper.toDto(user));
+    }
+
+    @Override
     public Class<UserDto> getGenericClass() {
         return UserDto.class;
     }
@@ -77,14 +86,32 @@ public class UserService implements IUserService {
     @Override
     @Transactional
     public Optional<UserDto> create(UserDto entityDto) {
-        return null;
+  /*      if (entityDto.getPassword() == null && entityDto.getPasswordConfirm() == null) {
+
+        } */
+        if (entityDto.getPassword().equals(entityDto.getPasswordConfirm())){
+            entityDto.setRoles(Collections.singleton("ROLE_USER"));
+            entityDto.setUsername(entityDto.getFirstName() + " " + entityDto.getLastName());
+            User user = userMapper.toEntity(entityDto);
+            user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+            user = userJpaRepository.save(user);
+            return Optional.of(userMapper.toDto(user));
+        } else  {
+            throw new PasswordMatchException(entityDto);
+        }
     }
 
     @Override
     @Transactional
     public Optional<UserDto> update(Long id, UserDto entityDto) {
-
-
-        return null;
+        if (entityDto.getPassword().equals(entityDto.getPasswordConfirm())){
+            entityDto.setRoles(Collections.singleton("ROLE_USER"));
+            User user = userMapper.toEntity(entityDto);
+            user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+            user = userJpaRepository.save(user);
+            return Optional.of(userMapper.toDto(user));
+        } else {
+            throw new PasswordMatchException(entityDto);
+        }
     }
 }

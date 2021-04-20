@@ -6,65 +6,193 @@
     <meta name="description" content="Log in page">
     <meta name="author" content="Ales'">
     <title>Please sign up</title>
-    <link rel="shortcut icon" type="image/x-icon"  href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAYAAAA7MK6iAAAABmJLR0QA/wD/AP+gvaeTAAABEUlEQVRIie3UMUoDYRDF8Z8psqUpLBRrBS+gx7ATD6E5iSjeQQ/gJUzEwmChnZZaKZiQ0ljsLkhQM5/5Agr74DX7DfOfgZ1Hoz+qAl30Marcx2H1thCtY4DJN76parKqmAH9DM+6eTcArX2QE3yVAO7lBA8TwMNIw6UgeJI46My+rWCjUQL0LVIUBd8lgEO1UfBZAvg8oXamCuWNRu64nRNMmUo/wReSXLXayoDoKc9miMvqW/ZNG2VRNLla2MYudrCFTvX2intlnl/gGu/zDraGYzyLZ/UTjrD6G2AHpxgnAKc9xgmWo9BNPM4BnPYDNiLg24zQ2oNpyFdZvRKZLlGhnvvKPzXXti/Yy7hEo3+iD9EHtgdqxQnwAAAAAElFTkSuQmCC"/>
+    <link rel="shortcut icon" type="image/x-icon"
+          href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAYAAAA7MK6iAAAABmJLR0QA/wD/AP+gvaeTAAABEUlEQVRIie3UMUoDYRDF8Z8psqUpLBRrBS+gx7ATD6E5iSjeQQ/gJUzEwmChnZZaKZiQ0ljsLkhQM5/5Agr74DX7DfOfgZ1Hoz+qAl30Marcx2H1thCtY4DJN76parKqmAH9DM+6eTcArX2QE3yVAO7lBA8TwMNIw6UgeJI46My+rWCjUQL0LVIUBd8lgEO1UfBZAvg8oXamCuWNRu64nRNMmUo/wReSXLXayoDoKc9miMvqW/ZNG2VRNLla2MYudrCFTvX2intlnl/gGu/zDraGYzyLZ/UTjrD6G2AHpxgnAKc9xgmWo9BNPM4BnPYDNiLg24zQ2oNpyFdZvRKZLlGhnvvKPzXXti/Yy7hEo3+iD9EHtgdqxQnwAAAAAElFTkSuQmCC"/>
     <link href="/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
     <link href="/css/signin.css" rel="stylesheet" crossorigin="anonymous"/>
 </head>
 
 <body>
-<div class="container">
-    <div class="md-4 text-danger" th:if="${param.error}">
-        Invalid username and password.
-        <p th:text="${param.error}">
-    </div>
-    <div class="md-4 text-danger" th:if="${param.logout}">
-        You have been logged out.
-        <p th:text="${param.logout}">
-    </div>
-
-    <form action="#" class="form-signin" th:href="@{/singup}" th:method="post" th:object="${userDto}">
-        <h2>Please sign up</h2>
-        <div class="mb-3">
-            <label class="form-label visually-hidden" for="username">Username</label>
-            <input class="form-control" id="username" placeholder="Username" th:field="*{username}"
-                   th:value="${userDto.username}"
-                   type="text">
-            <span class="text-danger" th:errors="*{username}" th:if="${#fields.hasErrors('username')}"></span>
+<div class="container m-auto">
+        <div class="md-4 text-danger" th:if="${param.error}">
+            Invalid username and password.
+            <p th:text="${param.error}">
+        </div>
+        <div class="md-4 text-danger" th:if="${param.logout}">
+            You have been logged out.
+            <p th:text="${param.logout}">
         </div>
 
-        <div class="mb-3">
-            <label class="form-label visually-hidden" for="email">Email</label>
-            <input class="form-control" id="email" placeholder="Email" th:field="*{email}" th:value="${userDto.email}"
-                   type="email">
-            <span class="text-danger" th:errors="*{email}" th:if="${#fields.hasErrors('email')}"></span>
+        <div class="form-signin-2">
+            <form action="#" th:href="@{/singup}" th:method="post" th:object="${userDto}">
+                <h2>Please sign up</h2>
+                <div>
+                    <div class="mb-3">
+                        <label class="form-label visually-hidden" for="firstName">First name</label>
+                        <input class="form-control" id="firstName" placeholder="First name" th:field="*{firstName}"
+                               th:value="${userDto.firstName}"
+                               type="text">
+                        <span class="text-danger" th:errors="*{firstName}"
+                              th:if="${#fields.hasErrors('firstName')}"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label visually-hidden" for="lastName">Last name</label>
+                        <input class="form-control" id="lastName" placeholder="Last name" th:field="*{lastName}"
+                               th:value="${userDto.lastName}"
+                               type="text">
+                        <span class="text-danger" th:errors="*{lastName}"
+                              th:if="${#fields.hasErrors('lastName')}"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label visually-hidden" for="middleName">Middle name</label>
+                        <input class="form-control" id="middleName" placeholder="Middle name" th:field="*{middleName}"
+                               th:value="${userDto.middleName}"
+                               type="text">
+                        <span class="text-danger" th:errors="*{middleName}"
+                              th:if="${#fields.hasErrors('middleName')}"></span>
+                    </div>
+                </div>
+                <div class="border-top">
+                    <div class="pt-3 mb-3">
+                        <label class="form-label visually-hidden" for="email">Email</label>
+                        <input class="form-control rounded" id="email" placeholder="Email" th:field="*{email}"
+                               th:value="${userDto.email}"
+                               type="email">
+                        <span class="text-danger" th:errors="*{email}" th:if="${#fields.hasErrors('email')}"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label visually-hidden" for="phoneNumber">Phone number</label>
+                        <input class="form-control" id="phoneNumber" placeholder="Phone number" th:field="*{phoneNumber}"
+                               th:value="${userDto.phoneNumber}"
+                               type="text">
+                        <span class="text-danger" th:errors="*{phoneNumber}"
+                              th:if="${#fields.hasErrors('phoneNumber')}"></span>
+                    </div>
+                </div>
+
+                <div class="mb-2 border-top border-bottom">
+                    <p class="m-1">Gender:</p>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" th:field="${userDto.gender}" type="radio" name="genderRadio"
+                               id="genderMale" value="m">
+                        <label class="form-check-label" for="genderMale">male</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" th:field="${userDto.gender}" type="radio" name="genderRadio"
+                               id="genderFemale" value="f">
+                        <label class="form-check-label" for="genderFemale">female</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" th:field="${userDto.gender}" type="radio" name="genderRadio"
+                               id="genderUnknown" value="u" checked="checked">
+                        <label class="form-check-label" for="genderUnknown">don't say</label>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label" for="birthday">Birthday:</label>
+                    <input class="form-control" id="birthday" placeholder="Birthday" th:field="*{birthday}"
+                           th:value="${userDto.birthday}"
+                           type="date">
+                    <span class="text-danger" th:errors="*{birthday}" th:if="${#fields.hasErrors('birthday')}"></span>
+                </div>
+
+                <div class="mb-3 border-top" th:object="${userDto.addressDto}">
+                    <p class="m-1">Address:</p>
+                    <div class="mb-2">
+                        <label class="form-label visually-hidden" for="region">Region</label>
+                        <input class="form-control" id="region" placeholder="Region name" th:field="*{region}"
+                               th:value="*{region}"
+                               type="text">
+                        <span class="text-danger" th:errors="*{region}"
+                              th:if="${#fields.hasErrors('region')}"></span>
+                    </div>
+                    <div class="mb-2">
+                        <label class="form-label visually-hidden" for="district">District</label>
+                        <input class="form-control" id="district" placeholder="District name"
+                               th:field="*{district}"
+                               th:value="*{district}"
+                               type="text">
+                        <span class="text-danger" th:errors="*{district}"
+                              th:if="${#fields.hasErrors('district')}"></span>
+                    </div>
+                    <div class="mb-2">
+                        <label class="form-label visually-hidden" for="city">City</label>
+                        <input class="form-control" id="city" placeholder="City name" th:field="*{cityName}"
+                               th:value="*{cityName}"
+                               type="text">
+                        <span class="text-danger" th:errors="*{cityName}"
+                              th:if="${#fields.hasErrors('cityName')}"></span>
+                    </div>
+                    <div class="mb-2">
+                        <label class="form-label visually-hidden" for="street">Street</label>
+                        <input class="form-control" id="street" placeholder="Street name" th:field="*{streetName}"
+                               th:value="*{streetName}"
+                               type="text">
+                        <span class="text-danger" th:errors="*{streetName}"
+                              th:if="${#fields.hasErrors('streetName')}"></span>
+                    </div>
+                    <div class="mb-2">
+                        <label class="form-label visually-hidden" for="house">House</label>
+                        <input class="form-control" id="house" placeholder="House number" th:field="*{houseNumber}"
+                               th:value="*{houseNumber}"
+                               type="text">
+                        <span class="text-danger" th:errors="*{houseNumber}"
+                              th:if="${#fields.hasErrors('houseNumber')}"></span>
+                    </div>
+                    <div class="mb-2">
+                        <label class="form-label visually-hidden" for="apt">Apartments</label>
+                        <input class="form-control" id="apt" placeholder="Apartment number"
+                               th:field="*{apartmentNumber}"
+                               th:value="*{apartmentNumber}"
+                               type="text">
+                        <span class="text-danger" th:errors="*{apartmentNumber}"
+                              th:if="${#fields.hasErrors('apartmentNumber')}"></span>
+                    </div>
+
+                    <div class="mb-2">
+                        <label class="form-label visually-hidden" for="postalCode">PostalCode</label>
+                        <input class="form-control" id="postalCode" placeholder="Postal code"
+                               th:field="*{postalCode}"
+                               th:value="*{postalCode}"
+                               type="text">
+                        <span class="text-danger" th:errors="*{postalCode}"
+                              th:if="${#fields.hasErrors('postalCode')}"></span>
+                    </div>
+                </div>
+
+
+                <div class="mb-2 pt-3 border-top">
+                    <label class="form-label visually-hidden" for="password">Password</label>
+                    <input class="form-control rounded" id="password" placeholder="Password" th:field="*{password}"
+                           type="password">
+                    <span class="text-danger" th:errors="*{password}" th:if="${#fields.hasErrors('password')}"></span>
+                </div>
+                <div class="mb-2">
+                    <label class="from-label visually-hidden" for="passwordConfirm">Confirm password</label>
+                    <input class="form-control rounded" id="passwordConfirm" placeholder="Confirm password"
+                           th:field="*{passwordConfirm}" type="password">
+                    <span class="text-danger" th:errors="*{passwordConfirm}"
+                          th:if="${#fields.hasErrors('passwordConfirm')}"></span>
+                </div>
+
+
+                <div class="mt-4 d-grid gap-2">
+                    <button class="btn btn-primary" type="submit">Sign up</button>
+                </div>
+
+                <p class="text-center text-body">Already a member? <a href="/login">Log in</a></p>
+
+                <p class="text-center"><a href="/">Home page</a></p>
+            </form>
         </div>
-
-        <div class="mb-3">
-            <label class="form-label visually-hidden" for="password">Password</label>
-            <input class="form-control" id="password" placeholder="Password" th:field="*{password}" type="password">
-            <span class="text-danger" th:errors="*{password}" th:if="${#fields.hasErrors('password')}"></span>
-        </div>
-
-        <div class="mb-3">
-            <label class="from-label visually-hidden" for="passwordConfirm">Confirm password</label>
-            <input class="form-control" id="passwordConfirm" placeholder="Confirm password"
-                   th:field="*{passwordConfirm}" type="password">
-            <span class="text-danger" th:errors="*{passwordConfirm}"
-                  th:if="${#fields.hasErrors('passwordConfirm')}"></span>
-        </div>
-
-        <div class="mt-4 d-grid gap-2">
-            <button class="btn btn-primary" type="submit">Sign up</button>
-        </div>
-
-        <p class="text-center text-body">Already a member? <a href="/login">Log in</a></p>
-
-        <p class="text-center"><a href="/">Home page</a></p>
-    </form>
 
     <footer class="modal-footer">
-        <span>Copyright © 2021, All Right Reserved Ales'</span>
+        <span>Copyright © 2021, All Right Reserved Aliaksandr Rachko</span>
     </footer>
 </div>
 </body>

@@ -12,4 +12,5 @@ public interface IUserService extends IAGenericCrudService<UserDto, Long> {
     Page<UserDto> findAll(Pageable pageable);
     Optional<UserDto> getUserBySocialId(Long socialId);
     Optional<UserDto> findUserByEmail(String email);
+    Optional<UserDto> findById(String userId);
 }

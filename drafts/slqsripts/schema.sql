@@ -10,20 +10,20 @@ USE by_it_academy_grodno_elibrary;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS user
 (
-    id           BIGINT UNSIGNED NOT NULL AUTO_INCREMENT UNIQUE COMMENT 'User id',
+    id           BIGINT UNSIGNED        NOT NULL AUTO_INCREMENT UNIQUE COMMENT 'User id',
     email        VARCHAR(80) UNIQUE COMMENT 'Email',
-    username     VARCHAR(45)     NOT NULL COMMENT 'User name',
-    first_name   VARCHAR(45) COMMENT 'First name',
-    last_name    VARCHAR(45) COMMENT 'Last name',
-    middle_name  VARCHAR(45) COMMENT 'Middle name',
+    username     VARCHAR(30)            NOT NULL COMMENT 'User name',
+    first_name   VARCHAR(15) COMMENT 'First name',
+    last_name    VARCHAR(15) COMMENT 'Last name',
+    middle_name  VARCHAR(15) COMMENT 'Middle name',
     phone_number JSON COMMENT 'User phone number',
     address_id   BIGINT UNSIGNED COMMENT 'Id of address',
-    gender       CHAR(1)         NOT NULL DEFAULT 'u' COMMENT 'Gender: m-male, f-female, u-unknown',
+    gender       CHAR(1)                NOT NULL DEFAULT 'u' COMMENT 'Gender: m-male, f-female, u-unknown',
     birthday     DATE COMMENT 'Date of birthday',
     password     VARCHAR(64) COMMENT 'Password encoded with using BCryptPasswordEncoder',
-    enabled      BOOLEAN                  DEFAULT TRUE COMMENT 'User lock',
-    user_created DATETIME        NOT NULL DEFAULT NOW() COMMENT 'Date of creating',
-    user_updated DATETIME        NOT NULL DEFAULT NOW() COMMENT 'Date of updated',
+    enabled      BOOLEAN  DEFAULT TRUE COMMENT 'User lock',
+    user_created DATETIME DEFAULT NOW() NOT NULL COMMENT 'Date of creating',
+    user_updated DATETIME DEFAULT NOW() NOT NULL COMMENT 'Date of updated',
     CONSTRAINT pk_user PRIMARY KEY (id)
 );
 
@@ -37,7 +37,6 @@ CREATE TABLE IF NOT EXISTS user_social_id
     CONSTRAINT fk_user_user_social_id FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
--- -----------------------------------------------------
 
 -- -----------------------------------------------------
 -- Table by_it_academy_grodno_elibrary.role
@@ -66,14 +65,15 @@ CREATE TABLE IF NOT EXISTS user_has_role
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS address
 (
-    id           BIGINT UNSIGNED NOT NULL AUTO_INCREMENT UNIQUE COMMENT 'A surrogate primary key used to uniquely identify each address in the table.',
+    id           BIGINT UNSIGNED        NOT NULL AUTO_INCREMENT UNIQUE COMMENT 'A surrogate primary key used to uniquely identify each address in the table.',
     region       VARCHAR(50) COMMENT 'The first line of an address.',
-    district     VARCHAR(50)     NOT NULL COMMENT 'The region of an address, this may be a state, province, prefecture, etc.',
-    city_name    VARCHAR(20)     NOT NULL COMMENT 'A foreign key pointing to the city table.',
+    district     VARCHAR(50)            NOT NULL COMMENT 'The region of an address, this may be a state, province, prefecture, etc.',
+    city    VARCHAR(50)            NOT NULL COMMENT 'A foreign key pointing to the city table.',
+    street  VARCHAR(50)            NOT NULL COMMENT 'The street name',
     postal_code  VARCHAR(32) COMMENT 'The postal code or ZIP code of the address (where applicable).',
-    house        VARCHAR(10)     NOT NULL COMMENT 'The house number',
+    house        VARCHAR(10)            NOT NULL COMMENT 'The house number',
     apt          VARCHAR(10) COMMENT 'Number of room',
-    last_updated DATETIME DEFAULT NOW() COMMENT 'Date of creating or last updating',
+    last_updated DATETIME DEFAULT NOW() NOT NULL COMMENT 'Date of creating or last updating',
     CONSTRAINT pk_address PRIMARY KEY (id)
 );
 
@@ -132,23 +132,23 @@ CREATE TABLE IF NOT EXISTS author
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS book
 (
-    id              BIGINT UNSIGNED NOT NULL AUTO_INCREMENT UNIQUE COMMENT 'Book id',
-    title           VARCHAR(100)    NOT NULL COMMENT 'Book title',
+    id              BIGINT UNSIGNED            NOT NULL AUTO_INCREMENT UNIQUE COMMENT 'Book id',
+    title           VARCHAR(100)               NOT NULL COMMENT 'Book title',
     description     TEXT COMMENT 'Book description',
-    isbn_10         VARCHAR(10)     NOT NULL COMMENT 'Books isbn in format ISBN-10',
-    isbn_13         VARCHAR(13)     NOT NULL COMMENT 'Books isbn in format ISBN-13',
-    section_id      INT UNSIGNED    NOT NULL COMMENT 'Sections id',
+    isbn_10         VARCHAR(10)                NOT NULL COMMENT 'Books isbn in format ISBN-10',
+    isbn_13         VARCHAR(13)                NOT NULL COMMENT 'Books isbn in format ISBN-13',
+    section_id      INT UNSIGNED               NOT NULL COMMENT 'Sections id',
     publisher_id    INT UNSIGNED COMMENT 'Book publisher',
     language        VARCHAR(3) COMMENT 'Language of book by alpha-3/ISO 639-2 Code',
     publishing_date DATE COMMENT 'The year and month of publishing',
-    print_length    INT UNSIGNED    NOT NULL COMMENT 'Count of pages',
+    print_length    INT UNSIGNED               NOT NULL COMMENT 'Count of pages',
     picture_url     VARCHAR(2083) COMMENT 'Books cover image',
     total_count     INT UNSIGNED COMMENT 'Total count of books',
     available_count INT UNSIGNED COMMENT 'Available count',
-    available       BOOLEAN                  DEFAULT TRUE COMMENT 'Available for booking',
-    book_rating     INT UNSIGNED             DEFAULT 0 COMMENT 'Book rating, count of viewing',
-    book_created    DATETIME        NOT NULL DEFAULT NOW() COMMENT 'The date of adding book',
-    book_updated    DATETIME        NOT NULL DEFAULT NOW() COMMENT 'The date of adding book',
+    available       BOOLEAN      DEFAULT TRUE COMMENT 'Available for booking',
+    book_rating     INT UNSIGNED DEFAULT 0 COMMENT 'Book rating, count of viewing',
+    book_created    DATETIME     DEFAULT NOW() NOT NULL COMMENT 'The date of adding book',
+    book_updated    DATETIME     DEFAULT NOW() NOT NULL COMMENT 'The date of adding book',
     #cover INT COMMENT 'The books cover',
     CONSTRAINT pk_book PRIMARY KEY (id),
     CONSTRAINT fk_book_section FOREIGN KEY (section_id) REFERENCES section (id) ON DELETE CASCADE ON UPDATE CASCADE,
@@ -182,11 +182,11 @@ CREATE TABLE IF NOT EXISTS book_has_author
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS review
 (
-    id             BIGINT UNSIGNED NOT NULL COMMENT 'Review id',
-    book_id        BIGINT UNSIGNED NOT NULL COMMENT 'Books id',
-    review_created DATETIME        NOT NULL DEFAULT NOW() COMMENT 'Date of creating',
-    user_id        BIGINT UNSIGNED NOT NULL COMMENT 'Users id',
-    review_text    TEXT            NOT NULL COMMENT 'Review text',
+    id             BIGINT UNSIGNED        NOT NULL COMMENT 'Review id',
+    book_id        BIGINT UNSIGNED        NOT NULL COMMENT 'Books id',
+    review_created DATETIME DEFAULT NOW() NOT NULL COMMENT 'Date of creating',
+    user_id        BIGINT UNSIGNED        NOT NULL COMMENT 'Users id',
+    review_text    TEXT                   NOT NULL COMMENT 'Review text',
     CONSTRAINT fk_review_book FOREIGN KEY (book_id) REFERENCES book (id) ON DELETE CASCADE ON UPDATE CASCADE,
     CONSTRAINT fk_review_user FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE ON UPDATE CASCADE
 );

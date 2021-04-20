@@ -1,19 +1,14 @@
 package by.it.academy.grodno.elibrary.api.dto;
 
-import by.it.academy.grodno.elibrary.entities.users.PhoneNumber;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
-import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
+import org.springframework.format.annotation.DateTimeFormat;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.time.LocalDate;
@@ -29,7 +24,8 @@ import java.util.Set;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class UserDto extends AEntityDto<Long> {
 
-    boolean enabled;
+    @Builder.Default
+    boolean enabled = true;
     @NotBlank(message = "Field 'Email' can not be empty.")
     @Pattern(regexp = "^(?:[a-zA-Z0-9_'^&/+-])+(?:\\.(?:[a-zA-Z0-9_'^&/+-])+)" +
             "*@(?:(?:\\[?(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?))\\.)" +
@@ -37,8 +33,6 @@ public class UserDto extends AEntityDto<Long> {
             "+(?:[a-zA-Z]){2,}\\.?)$",
             message = "Invalid 'Email'")
     private String email;
-    @NotBlank(message = "Field 'Username' can not be empty.")
-    @Size(min = 2, max = 20, message = "The 'Username' must be between 2 and 20 characters.")
     private String username;
     @NotBlank(message = "Field 'First name' can not be empty.")
     @Size(min = 2, max = 20, message = "The 'First name' must be between 2 and 20 characters.")
@@ -52,8 +46,11 @@ public class UserDto extends AEntityDto<Long> {
     @NotBlank(message = "Field 'Phone' can not be empty.")
     @Pattern(regexp = "^\\d{9}$", message = "'Phone' can be in format (xx)xxxxxxx")
     private String phoneNumber;
-    private AddressDto addressDto;
-    private Character gender;
+    @Valid
+    private AddressDto addressDto = new AddressDto();
+    private String gender;
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+    @NotNull(message = "Field 'Birthday' can not be empty.")
     private LocalDate birthday;
     @NotBlank(message = "Field 'Password' can not be empty.")
     @Size(min = 4, message = "The 'Password' must be longer than 4 characters.")
@@ -62,12 +59,8 @@ public class UserDto extends AEntityDto<Long> {
     @Size(min = 4, message = "The 'Password' must be longer than 4 characters.")
     private String passwordConfirm;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
-    @JsonDeserialize(using = LocalDateDeserializer.class)
-    @JsonSerialize(using = LocalDateSerializer.class)
     private LocalDateTime created;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
-    @JsonDeserialize(using = LocalDateDeserializer.class)
-    @JsonSerialize(using = LocalDateSerializer.class)
     private LocalDateTime updated;
     private Long socialId;
     private Set<String> roles;

@@ -19,5 +19,6 @@ public abstract class AEntity<K extends Number> implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(unique = true, nullable = false)
     protected K id;
 }

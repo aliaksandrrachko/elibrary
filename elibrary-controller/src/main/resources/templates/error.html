@@ -6,7 +6,7 @@
     <meta name="description" content="">
     <meta name="author" content="Ales' Rachko, and Bootstrap contributors">
     <meta name="generator" content="Hugo 0.80.0">
-    <title>Final project</title>
+    <title>Error</title>
 
     <link rel="canonical" href="https://getbootstrap.com/docs/5.0/examples/starter-template/">
 
@@ -15,7 +15,7 @@
           integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
 
     <!-- Favicons -->
-    <link rel="icon" href="/img/favicons/final-ico.png" sizes="32x32" type="image/png">
+    <link rel="icon" href="/static/img/favicons/final-ico.png" sizes="32x32" type="image/png">
     <meta name="theme-color" content="#7952b3">
 
     <style>
@@ -39,9 +39,10 @@
 </head>
 <body>
 
+
 <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
     <div class="container-fluid">
-        <a class="navbar-brand" href="/">E-Library</a>
+        <a class="navbar-brand" href="/">Final project</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarsExampleDefault"
                 aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -50,10 +51,19 @@
         <div class="collapse navbar-collapse" id="navbarsExampleDefault">
             <ul class="navbar-nav me-auto mb-2 mb-md-0">
                 <li class="nav-item">
+                    <a aria-current="page" class="nav-link active" href="/">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/users">Users</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/pets">Pets</a>
+                </li>
+                <li class="nav-item">
                     <a class="nav-link" href="/books">Book</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/users/search">Searching book</a>
+                    <a class="nav-link" href="/users/search">Search</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link disabled" href="/admin" tabindex="-1" aria-disabled="true">Disabled</a>
@@ -63,8 +73,7 @@
                        aria-expanded="false">Admin</a>
                     <ul class="dropdown-menu" aria-labelledby="dropdown01">
                         <li><a class="dropdown-item" th:href="@{/admin/users}">Manage users</a></li>
-                        <li><a class="dropdown-item" th:href="@{/admin/books}">Manage books</a></li>
-                        <li><a class="dropdown-item" th:href="@{/admin/books/add}">Add book</a></li>
+                        <li><a class="dropdown-item" th:href="@{/admin/pets}">Manage pets</a></li>
                     </ul>
                 </li>
             </ul>
@@ -83,25 +92,61 @@
             </div>
         </div>
     </div>
+    </div>
 </nav>
 
 <main class="container">
 
     <div class="starter-template text-center py-5 px-3">
-        <h1>Final project</h1>
-        <p class="lead">It's final project by lessons "Технологии разработки энтерпрайз-решений на Java" from
-            <a class="stretched-" href="https://www.grodno.it-academy.by/">IT-Academy</a> course.
-            <br>Version: 0.0.1-SNAPSHOT
-            <br>Author: Ales' Rachko
-            <br>There using next technologies: Spring Boot, Spring MVC, Hibernate, Thymeleaf, Spring Security.
-            <br>It's start page.</p>
+        <h1>Error:</h1>
+        <p></p>
+        <p class="lead">About error:</p>
+        <div th:if="${param.error}" class="lead">
+            <p th:text="${param.error}">
+        </div>
+        <div th:if="${param.logout}">
+            <p th:text="${param.logout}">
+        </div>
     </div>
+
+    <table class="table">
+        <tr>
+            <td>Date</td>
+            <td th:text="${timestamp}"/>
+        </tr>
+        <tr>
+            <td>Path</td>
+            <td th:text="${path}"/>
+        </tr>
+        <tr>
+            <td>Error</td>
+            <td th:text="${error}"/>
+        </tr>
+        <tr>
+            <td>Status</td>
+            <td th:text="${status}"/>
+        </tr>
+        <tr>
+            <td>Message</td>
+            <td th:text="${message}"/>
+        </tr>
+        <tr>
+            <td>Exception</td>
+            <td th:text="${exception}"/>
+        </tr>
+        <tr>
+            <td>Trace</td>
+            <td>
+                <pre th:text="${trace}"/>
+            </td>
+        </tr>
+    </table>
 
 </main><!-- /.container -->
 
 <footer class="footer mt-auto py-3 bg-light">
     <div class="container">
-        <span class="text-muted">Copyright © 2021, All Right Reserved Aliaksandr Rachko</span>
+        <span class="text-muted">Copyright © 2021, All Right Reserved Ales'</span>
     </div>
 </footer>
 

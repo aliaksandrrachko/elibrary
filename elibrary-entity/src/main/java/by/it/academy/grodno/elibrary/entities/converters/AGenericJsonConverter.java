@@ -17,7 +17,7 @@ public abstract class AGenericJsonConverter<X> implements AttributeConverter<X, 
         this.clazz = clazz;
     }
 
-    private static final ObjectMapper OBJECT_MAPPER;
+    protected static final ObjectMapper OBJECT_MAPPER;
 
     static {
         OBJECT_MAPPER = new ObjectMapper();

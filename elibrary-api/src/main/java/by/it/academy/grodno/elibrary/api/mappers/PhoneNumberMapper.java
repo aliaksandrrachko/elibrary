@@ -18,7 +18,7 @@ public class PhoneNumberMapper {
     private static final String PHONE_NUMBER_PATTERN = "^\\d{9}$";
 
     public static PhoneNumber toEntity(String string){
-        if (string.matches(PHONE_NUMBER_PATTERN)) {
+        if (string != null && string.matches(PHONE_NUMBER_PATTERN)) {
             return PhoneNumber.builder()
                     .phoneCode(string.substring(0, 2))
                     .number(string.substring(2))

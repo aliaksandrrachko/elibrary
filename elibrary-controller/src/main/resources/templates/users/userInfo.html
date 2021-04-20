@@ -6,7 +6,7 @@
     <meta name="description" content="">
     <meta name="author" content="Ales' Rachko, and Bootstrap contributors">
     <meta name="generator" content="Hugo 0.80.0">
-    <title>Final project</title>
+    <title>User info</title>
 
     <link rel="canonical" href="https://getbootstrap.com/docs/5.0/examples/starter-template/">
 
@@ -15,7 +15,7 @@
           integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
 
     <!-- Favicons -->
-    <link rel="icon" href="/img/favicons/final-ico.png" sizes="32x32" type="image/png">
+    <link rel="icon" href="/img/favicons/user.png" sizes="32x32" type="image/png">
     <meta name="theme-color" content="#7952b3">
 
     <style>
@@ -39,6 +39,7 @@
 </head>
 <body>
 
+
 <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
     <div class="container-fluid">
         <a class="navbar-brand" href="/">E-Library</a>
@@ -53,7 +54,7 @@
                     <a class="nav-link" href="/books">Book</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/users/search">Searching book</a>
+                    <a class="nav-link" href="/books/search">Searching book</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link disabled" href="/admin" tabindex="-1" aria-disabled="true">Disabled</a>
@@ -86,15 +87,51 @@
 </nav>
 
 <main class="container">
-
-    <div class="starter-template text-center py-5 px-3">
-        <h1>Final project</h1>
-        <p class="lead">It's final project by lessons "Технологии разработки энтерпрайз-решений на Java" from
-            <a class="stretched-" href="https://www.grodno.it-academy.by/">IT-Academy</a> course.
-            <br>Version: 0.0.1-SNAPSHOT
-            <br>Author: Ales' Rachko
-            <br>There using next technologies: Spring Boot, Spring MVC, Hibernate, Thymeleaf, Spring Security.
-            <br>It's start page.</p>
+    <div class="starter-template py-5 px-3">
+        <div class="text-center">
+            <h1>User's info</h1>
+        </div>
+        <table class="table">
+            <thead class="thead-dark">
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Value</th>
+            </tr>
+            </thead>
+            <tbody class="text-left">
+            <tr><th scope="row" class="text-left">Library card number</th><td th:text="${userDto.id}"></td></tr>
+            <!-- <tr><th scope="row">Avatar</th><td> lather you can add avatar picture
+                <img class="img-thumbnail" src="#" th:src="@{'/img/avatars/' + ${userDto.username} + '.png'}"
+                     alt="Avatar didn't find" width="200" height="200"/>
+            </td></tr>
+            -->
+            <tr><th scope="row">First name</th><td th:text="${userDto.firstName}"></td></tr>
+            <tr><th scope="row">Last name</th><td th:text="${userDto.lastName}"></td></tr>
+            <tr><th scope="row">Middle name</th><td th:text="${userDto.middleName}"></td></tr>
+            <tr><th scope="row">Username</th><td th:text="${userDto.username}"></td></tr>
+            <tr><th scope="row">Email</th><td th:text="${userDto.email}"></td></tr>
+            <tr><th scope="row">Phone number</th><td th:text="${userDto.phoneNumber}"></td></tr>
+            <tr><th scope="row">Gender</th><td th:text="${userDto.gender}"></td></tr>
+            <tr><th scope="row">Birthday date</th><td th:text="${userDto.birthday}"></td></tr>
+            <tr><th scope="row">Address</th><td th:object="${userDto.addressDto}">
+                <p class="m-0" th:text="'Region name: ' + *{region}"></p>
+                <p class="m-0" th:text="'District name: ' + *{district}"></p>
+                <p class="m-0" th:text="'City name: ' + *{cityName}"></p>
+                <p class="m-0" th:text="'Street name: ' + *{streetName}"></p>
+                <p class="m-0" th:text="'House number: ' + *{houseNumber}"></p>
+                <p class="m-0" th:text="'Apartment number: ' + *{apartmentNumber}"></p>
+                <p class="m-0" th:text="'Postal code: ' + *{postalCode}"></p>
+                <!--  The you can update address insert modal window with form -->
+            </td></tr>
+            <tr><th scope="row">Created</th><td th:text="${userDto.created}"></td></tr>
+            <tr><th scope="row">Updated</th><td th:text="${userDto.updated}"></td></tr>
+            <tr><th scope="row">Is enabled</th><td th:text="${userDto.enabled}"></td></tr>
+            <tr><th scope="row">Roles</th><td>
+                <p class="m-0" th:each="role : ${userDto.roles}" th:text="*{role}"></p>
+            </td></tr>
+            </tbody>
+        </table>
+        <a th:href="@{'/users/update/'}" class="btn btn-primary btn-lg">Edit</a>
     </div>
 
 </main><!-- /.container -->

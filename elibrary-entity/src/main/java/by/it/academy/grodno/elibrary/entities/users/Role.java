@@ -22,7 +22,7 @@ import java.io.Serializable;
 @Table(name = ("role"))
 public class Role extends AEntity<Integer> implements GrantedAuthority, Serializable {
 
-    @Column(name = "role_name")
+    @Column(name = "role_name", length = 45)
     private String roleName;
 
     @Override

@@ -18,6 +18,14 @@ body {
     margin: auto;
 }
 
+.form-signin-2 {
+    width: 90%;
+    max-width: 420px;
+    padding: 5px;
+    margin: auto;
+    vertical-align: middle;
+}
+
 .form-signin .checkbox {
     font-weight: 400;
 }

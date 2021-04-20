@@ -3,10 +3,8 @@ package by.it.academy.grodno.elibrary.entities.users;
 import by.it.academy.grodno.elibrary.entities.AEntity;
 import by.it.academy.grodno.elibrary.entities.converters.GenderConverter;
 import by.it.academy.grodno.elibrary.entities.converters.PhoneNumberJsonConverter;
-import com.vladmihalcea.hibernate.type.json.JsonStringType;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
-import org.hibernate.annotations.TypeDef;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -26,32 +24,32 @@ import java.util.Set;
 @Entity
 @Table(name = ("user"))
 @SecondaryTables(value = {
-        @SecondaryTable(name = "user_social_id", pkJoinColumns = {@PrimaryKeyJoinColumn(name = "user_id")}),
-        @SecondaryTable(name = "address", pkJoinColumns = {@PrimaryKeyJoinColumn(name = "id")})})
+        @SecondaryTable(name = "user_social_id", pkJoinColumns = {@PrimaryKeyJoinColumn(name = "user_id", referencedColumnName = "id")}),
+        //@SecondaryTable(name = "address", pkJoinColumns = {@PrimaryKeyJoinColumn(name = "id", referencedColumnName = "address_id")})
+})
 public class User extends AEntity<Long> implements UserDetails, Serializable {
 
     @Column(name = "email", unique = true, length = 80)
     private String email;
 
-    @Column(name = "username", nullable = false, length = 45)
+    @Column(name = "username", nullable = false, length = 30)
     private String username;
 
-    @Column(name = "first_name", length = 45)
+    @Column(name = "first_name", length = 15)
     private String firstName;
 
-    @Column(name = "last_name")
+    @Column(name = "last_name", length = 15)
     private String lastName;
 
-    @Column(name = "middle_name")
+    @Column(name = "middle_name", length = 15)
     private String middleName;
 
-    //@Type(type = "json")
     @Convert(converter = PhoneNumberJsonConverter.class)
     @Column(name = "phone_number", columnDefinition = "json")
     private PhoneNumber phoneNumber;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
-    @JoinColumn(name = "address_id")
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinColumn(name = "address_id", referencedColumnName = "id")
     private Address address;
 
     /**
@@ -71,21 +69,22 @@ public class User extends AEntity<Long> implements UserDetails, Serializable {
     private String password;
 
     @Column(name = "enabled")
-    boolean enabled;
+    @Builder.Default
+    boolean enabled = true;
 
     @Column(name = "social_id", table = "user_social_id")
     private Long socialId;
 
-    @ManyToMany(fetch = FetchType.LAZY)//cascade = {CascadeType.MERGE, CascadeType.PERSIST}
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "user_has_role",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles;
 
-    @Column(name = "user_created")
+    @Column(name = "user_created", insertable = false, updatable = false)
     private LocalDateTime created;
 
-    @Column(name = "user_updated")
+    @Column(name = "user_updated", insertable = false, updatable = false)
     private LocalDateTime updated;
 
     @Override

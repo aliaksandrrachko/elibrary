@@ -26,10 +26,10 @@ public class Address extends AEntity<Long> implements Serializable {
     @Column(name = "district", length = 50)
     private String district;
 
-    @Column(name = "city_name", length = 50)
+    @Column(name = "city", length = 50)
     private String cityName;
 
-    @Column(name = "street_name", length = 50)
+    @Column(name = "street", length = 50)
     private String streetName;
 
     @Column(name = "postal_code", length = 32)
@@ -41,6 +41,6 @@ public class Address extends AEntity<Long> implements Serializable {
     @Column(name = "apt", length = 10)
     private String apartmentNumber;
 
-    @Column(name = "last_updated")
+    @Column(name = "last_updated", insertable = false)
     private LocalDateTime updated;
 }
