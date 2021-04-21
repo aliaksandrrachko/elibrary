@@ -4,6 +4,7 @@ import by.it.academy.grodno.elibrary.api.dao.UserJpaRepository;
 import by.it.academy.grodno.elibrary.api.dto.UserDto;
 import by.it.academy.grodno.elibrary.api.mappers.UserMapper;
 import by.it.academy.grodno.elibrary.api.services.IUserService;
+import by.it.academy.grodno.elibrary.entities.users.Address;
 import by.it.academy.grodno.elibrary.entities.users.User;
 import by.it.academy.grodno.elibrary.service.exceptions.PasswordMatchException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -104,14 +105,46 @@ public class UserService implements IUserService {
     @Override
     @Transactional
     public Optional<UserDto> update(Long id, UserDto entityDto) {
+        Optional<User> optionalUser = userJpaRepository.findById(id);
+        if (!optionalUser.isPresent()){
+            return Optional.empty();
+        }
+
         if (entityDto.getPassword().equals(entityDto.getPasswordConfirm())){
             entityDto.setRoles(Collections.singleton("ROLE_USER"));
+            entityDto.setUsername(entityDto.getFirstName() + " " + entityDto.getLastName());
             User user = userMapper.toEntity(entityDto);
             user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
-            user = userJpaRepository.save(user);
+            User userFromDb = optionalUser.get();
+            mapFields(user, userFromDb);
+            user = userJpaRepository.save(userFromDb);
             return Optional.of(userMapper.toDto(user));
         } else {
             throw new PasswordMatchException(entityDto);
         }
+    }
+
+    private void mapFields(User source, User destination){
+        mapFields(source.getAddress(), destination.getAddress());
+        destination.setBirthday(source.getBirthday());
+        destination.setEmail(source.getEmail());
+        destination.setFirstName(source.getFirstName());
+        destination.setGender(source.getGender());
+        destination.setLastName(source.getLastName());
+        destination.setMiddleName(source.getMiddleName());
+        destination.setPassword(source.getPassword());
+        destination.setPhoneNumber(source.getPhoneNumber());
+        destination.setRoles(source.getRoles());
+        destination.setUsername(source.getUsername());
+    }
+
+    private void mapFields(Address source, Address destination){
+        destination.setApartmentNumber(source.getApartmentNumber());
+        destination.setCityName(source.getCityName());
+        destination.setDistrict(source.getDistrict());
+        destination.setHouseNumber(destination.getHouseNumber());
+        destination.setPostalCode(source.getPostalCode());
+        destination.setRegion(source.getRegion());
+        destination.setStreetName(source.getStreetName());
     }
 }

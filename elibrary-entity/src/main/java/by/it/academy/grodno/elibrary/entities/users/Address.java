@@ -41,6 +41,6 @@ public class Address extends AEntity<Long> implements Serializable {
     @Column(name = "apt", length = 10)
     private String apartmentNumber;
 
-    @Column(name = "last_updated", insertable = false)
+    @Column(name = "last_updated", insertable = false, updatable = false)
     private LocalDateTime updated;
 }

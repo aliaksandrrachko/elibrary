@@ -1,11 +1,9 @@
-package by.it.academy.grodno.elibrary.service.utils;
+package by.it.academy.grodno.elibrary.entities.utils;
 
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@SpringBootTest
 class IsbnUtilsTest {
 
     private static final String[] CORRECT_ISBN_10 = {

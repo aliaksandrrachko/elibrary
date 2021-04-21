@@ -1,15 +1,12 @@
 package by.it.academy.grodno.elibrary.entities.books;
 
 import by.it.academy.grodno.elibrary.entities.AEntity;
-import org.hibernate.annotations.Type;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Set;
 
 @NoArgsConstructor
@@ -37,14 +34,14 @@ public class Book extends AEntity<Long> {
     private String description;
 
     @ManyToOne
-    @JoinColumn(name = "section_id", referencedColumnName = "id")
+    @JoinColumn(name = "section_id", referencedColumnName = "id", nullable = false)
     private Section section;
 
     @ManyToOne
     @JoinColumn(name = "publisher_id", referencedColumnName = "id")
     private Publisher publisher;
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "book_has_author",
             joinColumns = @JoinColumn(name = "book_id"),
             inverseJoinColumns = @JoinColumn(name = "author_id"))
@@ -55,6 +52,9 @@ public class Book extends AEntity<Long> {
 //            joinColumns = {@JoinColumn(name = "attribute", columnDefinition = "json")})
 //    private Map<String, Object> attributes;
 
+    /**
+     * Code by alpha-3/ISO 639-2.
+     */
     @Column(name = "language", length = 3)
     private String language;
 
@@ -76,12 +76,12 @@ public class Book extends AEntity<Long> {
     @Column(name = "available")
     private boolean available;
 
-    @Column(name = "book_rating")
+    @Column(name = "book_rating", insertable = false, updatable = false)
     private int rating;
 
-    @Column(name = "book_created")
+    @Column(name = "book_created", insertable = false, updatable = false)
     private LocalDateTime created;
 
-    @Column(name = "book_updated")
+    @Column(name = "book_updated", insertable = false, updatable = false)
     private LocalDateTime updated;
 }

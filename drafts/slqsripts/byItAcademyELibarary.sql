@@ -11,7 +11,7 @@ USE by_it_academy_grodno_elibrary;
 CREATE TABLE IF NOT EXISTS user
 (
     id           BIGINT UNSIGNED        NOT NULL AUTO_INCREMENT UNIQUE COMMENT 'User id',
-    email        VARCHAR(80) UNIQUE COMMENT 'Email',
+    email        VARCHAR(80) UNIQUE NULL COMMENT 'Email',
     username     VARCHAR(30)            NOT NULL COMMENT 'User name',
     first_name   VARCHAR(15) COMMENT 'First name',
     last_name    VARCHAR(15) COMMENT 'Last name',
@@ -42,25 +42,21 @@ CREATE TABLE IF NOT EXISTS user_social_id
 -- -----------------------------------------------------
 # CREATE
 #     TRIGGER p_user_insert
-#     AFTER INSERT
+#     BEFORE INSERT
 #     ON user
 #     FOR EACH ROW
-#     UPDATE user
-#     SET user.user_created = NOW(),
-#         user.user_updated = NOW()
-#     WHERE user.id = NEW.id;
+#     SET NEW.user_created = NOW(),
+#         NEW.user_updated = NOW();
 
 -- -----------------------------------------------------
 -- Trigger on update user
 -- -----------------------------------------------------
 CREATE
     TRIGGER p_user_update
-    AFTER UPDATE
+    BEFORE UPDATE
     ON user
     FOR EACH ROW
-    UPDATE user
-    SET user.user_updated = NOW()
-    WHERE user.id = NEW.id;
+    SET NEW.user_updated = NOW();
 
 -- -----------------------------------------------------
 -- Table by_it_academy_grodno_elibrary.role
@@ -106,24 +102,20 @@ CREATE TABLE IF NOT EXISTS address
 -- -----------------------------------------------------
 CREATE
     TRIGGER p_address_update
-    AFTER UPDATE
+    BEFORE UPDATE
     ON address
     FOR EACH ROW
-    UPDATE address
-    SET last_updated = NOW()
-    WHERE id = NEW.id;
+    SET NEW.last_updated = NOW();
 
 -- -----------------------------------------------------
 -- Trigger by insert or insert address
 -- -----------------------------------------------------
-# CREATE
-#     TRIGGER p_address_insert
-#     AFTER INSERT
-#     ON address
-#     FOR EACH ROW
-#     UPDATE address
-#     SET last_updated = NOW()
-#     WHERE id = NEW.id;
+CREATE
+    TRIGGER p_address_insert
+    BEFORE INSERT
+    ON address
+    FOR EACH ROW
+    SET NEW.last_updated = NOW();
 
 -- -----------------------------------------------------
 -- Alter table user add FK key
@@ -194,7 +186,7 @@ CREATE TABLE IF NOT EXISTS book
     total_count     INT UNSIGNED COMMENT 'Total count of books',
     available_count INT UNSIGNED COMMENT 'Available count',
     available       BOOLEAN      DEFAULT TRUE COMMENT 'Available for booking',
-    book_rating     INT UNSIGNED DEFAULT 0 COMMENT 'Book rating, count of viewing',
+    book_rating     INT UNSIGNED DEFAULT 0 NOT NULL COMMENT 'Book rating, count of viewing',
     book_created    DATETIME     DEFAULT NOW() NOT NULL COMMENT 'The date of adding book',
     book_updated    DATETIME     DEFAULT NOW() NOT NULL COMMENT 'The date of adding book',
     #cover INT COMMENT 'The books cover',
@@ -202,6 +194,28 @@ CREATE TABLE IF NOT EXISTS book
     CONSTRAINT fk_book_section FOREIGN KEY (section_id) REFERENCES section (id) ON DELETE CASCADE ON UPDATE CASCADE,
     CONSTRAINT fk_book_publisher FOREIGN KEY (publisher_id) REFERENCES publisher (id) ON DELETE CASCADE ON UPDATE CASCADE
 );
+
+-- -----------------------------------------------------
+-- Trigger on insert book
+-- -----------------------------------------------------
+# CREATE
+#     TRIGGER p_book_insert
+#     BEFORE INSERT
+#     ON book
+#     FOR EACH ROW
+#     SET NEW.book_created = NOW(),
+#         NEW.book_updated = NOW();
+
+-- -----------------------------------------------------
+-- Trigger on update user
+-- -----------------------------------------------------
+CREATE
+    TRIGGER p_book_update
+    BEFORE UPDATE
+    ON book
+    FOR EACH ROW
+    SET NEW.book_updated = NOW();
+
 
 -- -----------------------------------------------------
 -- Table by_it_academy_grodno_elibrary.attribute
@@ -279,7 +293,7 @@ CREATE TABLE IF NOT EXISTS subscription
 -- -----------------------------------------------------
 CREATE
     TRIGGER p_subscription_book_insert
-    AFTER INSERT
+    BEFORE INSERT
     ON subscription
     FOR EACH ROW
     UPDATE book
@@ -291,10 +305,9 @@ CREATE
 -- -----------------------------------------------------
 CREATE
     TRIGGER p_subscription_insert
-    AFTER INSERT
+    BEFORE INSERT
     ON subscription
     FOR EACH ROW
-    UPDATE subscription
     SET subscription_deadline =
             DATE_ADD((SELECT subscription_deadline FROM subscription WHERE id = new.id),
                      INTERVAL
@@ -306,10 +319,9 @@ CREATE
 -- -----------------------------------------------------
 CREATE
     TRIGGER p_subscription_update
-    AFTER UPDATE
+    BEFORE UPDATE
     ON subscription
     FOR EACH ROW
-    UPDATE subscription
     SET subscription_deadline =
             DATE_ADD((SELECT subscription_deadline FROM subscription WHERE id = new.id),
                      INTERVAL
@@ -327,55 +339,74 @@ VALUES (1, 'ROLE_USER'),
        (5, 'ROLE_USER_GOOGLE'),
        (6, 'ROLE_LIBRARIAN');
 
-# Fake users
-INSERT INTO user (email, username, first_name, last_name, middle_name, phone_number, gender, birthday, password)
-VALUES ('admin@mail.ru', 'Admin', 'Dima', 'Petrov', 'Petrovich', '{
-  "code": "29",
-  "number": "2965416"
-}', 'm', '1995-04-05', '$2a$10$Z1/.F4bRuyOGyL7NQrmjhufHf8XrHIEjPfBz9tlPbPcWrLpvPWKfq'); /*12345*/
+-- -----------------------------------------------------
+-- Initial data by_it_academy_grodno_elibrary.address
+-- -----------------------------------------------------
+INSERT INTO address (id, region, district, city, street, postal_code, house, apt)
+values (1, 'Гродненская', 'Гродненский', 'Kuangyuan', 'Erie', 230005, '278', '4720'),
+       (2, 'Гродненская', 'Гродненский', 'Kutorejo', 'Gerald', 230005, '07', '4292'),
+       (3, 'Гродненская', 'Гродненский', 'Shangshuai', 'Prairieview', 230005, '05843', '07'),
+       (4, 'Гродненская', 'Rhône-Alpes', 'Valbonë', 'Talmadge', 230005, '1', '6'),
+       (5, 'Гродненская', 'Гродненский', 'Montes Claros', 'Kensington', '39400-000', '78523', '77'),
+       (6, 'Гродненская', 'Гродненский', 'Yanhe', 'Heffernan', 230005, '49220', '1096'),
+       (7, 'Québec', 'Гродненский', 'Matagami', 'Barnett', 'N2M', '0866', '245'),
+       (8, 'Гродненская', 'Гродненский', 'Moñitos', 'Stuart', '231008', '114', '0'),
+       (9, 'Гродненская', 'Гродненский', 'Tongqiao', 'International', 230005, '88', '753'),
+       (10, 'Гродненская', 'Гродненский', 'San Marcos', 'Armistice', '704038', '387', '578'),
+       (11, 'Гродненская', 'Гродненский', 'Shuicha', 'Fulton', 230005, '8546', '702'),
+       (12, 'Гродненская', 'Гродненский', 'Sangumata', 'American', 230005, '22', '031');
 
-INSERT INTO user (email, username, first_name, last_name, middle_name, phone_number, gender, birthday, password)
+-- -----------------------------------------------------
+-- Initial data by_it_academy_grodno_elibrary.user
+-- -----------------------------------------------------
+INSERT INTO user (email, username, first_name, last_name, middle_name, phone_number, address_id, gender, birthday, password)
+VALUES ('admin@mail.ru', 'Admin', 'Dima', 'Petrov', 'Petrovich', '{"code": "29", "number": "2965416"}', 1, 'm', '1995-04-05', '$2a$10$Z1/.F4bRuyOGyL7NQrmjhufHf8XrHIEjPfBz9tlPbPcWrLpvPWKfq'); /*12345*/
+
+INSERT INTO user (email, username, first_name, last_name, middle_name, phone_number, address_id, gender, birthday, password)
 VALUES ('eget.odio@Donec.ca', 'Armand Parrish', 'Cleo', 'Macias', 'Gretchen', '{
   "code": "67",
   "number": "6908407"
-}', 'm', '2021-03-01', '$2a$10$Z1/.F4bRuyOGyL7NQrmjhufHf8XrHIEjPfBz9tlPbPcWrLpvPWKfq'),
+}', 2, 'm', '2021-03-01', '$2a$10$Z1/.F4bRuyOGyL7NQrmjhufHf8XrHIEjPfBz9tlPbPcWrLpvPWKfq'),
        ('ligula.eu@litoratorquent.net', 'Azalia Rosario', 'Raven', 'Barry', 'Jordan', '{
          "code": "87",
          "number": "6270309"
-       }', 'm', '2022-02-25', '$2a$10$Z1/.F4bRuyOGyL7NQrmjhufHf8XrHIEjPfBz9tlPbPcWrLpvPWKfq'),
+       }', 3, 'm', '2022-02-25', '$2a$10$Z1/.F4bRuyOGyL7NQrmjhufHf8XrHIEjPfBz9tlPbPcWrLpvPWKfq'),
        ('id@acarcuNunc.edu', 'Leah Moody', 'Mark', 'Mckinney', 'Dalton', '{
          "code": "97",
          "number": "9685203"
-       }', 'm', '2020-10-01', '$2a$10$Z1/.F4bRuyOGyL7NQrmjhufHf8XrHIEjPfBz9tlPbPcWrLpvPWKfq'),
+       }', 4, 'm', '2020-10-01', '$2a$10$Z1/.F4bRuyOGyL7NQrmjhufHf8XrHIEjPfBz9tlPbPcWrLpvPWKfq'),
        ('urna.Vivamus.molestie@suscipitest.ca', 'Isabella Ford', 'Keefe', 'Terry', 'Celeste', '{
          "code": "44",
          "number": "3526222"
-       }', 'm', '2021-08-23', '$2a$10$Z1/.F4bRuyOGyL7NQrmjhufHf8XrHIEjPfBz9tlPbPcWrLpvPWKfq'),
+       }', 5, 'm', '2021-08-23', '$2a$10$Z1/.F4bRuyOGyL7NQrmjhufHf8XrHIEjPfBz9tlPbPcWrLpvPWKfq'),
        ('dictum@mus.net', 'Jaime Castillo', 'Fredericka', 'York', 'Armand', '{
          "code": "24",
          "number": "8526313"
-       }', 'f', '2022-04-04', '$2a$10$Z1/.F4bRuyOGyL7NQrmjhufHf8XrHIEjPfBz9tlPbPcWrLpvPWKfq'),
+       }', 6, 'f', '2022-04-04', '$2a$10$Z1/.F4bRuyOGyL7NQrmjhufHf8XrHIEjPfBz9tlPbPcWrLpvPWKfq'),
        ('nec@dolorsit.co.uk', 'Hollee Mejia', 'Winter', 'Vasquez', 'Brenda', '{
          "code": "73",
          "number": "7728818"
-       }', 'f', '2020-12-07', '$2a$10$Z1/.F4bRuyOGyL7NQrmjhufHf8XrHIEjPfBz9tlPbPcWrLpvPWKfq'),
+       }', 7, 'f', '2020-12-07', '$2a$10$Z1/.F4bRuyOGyL7NQrmjhufHf8XrHIEjPfBz9tlPbPcWrLpvPWKfq'),
        ('ac.mattis.ornare@elementumat.org', 'Octavius Case', 'Phyllis', 'Christian', 'Luke', '{
          "code": "21",
          "number": "9467819"
-       }', 'u', '2021-04-02', '$2a$10$Z1/.F4bRuyOGyL7NQrmjhufHf8XrHIEjPfBz9tlPbPcWrLpvPWKfq'),
+       }', 8, 'u', '2021-04-02', '$2a$10$Z1/.F4bRuyOGyL7NQrmjhufHf8XrHIEjPfBz9tlPbPcWrLpvPWKfq'),
        ('erat.Sed.nunc@temporbibendum.org', 'Xena Albert', 'Fulton', 'Mcbride', 'Marny', '{
          "code": "07",
          "number": "3555666"
-       }', 'u', '2022-03-22', '$2a$10$Z1/.F4bRuyOGyL7NQrmjhufHf8XrHIEjPfBz9tlPbPcWrLpvPWKfq'),
+       }', 9, 'u', '2022-03-22', '$2a$10$Z1/.F4bRuyOGyL7NQrmjhufHf8XrHIEjPfBz9tlPbPcWrLpvPWKfq'),
        ('dolor.nonummy.ac@neque.com', 'Ivy Whitfield', 'Lara', 'Forbes', 'Anjolie', '{
          "code": "34",
          "number": "4574811"
-       }', 'f', '2022-03-21', '$2a$10$Z1/.F4bRuyOGyL7NQrmjhufHf8XrHIEjPfBz9tlPbPcWrLpvPWKfq'),
+       }', 10, 'f', '2022-03-21', '$2a$10$Z1/.F4bRuyOGyL7NQrmjhufHf8XrHIEjPfBz9tlPbPcWrLpvPWKfq'),
        ('mauris@malesuada.org', 'Claire Contreras', 'Kimberly', 'Castaneda', 'Darryl', '{
          "code": "34",
          "number": "2424054"
-       }', 'm', '2021-10-23', '$2a$10$Z1/.F4bRuyOGyL7NQrmjhufHf8XrHIEjPfBz9tlPbPcWrLpvPWKfq');
+       }', 11, 'm', '2021-10-23', '$2a$10$Z1/.F4bRuyOGyL7NQrmjhufHf8XrHIEjPfBz9tlPbPcWrLpvPWKfq');
 
+-- -----------------------------------------------------
+-- Initial data by_it_academy_grodno_elibrary.user_has_role
+-- -----------------------------------------------------
 INSERT INTO user_has_role (user_id, role_id)
 VALUES (1, 2),
        (1, 1),
@@ -396,35 +427,54 @@ VALUES (1, 'Художественная литература'),
 -- -----------------------------------------------------
 -- Filing data by_it_academy_grodno_elibrary.section
 -- -----------------------------------------------------
-INSERT INTO section (section_name, category_id)
-VALUES ('Современная литература', 1),
-       ('Классическая литература', 1),
-       ('Фантастика, фэнтези', 1),
-       ('Поэзия', 1),
-       ('Пособия для школьников', 2),
-       ('Пособия для учителей', 2),
-       ('Комиксы', 3),
-       ('Развивающие книги', 3),
-       ('Художественны книги', 3);
+INSERT INTO section (id, section_name, category_id)
+VALUES (1, 'Современная литература', 1),
+       (2, 'Классическая литература', 1),
+       (3, 'Фантастика, фэнтези', 1),
+       (4, 'Поэзия', 1),
+       (5, 'Пособия для школьников', 2),
+       (6, 'Пособия для учителей', 2),
+       (7, 'Комиксы', 3),
+       (8, 'Развивающие книги', 3),
+       (9, 'Художественны книги', 3);
 
 -- -----------------------------------------------------
 -- Filing data by_it_academy_grodno_elibrary.author
 -- -----------------------------------------------------
-INSERT INTO author (author_name)
-VALUES ('Александр Сергеевич Пушкин'),
-       ('Arthur Conan Doyle'),
-       ('Elisabeth Robson'),
-       ('Eric Freeman'),
-       ('Paul Barry'),
-       ('Stephen King'),
-       ('Scott Pratt'),
-       ('Федор Михайлович Достоевский'),
-       ('Иван Александрович Гончаров'),
-       ('Николай Васильевич Гоголь'),
-       ('Лев Николаевич Толстой'),
-       ('Михаил Афанасьевич Булгаков'),
-       ('Антон Павлович чехов'),
-       ('Иван Алексеевич Бунин');
+INSERT INTO author (id, author_name)
+VALUES (1, 'Александр Сергеевич Пушкин'),
+       (2, 'Arthur Conan Doyle'),
+       (3, 'Elisabeth Robson'),
+       (4, 'Eric Freeman'),
+       (5, 'Paul Barry'),
+       (6, 'Stephen King'),
+       (7, 'Scott Pratt'),
+       (8, 'Федор Михайлович Достоевский'),
+       (9, 'Иван Александрович Гончаров'),
+       (10, 'Николай Васильевич Гоголь'),
+       (11, 'Лев Николаевич Толстой'),
+       (12, 'Михаил Афанасьевич Булгаков'),
+       (13, 'Антон Павлович чехов'),
+       (14, 'Иван Алексеевич Бунин');
 
+-- -----------------------------------------------------
+-- Filing data by_it_academy_grodno_elibrary.publisher
+-- -----------------------------------------------------
+INSERT INTO publisher (id, publisher_name)
+VALUES (1, 'AST');
 
+-- -----------------------------------------------------
+-- Filing data by_it_academy_grodno_elibrary.book
+-- -----------------------------------------------------
+INSERT INTO book (id, title, description, isbn_10, isbn_13, section_id, publisher_id, language, publishing_date, print_length, picture_url, total_count, available_count, available)
+ VALUES (1, 'Voyna i mir. Kniga 1',
+         'Издательство АСТ Серия Лучшая мировая классика Год издания 2018 ISBN 9785171123857 Кол-во страниц 736 Формат 20.6 x 13.5 x 3 Тип обложки Твердая бумажная Тираж 10000 Вес, г 500 Возрастные ограничения 12+ Аннотация "Война и мир" — роман-эпопея Льва Толстого, одно из крупнейших произведений мировой литературы, описывающее жизнь русского общества в эпоху Наполеоновских войн. "Война и мир" — это масштабная картина жизни России, взятая во всех ее социальных слоях (от крестьян до императора Александра I), и детальное описание хода военных действий, и осмысление поведения человека на войне, но главное — это глубокое философское осмысление и исследование жизни как таковой — в быту, в семье, в мирное время, на войне. Именно поэтому "Войну и мир" можно читать и перечитывать всю жизнь — этот роман никогда не потеряет своей актуальности.',
+         '5171123853',
+         '9785171123857',
+         2, 1, 'rus', '2018-01-01', 736,
+         'https://m.media-amazon.com/images/I/513ZIFMK6VL.jpg',
+         2, 2, TRUE);
+
+INSERT INTO book_has_author (book_id, author_id)
+VALUES (1, 11);
 

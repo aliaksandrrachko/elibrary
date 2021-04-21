@@ -1,4 +1,4 @@
-package by.it.academy.grodno.elibrary.service.utils;
+package by.it.academy.grodno.elibrary.entities.utils;
 
 /**
  * Utility class for validation and converting ISBN-10 and ISBN-13 number.
