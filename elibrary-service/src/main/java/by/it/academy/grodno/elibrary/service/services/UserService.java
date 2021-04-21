@@ -14,6 +14,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -93,6 +94,9 @@ public class UserService implements IUserService {
         if (entityDto.getPassword().equals(entityDto.getPasswordConfirm())){
             entityDto.setRoles(Collections.singleton("ROLE_USER"));
             entityDto.setUsername(entityDto.getFirstName() + " " + entityDto.getLastName());
+            entityDto.setCreated(LocalDateTime.now().withNano(0));
+            entityDto.setUpdated(LocalDateTime.now().withNano(0));
+            entityDto.getAddressDto().setUpdated(LocalDateTime.now().withNano(0));
             User user = userMapper.toEntity(entityDto);
             user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
             user = userJpaRepository.save(user);
@@ -109,42 +113,29 @@ public class UserService implements IUserService {
         if (!optionalUser.isPresent()){
             return Optional.empty();
         }
-
         if (entityDto.getPassword().equals(entityDto.getPasswordConfirm())){
-            entityDto.setRoles(Collections.singleton("ROLE_USER"));
+            User userFromDb = optionalUser.get();
+            entityDto.setId(id);
             entityDto.setUsername(entityDto.getFirstName() + " " + entityDto.getLastName());
+            entityDto.setCreated(userFromDb.getCreated());
+            entityDto.setUpdated(LocalDateTime.now().withNano(0));
+            entityDto.setSocialId(userFromDb.getSocialId());
+            entityDto.getAddressDto().setUpdated(LocalDateTime.now().withNano(0));
+            setAddressIdIfExists(userFromDb, entityDto);
             User user = userMapper.toEntity(entityDto);
             user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
-            User userFromDb = optionalUser.get();
-            mapFields(user, userFromDb);
-            user = userJpaRepository.save(userFromDb);
+            user.setRoles(userFromDb.getRoles());
+            user = userJpaRepository.save(user);
             return Optional.of(userMapper.toDto(user));
         } else {
             throw new PasswordMatchException(entityDto);
         }
     }
 
-    private void mapFields(User source, User destination){
-        mapFields(source.getAddress(), destination.getAddress());
-        destination.setBirthday(source.getBirthday());
-        destination.setEmail(source.getEmail());
-        destination.setFirstName(source.getFirstName());
-        destination.setGender(source.getGender());
-        destination.setLastName(source.getLastName());
-        destination.setMiddleName(source.getMiddleName());
-        destination.setPassword(source.getPassword());
-        destination.setPhoneNumber(source.getPhoneNumber());
-        destination.setRoles(source.getRoles());
-        destination.setUsername(source.getUsername());
-    }
-
-    private void mapFields(Address source, Address destination){
-        destination.setApartmentNumber(source.getApartmentNumber());
-        destination.setCityName(source.getCityName());
-        destination.setDistrict(source.getDistrict());
-        destination.setHouseNumber(destination.getHouseNumber());
-        destination.setPostalCode(source.getPostalCode());
-        destination.setRegion(source.getRegion());
-        destination.setStreetName(source.getStreetName());
+    private void setAddressIdIfExists(User userFromDb, UserDto entityDto){
+        Address address = userFromDb.getAddress();
+        if (address != null){
+            entityDto.getAddressDto().setId(userFromDb.getAddress().getId());
+        }
     }
 }

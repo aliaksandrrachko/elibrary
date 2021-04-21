@@ -33,11 +33,11 @@ public class Book extends AEntity<Long> {
     @Column(name = "description", columnDefinition = "TEXT")
     private String description;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "section_id", referencedColumnName = "id", nullable = false)
     private Section section;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "publisher_id", referencedColumnName = "id")
     private Publisher publisher;
 

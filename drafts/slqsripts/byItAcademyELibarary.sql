@@ -308,7 +308,7 @@ CREATE
     BEFORE INSERT
     ON subscription
     FOR EACH ROW
-    SET subscription_deadline =
+    SET NEW.subscription_deadline =
             DATE_ADD((SELECT subscription_deadline FROM subscription WHERE id = new.id),
                      INTERVAL
                      (SELECT status_duration FROM status WHERE status_code = new.status_code)
@@ -322,7 +322,7 @@ CREATE
     BEFORE UPDATE
     ON subscription
     FOR EACH ROW
-    SET subscription_deadline =
+    SET NEW.subscription_deadline =
             DATE_ADD((SELECT subscription_deadline FROM subscription WHERE id = new.id),
                      INTERVAL
                      (SELECT status_duration FROM status WHERE status_code = new.status_code)

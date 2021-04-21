@@ -9,11 +9,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
 @Component
+@Transactional(readOnly = true)
 public class BookService implements IBookService {
 
     @Autowired
@@ -39,51 +42,39 @@ public class BookService implements IBookService {
     }
 
     @Override
+    @Transactional
     public void delete(Long id) {
         Optional<Book> bookOptional = bookJpaRepository.findById(id);
         bookOptional.ifPresent(book -> bookJpaRepository.delete(book));
     }
 
     @Override
+    @Transactional
     public Optional<BookDto> create(BookDto entityDto) {
+        entityDto.setCreated(LocalDateTime.now().withNano(0));
+        entityDto.setUpdated(LocalDateTime.now().withNano(0));
         Book createdBook = bookJpaRepository.save(bookMapper.toEntity(entityDto));
-        String stop = "stop";
         return Optional.of(bookMapper.toDto(createdBook));
     }
 
     @Override
+    @Transactional
     public Optional<BookDto> update(Long id, BookDto entityDto) {
         Optional<Book> optionalBook = bookJpaRepository.findById(id);
-        if (!optionalBook.isPresent()){
-            return Optional.empty();
+        if (optionalBook.isPresent()){
+            Book bookFromDb = optionalBook.get();
+            entityDto.setCreated(bookFromDb.getCreated());
+            entityDto.setUpdated(LocalDateTime.now().withNano(0));
+            Book newDataBook = bookMapper.toEntity(entityDto);
+            newDataBook.setId(id);
+            Book updatedBook = bookJpaRepository.save(newDataBook);
+            return Optional.of(bookMapper.toDto(updatedBook));
         }
-
-        Book newDataBook = bookMapper.toEntity(entityDto);
-        newDataBook.setId(id);
-        bookJpaRepository.save(newDataBook);
-        //mapFields(newDataBook, optionalBook.get());
         return Optional.empty();
     }
 
     @Override
     public Page<BookDto> findAll(Pageable pageable) {
         return bookMapper.toPageDto(bookJpaRepository.findAll(pageable));
-    }
-
-    private void mapFields(Book source, Book destination){
-        destination.setAuthors(source.getAuthors());
-        destination.setAvailable(source.isAvailable());
-        destination.setAvailableCount(source.getAvailableCount());
-        destination.setDatePublishing(source.getDatePublishing());
-        destination.setDescription(source.getDescription());
-        destination.setIsbn10(source.getIsbn10());
-        destination.setIsbn13(source.getIsbn13());
-        destination.setLanguage(source.getLanguage());
-        destination.setPictureUrl(source.getPictureUrl());
-        destination.setPrintLength(source.getPrintLength());
-        destination.setPublisher(source.getPublisher());
-        destination.setSection(source.getSection());
-        destination.setTitle(source.getTitle());
-        destination.setTotalCount(source.getTotalCount());
     }
 }

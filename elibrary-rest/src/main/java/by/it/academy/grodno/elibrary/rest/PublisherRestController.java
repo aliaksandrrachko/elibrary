@@ -5,6 +5,7 @@ import by.it.academy.grodno.elibrary.api.services.books.IPublisherService;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -28,12 +29,12 @@ public class PublisherRestController {
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public PublisherDto createCategory(@RequestBody PublisherDto dto) {
+    public PublisherDto createCategory(@Valid @RequestBody PublisherDto dto) {
         return publisherService.create(dto).orElse(null);
     }
 
     @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public PublisherDto updateCategory(@RequestBody PublisherDto dto, @PathVariable Integer id) {
+    public PublisherDto updateCategory(@Valid @RequestBody PublisherDto dto, @PathVariable Integer id) {
         return publisherService.update(id, dto).orElse(null);
     }
 

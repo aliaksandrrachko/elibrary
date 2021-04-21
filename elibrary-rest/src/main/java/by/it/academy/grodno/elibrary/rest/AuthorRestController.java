@@ -7,6 +7,7 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -18,7 +19,6 @@ public class AuthorRestController {
     public AuthorRestController(IAuthorService authorService) {
         this.authorService = authorService;
     }
-
 
     @GetMapping()
     public List<AuthorDto> findAllAuthors() {
@@ -37,12 +37,12 @@ public class AuthorRestController {
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public AuthorDto createAuthor(@RequestBody AuthorDto dto) {
+    public AuthorDto createAuthor(@Valid @RequestBody AuthorDto dto) {
         return authorService.create(dto).orElse(null);
     }
 
     @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public AuthorDto updateAuthor(@RequestBody AuthorDto dto, @PathVariable Integer id) {
+    public AuthorDto updateAuthor(@Valid @RequestBody AuthorDto dto, @PathVariable Integer id) {
         return authorService.update(id, dto).orElse(null);
     }
 

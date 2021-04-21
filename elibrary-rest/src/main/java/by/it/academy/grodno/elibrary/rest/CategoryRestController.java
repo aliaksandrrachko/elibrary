@@ -5,6 +5,7 @@ import by.it.academy.grodno.elibrary.api.services.books.ICategoryService;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -28,12 +29,12 @@ public class CategoryRestController {
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public CategoryDto createCategory(@RequestBody CategoryDto dto) {
+    public CategoryDto createCategory(@Valid @RequestBody CategoryDto dto) {
         return categoryService.create(dto).orElse(null);
     }
 
     @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public CategoryDto updateCategory(@RequestBody CategoryDto dto, @PathVariable Integer id) {
+    public CategoryDto updateCategory(@Valid @RequestBody CategoryDto dto, @PathVariable Integer id) {
         return categoryService.update(id, dto).orElse(null);
     }
 
