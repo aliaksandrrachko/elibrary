@@ -1,6 +1,6 @@
 package by.it.academy.grodno.elibrary.service.exceptions;
 
-import by.it.academy.grodno.elibrary.api.dto.UserDto;
+import by.it.academy.grodno.elibrary.api.dto.users.UserDto;
 
 public class PasswordMatchException extends RuntimeException {
 

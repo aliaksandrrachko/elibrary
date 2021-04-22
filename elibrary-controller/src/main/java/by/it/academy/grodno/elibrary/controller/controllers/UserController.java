@@ -1,6 +1,6 @@
 package by.it.academy.grodno.elibrary.controller.controllers;
 
-import by.it.academy.grodno.elibrary.api.dto.UserDto;
+import by.it.academy.grodno.elibrary.api.dto.users.UserDto;
 import by.it.academy.grodno.elibrary.api.services.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

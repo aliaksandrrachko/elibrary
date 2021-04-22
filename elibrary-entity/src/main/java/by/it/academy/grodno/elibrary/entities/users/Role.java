@@ -1,10 +1,7 @@
 package by.it.academy.grodno.elibrary.entities.users;
 
 import by.it.academy.grodno.elibrary.entities.AEntity;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 import org.springframework.security.core.GrantedAuthority;
 
@@ -16,6 +13,7 @@ import java.io.Serializable;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode(callSuper = false)
 @Getter
 @Setter
 @SuperBuilder

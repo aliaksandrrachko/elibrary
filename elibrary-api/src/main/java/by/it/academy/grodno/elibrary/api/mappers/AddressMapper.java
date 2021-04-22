@@ -1,6 +1,6 @@
 package by.it.academy.grodno.elibrary.api.mappers;
 
-import by.it.academy.grodno.elibrary.api.dto.AddressDto;
+import by.it.academy.grodno.elibrary.api.dto.users.AddressDto;
 import by.it.academy.grodno.elibrary.entities.users.Address;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;

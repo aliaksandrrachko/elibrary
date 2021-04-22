@@ -7,7 +7,7 @@ import java.util.stream.Stream;
 public enum SubscriptionStatus {
     BOOKING(1),
     READING(2),
-    PROROGUE(3),
+    READING_EXTENDED(3),
     COMPLETED(4);
 
     private final int statusCode;
@@ -27,7 +27,7 @@ public enum SubscriptionStatus {
         return statusCode;
     }
 
-    public static SubscriptionStatus getBookSubscriptionStatus(int statusCode){
+    public static SubscriptionStatus getSubscriptionStatus(int statusCode){
         if (statusCodes.containsKey(statusCode)){
             return statusCodes.get(statusCode);
         } else {

@@ -1,6 +1,6 @@
 package by.it.academy.grodno.elibrary.api.services;
 
-import by.it.academy.grodno.elibrary.api.dto.UserDto;
+import by.it.academy.grodno.elibrary.api.dto.users.UserDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 

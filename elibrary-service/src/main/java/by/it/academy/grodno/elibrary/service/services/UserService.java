@@ -1,10 +1,11 @@
 package by.it.academy.grodno.elibrary.service.services;
 
 import by.it.academy.grodno.elibrary.api.dao.UserJpaRepository;
-import by.it.academy.grodno.elibrary.api.dto.UserDto;
+import by.it.academy.grodno.elibrary.api.dto.users.UserDto;
 import by.it.academy.grodno.elibrary.api.mappers.UserMapper;
 import by.it.academy.grodno.elibrary.api.services.IUserService;
 import by.it.academy.grodno.elibrary.entities.users.Address;
+import by.it.academy.grodno.elibrary.entities.users.Role;
 import by.it.academy.grodno.elibrary.entities.users.User;
 import by.it.academy.grodno.elibrary.service.exceptions.PasswordMatchException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,7 @@ import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService implements IUserService {
@@ -121,6 +123,10 @@ public class UserService implements IUserService {
             entityDto.setUpdated(LocalDateTime.now().withNano(0));
             entityDto.setSocialId(userFromDb.getSocialId());
             entityDto.getAddressDto().setUpdated(LocalDateTime.now().withNano(0));
+            if (entityDto.getAddressDto().isFullAddress()){
+                entityDto.getRoles().add("ROLE_USER");
+            }
+            entityDto.getRoles().addAll(userFromDb.getRoles().stream().map(Role::getAuthority).collect(Collectors.toSet()));
             setAddressIdIfExists(userFromDb, entityDto);
             User user = userMapper.toEntity(entityDto);
             user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));

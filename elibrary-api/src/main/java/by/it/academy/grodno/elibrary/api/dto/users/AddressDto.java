@@ -1,12 +1,10 @@
-package by.it.academy.grodno.elibrary.api.dto;
+package by.it.academy.grodno.elibrary.api.dto.users;
 
+import by.it.academy.grodno.elibrary.api.dto.AEntityDto;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
-import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
+import org.springframework.util.StringUtils;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
@@ -42,4 +40,14 @@ public class AddressDto extends AEntityDto<Long> {
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime updated;
+
+
+    public boolean isFullAddress(){
+        return StringUtils.hasText(region) &&
+                StringUtils.hasText(cityName) &&
+                StringUtils.hasText(streetName) &&
+                StringUtils.hasText(postalCode) &&
+                StringUtils.hasText(houseNumber) &&
+                StringUtils.hasText(apartmentNumber);
+    }
 }

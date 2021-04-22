@@ -1,8 +1,8 @@
 package by.it.academy.grodno.elibrary.api.mappers;
 
 import by.it.academy.grodno.elibrary.api.dao.RoleJpaRepository;
-import by.it.academy.grodno.elibrary.api.dto.AddressDto;
-import by.it.academy.grodno.elibrary.api.dto.UserDto;
+import by.it.academy.grodno.elibrary.api.dto.users.AddressDto;
+import by.it.academy.grodno.elibrary.api.dto.users.UserDto;
 import by.it.academy.grodno.elibrary.entities.users.Address;
 import by.it.academy.grodno.elibrary.entities.users.Gender;
 import by.it.academy.grodno.elibrary.entities.users.Role;
@@ -27,7 +27,7 @@ public class UserMapper extends AGenericMapper<User, UserDto, Long>{
     private AddressMapper addressMapper;
 
     public UserMapper(ModelMapper modelMapper) {
-        super(modelMapper, User.class, UserDto.class);;
+        super(modelMapper, User.class, UserDto.class);
     }
 
     @PostConstruct

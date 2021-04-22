@@ -1,6 +1,6 @@
 package by.it.academy.grodno.elibrary.rest;
 
-import by.it.academy.grodno.elibrary.api.dto.UserDto;
+import by.it.academy.grodno.elibrary.api.dto.users.UserDto;
 import by.it.academy.grodno.elibrary.api.services.IUserService;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;

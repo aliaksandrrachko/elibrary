@@ -1,5 +1,6 @@
-package by.it.academy.grodno.elibrary.api.dto;
+package by.it.academy.grodno.elibrary.api.dto.users;
 
+import by.it.academy.grodno.elibrary.api.dto.AEntityDto;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;

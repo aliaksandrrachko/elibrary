@@ -84,4 +84,8 @@ public class Book extends AEntity<Long> {
 
     @Column(name = "book_updated", insertable = false, updatable = false)
     private LocalDateTime updated;
+
+    public boolean isAvailable(){
+        return available && availableCount > 0;
+    }
 }

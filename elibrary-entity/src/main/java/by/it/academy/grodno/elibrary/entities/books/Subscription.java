@@ -5,6 +5,7 @@ import by.it.academy.grodno.elibrary.entities.converters.SubscriptionStatusConve
 import by.it.academy.grodno.elibrary.entities.users.User;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
+import org.hibernate.annotations.Target;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -17,7 +18,7 @@ import java.time.LocalDateTime;
 @SuperBuilder
 @Entity
 @Table(name = ("subscription"))
-public class Subscription extends AEntity<Integer> {
+public class Subscription extends AEntity<Long> {
 
     @Column(name = "status_code")
     @Convert(converter = SubscriptionStatusConverter.class)
@@ -33,7 +34,7 @@ public class Subscription extends AEntity<Integer> {
     @Column(name = "returned")
     private int returned;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE})
     @JoinColumn(name = "book_id", referencedColumnName = "id")
     private Book book;
 

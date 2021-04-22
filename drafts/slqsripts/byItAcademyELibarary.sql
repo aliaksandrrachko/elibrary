@@ -256,25 +256,25 @@ CREATE TABLE IF NOT EXISTS review
 -- -----------------------------------------------------
 -- Table by_it_academy_grodno_elibrary.subscription_status
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS status
-(
-    status_code     INT UNSIGNED NOT NULL COMMENT 'Status id',
-    status_duration INT UNSIGNED NOT NULL COMMENT 'Duration of the event for giving status',
-    CONSTRAINT pk_subscription_status PRIMARY KEY (status_code)
-);
-
-INSERT INTO status (status_code, status_duration)
-VALUES (1, 1),
-       (2, 10),
-       (3, 2),
-       (4, 0);
+# CREATE TABLE IF NOT EXISTS status
+# (
+#     status_code     INT UNSIGNED NOT NULL COMMENT 'Status id',
+#     status_duration INT UNSIGNED NOT NULL COMMENT 'Duration of the event for giving status',
+#     CONSTRAINT pk_subscription_status PRIMARY KEY (status_code)
+# );
+#
+# INSERT INTO status (status_code, status_duration)
+# VALUES (1, 1),
+#        (2, 10),
+#        (3, 2),
+#        (4, 0);
 
 -- -----------------------------------------------------
 -- Table by_it_academy_grodno_elibrary.subscription
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS subscription
 (
-    id                    INT UNSIGNED    NOT NULL COMMENT 'Subscription id',
+    id                    BIGINT UNSIGNED AUTO_INCREMENT UNIQUE NOT NULL COMMENT 'Subscription id',
     status_code           INT UNSIGNED    NOT NULL COMMENT 'Status',
     user_id               BIGINT UNSIGNED NOT NULL COMMENT 'Users id',
     book_id               BIGINT UNSIGNED NOT NULL COMMENT 'Book id from table book',
@@ -284,49 +284,52 @@ CREATE TABLE IF NOT EXISTS subscription
     subscription_deadline DATETIME        NOT NULL DEFAULT NOW() COMMENT 'Deadline',
     CONSTRAINT pk_subscription PRIMARY KEY (id),
     CONSTRAINT fk_subscription_user FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE ON UPDATE CASCADE,
-    CONSTRAINT fk_subscription_book FOREIGN KEY (book_id) REFERENCES book (id) ON DELETE CASCADE ON UPDATE CASCADE,
-    CONSTRAINT fk_subscription_status FOREIGN KEY (status_code) REFERENCES status (status_code) ON DELETE CASCADE ON UPDATE CASCADE
+    CONSTRAINT fk_subscription_book FOREIGN KEY (book_id) REFERENCES book (id) ON DELETE CASCADE ON UPDATE CASCADE
+    #CONSTRAINT fk_subscription_status FOREIGN KEY (status_code) REFERENCES status (status_code) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 -- -----------------------------------------------------
 -- Trigger on subscription insert increment book_rating
 -- -----------------------------------------------------
-CREATE
-    TRIGGER p_subscription_book_insert
-    BEFORE INSERT
-    ON subscription
-    FOR EACH ROW
-    UPDATE book
-    SET book.book_rating = ((SELECT book_rating FROM book WHERE id = NEW.book_id) + 1)
-    WHERE book.id = NEW.book_id;
+# CREATE
+#     TRIGGER p_subscription_book_insert
+#     AFTER INSERT
+#     ON subscription
+#     FOR EACH ROW BEGIN
+#     UPDATE book
+#     SET book.book_rating = ((SELECT book_rating FROM book WHERE id = NEW.book_id) + 1)
+#     WHERE book.id = NEW.book_id;
+#     END;
+#
+# Drop trigger p_subscription_book_insert;
 
 -- -----------------------------------------------------
 -- Trigger on subscription insert (adds duration for deadline)
 -- -----------------------------------------------------
-CREATE
-    TRIGGER p_subscription_insert
-    BEFORE INSERT
-    ON subscription
-    FOR EACH ROW
-    SET NEW.subscription_deadline =
-            DATE_ADD((SELECT subscription_deadline FROM subscription WHERE id = new.id),
-                     INTERVAL
-                     (SELECT status_duration FROM status WHERE status_code = new.status_code)
-                     DAY);
+# CREATE
+#     TRIGGER p_subscription_insert
+#     BEFORE INSERT
+#     ON subscription
+#     FOR EACH ROW
+#     SET NEW.subscription_deadline =
+#             DATE_ADD((SELECT subscription_deadline FROM subscription WHERE id = new.id),
+#                      INTERVAL
+#                      (SELECT status_duration FROM status WHERE status_code = new.status_code)
+#                      DAY);
 
 -- -----------------------------------------------------
 -- Trigger on subscription update status (add duration for deadline)
 -- -----------------------------------------------------
-CREATE
-    TRIGGER p_subscription_update
-    BEFORE UPDATE
-    ON subscription
-    FOR EACH ROW
-    SET NEW.subscription_deadline =
-            DATE_ADD((SELECT subscription_deadline FROM subscription WHERE id = new.id),
-                     INTERVAL
-                     (SELECT status_duration FROM status WHERE status_code = new.status_code)
-                     DAY);
+# CREATE
+#     TRIGGER p_subscription_update
+#     BEFORE UPDATE
+#     ON subscription
+#     FOR EACH ROW
+#     SET NEW.subscription_deadline =
+#             DATE_ADD((SELECT subscription_deadline FROM subscription WHERE id = new.id),
+#                      INTERVAL
+#                      (SELECT status_duration FROM status WHERE status_code = new.status_code)
+#                      DAY);
 
 -- -----------------------------------------------------
 -- Initial data by_it_academy_grodno_elibrary.role
@@ -477,4 +480,8 @@ INSERT INTO book (id, title, description, isbn_10, isbn_13, section_id, publishe
 
 INSERT INTO book_has_author (book_id, author_id)
 VALUES (1, 11);
+
+# insert
+# into subscription (book_id, subscription_created, subscription_deadline, returned, status_code, took, user_id)
+# values (1, NOW(), DATE_ADD(NOW(), INTERVAL 1 DAY), 0, 1, 2, 2);
 
