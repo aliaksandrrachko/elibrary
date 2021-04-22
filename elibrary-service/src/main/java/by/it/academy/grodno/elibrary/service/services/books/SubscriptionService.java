@@ -59,6 +59,7 @@ public class SubscriptionService implements ISubscriptionService {
     private static final int DEFAULT_BOOKING_DAYS = 1;
 
     @Override
+    @Transactional
     public Optional<SubscriptionDto> booking(SubscriptionRequest entityDto){
         entityDto.setCount(DEFAULT_BOOKING_COUNT);
         entityDto.setDays(DEFAULT_BOOKING_DAYS);
@@ -82,8 +83,8 @@ public class SubscriptionService implements ISubscriptionService {
                 int amountTaken = takeBook(book, request.getCount());
                 Subscription subscription = Subscription.builder()
                         .status(SubscriptionStatus.getSubscriptionStatus(request.getStatus()))
-                        .created(LocalDateTime.now())
-                        .deadline(LocalDateTime.now().plusDays(request.getDays()))
+                        .created(LocalDateTime.now().withNano(0))
+                        .deadline(LocalDateTime.now().withNano(0).plusDays(request.getDays()))
                         .returned(0)
                         .book(book)
                         .took(amountTaken)
@@ -109,6 +110,7 @@ public class SubscriptionService implements ISubscriptionService {
     }
 
     @Override
+    @Transactional
     public Optional<SubscriptionDto> update(Long id, SubscriptionRequest request) {
         Optional<Subscription> optionalSubscription = subscriptionJpaRepository.findById(id);
         if (!optionalSubscription.isPresent()){

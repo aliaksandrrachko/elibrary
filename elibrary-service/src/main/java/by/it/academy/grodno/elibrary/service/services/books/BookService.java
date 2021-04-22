@@ -53,7 +53,7 @@ public class BookService implements IBookService {
     public Optional<BookDto> create(BookDto entityDto) {
         entityDto.setCreated(LocalDateTime.now().withNano(0));
         entityDto.setUpdated(LocalDateTime.now().withNano(0));
-        Book createdBook = bookJpaRepository.save(bookMapper.toEntity(entityDto));
+        Book createdBook = bookJpaRepository.saveAndFlush(bookMapper.toEntity(entityDto));
         return Optional.of(bookMapper.toDto(createdBook));
     }
 
