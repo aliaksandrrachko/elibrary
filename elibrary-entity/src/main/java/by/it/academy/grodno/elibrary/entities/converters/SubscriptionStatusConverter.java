@@ -15,6 +15,6 @@ public class SubscriptionStatusConverter implements AttributeConverter<Subscript
 
     @Override
     public SubscriptionStatus convertToEntityAttribute(Integer dbData) {
-        return SubscriptionStatus.getBookSubscriptionStatus(dbData);
+        return SubscriptionStatus.getSubscriptionStatus(dbData);
     }
 }
