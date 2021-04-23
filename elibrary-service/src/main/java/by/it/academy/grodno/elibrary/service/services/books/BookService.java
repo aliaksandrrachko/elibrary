@@ -83,7 +83,7 @@ public class BookService implements IBookService {
         return bookMapper.toPageDto(bookJpaRepository.findAll(pageable));
     }
 
-    @Override
+/*    @Override
     public Page<BookDto> findAllBySectionName(String sectionName, Pageable pageable) {
         Optional<Section> sectionOptional = sectionJpaRepository.findBySectionName(sectionName);
         if (sectionOptional.isPresent()){
@@ -91,5 +91,5 @@ public class BookService implements IBookService {
         } else {
             return Page.empty();
         }
-    }
+    }*/
 }

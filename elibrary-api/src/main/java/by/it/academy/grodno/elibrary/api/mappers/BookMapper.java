@@ -1,6 +1,7 @@
 package by.it.academy.grodno.elibrary.api.mappers;
 
 import by.it.academy.grodno.elibrary.api.dao.AuthorJpaRepository;
+import by.it.academy.grodno.elibrary.api.dao.CategoryJpaRepository;
 import by.it.academy.grodno.elibrary.api.dao.PublisherJpaRepository;
 import by.it.academy.grodno.elibrary.api.dao.SectionJpaRepository;
 import by.it.academy.grodno.elibrary.api.dto.books.BookDto;
@@ -31,6 +32,12 @@ public class BookMapper extends AGenericMapper<Book, BookDto, Long> {
     @Autowired
     private SectionMapper sectionMapper;
 
+    @Autowired
+    private CategoryJpaRepository categoryJpaRepository;
+
+    @Autowired
+    private CategoryMapper categoryMapper;
+
     protected BookMapper(ModelMapper modelMapper) {
         super(modelMapper, Book.class, BookDto.class);
     }
@@ -41,13 +48,13 @@ public class BookMapper extends AGenericMapper<Book, BookDto, Long> {
                 .addMappings(u -> {
                     u.skip(BookDto::setAuthors);
                     u.skip(BookDto::setPublisher);
-                    u.skip(BookDto::setSection);
+                    u.skip(BookDto::setCategory);
                 }).setPostConverter(toDtoConverter());
         modelMapper.createTypeMap(BookDto.class, Book.class)
                 .addMappings(m -> {
                     m.skip(Book::setAuthors);
                     m.skip(Book::setPublisher);
-                    m.skip(Book::setSection);
+                    m.skip(Book::setCategory);
                 }).setPostConverter(toEntityConverter());
     }
 
@@ -55,7 +62,7 @@ public class BookMapper extends AGenericMapper<Book, BookDto, Long> {
     public void mapSpecificFields(Book source, BookDto destination) {
         destination.setAuthors(source.getAuthors().stream().map(Author::getAuthorName).collect(Collectors.toSet()));
         destination.setPublisher(source.getPublisher().getPublisherName());
-        destination.setSection(sectionMapper.toDto(source.getSection()));
+        destination.setCategory(categoryMapper.toDto(source.getCategory()));
     }
 
     @Override
@@ -67,6 +74,6 @@ public class BookMapper extends AGenericMapper<Book, BookDto, Long> {
         });
         destination.setAuthors(authorSet);
         publisherJpaRepository.findByPublisherName(source.getPublisher()).ifPresent(destination::setPublisher);
-        destination.setSection(sectionJpaRepository.findBySectionName(source.getSection().getSectionName()).orElse(null));
+        destination.setCategory(categoryJpaRepository.findByCategoryName(source.getCategory().getCategoryName()).orElse(null));
     }
 }

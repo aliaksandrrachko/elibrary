@@ -8,5 +8,5 @@ import org.springframework.data.domain.Pageable;
 
 public interface IBookService extends IAGenericCrudService<BookDto, Long> {
 
-    Page<BookDto> findAllBySectionName(String sectionName, Pageable pageable);
+//    Page<BookDto> findAllBySectionName(String sectionName, Pageable pageable);
 }

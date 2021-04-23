@@ -13,7 +13,7 @@ import java.util.Set;
 @AllArgsConstructor
 @Getter
 @Setter
-@EqualsAndHashCode(callSuper = true, exclude = "sections")
+@EqualsAndHashCode(callSuper = true, exclude = {"categories", "parentCategory"})
 @SuperBuilder
 @Entity
 @Table(name = ("category"))
@@ -22,13 +22,17 @@ public class Category extends AEntity<Integer> implements Serializable {
     @Column(name = "category_name", length = 45)
     private String categoryName;
 
-    @OneToMany(fetch = FetchType.LAZY)
-    @JoinColumn(name = "category_id")
-    private Set<Section> sections;
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "parent_id")
+    private Category parentCategory;
 
-    public Set<Section> getSections(){
-        if (sections != null){
-            return sections;
+    @OneToMany(fetch = FetchType.EAGER)
+    @JoinColumn(name = "parent_id", referencedColumnName = "id")
+    private Set<Category> categories;
+
+    public Set<Category> getCategories(){
+        if (categories != null){
+            return categories;
         } else {
             return new HashSet<>();
         }

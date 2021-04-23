@@ -18,7 +18,7 @@ import java.util.Set;
 @Entity
 @Table(name = "book")
 @SecondaryTables(value = {
-        @SecondaryTable(name = "section", pkJoinColumns = {@PrimaryKeyJoinColumn(name = "id")}),
+        @SecondaryTable(name = "category", pkJoinColumns = {@PrimaryKeyJoinColumn(name = "id")}),
         @SecondaryTable(name = "publisher", pkJoinColumns = {@PrimaryKeyJoinColumn(name = "id")})})
 public class Book extends AEntity<Long> {
     @Column(name = "isbn_10", length = 10)
@@ -34,8 +34,8 @@ public class Book extends AEntity<Long> {
     private String description;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "section_id", referencedColumnName = "id", nullable = false)
-    private Section section;
+    @JoinColumn(name = "category_id", referencedColumnName = "id", nullable = false)
+    private Category category;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "publisher_id", referencedColumnName = "id")

@@ -1,9 +1,11 @@
 package by.it.academy.grodno.elibrary.api.mappers;
 
+import by.it.academy.grodno.elibrary.api.dao.CategoryJpaRepository;
 import by.it.academy.grodno.elibrary.api.dto.books.CategoryDto;
 import by.it.academy.grodno.elibrary.entities.books.Category;
 import by.it.academy.grodno.elibrary.entities.books.Section;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
@@ -13,6 +15,9 @@ import java.util.stream.Collectors;
 @Component
 public class CategoryMapper extends AGenericMapper<Category, CategoryDto, Integer>{
 
+    @Autowired
+    private CategoryJpaRepository categoryJpaRepository;
+
     protected CategoryMapper(ModelMapper modelMapper) {
         super(modelMapper, Category.class, CategoryDto.class);
     }
@@ -20,20 +25,30 @@ public class CategoryMapper extends AGenericMapper<Category, CategoryDto, Intege
     @PostConstruct
     public void setupMapper() {
         modelMapper.createTypeMap(Category.class, CategoryDto.class)
-                .addMappings(u -> u.skip(CategoryDto::setSections)).setPostConverter(toDtoConverter());
+                .addMappings(u -> {
+                    u.skip(CategoryDto::setCategories);
+                    u.skip(CategoryDto::setParentCategory);
+                }).setPostConverter(toDtoConverter());
         modelMapper.createTypeMap(CategoryDto.class, Category.class)
-                .addMappings(m -> m.skip(Category::setSections)).setPostConverter(toEntityConverter());
+                .addMappings(m -> {
+                    m.skip(Category::setCategories);
+                    m.skip(Category::setParentCategory);
+                }).setPostConverter(toEntityConverter());
     }
 
     @Override
     public void mapSpecificFields(Category source, CategoryDto destination) {
-        Set<String> sections = source.getSections().stream()
-                .map(Section::getSectionName).collect(Collectors.toSet());
-        destination.setSections(sections);
+        if (source.getParentCategory() != null) {
+            destination.setParentCategory(source.getParentCategory().getCategoryName());
+        }
+        Set<CategoryDto> categories = source.getCategories().stream().map(this::toDto).collect(Collectors.toSet());
+        destination.setCategories(categories);
     }
 
     @Override
     public void mapSpecificFields(CategoryDto source, Category destination) {
-        //destination.setGender(Gender.getGender(source.getGender()));
+        destination.setParentCategory(categoryJpaRepository.findByCategoryName(source.getParentCategory()).orElse(null));
+        Set<Category> categories = source.getCategories().stream().map(this::toEntity).collect(Collectors.toSet());
+        destination.setCategories(categories);
     }
 }
