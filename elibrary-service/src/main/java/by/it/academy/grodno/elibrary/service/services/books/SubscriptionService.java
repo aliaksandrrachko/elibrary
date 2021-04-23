@@ -5,6 +5,7 @@ import by.it.academy.grodno.elibrary.api.dao.SubscriptionJpaRepository;
 import by.it.academy.grodno.elibrary.api.dao.UserJpaRepository;
 import by.it.academy.grodno.elibrary.api.dto.books.SubscriptionRequest;
 import by.it.academy.grodno.elibrary.api.dto.books.SubscriptionDto;
+import by.it.academy.grodno.elibrary.api.dto.books.SubscriptionRequestCode;
 import by.it.academy.grodno.elibrary.api.mappers.SubscriptionMapper;
 import by.it.academy.grodno.elibrary.api.services.books.ISubscriptionService;
 import by.it.academy.grodno.elibrary.entities.books.Book;
@@ -42,6 +43,11 @@ public class SubscriptionService implements ISubscriptionService {
     }
 
     @Override
+    public Page<SubscriptionDto> findAll(Pageable pageable) {
+        return subscriptionMapper.toPageDto( subscriptionJpaRepository.findAll(pageable));
+    }
+
+    @Override
     public Optional<SubscriptionDto> findById(Long id) {
         return subscriptionJpaRepository.findById(id).map(s -> subscriptionMapper.toDto(s));
     }
@@ -50,7 +56,7 @@ public class SubscriptionService implements ISubscriptionService {
     @Transactional
     public void delete(Long id) {
         Optional<Subscription> bookOptional = subscriptionJpaRepository.findById(id);
-        if (bookOptional.isPresent() && bookOptional.get().getStatus().equals(SubscriptionStatus.COMPLETED)){
+        if (bookOptional.isPresent() && bookOptional.get().getStatus().equals(SubscriptionStatus.COMPLETED)) {
             bookOptional.ifPresent(book -> subscriptionJpaRepository.delete(book));
         }
     }
@@ -60,7 +66,7 @@ public class SubscriptionService implements ISubscriptionService {
 
     @Override
     @Transactional
-    public Optional<SubscriptionDto> booking(SubscriptionRequest entityDto){
+    public Optional<SubscriptionDto> booking(SubscriptionRequest entityDto) {
         entityDto.setCount(DEFAULT_BOOKING_COUNT);
         entityDto.setDays(DEFAULT_BOOKING_DAYS);
         entityDto.setStatus(1);
@@ -73,16 +79,16 @@ public class SubscriptionService implements ISubscriptionService {
         return createAndSave(entityDto);
     }
 
-    private Optional<SubscriptionDto> createAndSave(SubscriptionRequest request){
+    private Optional<SubscriptionDto> createAndSave(SubscriptionRequest request) {
         Optional<Book> optionalBook = bookJpaRepository.findById(request.getBookId());
         Optional<User> optionalUser = userJpaRepository.findById(request.getUserId());
-        if (optionalBook.isPresent() && optionalUser.isPresent()){
+        if (optionalBook.isPresent() && optionalUser.isPresent()) {
             Book book = optionalBook.get();
             User user = optionalUser.get();
             if (book.isAvailable()) {
                 int amountTaken = takeBook(book, request.getCount());
                 Subscription subscription = Subscription.builder()
-                        .status(SubscriptionStatus.getSubscriptionStatus(request.getStatus()))
+                        .status(SubscriptionStatus.BOOKING)
                         .created(LocalDateTime.now().withNano(0))
                         .deadline(LocalDateTime.now().withNano(0).plusDays(request.getDays()))
                         .returned(0)
@@ -99,7 +105,7 @@ public class SubscriptionService implements ISubscriptionService {
 
     private int takeBook(Book book, int count) {
         int taken;
-        if (book.getAvailableCount() >= count){
+        if (book.getAvailableCount() >= count) {
             book.setAvailableCount(book.getAvailableCount() - count);
             taken = count;
         } else {
@@ -113,39 +119,61 @@ public class SubscriptionService implements ISubscriptionService {
     @Transactional
     public Optional<SubscriptionDto> update(Long id, SubscriptionRequest request) {
         Optional<Subscription> optionalSubscription = subscriptionJpaRepository.findById(id);
-        if (!optionalSubscription.isPresent()){
+        if (!optionalSubscription.isPresent()) {
             return Optional.empty();
         }
         Subscription subscription = optionalSubscription.get();
-        SubscriptionStatus gettingStatus = SubscriptionStatus.getSubscriptionStatus(request.getStatus());
+        SubscriptionRequestCode requestCode = SubscriptionRequestCode.getSubscriptionRequestCode(request.getStatus());
 
-        switch (gettingStatus) {
-            case COMPLETED:
-                prepareToCompletingSubscription(subscription);
+        switch (requestCode) {
+            case TAKE_BOOK:
+                prepareToTakeBookSubscription(subscription, request);
                 break;
-            case READING:
-                prepareToReadingSubscription(subscription);
+            case LEAVE_BOOK:
+                prepareToLeaveBookSubscription(subscription, request);
                 break;
-            case READING_EXTENDED:
-                prepareToExtendedSubscription(subscription);
+            case EXTENDED_SUBSCRIPTION:
+                prepareToExtendedSubscription(subscription, request);
                 break;
         }
         return Optional.of(subscriptionMapper.toDto(subscriptionJpaRepository.save(subscription)));
     }
 
-    private void prepareToExtendedSubscription(Subscription subscription) {
-
+    private void prepareToExtendedSubscription(Subscription subscription, SubscriptionRequest request) {
+        if (request.getDays() > 0) {
+            subscription.setDeadline(subscription.getDeadline().plusDays(request.getDays()));
+        }
     }
 
-    private void prepareToReadingSubscription(Subscription subscription) {
-
+    private void prepareToLeaveBookSubscription(Subscription subscription, SubscriptionRequest request) {
+        int debtBook = subscription.getTook() - subscription.getReturned();
+        int returnsBook = request.getCount();
+        if (debtBook >= returnsBook && (subscription.getStatus().equals(SubscriptionStatus.READING) ||
+                subscription.getStatus().equals(SubscriptionStatus.READING_EXTENDED))) {
+            leaveBook(subscription.getBook(), returnsBook);
+            subscription.setReturned(subscription.getReturned() + returnsBook);
+            if (debtBook == returnsBook) {
+                subscription.setStatus(SubscriptionStatus.COMPLETED);
+                subscription.setDeadline(LocalDateTime.now().withNano(0));
+            } else {
+                subscription.setStatus(SubscriptionStatus.READING_EXTENDED);
+            }
+        }
     }
 
-    private void prepareToCompletingSubscription(Subscription subscription) {
+    private void prepareToTakeBookSubscription(Subscription subscription, SubscriptionRequest request) {
+        if (subscription.getStatus().equals(SubscriptionStatus.BOOKING) && subscription.getTook() > request.getCount()) {
+            Book book = subscription.getBook();
+            int amountTaken = takeBook(book, request.getCount());
+            subscription.setTook(amountTaken);
+            subscription.setReturned(0);
+            subscription.setStatus(SubscriptionStatus.READING);
+            subscription.setCreated(LocalDateTime.now().withNano(0));
+            subscription.setDeadline(LocalDateTime.now().withNano(0));
+        }
     }
 
-    @Override
-    public Page<SubscriptionDto> findAll(Pageable pageable) {
-        return null;
+    private void leaveBook(Book book, int count) {
+        book.setAvailableCount(book.getAvailableCount() + count);
     }
 }

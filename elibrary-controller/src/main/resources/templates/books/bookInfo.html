@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="Ales' Rachko, and Bootstrap contributors">
+    <meta name="generator" content="Hugo 0.80.0">
+    <title>Users</title>
+
+    <link rel="canonical" href="https://getbootstrap.com/docs/5.0/examples/starter-template/">
+
+    <!-- Bootstrap core CSS -->
+    <link href="/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+
+    <!-- Favicons -->
+    <link rel="icon" href="/img/favicons/final-ico.png" sizes="32x32" type="image/png">
+    <meta name="theme-color" content="#7952b3">
+
+    <style>
+        .bd-placeholder-img {
+            font-size: 1.125rem;
+            text-anchor: middle;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            user-select: none;
+        }
+
+        @media (min-width: 768px) {
+            .bd-placeholder-img-lg {
+                font-size: 3.5rem;
+            }
+        }
+    </style>
+
+    <!-- Custom styles for this template -->
+    <link href="/css/starter-template.css" rel="stylesheet">
+</head>
+<body>
+
+<nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="/">E-Library</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarsExampleDefault"
+                aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+            <ul class="navbar-nav me-auto mb-2 mb-md-0">
+                <li class="nav-item">
+                    <a class="nav-link" href="/books">Book</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/users/search">Searching book</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link disabled" href="/admin" tabindex="-1" aria-disabled="true">Disabled</a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="dropdown01" data-bs-toggle="dropdown"
+                       aria-expanded="false">Admin</a>
+                    <ul class="dropdown-menu" aria-labelledby="dropdown01">
+                        <li><a class="dropdown-item" th:href="@{/admin/users}">Manage users</a></li>
+                        <li><a class="dropdown-item" th:href="@{/admin/books}">Manage books</a></li>
+                        <li><a class="dropdown-item" th:href="@{/admin/books/add}">Add book</a></li>
+                    </ul>
+                </li>
+            </ul>
+
+            <div class="d-flex">
+                <div th:object="${currentUser}">
+                    <div th:if="${currentUser != null}">
+                        <a class="btn btn btn-outline-primary" th:href="@{'/users/info'}" th:text="*{username}"></a>
+                        <a class="btn btn-outline-danger" href="/logout">Log out</a>
+                    </div>
+                    <div th:if="${currentUser == null}">
+                        <a class="btn btn-outline-warning" href="/signup">Sign up</a>
+                        <a class="btn btn-outline-success" href="/login">Log in</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<main class="container">
+
+    <div class="starter-template text-center py-5 px-3">
+        <h1>All books</h1>
+        <p class="lead">Table of books in the database</p>
+        <table class="table">
+            <thead class="thead-dark">
+            <tr>
+                <th scope="col">Picture</th>
+                <th scope="col">About</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <th scope="row">
+                    <!--/*@thymesVar id="book" type="by.it.academy.grodno.elibrary.api.dto.books.BookDto"*/-->
+                    <img class="rounded" src="#" th:src="${book.pictureUrl}" alt="no picture" width="200"/>
+                </th>
+                <th scope="row">
+                    <h6 class="text-sm-start m-0" th:text="'N' + ${book.id}"></h6>
+                    <!--/*@thymesVar id="book" type="by.it.academy.grodno.elibrary.api.dto.books.BookDto"*/-->
+                    <h2 class="text-sm-start mt-2" th:text="${book.title}"></h2>
+                    <h5 class="text-sm-start m-0">
+                        <span th:each="authorName : ${book.authors}" th:text="${authorName} + ', '"></span>
+                        <span th:text="${book.datePublishing}"></span>
+                    </h5>
+                    <h5 class="text-sm-start mt-1" th:text="'Publisher: ' + ${book.publisher}"></h5>
+                    <h6 class="text-sm-start mt-2" th:text="'Description: ' + ${book.description.substring(0, 200) + '...'}"></h6>
+                    <h6 class="text-sm-start mt-4">
+                        <span th:text="'Total count: ' + ${book.totalCount} + '. '"></span>
+                        <span th:text="'Available count: ' + ${book.availableCount} + '. '"></span>
+                        <span th:text="'Available: ' + ${book.available} + '. '"></span>
+                    </h6>
+                    <div class="text-md-start">
+                        <a class="btn btn-secondary btn-sm mt-2" th:href="'/books/' + ${book.id}">More info...</a>
+                    </div>
+                </th>
+            </tr>
+
+            <tr>
+
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+</main><!-- /.container -->
+
+<footer class="footer mt-auto py-3 bg-light">
+    <div class="container">
+        <span class="text-muted">Copyright © 2021, All Right Reserved Aliaksandr Rachko</span>
+    </div>
+</footer>
+
+<script src="/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+</body>
+</html>

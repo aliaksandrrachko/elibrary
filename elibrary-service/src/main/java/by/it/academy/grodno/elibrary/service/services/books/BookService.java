@@ -1,10 +1,12 @@
 package by.it.academy.grodno.elibrary.service.services.books;
 
 import by.it.academy.grodno.elibrary.api.dao.BookJpaRepository;
+import by.it.academy.grodno.elibrary.api.dao.SectionJpaRepository;
 import by.it.academy.grodno.elibrary.api.dto.books.BookDto;
 import by.it.academy.grodno.elibrary.api.mappers.BookMapper;
 import by.it.academy.grodno.elibrary.api.services.books.IBookService;
 import by.it.academy.grodno.elibrary.entities.books.Book;
+import by.it.academy.grodno.elibrary.entities.books.Section;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -24,6 +26,9 @@ public class BookService implements IBookService {
 
     @Autowired
     private BookJpaRepository bookJpaRepository;
+
+    @Autowired
+    private SectionJpaRepository sectionJpaRepository;
 
     @Override
     public Class<BookDto> getGenericClass() {
@@ -76,5 +81,15 @@ public class BookService implements IBookService {
     @Override
     public Page<BookDto> findAll(Pageable pageable) {
         return bookMapper.toPageDto(bookJpaRepository.findAll(pageable));
+    }
+
+    @Override
+    public Page<BookDto> findAllBySectionName(String sectionName, Pageable pageable) {
+        Optional<Section> sectionOptional = sectionJpaRepository.findBySectionName(sectionName);
+        if (sectionOptional.isPresent()){
+            return bookMapper.toPageDto(bookJpaRepository.findAllBySectionId(sectionOptional.get().getId(), pageable));
+        } else {
+            return Page.empty();
+        }
     }
 }

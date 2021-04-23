@@ -79,7 +79,7 @@ public class UserController {
 
         UsernamePasswordAuthenticationToken token =
                 new UsernamePasswordAuthenticationToken(
-                        updatedUser.getUsername(),
+                        String.valueOf(updatedUser.getId()),
                         updatedUser.getPassword(),
                         nowAuthorities);
         SecurityContextHolder.getContext().setAuthentication(token);

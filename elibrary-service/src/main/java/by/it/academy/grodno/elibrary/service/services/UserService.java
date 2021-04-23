@@ -14,6 +14,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import java.time.LocalDateTime;
 import java.util.Collections;
@@ -118,7 +119,9 @@ public class UserService implements IUserService {
         if (entityDto.getPassword().equals(entityDto.getPasswordConfirm())){
             User userFromDb = optionalUser.get();
             entityDto.setId(id);
-            entityDto.setUsername(entityDto.getFirstName() + " " + entityDto.getLastName());
+            if (!StringUtils.hasText(entityDto.getUsername())) {
+                entityDto.setUsername(entityDto.getFirstName() + " " + entityDto.getLastName());
+            }
             entityDto.setCreated(userFromDb.getCreated());
             entityDto.setUpdated(LocalDateTime.now().withNano(0));
             entityDto.setSocialId(userFromDb.getSocialId());

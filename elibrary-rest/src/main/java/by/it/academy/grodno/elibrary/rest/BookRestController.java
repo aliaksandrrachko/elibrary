@@ -2,6 +2,9 @@ package by.it.academy.grodno.elibrary.rest;
 
 import by.it.academy.grodno.elibrary.api.dto.books.BookDto;
 import by.it.academy.grodno.elibrary.api.services.books.IBookService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,6 +30,12 @@ public class BookRestController {
     public BookDto findBookById(@PathVariable Long id) {
         return bookService.findById(id).orElse(null);
     }
+
+/*    @GetMapping
+    public Page<BookDto> findBookBySection(@RequestParam(value = "section") String section,
+                                           @PageableDefault Pageable pageable){
+        return bookService.findAllBySectionName(section, pageable);
+    }*/
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public BookDto createBook(@Valid @RequestBody BookDto dto) {

@@ -251,7 +251,7 @@
                 <tr><th scope="row">Updated</th><td th:text="${userDto.updated}"></td></tr>
                 <tr><th scope="row">Is enabled</th><td th:text="${userDto.enabled}"></td></tr>
                 <tr><th scope="row">Roles</th><td>
-                    <p class="m-0" th:each="role : ${userDto.roles}" th:text="*{roles}"></p>
+                    <p class="m-0" th:each="role : ${userDto.getRoles()}" th:text="${role}"></p>
                 </td></tr>
                 </tbody>
             </table>
