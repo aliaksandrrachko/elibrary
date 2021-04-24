@@ -48,6 +48,21 @@ public class SubscriptionService implements ISubscriptionService {
     }
 
     @Override
+    public Page<SubscriptionDto> findAll(Long userId, Integer statusCode, Pageable pageable) {
+        if (userId == null && statusCode != null && statusCode != 5) {
+            return subscriptionMapper.toPageDto(subscriptionJpaRepository.findAllByStatus(
+                    SubscriptionStatus.getSubscriptionStatus(statusCode), pageable));
+        } else if (statusCode == null && userId != null && statusCode != 5){
+            return subscriptionMapper.toPageDto(subscriptionJpaRepository.findByUserId(userId, pageable));
+        } else if (statusCode != null && statusCode != 5){
+            return subscriptionMapper.toPageDto(subscriptionJpaRepository.findByStatusAndUserId(
+                    SubscriptionStatus.getSubscriptionStatus(statusCode), userId, pageable));
+        } else {
+            return findAll(pageable);
+        }
+    }
+
+    @Override
     public Optional<SubscriptionDto> findById(Long id) {
         return subscriptionJpaRepository.findById(id).map(s -> subscriptionMapper.toDto(s));
     }
@@ -155,6 +170,7 @@ public class SubscriptionService implements ISubscriptionService {
             if (debtBook == returnsBook) {
                 subscription.setStatus(SubscriptionStatus.COMPLETED);
                 subscription.setDeadline(LocalDateTime.now().withNano(0));
+                subscription.getBook().setRating(subscription.getBook().getRating() + 1);
             } else {
                 subscription.setStatus(SubscriptionStatus.READING_EXTENDED);
             }
@@ -162,14 +178,15 @@ public class SubscriptionService implements ISubscriptionService {
     }
 
     private void prepareToTakeBookSubscription(Subscription subscription, SubscriptionRequest request) {
-        if (subscription.getStatus().equals(SubscriptionStatus.BOOKING) && subscription.getTook() > request.getCount()) {
+        if (subscription.getStatus().equals(SubscriptionStatus.BOOKING) && subscription.getTook() >= request.getCount()) {
             Book book = subscription.getBook();
-            int amountTaken = takeBook(book, request.getCount());
-            subscription.setTook(amountTaken);
+            int remainder = subscription.getTook() - request.getCount();
+            leaveBook(book, remainder);
+            subscription.setTook(request.getCount());
             subscription.setReturned(0);
             subscription.setStatus(SubscriptionStatus.READING);
             subscription.setCreated(LocalDateTime.now().withNano(0));
-            subscription.setDeadline(LocalDateTime.now().withNano(0));
+            subscription.setDeadline(LocalDateTime.now().withNano(0).plusDays(request.getDays()));
         }
     }
 

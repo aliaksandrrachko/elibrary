@@ -3,7 +3,6 @@ package by.it.academy.grodno.elibrary.api.mappers;
 import by.it.academy.grodno.elibrary.api.dao.CategoryJpaRepository;
 import by.it.academy.grodno.elibrary.api.dto.books.CategoryDto;
 import by.it.academy.grodno.elibrary.entities.books.Category;
-import by.it.academy.grodno.elibrary.entities.books.Section;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -27,7 +26,9 @@ public class CategoryMapper extends AGenericMapper<Category, CategoryDto, Intege
         modelMapper.createTypeMap(Category.class, CategoryDto.class)
                 .addMappings(u -> {
                     u.skip(CategoryDto::setCategories);
+                    u.skip(CategoryDto::setParentId);
                     u.skip(CategoryDto::setParentCategory);
+                    u.skip(CategoryDto::setCategoryPath);
                 }).setPostConverter(toDtoConverter());
         modelMapper.createTypeMap(CategoryDto.class, Category.class)
                 .addMappings(m -> {
@@ -40,7 +41,9 @@ public class CategoryMapper extends AGenericMapper<Category, CategoryDto, Intege
     public void mapSpecificFields(Category source, CategoryDto destination) {
         if (source.getParentCategory() != null) {
             destination.setParentCategory(source.getParentCategory().getCategoryName());
+            destination.setParentId(source.getParentCategory().getId());
         }
+        destination.setCategoryPath(source.getPath());
         Set<CategoryDto> categories = source.getCategories().stream().map(this::toDto).collect(Collectors.toSet());
         destination.setCategories(categories);
     }

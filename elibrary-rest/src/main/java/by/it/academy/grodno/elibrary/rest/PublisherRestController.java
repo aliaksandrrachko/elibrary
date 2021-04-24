@@ -19,27 +19,27 @@ public class PublisherRestController {
     }
 
     @GetMapping()
-    public List<PublisherDto> findAllSection() {
+    public List<PublisherDto> findAllPublisher() {
         return publisherService.findAll();
     }
 
     @GetMapping(value = "/{id}")
-    public PublisherDto findSection(@PathVariable Integer id) {
+    public PublisherDto findPublisher(@PathVariable Integer id) {
         return publisherService.findById(id).orElse(null);
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public PublisherDto createCategory(@Valid @RequestBody PublisherDto dto) {
+    public PublisherDto createPublisher(@Valid @RequestBody PublisherDto dto) {
         return publisherService.create(dto).orElse(null);
     }
 
     @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public PublisherDto updateCategory(@Valid @RequestBody PublisherDto dto, @PathVariable Integer id) {
+    public PublisherDto updatePublisher(@Valid @RequestBody PublisherDto dto, @PathVariable Integer id) {
         return publisherService.update(id, dto).orElse(null);
     }
 
     @DeleteMapping(value = "/{id}")
-    public void deleteSection(@PathVariable Integer id) {
+    public void deletePublisher(@PathVariable Integer id) {
         publisherService.delete(id);
     }
 

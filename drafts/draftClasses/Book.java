@@ -27,8 +27,8 @@ public class Book extends AEntity<Long> {
     private String isbn13;
 
     @OneToOne
-    @JoinColumn(name = "section_id", referencedColumnName = "id")
-    private Section section;
+    @JoinColumn(name = "category_id", referencedColumnName = "id")
+    private Category category;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "book_has_author",

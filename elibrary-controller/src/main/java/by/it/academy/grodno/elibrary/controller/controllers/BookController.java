@@ -31,9 +31,10 @@ public class BookController {
     private ICategoryService categoryService;
 
     @GetMapping
-    public ModelAndView findAllBook(Principal principal, @PageableDefault Pageable pageable) {
+    public ModelAndView findAllBook(Principal principal, @RequestParam(value = "categoryId", required = false) Integer categoryId,
+                                    @PageableDefault Pageable pageable) {
         UserDto currentUser = userService.findById(principal.getName()).orElse(null);
-        Page<BookDto> pageBookDto = bookService.findAll(pageable);
+        Page<BookDto> pageBookDto = bookService.findAll(categoryId, pageable);
         List<CategoryDto> categoryDtoList = categoryService.findAll();
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("books/booksList");
@@ -55,6 +56,7 @@ public class BookController {
         modelAndView.addObject("book", bookDto);
         return modelAndView;
     }
+
 // add some logic in another method
 //    @GetMapping
 //    public ModelAndView findAllBookBySection(Principal principal, @RequestParam(value = "section") String section,

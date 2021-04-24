@@ -6,7 +6,7 @@
     <meta name="description" content="">
     <meta name="author" content="Ales' Rachko, and Bootstrap contributors">
     <meta name="generator" content="Hugo 0.80.0">
-    <title>Final project</title>
+    <title>E-Library</title>
 
     <link rel="canonical" href="https://getbootstrap.com/docs/5.0/examples/starter-template/">
 
@@ -14,24 +14,8 @@
     <link href="/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
 
     <!-- Favicons -->
-    <link rel="icon" href="/img/favicons/final-ico.png" sizes="32x32" type="image/png">
+    <link rel="icon" href="/img/favicons/old-library-building.png" sizes="32x32" type="image/png">
     <meta name="theme-color" content="#7952b3">
-
-    <style>
-        .bd-placeholder-img {
-            font-size: 1.125rem;
-            text-anchor: middle;
-            -webkit-user-select: none;
-            -moz-user-select: none;
-            user-select: none;
-        }
-
-        @media (min-width: 768px) {
-            .bd-placeholder-img-lg {
-                font-size: 3.5rem;
-            }
-        }
-    </style>
 
     <!-- Custom styles for this template -->
     <link href="/css/starter-template.css" rel="stylesheet">
@@ -71,6 +55,7 @@
             <div class="d-flex">
                 <div th:object="${currentUser}">
                     <div th:if="${currentUser != null}">
+                        <a class="btn btn btn-outline-secondary" th:href="@{'/subscription'}">My subscriptions</a>
                         <a class="btn btn btn-outline-primary" th:href="@{'/users/info'}" th:text="*{username}"></a>
                         <a class="btn btn-outline-danger" href="/logout">Log out</a>
                     </div>

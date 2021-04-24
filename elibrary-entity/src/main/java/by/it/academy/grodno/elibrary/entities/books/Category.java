@@ -37,4 +37,13 @@ public class Category extends AEntity<Integer> implements Serializable {
             return new HashSet<>();
         }
     }
+
+    public String getPath(){
+        StringBuilder sb = new StringBuilder();
+        if (parentCategory != null){
+            sb.append(parentCategory.getPath()).append('/');
+            sb.append(parentCategory.getCategoryName());
+        }
+        return sb.toString();
+    }
 }

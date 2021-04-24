@@ -76,7 +76,7 @@ public class Book extends AEntity<Long> {
     @Column(name = "available")
     private boolean available;
 
-    @Column(name = "book_rating", insertable = false, updatable = false)
+    @Column(name = "book_rating", updatable = false)
     private int rating;
 
     @Column(name = "book_created", insertable = false, updatable = false)

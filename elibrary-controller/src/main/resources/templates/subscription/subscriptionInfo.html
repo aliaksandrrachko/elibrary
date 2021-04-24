@@ -6,7 +6,7 @@
     <meta name="description" content="">
     <meta name="author" content="Ales' Rachko, and Bootstrap contributors">
     <meta name="generator" content="Hugo 0.80.0">
-    <title>Books</title>
+    <title>My subscription</title>
 
     <link rel="canonical" href="https://getbootstrap.com/docs/5.0/examples/starter-template/">
 
@@ -15,7 +15,7 @@
     <link href="/css/docs.css" rel="stylesheet" crossorigin="anonymous">
 
     <!-- Favicons -->
-    <link rel="icon" href="/img/favicons/books-stack-of-three.png" sizes="32x32" type="image/png">
+    <link rel="icon" href="/img/favicons/subscription.png" sizes="32x32" type="image/png">
     <meta name="theme-color" content="#7952b3">
 
     <!-- Custom styles for this template -->
@@ -88,41 +88,25 @@
 <div class="container-xxl my-md-4 bd-layout">
     <aside class="bd-sidebar">
         <nav class="collapse bd-links" id="bd-docs-nav" aria-label="Docs navigation"><ul class="list-unstyled mb-0 py-3 pt-md-1">
-<!--            <div th:fragment="submenu (menu, depth)" th:remove="tag">
-                <ul th:if="${not #lists.isEmpty(menu.children)}" th:class="${#objects.nullSafe(depth, 1) &gt; 1}? 'children'">
-                    <li th:each="child : ${menu.children}">
-                        <span th:if="${#strings.isEmpty(child.actionUri)}" th:text="${child.displayLabel}">Addons</span>
-                        <a th:if="${not #strings.isEmpty(child.actionUri)}" th:href="${child.actionUri}" th:text="${child.displayLabel}">Link Item</a>
-                        <div th:replace="fragments/submenu :: submenu(menu=${child}, depth=${depth+1})" th:remove="tag" />
-                    </li>
-                </ul>
-            </div>-->
-
             <li class="mb-1">
-                <button class="btn d-inline-flex align-items-center rounded collapsed" data-bs-toggle="collapse" data-bs-target="#getting-started-collapse" aria-expanded="false">
-                    Getting started
+                <button class="btn d-inline-flex align-items-center rounded collapsed" data-bs-toggle="collapse" data-bs-target="#subscription-status" aria-expanded="false">
+                    Subscription status
                 </button>
 
-                <div class="collapse" id="getting-started-collapse">
+                <div class="collapse" id="subscription-status">
                     <ul class="list-unstyled fw-normal pb-1 small">
-                        <li><a href="/docs/5.0/getting-started/introduction/" class="d-inline-flex align-items-center rounded">Introduction</a></li>
-                        <li><a href="/docs/5.0/getting-started/download/" class="d-inline-flex align-items-center rounded">Download</a></li>
-                        <li><a href="/docs/5.0/getting-started/contents/" class="d-inline-flex align-items-center rounded">Contents</a></li>
-                        <li><a href="/docs/5.0/getting-started/browsers-devices/" class="d-inline-flex align-items-center rounded">Browsers &amp; devices</a></li>
-                        <li><a href="/docs/5.0/getting-started/javascript/" class="d-inline-flex align-items-center rounded">JavaScript</a></li>
-                        <li><a href="/docs/5.0/getting-started/build-tools/" class="d-inline-flex align-items-center rounded">Build tools</a></li>
-                        <li><a href="/docs/5.0/getting-started/webpack/" class="d-inline-flex align-items-center rounded">Webpack</a></li>
-                        <li><a href="/docs/5.0/getting-started/parcel/" class="d-inline-flex align-items-center rounded">Parcel</a></li>
-                        <li><a href="/docs/5.0/getting-started/accessibility/" class="d-inline-flex align-items-center rounded">Accessibility</a></li>
-                        <li><a href="/docs/5.0/getting-started/rfs/" class="d-inline-flex align-items-center rounded">RFS</a></li>
-                        <li><a href="/docs/5.0/getting-started/rtl/" class="d-inline-flex align-items-center rounded">RTL</a></li>
+                        <li><a href="/subscription?status=1" class="d-inline-flex align-items-center rounded">Booking</a></li>
+                        <li><a href="/subscription?status=2" class="d-inline-flex align-items-center rounded">Reading</a></li>
+                        <li><a href="/subscription?status=3" class="d-inline-flex align-items-center rounded">Reading extended</a></li>
+                        <li><a href="/subscription?status=4" class="d-inline-flex align-items-center rounded">Completed</a></li>
+                        <li><a href="/subscription?status=5" class="d-inline-flex align-items-center rounded">Expired</a></li>
                     </ul>
                 </div>
             </li>
             <li class="my-3 mx-4 border-top"></li>
             <li>
-                <a href="/books" class="d-inline-flex align-items-center rounded">
-                    All books
+                <a href="/subscription" class="d-inline-flex align-items-center rounded">
+                    All subscription
                 </a>
             </li>
         </ul>
@@ -131,8 +115,7 @@
 
     <main class="bd-main order-1">
         <div class="bd-intro ps-lg-4">
-            <h1>Books</h1>
-            <p class="lead">Table of books in the database</p>
+            <h1>Subscriptions</h1>
         </div>
         <div class="bd-content ps-lg-4">
             <table class="table">
@@ -143,32 +126,38 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr th:each="book : ${pageBookDto.content}">
+                <tr th:each="subscription : ${pageSubscriptionDto.content}">
                     <th scope="row">
-                        <!--/*@thymesVar id="book" type="by.it.academy.grodno.elibrary.api.dto.books.BookDto"*/-->
-                        <img class="rounded" src="#" th:src="${book.pictureUrl}" alt="no picture" width="200"/>
+                        <!--/*@thymesVar id="bookDetails" type="by.it.academy.grodno.elibrary.api.dto.books.BookDto"*/-->
+                        <img class="rounded" src="#" th:src="${subscription.bookDetails.pictureUrl}" alt="no picture" width="200"/>
                     </th>
                     <th scope="row">
-                        <h6 class="text-sm-start text-muted m-0" th:text="'N' + ${book.id}"></h6>
-                        <h6 class="text-sm-start m-0" th:text="${book.getCategory().getCategoryPath()+ '/'}"></h6>
-                        <span class="h6"><a class="text-sm-start m-0 link-primary" th:href="@{/books(categoryId=${book.getCategory().getId()})}"
-                                 th:text="${book.getCategory().getCategoryName}"></a></span>
-                        <!--/*@thymesVar id="book" type="by.it.academy.grodno.elibrary.api.dto.books.BookDto"*/-->
-                        <h2 class="text-sm-start mt-2" th:text="${book.title}"></h2>
+                        <h6 class="text-sm-start m-0" th:text="'N' + ${subscription.bookDetails.id}"></h6>
+                        <h6 class="text-sm-start m-0" th:text="${subscription.bookDetails.getCategory().getCategoryPath()+ '/'}"></h6>
+                        <span class="h6"><a class="text-sm-start m-0 link-primary" th:href="@{/bookDetailss(categoryId=${subscription.bookDetails.getCategory().getId()})}"
+                                 th:text="${subscription.bookDetails.getCategory().getCategoryName}"></a></span>
+                        <!--/*@thymesVar id="bookDetails" type="by.it.academy.grodno.elibrary.api.dto.books.BookDto"*/-->
+                        <h2 class="text-sm-start mt-2" th:text="${subscription.bookDetails.title}"></h2>
                         <h5 class="text-sm-start m-0">
-                            <span th:each="authorName : ${book.authors}" th:text="${authorName} + ', '"></span>
-                            <span th:text="${book.datePublishing}"></span>
+                            <span th:each="authorName : ${subscription.bookDetails.authors}" th:text="${authorName} + ', '"></span>
+                            <span th:text="${subscription.bookDetails.datePublishing}"></span>
                         </h5>
-                        <h5 class="text-sm-start mt-1" th:text="'Publisher: ' + ${book.publisher}"></h5>
-                        <h6 class="text-sm-start mt-2" th:text="'Description: ' + ${book.description.substring(0, 200) + '...'}"></h6>
-                        <h6 class="text-sm-start mt-4">
-                            <span th:text="'Total count: ' + ${book.totalCount} + '. '"></span>
-                            <span th:text="'Available count: ' + ${book.availableCount} + '. '"></span>
-                            <span th:text="'Available: ' + ${book.available} + '. '"></span>
-                        </h6>
+                        <h5 class="text-sm-start mt-1" th:text="'Publisher: ' + ${subscription.bookDetails.publisher}"></h5>
                         <div class="text-md-start">
-                            <a class="btn btn-secondary btn-sm mt-2" th:href="'/books/' + ${book.id}">More info...</a>
+                            <a class="btn btn-secondary btn-sm mt-2" th:href="'/books/' + ${subscription.bookDetails.id}">More info...</a>
                         </div>
+
+                        <h6 class="text-sm-start mt-4">
+                            <span th:text="'Created: ' + ${subscription.created} + '. '"></span>
+                            <span th:text="'Deadline: ' + ${subscription.deadline} + '. '"></span>
+                        </h6>
+                        <h6 class="text-sm-start mt-4">
+                            <span th:text="'Took: ' + ${subscription.took} + '. '"></span>
+                            <span th:text="'Returned: ' + ${subscription.returned} + '. '"></span>
+                        </h6>
+                        <h6 class="text-sm-start mt-4">
+                            <span th:text="'Status: ' + ${subscription.status} + '. '"></span>
+                        </h6>
                     </th>
                 </tr>
                 </tbody>
@@ -176,18 +165,18 @@
 
             <nav aria-label="Page navigation">
                 <ul class="pagination">
-                    <li th:class="'page-item ' + ${pageBookDto.getNumber() > 0 ? '' : 'disabled'}">
-                        <a class="page-link" th:href="@{/books(size=${pageBookDto.size}, page=${pageBookDto.getNumber() - 1})}">Previous</a></li>
+                    <li th:class="'page-item ' + ${pageSubscriptionDto.getNumber() > 0 ? '' : 'disabled'}">
+                        <a class="page-link" th:href="@{/sbuscription(status=${currentStatusCode}, size=${pageSubscriptionDto.size}, page=${pageSubscriptionDto.getNumber() - 1})}">Previous</a></li>
                     <li class="page-item active"
-                        th:if="${pageBookDto.totalPages > 0}"
+                        th:if="${pageSubscriptionDto.totalPages > 0}"
                         th:each="pageNumber : ${pageNumbers}"
-                        th:class="'page-item' + ${pageNumber == pageBookDto.number ? ' active' : ''}">
+                        th:class="'page-item' + ${pageNumber == pageSubscriptionDto.number ? ' active' : ''}">
                         <a class="page-link"
-                           th:href="@{/books(size=${pageBookDto.size}, page=${pageNumber})}"
+                           th:href="@{/sbuscription(status=${currentStatusCode}, size=${pageSubscriptionDto.size}, page=${pageNumber})}"
                            th:text="${pageNumber + 1}"></a>
                     </li>
-                    <li th:class="'page-item ' + ${pageBookDto.getNumber() < pageBookDto.getTotalPages() - 1 ? '' : 'disabled'}">
-                        <a class="page-link" th:href="@{/books(size=${pageBookDto.size}, page=${pageBookDto.getNumber() + 1})}">Next</a></li>
+                    <li th:class="'page-item ' + ${pageSubscriptionDto.getNumber() < pageSubscriptionDto.getTotalPages() - 1 ? '' : 'disabled'}">
+                        <a class="page-link" th:href="@{/sbuscription(status=${currentStatusCode}, size=${pageSubscriptionDto.size}, page=${pageSubscriptionDto.getNumber() + 1})}">Next</a></li>
                 </ul>
             </nav>
         </div>

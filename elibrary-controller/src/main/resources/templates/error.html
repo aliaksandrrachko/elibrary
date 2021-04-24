@@ -14,24 +14,8 @@
     <link href="/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
 
     <!-- Favicons -->
-    <link rel="icon" href="/static/img/favicons/final-ico.png" sizes="32x32" type="image/png">
+    <link rel="icon" href="/static/img/favicons/warning.png" sizes="32x32" type="image/png">
     <meta name="theme-color" content="#7952b3">
-
-    <style>
-        .bd-placeholder-img {
-            font-size: 1.125rem;
-            text-anchor: middle;
-            -webkit-user-select: none;
-            -moz-user-select: none;
-            user-select: none;
-        }
-
-        @media (min-width: 768px) {
-            .bd-placeholder-img-lg {
-                font-size: 3.5rem;
-            }
-        }
-    </style>
 
     <!-- Custom styles for this template -->
     <link href="/css/starter-template.css" rel="stylesheet">
@@ -76,19 +60,6 @@
                     </ul>
                 </li>
             </ul>
-
-            <div class="d-flex">
-                <div th:object="${currentUser}">
-                    <div th:if="${currentUser != null}">
-                        <a class="btn btn btn-outline-primary" th:href="@{'/users/info'}" th:text="*{username}"></a>
-                        <a class="btn btn-outline-danger" href="/logout">Log out</a>
-                    </div>
-                    <div th:if="${currentUser == null}">
-                        <a class="btn btn-outline-warning" href="/signup">Sign up</a>
-                        <a class="btn btn-outline-success" href="/login">Log in</a>
-                    </div>
-                </div>
-            </div>
         </div>
     </div>
     </div>

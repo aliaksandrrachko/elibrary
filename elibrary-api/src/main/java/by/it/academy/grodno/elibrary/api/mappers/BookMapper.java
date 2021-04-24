@@ -3,7 +3,6 @@ package by.it.academy.grodno.elibrary.api.mappers;
 import by.it.academy.grodno.elibrary.api.dao.AuthorJpaRepository;
 import by.it.academy.grodno.elibrary.api.dao.CategoryJpaRepository;
 import by.it.academy.grodno.elibrary.api.dao.PublisherJpaRepository;
-import by.it.academy.grodno.elibrary.api.dao.SectionJpaRepository;
 import by.it.academy.grodno.elibrary.api.dto.books.BookDto;
 import by.it.academy.grodno.elibrary.entities.books.Author;
 import by.it.academy.grodno.elibrary.entities.books.Book;
@@ -25,12 +24,6 @@ public class BookMapper extends AGenericMapper<Book, BookDto, Long> {
 
     @Autowired
     private PublisherJpaRepository publisherJpaRepository;
-
-    @Autowired
-    private SectionJpaRepository sectionJpaRepository;
-
-    @Autowired
-    private SectionMapper sectionMapper;
 
     @Autowired
     private CategoryJpaRepository categoryJpaRepository;
@@ -74,6 +67,7 @@ public class BookMapper extends AGenericMapper<Book, BookDto, Long> {
         });
         destination.setAuthors(authorSet);
         publisherJpaRepository.findByPublisherName(source.getPublisher()).ifPresent(destination::setPublisher);
-        destination.setCategory(categoryJpaRepository.findByCategoryName(source.getCategory().getCategoryName()).orElse(null));
+        destination.setCategory(categoryJpaRepository.findByCategoryName(source.getCategory().getCategoryName())
+                .orElseThrow(IllegalArgumentException::new));
     }
 }

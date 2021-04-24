@@ -10,6 +10,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
 import java.util.Optional;
@@ -29,7 +30,7 @@ public class CategoryService implements ICategoryService {
 
     @Override
     public List<CategoryDto> findAll() {
-        return categoryMapper.toDtos(categoryJpaRepository.findAll());
+        return categoryMapper.toDtos(categoryJpaRepository.findAllByParentCategoryIsNull());
     }
 
     @Override
@@ -48,10 +49,39 @@ public class CategoryService implements ICategoryService {
     @Override
     @Transactional
     public Optional<CategoryDto> create(CategoryDto entityDto) {
+        String parentCategoryName = entityDto.getParentCategory();
+        Integer parentCategoryId = entityDto.getParentId();
+
+        Optional<Category> optionalParentCategory = Optional.empty();
+
+        if (StringUtils.hasText(parentCategoryName)) {
+            optionalParentCategory = categoryJpaRepository.findByCategoryName(parentCategoryName);
+        } else if (entityDto.getParentId() != null && entityDto.getParentId() > 0) {
+            optionalParentCategory = categoryJpaRepository.findById(parentCategoryId);
+        }
+        Category parentCategory = null;
+        if (optionalParentCategory.isPresent()) {
+            matches(optionalParentCategory.get(), parentCategoryName, parentCategoryId);
+            parentCategory = optionalParentCategory.get();
+        }
+
+
         return Optional.of(categoryMapper.toDto(categoryJpaRepository.save(
-                    Category.builder()
-                            .categoryName(entityDto.getCategoryName())
-                            .build())));
+                Category.builder()
+                        .parentCategory(parentCategory)
+                        .categoryName(entityDto.getCategoryName())
+                        .build())));
+    }
+
+    private void matches(Category category, String parentCategoryName, Integer parentCategoryId) {
+        boolean isCategoryName = StringUtils.hasText(parentCategoryName);
+        boolean isCategoryId = isCategoryName && parentCategoryId != null && parentCategoryId >= 0;
+        if (isCategoryName && isCategoryId &&
+                !category.getCategoryName().equals(parentCategoryName)
+                && !category.getId().equals(parentCategoryId)) {
+            throw new IllegalArgumentException(
+                    "Collisions: 'parentCategoryName' and 'parentCategoryId' mismatch for found category.");
+        }
     }
 
     @Override
@@ -61,7 +91,7 @@ public class CategoryService implements ICategoryService {
         if (entityDto != null &&
                 optionalCategory.isPresent() &&
                 entityDto.getCategoryName() != null &&
-                !entityDto.getCategoryName().isEmpty()){
+                !entityDto.getCategoryName().isEmpty()) {
             Category category = optionalCategory.get();
             category.setCategoryName(entityDto.getCategoryName());
             category = categoryJpaRepository.save(category);
@@ -73,5 +103,11 @@ public class CategoryService implements ICategoryService {
     @Override
     public Page<CategoryDto> findAll(Pageable pageable) {
         return categoryMapper.toPageDto(categoryJpaRepository.findAll(pageable));
+    }
+
+    @Override
+    public Optional<CategoryDto> findByCategoryName(String categoryName) {
+        Optional<Category> optionalCategory = categoryJpaRepository.findByCategoryName(categoryName);
+        return optionalCategory.map(category -> categoryMapper.toDto(category));
     }
 }

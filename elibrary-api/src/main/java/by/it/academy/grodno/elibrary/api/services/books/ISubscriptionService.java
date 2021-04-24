@@ -19,4 +19,6 @@ public interface ISubscriptionService {
     Optional<SubscriptionDto> create(SubscriptionRequest entityDto);
     Optional<SubscriptionDto> update(Long id, SubscriptionRequest entityDto);
     Page<SubscriptionDto> findAll(Pageable pageable);
+
+    Page<SubscriptionDto> findAll(Long userId, Integer statusCode, Pageable pageable);
 }
