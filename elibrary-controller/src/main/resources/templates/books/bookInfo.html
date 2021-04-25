@@ -20,54 +20,9 @@
     <!-- Custom styles for this template -->
     <link href="/css/starter-template.css" rel="stylesheet">
 </head>
+
 <body>
-
-<nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="/">E-Library</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarsExampleDefault"
-                aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-
-        <div class="collapse navbar-collapse" id="navbarsExampleDefault">
-            <ul class="navbar-nav me-auto mb-2 mb-md-0">
-                <li class="nav-item">
-                    <a class="nav-link" href="/books">Book</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/users/search">Searching book</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link disabled" href="/admin" tabindex="-1" aria-disabled="true">Disabled</a>
-                </li>
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="dropdown01" data-bs-toggle="dropdown"
-                       aria-expanded="false">Admin</a>
-                    <ul class="dropdown-menu" aria-labelledby="dropdown01">
-                        <li><a class="dropdown-item" th:href="@{/admin/users}">Manage users</a></li>
-                        <li><a class="dropdown-item" th:href="@{/admin/books}">Manage books</a></li>
-                        <li><a class="dropdown-item" th:href="@{/admin/books/add}">Add book</a></li>
-                    </ul>
-                </li>
-            </ul>
-
-            <div class="d-flex">
-                <div th:object="${currentUser}">
-                    <div th:if="${currentUser != null}">
-                        <a class="btn btn btn-outline-secondary" th:href="@{'/subscription'}">My subscriptions</a>
-                        <a class="btn btn btn-outline-primary" th:href="@{'/users/info'}" th:text="*{username}"></a>
-                        <a class="btn btn-outline-danger" href="/logout">Log out</a>
-                    </div>
-                    <div th:if="${currentUser == null}">
-                        <a class="btn btn-outline-warning" href="/signup">Sign up</a>
-                        <a class="btn btn-outline-success" href="/login">Log in</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</nav>
+<div th:replace="fragments/upperNavbar :: copy"></div>
 
 <main class="container">
 
@@ -116,48 +71,7 @@
                     <h6 class="text-sm-start" th:text="'Updated: ' + ${book.updated}"></h6>
                     <h6 class="text-sm-start mt-sm-4" th:text="'Rating: ' + ${book.rating}"></h6>
 
-                    <div th:if="${book.isAvailable()}">
-                    <!-- Button trigger modal - subscription -->
-                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#subscriptionForm">
-                        Booking this book
-                    </button>
-
-                    <!-- Modal -->
-                    <div class="modal fade" id="subscriptionForm" tabindex="-1" aria-labelledby="subscriptionFormLabel" aria-hidden="true">
-                        <div class="modal-dialog">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="subscriptionFormLabel">Booking</h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                </div>
-                                <div class="modal-body">
-                                    <h5 class="modal-title" th:text="${book.title}"></h5>
-                                    <h6 class="modal-title" th:text="'Available count: ' + ${book.availableCount} + '. '"></h6>
-                                    <form class="row g-3 mt-1" action="#" th:action="@{/subscription}" method="post">
-                                        <div class="col-auto">
-                                            <label for="bookId" class="form-label visually-hidden">Book Id</label>
-                                            <input type="text" id="bookId" name="bookId" class="form-control visually-hidden"
-                                                   th:value="${book.id}"
-                                                   placeholder="Book Id" required autofocus>
-                                        </div>
-                                        <div class="col-auto">
-                                            <label for="count" class="form-label visually-hidden">Count</label>
-                                            <input type="number" id="count" name="count" class="form-control"
-                                                   th:value="1"
-                                                   placeholder="Count" required autofocus>
-                                        </div>
-                                        <div class="col-auto">
-                                            <button class="btn btn-primary" type="submit">Booking</button>
-                                        </div>
-                                    </form>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    </div>
+                    <div th:replace="fragments/bookingBookModal :: bookingBookModal (thisBook=${book})"></div>
                 </th>
             </tr>
             </tbody>
@@ -166,11 +80,7 @@
 
 </main><!-- /.container -->
 
-<footer class="footer mt-auto py-3 bg-light">
-    <div class="container">
-        <span class="text-muted">Copyright © 2021, All Right Reserved Aliaksandr Rachko</span>
-    </div>
-</footer>
+<div th:replace="fragments/footer :: copy"></div>
 
 <script src="/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
 </body>

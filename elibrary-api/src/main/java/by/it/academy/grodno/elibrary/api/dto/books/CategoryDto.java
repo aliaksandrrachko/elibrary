@@ -4,9 +4,7 @@ import by.it.academy.grodno.elibrary.api.dto.AEntityDto;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import java.util.Set;
 
 @NoArgsConstructor

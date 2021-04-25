@@ -7,17 +7,20 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.time.LocalDateTime;
+import java.util.Collection;
 
 public interface SubscriptionJpaRepository extends JpaRepository<Subscription, Long> {
 
-    Page<Subscription> findAllByStatus(SubscriptionStatus status, Pageable pageable);
+    Page<Subscription> findAllByStatusIn(Collection<SubscriptionStatus> status, Pageable pageable);
 
     Page<Subscription> findByUserId(Long userId, Pageable pageable);
 
-    Page<Subscription> findByStatusAndUserId(SubscriptionStatus status, Long userId, Pageable pageable);
+    Page<Subscription> findAllByUserIdAndStatusIn(Long userId, Collection<SubscriptionStatus> status, Pageable pageable);
 
-    Page<Subscription> findByUserIdAndDeadlineAfterAndStatusIsNot(Long userId,
-                                                                  LocalDateTime deadline,
-                                                                  SubscriptionStatus status,
-                                                                  Pageable pageable);
+    Page<Subscription> findByUserIdAndDeadlineAfterAndStatusNot(Long userId,
+                                                                LocalDateTime deadline,
+                                                                SubscriptionStatus status,
+                                                                Pageable pageable);
+
+    Page<Subscription> findByDeadlineAfterAndStatusNot(LocalDateTime deadLine, SubscriptionStatus status, Pageable pageable);
 }

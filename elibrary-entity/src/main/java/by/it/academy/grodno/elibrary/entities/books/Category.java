@@ -5,7 +5,6 @@ import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
-import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -17,7 +16,7 @@ import java.util.Set;
 @SuperBuilder
 @Entity
 @Table(name = ("category"))
-public class Category extends AEntity<Integer> implements Serializable {
+public class Category extends AEntity<Integer> {
 
     @Column(name = "category_name", length = 45)
     private String categoryName;

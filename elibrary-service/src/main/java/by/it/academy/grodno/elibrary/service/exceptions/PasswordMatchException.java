@@ -10,8 +10,7 @@ public class PasswordMatchException extends RuntimeException {
         super(String.format(PASSWORD_MISMATCH, userDto.getUsername()));
     }
 
-    public PasswordMatchException() {
-    }
+    public PasswordMatchException() { }
 
     public PasswordMatchException(String message) {
         super(message);

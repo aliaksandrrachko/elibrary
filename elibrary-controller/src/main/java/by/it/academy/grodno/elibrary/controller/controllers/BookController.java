@@ -7,7 +7,6 @@ import by.it.academy.grodno.elibrary.api.services.IUserService;
 import by.it.academy.grodno.elibrary.api.services.books.IBookService;
 import by.it.academy.grodno.elibrary.api.services.books.ICategoryService;
 import by.it.academy.grodno.elibrary.controller.utils.PageNumberListCreator;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -15,31 +14,35 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.security.Principal;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 @RestController
 @RequestMapping(value = "books")
 public class BookController {
 
-    @Autowired
-    private IBookService bookService;
+    private final IBookService bookService;
+    private final IUserService userService;
+    private final ICategoryService categoryService;
 
-    @Autowired
-    private IUserService userService;
-
-    @Autowired
-    private ICategoryService categoryService;
+    public BookController(IBookService bookService, IUserService userService, ICategoryService categoryService) {
+        this.bookService = bookService;
+        this.userService = userService;
+        this.categoryService = categoryService;
+    }
 
     @GetMapping
     public ModelAndView findAllBook(Principal principal, @RequestParam(value = "categoryId", required = false) Integer categoryId,
                                     @PageableDefault Pageable pageable) {
-        UserDto currentUser = userService.findById(principal.getName()).orElse(null);
+        UserDto currentUser = userService.findUser(principal).orElse(null);
+
         Page<BookDto> pageBookDto = bookService.findAll(categoryId, pageable);
-        List<CategoryDto> categoryDtoList = categoryService.findAll();
+        Set<CategoryDto> categoryDtoList = new HashSet<>(categoryService.findAll());
+
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("books/booksList");
         modelAndView.addObject("currentUser", currentUser);
-        modelAndView.addObject("categoryDtoList", categoryDtoList);
+        modelAndView.addObject("categoryDtoSet", categoryDtoList);
         modelAndView.addObject("pageBookDto", pageBookDto);
         modelAndView.addObject("pageNumbers",
                 PageNumberListCreator.getListOfPagesNumber(pageBookDto.getNumber(), pageBookDto.getTotalPages()));
@@ -48,7 +51,7 @@ public class BookController {
 
     @GetMapping(value = "/{id}")
     public ModelAndView bookInfo(Principal principal, @PathVariable Long id){
-        UserDto currentUser = userService.findById(principal.getName()).orElse(null);
+        UserDto currentUser = userService.findUser(principal).orElse(null);
         BookDto bookDto = bookService.findById(id).orElse(null);
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("books/bookInfo");
@@ -56,22 +59,4 @@ public class BookController {
         modelAndView.addObject("book", bookDto);
         return modelAndView;
     }
-
-// add some logic in another method
-//    @GetMapping
-//    public ModelAndView findAllBookBySection(Principal principal, @RequestParam(value = "section") String section,
-//                                             @PageableDefault Pageable pageable){
-//        UserDto currentUser = userService.findById(principal.getName()).orElse(null);
-//        ModelAndView modelAndView = new ModelAndView();
-//        List<CategoryDto> categoryDtoList = categoryService.findAll();
-//        Page<BookDto> pageBookDto = bookService.findAllBySectionName(section, pageable);
-//        modelAndView.setViewName("books/booksList");
-//        modelAndView.addObject("currentUser", currentUser);
-//        modelAndView.addObject("categoryDtoList", categoryDtoList);
-//        modelAndView.addObject("pageBookDto", pageBookDto);
-//        modelAndView.addObject("pageNumbers",
-//                PageNumberListCreator.getListOfPagesNumber(pageBookDto.getNumber(), pageBookDto.getTotalPages()));
-//        return modelAndView;
-//    }
-
 }

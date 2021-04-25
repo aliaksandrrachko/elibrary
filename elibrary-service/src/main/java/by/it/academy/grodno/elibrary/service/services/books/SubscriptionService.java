@@ -12,6 +12,8 @@ import by.it.academy.grodno.elibrary.entities.books.Book;
 import by.it.academy.grodno.elibrary.entities.books.Subscription;
 import by.it.academy.grodno.elibrary.entities.books.SubscriptionStatus;
 import by.it.academy.grodno.elibrary.entities.users.User;
+import by.it.academy.grodno.elibrary.service.exceptions.UnknownSubscriptionUpdateCodeRequest;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -19,6 +21,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -48,19 +51,49 @@ public class SubscriptionService implements ISubscriptionService {
     }
 
     @Override
-    public Page<SubscriptionDto> findAll(Long userId, Integer statusCode, Pageable pageable) {
-        if (userId == null && statusCode != null && statusCode != 5) {
-            return subscriptionMapper.toPageDto(subscriptionJpaRepository.findAllByStatus(
-                    SubscriptionStatus.getSubscriptionStatus(statusCode), pageable));
-        } else if (statusCode == null && userId != null && statusCode != 5){
-            return subscriptionMapper.toPageDto(subscriptionJpaRepository.findByUserId(userId, pageable));
-        } else if (statusCode != null && statusCode != 5){
-            return subscriptionMapper.toPageDto(subscriptionJpaRepository.findByStatusAndUserId(
-                    SubscriptionStatus.getSubscriptionStatus(statusCode), userId, pageable));
+    public Page<SubscriptionDto> findAllByUserIdAndStatus(Long userId, Integer statusCode, Pageable pageable) {
+        if (userId == null && statusCode != null) {
+            return findAllByStatus(statusCode, pageable);
+        } else if (statusCode == null && userId != null){
+            return findAllByUserId(userId, pageable);
+        } else if (userId != null){
+            return findAllAllByUserIdAndStatusIfItPresent(userId, statusCode, pageable);
         } else {
-            return findAll(pageable);
+            return Page.empty(pageable);
         }
     }
+
+    @Override
+    public Page<SubscriptionDto> findAllByUserId(Long userId, Pageable pageable){
+        return subscriptionMapper.toPageDto(subscriptionJpaRepository.findByUserId(userId, pageable));
+    }
+
+    @Override
+    public Page<SubscriptionDto> findAllByStatus(Integer statusCode, Pageable pageable){
+        SubscriptionStatus status = SubscriptionStatus.getSubscriptionStatus(statusCode);
+        Page<Subscription> subscriptionPage;
+        if (status.equals(SubscriptionStatus.EXPIRED)){
+            subscriptionPage = subscriptionJpaRepository
+                    .findByDeadlineAfterAndStatusNot(LocalDateTime.now().withNano(0),
+                            SubscriptionStatus.COMPLETED, pageable);
+        } else {
+            subscriptionPage = subscriptionJpaRepository.findAllByStatusIn(Collections.singleton(status), pageable);
+        }
+        return subscriptionMapper.toPageDto(subscriptionPage);
+    }
+
+    private Page<SubscriptionDto> findAllAllByUserIdAndStatusIfItPresent(Long userId, Integer statusCode, Pageable pageable){
+        SubscriptionStatus status = SubscriptionStatus.getSubscriptionStatus(statusCode);
+        Page<Subscription> subscriptionPage;
+        if (status.equals(SubscriptionStatus.EXPIRED)){
+            subscriptionPage = subscriptionJpaRepository
+                    .findByUserIdAndDeadlineAfterAndStatusNot(userId, LocalDateTime.now().withNano(0), status, pageable);
+        } else {
+            subscriptionPage = subscriptionJpaRepository.findAllByUserIdAndStatusIn(userId, Collections.singleton(status), pageable);
+        }
+        return subscriptionMapper.toPageDto(subscriptionPage);
+    }
+
 
     @Override
     public Optional<SubscriptionDto> findById(Long id) {
@@ -118,7 +151,7 @@ public class SubscriptionService implements ISubscriptionService {
         return Optional.empty();
     }
 
-    private int takeBook(Book book, int count) {
+    private int takeBook(@NotNull Book book, int count) {
         int taken;
         if (book.getAvailableCount() >= count) {
             book.setAvailableCount(book.getAvailableCount() - count);
@@ -150,6 +183,8 @@ public class SubscriptionService implements ISubscriptionService {
             case EXTENDED_SUBSCRIPTION:
                 prepareToExtendedSubscription(subscription, request);
                 break;
+            default:
+                throw new UnknownSubscriptionUpdateCodeRequest(requestCode);
         }
         return Optional.of(subscriptionMapper.toDto(subscriptionJpaRepository.save(subscription)));
     }

@@ -21,113 +21,13 @@
     <!-- Custom styles for this template -->
     <link href="/css/starter-template.css" rel="stylesheet">
 </head>
+
 <body>
-<nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="/">E-Library</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarsExampleDefault"
-                aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-
-        <div class="collapse navbar-collapse" id="navbarsExampleDefault">
-            <ul class="navbar-nav me-auto mb-2 mb-md-0">
-                <li class="nav-item">
-                    <a class="nav-link" href="/books">Book</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/books/search">Searching book</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link disabled" href="/admin" tabindex="-1" aria-disabled="true">Disabled</a>
-                </li>
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="dropdown01" data-bs-toggle="dropdown"
-                       aria-expanded="false">Admin</a>
-                    <ul class="dropdown-menu" aria-labelledby="dropdown01">
-                        <li><a class="dropdown-item" th:href="@{/admin/users}">Manage users</a></li>
-                        <li><a class="dropdown-item" th:href="@{/admin/books}">Manage books</a></li>
-                        <li><a class="dropdown-item" th:href="@{/admin/books/add}">Add book</a></li>
-                    </ul>
-                </li>
-            </ul>
-
-            <div class="d-flex">
-                <div th:object="${currentUser}">
-                    <div th:if="${currentUser != null}">
-                        <a class="btn btn btn-outline-secondary" th:href="@{'/subscription'}">My subscriptions</a>
-                        <a class="btn btn btn-outline-primary" th:href="@{'/users/info'}" th:text="*{username}"></a>
-                        <a class="btn btn-outline-danger" href="/logout">Log out</a>
-                    </div>
-                    <div th:if="${currentUser == null}">
-                        <a class="btn btn-outline-warning" href="/signup">Sign up</a>
-                        <a class="btn btn-outline-success" href="/login">Log in</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</nav>
-<nav class="bd-subnavbar py-2" aria-label="Secondary navigation">
-    <div class="container-xxl d-flex align-items-md-center">
-        <button class="btn bd-sidebar-toggle d-md-none py-0 px-1 ms-3 order-3 collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#bd-docs-nav" aria-controls="bd-docs-nav" aria-expanded="false" aria-label="Toggle docs navigation">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" class="bi bi-expand" fill="currentColor" viewBox="0 0 16 16">
-                <title>Expand</title>
-                <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h13a.5.5 0 0 1 0 1h-13A.5.5 0 0 1 1 8zM7.646.146a.5.5 0 0 1 .708 0l2 2a.5.5 0 0 1-.708.708L8.5 1.707V5.5a.5.5 0 0 1-1 0V1.707L6.354 2.854a.5.5 0 1 1-.708-.708l2-2zM8 10a.5.5 0 0 1 .5.5v3.793l1.146-1.147a.5.5 0 0 1 .708.708l-2 2a.5.5 0 0 1-.708 0l-2-2a.5.5 0 0 1 .708-.708L7.5 14.293V10.5A.5.5 0 0 1 8 10z"></path>
-            </svg>
-
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" class="bi bi-collapse" fill="currentColor" viewBox="0 0 16 16">
-                <title>Collapse</title>
-                <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h13a.5.5 0 0 1 0 1h-13A.5.5 0 0 1 1 8zm7-8a.5.5 0 0 1 .5.5v3.793l1.146-1.147a.5.5 0 0 1 .708.708l-2 2a.5.5 0 0 1-.708 0l-2-2a.5.5 0 1 1 .708-.708L7.5 4.293V.5A.5.5 0 0 1 8 0zm-.5 11.707l-1.146 1.147a.5.5 0 0 1-.708-.708l2-2a.5.5 0 0 1 .708 0l2 2a.5.5 0 0 1-.708.708L8.5 11.707V15.5a.5.5 0 0 1-1 0v-3.793z"></path>
-            </svg>
-
-        </button>
-    </div>
-</nav>
+<div th:replace="fragments/upperNavbar :: copy"></div>
+<div th:replace="fragments/subNavbarCategory :: navAsideButton"></div>
 
 <div class="container-xxl my-md-4 bd-layout">
-    <aside class="bd-sidebar">
-        <nav class="collapse bd-links" id="bd-docs-nav" aria-label="Docs navigation"><ul class="list-unstyled mb-0 py-3 pt-md-1">
-<!--            <div th:fragment="submenu (menu, depth)" th:remove="tag">
-                <ul th:if="${not #lists.isEmpty(menu.children)}" th:class="${#objects.nullSafe(depth, 1) &gt; 1}? 'children'">
-                    <li th:each="child : ${menu.children}">
-                        <span th:if="${#strings.isEmpty(child.actionUri)}" th:text="${child.displayLabel}">Addons</span>
-                        <a th:if="${not #strings.isEmpty(child.actionUri)}" th:href="${child.actionUri}" th:text="${child.displayLabel}">Link Item</a>
-                        <div th:replace="fragments/submenu :: submenu(menu=${child}, depth=${depth+1})" th:remove="tag" />
-                    </li>
-                </ul>
-            </div>-->
-
-            <li class="mb-1">
-                <button class="btn d-inline-flex align-items-center rounded collapsed" data-bs-toggle="collapse" data-bs-target="#getting-started-collapse" aria-expanded="false">
-                    Getting started
-                </button>
-
-                <div class="collapse" id="getting-started-collapse">
-                    <ul class="list-unstyled fw-normal pb-1 small">
-                        <li><a href="/docs/5.0/getting-started/introduction/" class="d-inline-flex align-items-center rounded">Introduction</a></li>
-                        <li><a href="/docs/5.0/getting-started/download/" class="d-inline-flex align-items-center rounded">Download</a></li>
-                        <li><a href="/docs/5.0/getting-started/contents/" class="d-inline-flex align-items-center rounded">Contents</a></li>
-                        <li><a href="/docs/5.0/getting-started/browsers-devices/" class="d-inline-flex align-items-center rounded">Browsers &amp; devices</a></li>
-                        <li><a href="/docs/5.0/getting-started/javascript/" class="d-inline-flex align-items-center rounded">JavaScript</a></li>
-                        <li><a href="/docs/5.0/getting-started/build-tools/" class="d-inline-flex align-items-center rounded">Build tools</a></li>
-                        <li><a href="/docs/5.0/getting-started/webpack/" class="d-inline-flex align-items-center rounded">Webpack</a></li>
-                        <li><a href="/docs/5.0/getting-started/parcel/" class="d-inline-flex align-items-center rounded">Parcel</a></li>
-                        <li><a href="/docs/5.0/getting-started/accessibility/" class="d-inline-flex align-items-center rounded">Accessibility</a></li>
-                        <li><a href="/docs/5.0/getting-started/rfs/" class="d-inline-flex align-items-center rounded">RFS</a></li>
-                        <li><a href="/docs/5.0/getting-started/rtl/" class="d-inline-flex align-items-center rounded">RTL</a></li>
-                    </ul>
-                </div>
-            </li>
-            <li class="my-3 mx-4 border-top"></li>
-            <li>
-                <a href="/books" class="d-inline-flex align-items-center rounded">
-                    All books
-                </a>
-            </li>
-        </ul>
-        </nav>
-    </aside>
+    <div th:replace="fragments/subNavbarCategory :: navAsideCategory"></div>
 
     <main class="bd-main order-1">
         <div class="bd-intro ps-lg-4">
@@ -169,6 +69,7 @@
                         <div class="text-md-start">
                             <a class="btn btn-secondary btn-sm mt-2" th:href="'/books/' + ${book.id}">More info...</a>
                         </div>
+                        <div th:replace="fragments/bookingBookModal :: bookingBookModal (thisBook=${book})"></div>
                     </th>
                 </tr>
                 </tbody>
@@ -194,11 +95,7 @@
     </main>
 </div>
 
-<footer class="footer mt-auto py-3 bg-light">
-    <div class="container">
-        <span class="text-muted">Copyright © 2021, All Right Reserved Aliaksandr Rachko</span>
-    </div>
-</footer>
+<div th:replace="fragments/footer :: copy"></div>
 
 <script src="/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
 <script src="/js/docs.min.js.js" crossorigin="anonymous"></script>

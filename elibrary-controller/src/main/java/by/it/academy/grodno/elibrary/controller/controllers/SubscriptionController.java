@@ -6,38 +6,36 @@ import by.it.academy.grodno.elibrary.api.dto.users.UserDto;
 import by.it.academy.grodno.elibrary.api.services.IUserService;
 import by.it.academy.grodno.elibrary.api.services.books.ISubscriptionService;
 import by.it.academy.grodno.elibrary.controller.utils.PageNumberListCreator;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.security.Principal;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @RestController
 @RequestMapping(value = "/subscription")
 public class SubscriptionController {
 
-    @Autowired
-    private IUserService userService;
+    private final IUserService userService;
+    private final ISubscriptionService subscriptionService;
 
-    @Autowired
-    private ISubscriptionService subscriptionService;
+    public SubscriptionController(IUserService userService, ISubscriptionService subscriptionService) {
+        this.userService = userService;
+        this.subscriptionService = subscriptionService;
+    }
 
     @GetMapping
     public ModelAndView findAll(@RequestParam(value = "status", required = false) Integer status,
                                 Pageable pageable,
                                 Principal principal){
-        UserDto userDto = null;
-        if (principal != null){
-            userDto = userService.findById(principal.getName()).orElse(null);
-        }
+        Optional<UserDto> optionalUserDto = userService.findUser(principal);
+        UserDto userDto = optionalUserDto.orElseThrow(NoSuchElementException::new);
 
-        Page<SubscriptionDto> subscriptionPage = Page.empty();
-        if (userDto != null){
-            subscriptionPage = subscriptionService.findAll(userDto.getId(), status, pageable);
-        }
+        Page<SubscriptionDto> subscriptionPage =
+                subscriptionService.findAllByUserIdAndStatus(userDto.getId(), status, pageable);
 
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("subscription/subscriptionInfo");
@@ -62,12 +60,5 @@ public class SubscriptionController {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("redirect:/books/" + request.getBookId());
         return modelAndView;
-    }
-
-    private Optional<UserDto> getCurrentUserDto(Principal principal){
-        if (principal != null){
-           return userService.findById(principal.getName());
-        }
-        return Optional.empty();
     }
 }

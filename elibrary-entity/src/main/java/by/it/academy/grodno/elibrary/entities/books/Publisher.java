@@ -12,7 +12,7 @@ import javax.persistence.Table;
 @AllArgsConstructor
 @Getter
 @Setter
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(callSuper = false)
 @SuperBuilder
 @Entity
 @Table(name = "publisher")
