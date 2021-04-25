@@ -22,20 +22,15 @@ public class BookRestController {
     }
 
     @GetMapping()
-    public List<BookDto> findAllBook() {
-        return bookService.findAll();
+    public Page<BookDto> findAllBook(@RequestParam(value = "categoryId", required = false) Integer categoryId,
+                                     @PageableDefault Pageable pageable) {
+        return bookService.findAllByCategoryId(categoryId, pageable);
     }
 
     @GetMapping(value = "/{id}")
     public BookDto findBookById(@PathVariable Long id) {
         return bookService.findById(id).orElse(null);
     }
-
-/*    @GetMapping
-    public Page<BookDto> findBookBySection(@RequestParam(value = "section") String section,
-                                           @PageableDefault Pageable pageable){
-        return bookService.findAllBySectionName(section, pageable);
-    }*/
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public BookDto createBook(@Valid @RequestBody BookDto dto) {

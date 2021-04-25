@@ -5,7 +5,6 @@ import by.it.academy.grodno.elibrary.entities.converters.SubscriptionStatusConve
 import by.it.academy.grodno.elibrary.entities.users.User;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
-import org.hibernate.annotations.Target;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;

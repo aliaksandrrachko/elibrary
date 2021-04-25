@@ -32,7 +32,7 @@ public class BookDto extends AEntityDto<Long> {
 
     private String description;
 
-    private SectionDto section;
+    private CategoryDto category;
 
     private String publisher;
 

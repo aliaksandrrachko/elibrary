@@ -13,10 +13,11 @@ public interface ISubscriptionService {
     List<SubscriptionDto> findAll();
     Optional<SubscriptionDto> findById(Long id);
     void delete(Long id);
-
     Optional<SubscriptionDto> booking(SubscriptionRequest entityDto);
-
     Optional<SubscriptionDto> create(SubscriptionRequest entityDto);
     Optional<SubscriptionDto> update(Long id, SubscriptionRequest entityDto);
     Page<SubscriptionDto> findAll(Pageable pageable);
+    Page<SubscriptionDto> findAllByUserId(Long userId, Pageable pageable);
+    Page<SubscriptionDto> findAllByUserIdAndStatus(Long userId, Integer statusCode, Pageable pageable);
+    Page<SubscriptionDto> findAllByStatus(Integer statusCode, Pageable pageable);
 }

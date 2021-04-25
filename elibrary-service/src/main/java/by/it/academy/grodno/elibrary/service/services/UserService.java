@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
+import java.security.Principal;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
@@ -63,6 +64,15 @@ public class UserService implements IUserService {
         Long userIdNumber = Long.parseLong(userId);
         Optional<User> optionalUser = userJpaRepository.findById(userIdNumber);
         return optionalUser.map(user -> userMapper.toDto(user));
+    }
+
+    @Override
+    public Optional<UserDto> findUser(Principal principal) {
+        Optional<UserDto> optionalUserDto = Optional.empty();
+        if (principal != null && StringUtils.hasText(principal.getName())) {
+            optionalUserDto = this.findById(principal.getName());
+        }
+        return optionalUserDto;
     }
 
     @Override

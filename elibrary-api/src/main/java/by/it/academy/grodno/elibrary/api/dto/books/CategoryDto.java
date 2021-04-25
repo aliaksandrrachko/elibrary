@@ -15,8 +15,13 @@ import java.util.Set;
 @SuperBuilder
 public class CategoryDto extends AEntityDto<Integer> {
 
+    private Integer parentId;
+    private String parentCategory;
+
+    private String categoryPath;
+
     @NotBlank(message = "Field 'Category' can not be empty.")
     private String categoryName;
 
-    private Set<String> sections;
+    private Set<CategoryDto> categories;
 }

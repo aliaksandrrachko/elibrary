@@ -4,6 +4,7 @@ import by.it.academy.grodno.elibrary.api.dto.users.UserDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.security.Principal;
 import java.util.Optional;
 
 public interface IUserService extends IAGenericCrudService<UserDto, Long> {
@@ -13,4 +14,5 @@ public interface IUserService extends IAGenericCrudService<UserDto, Long> {
     Optional<UserDto> getUserBySocialId(Long socialId);
     Optional<UserDto> findUserByEmail(String email);
     Optional<UserDto> findById(String userId);
+    Optional<UserDto> findUser(Principal principal);
 }

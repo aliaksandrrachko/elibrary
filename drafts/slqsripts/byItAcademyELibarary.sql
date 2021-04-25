@@ -131,8 +131,10 @@ ALTER TABLE user
 CREATE TABLE IF NOT EXISTS category
 (
     id            INT UNSIGNED NOT NULL AUTO_INCREMENT UNIQUE COMMENT 'Book category id',
+    parent_id     INT UNSIGNED COMMENT 'Parent id',
     category_name VARCHAR(45)  NOT NULL UNIQUE COMMENT 'Name of book category',
-    CONSTRAINT pk_category PRIMARY KEY (id)
+    CONSTRAINT pk_category PRIMARY KEY (id),
+    CONSTRAINT fk_category_category1 FOREIGN KEY (parent_id) REFERENCES category (id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 -- -----------------------------------------------------
@@ -177,7 +179,7 @@ CREATE TABLE IF NOT EXISTS book
     description     TEXT COMMENT 'Book description',
     isbn_10         VARCHAR(10)                NOT NULL COMMENT 'Books isbn in format ISBN-10',
     isbn_13         VARCHAR(13)                NOT NULL COMMENT 'Books isbn in format ISBN-13',
-    section_id      INT UNSIGNED               NOT NULL COMMENT 'Sections id',
+    category_id      INT UNSIGNED               NOT NULL COMMENT 'Category id',
     publisher_id    INT UNSIGNED COMMENT 'Book publisher',
     language        VARCHAR(3) COMMENT 'Language of book by alpha-3/ISO 639-2 Code',
     publishing_date DATE COMMENT 'The year and month of publishing',
@@ -191,7 +193,7 @@ CREATE TABLE IF NOT EXISTS book
     book_updated    DATETIME     DEFAULT NOW() NOT NULL COMMENT 'The date of adding book',
     #cover INT COMMENT 'The books cover',
     CONSTRAINT pk_book PRIMARY KEY (id),
-    CONSTRAINT fk_book_section FOREIGN KEY (section_id) REFERENCES section (id) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT fk_book_category FOREIGN KEY (category_id) REFERENCES category (id) ON DELETE CASCADE ON UPDATE CASCADE,
     CONSTRAINT fk_book_publisher FOREIGN KEY (publisher_id) REFERENCES publisher (id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
@@ -422,59 +424,72 @@ VALUES (1, 2),
 -- -----------------------------------------------------
 -- Filing data by_it_academy_grodno_elibrary.category
 -- -----------------------------------------------------
-INSERT INTO category (id, category_name)
-VALUES (1, 'Художественная литература'),
-       (2, 'Нехудожественная литература'),
-       (3, 'Учебная, методическая литература и словари'),
-       (4, 'Билингвы и книги на иностранных языках'),
-       (5, 'Комиксы, Манга, Артбуки'),
-       (6, 'Периодические издания'),
-       (7, 'Книги для детей');
+INSERT INTO category (id, parent_id, category_name)
+VALUES (1, null, 'Художественная литература'),
+       (2, null, 'Нехудожественная литература'),
+       (3, null, 'Учебная, методическая литература и словари'),
+       (4, null, 'Билингвы и книги на иностранных языках'),
+       (5, null, 'Комиксы, Манга, Артбуки'),
+       (6, null, 'Периодические издания'),
+       (7, null, 'Книги для детей');
 
 -- -----------------------------------------------------
--- Filing data by_it_academy_grodno_elibrary.section
+-- Filing data by_it_academy_grodno_elibrary.category1
 -- -----------------------------------------------------
-INSERT INTO section (id, section_name, category_id)
-VALUES (1, 'Современная литература', 1),
-       (2, 'Басни', 1),
-       (3, 'Детективы', 1),
-       (4, 'Драматургия', 1),
-       (5, 'Историческая проза', 1),
-       (6, 'Классическая проза', 1),
-       (7, 'Поэзия', 1),
-       (8, 'Приключения', 1),
-       (9, 'Сентиментальная проза', 1),
-       (10, 'Современная проза', 1),
-       (11, 'Фантастика', 1),
-       (12, 'Фэнтези', 1),
-       (13, 'Эпос и фольклор', 1),
+INSERT INTO category (id, parent_id, category_name)
+VALUES (8, 1,  'Современная литература'),
+       (9, 1, 'Басни'),
+       (10, 1, 'Детективы'),
+       (11, 1, 'Драматургия'),
+       (12, 1, 'Историческая проза'),
+       (13, 1, 'Классическая проза'),
+       (14, 1, 'Поэзия'),
+       (15, 1, 'Приключения'),
+       (16, 1, 'Сентиментальная проза'),
+       (17, 1, 'Современная проза'),
+       (18, 1, 'Фантастика'),
+       (19, 1, 'Фэнтези'),
+       (20, 1, 'Эпос и фольклор'),
 -- -----------------------------------------------------
-       (14, 'Бизнес. Экономика', 2),
-       (15, 'Естественные науки', 2),
-       (16, 'История. Исторические науки', 2),
+       (21, 2, 'Бизнес. Экономика'),
+       (22, 2, 'Естественные науки'),
+       (23, 2, 'История. Исторические науки'),
 -- -----------------------------------------------------
-       (17, 'Вспомогательные материалы для студентов', 3),
-       (18, 'Демонстрационные материалы', 3),
-       (19, 'Дополнительное образование для детей', 3),
+       (24, 3, 'Вспомогательные материалы для студентов'),
+       (25, 3, 'Демонстрационные материалы'),
+       (26, 3,  'Дополнительное образование для детей'),
 -- -----------------------------------------------------
-       (20, 'Билингвы', 4),
-       (21, 'Литература на иностранном языке', 4),
-       (22, 'Литература на иностранном языке для детей', 4),
+       (27, 4, 'Билингвы'),
+       (28, 4, 'Литература на иностранном языке'),
+       (29, 4, 'Литература на иностранном языке для детей'),
 -- -----------------------------------------------------
-       (23, 'Артбуки. Игровые миры. Вселенные', 5),
-       (24, 'Комиксы', 5),
-       (25, 'Комиксы для детей', 5),
-       (26, 'Манга', 5),
-       (27, 'Манга для детей', 5),
-       (28, 'Новеллизации', 5),
+       (30, 5, 'Артбуки. Игровые миры. Вселенные'),
+       (31, 5, 'Комиксы'),
+       (32, 5, 'Комиксы для детей'),
+       (33, 5, 'Манга'),
+       (34, 5, 'Манга для детей'),
+       (35, 5, 'Новеллизации'),
 -- -----------------------------------------------------
-       (29, 'Газеты', 6),
-       (30, 'Журналы', 6),
-       (31, 'Научные журналы', 6),
+       (36, 6, 'Газеты'),
+       (37, 6, 'Журналы'),
+       (38, 6, 'Научные журналы'),
 -- -----------------------------------------------------
-       (32, 'Детская художественная литература', 7),
-       (33, 'Детский досуг', 7),
-       (34, 'Познавательная литература', 7);
+       (39, 7, 'Детская художественная литература'),
+       (40, 7, 'Детский досуг'),
+       (41, 7, 'Познавательная литература');
+
+-- -----------------------------------------------------
+-- Filing data by_it_academy_grodno_elibrary.category2
+-- -----------------------------------------------------
+INSERT INTO category (id, parent_id, category_name)
+VALUES (42, 13, 'Классическая зарубежная проза'),
+       (43, 13, 'Классическая отечественная проза'),
+-- -----------------------------------------------------
+       (44, 10, 'Современный зарубежный детектив'),
+       (45, 10, 'Классический отечественный детектив'),
+       (46, 10, 'Классический зарубежный детектив');
+
+
 
 -- -----------------------------------------------------
 -- Filing data by_it_academy_grodno_elibrary.author
@@ -509,56 +524,56 @@ VALUES (1, 'AST'),
 -- -----------------------------------------------------
 -- Filing data by_it_academy_grodno_elibrary.book
 -- -----------------------------------------------------
-INSERT INTO book (id, title, description, isbn_10, isbn_13, section_id, publisher_id, language, publishing_date, print_length, picture_url, total_count, available_count, available)
+INSERT INTO book (id, title, description, isbn_10, isbn_13, category_id, publisher_id, language, publishing_date, print_length, picture_url, total_count, available_count, available)
  VALUES (1, 'Voyna i mir. Kniga 1',
          'Издательство АСТ Серия Лучшая мировая классика Год издания 2018 ISBN 9785171123857 Кол-во страниц 736 Формат 20.6 x 13.5 x 3 Тип обложки Твердая бумажная Тираж 10000 Вес, г 500 Возрастные ограничения 12+ Аннотация "Война и мир" — роман-эпопея Льва Толстого, одно из крупнейших произведений мировой литературы, описывающее жизнь русского общества в эпоху Наполеоновских войн. "Война и мир" — это масштабная картина жизни России, взятая во всех ее социальных слоях (от крестьян до императора Александра I), и детальное описание хода военных действий, и осмысление поведения человека на войне, но главное — это глубокое философское осмысление и исследование жизни как таковой — в быту, в семье, в мирное время, на войне. Именно поэтому "Войну и мир" можно читать и перечитывать всю жизнь — этот роман никогда не потеряет своей актуальности.',
          '5171123853',
          '9785171123857',
-         6, 1, 'rus', '2018-01-01', 736,
+         43, 1, 'rus', '2018-01-01', 736,
          'https://m.media-amazon.com/images/I/513ZIFMK6VL.jpg',
          2, 2, TRUE);
 INSERT INTO book_has_author (book_id, author_id)
 VALUES (1, 11);
 
-INSERT INTO book (id, title, description, isbn_10, isbn_13, section_id, publisher_id, language, publishing_date, print_length, picture_url, total_count, available_count, available)
+INSERT INTO book (id, title, description, isbn_10, isbn_13, category_id, publisher_id, language, publishing_date, print_length, picture_url, total_count, available_count, available)
 VALUES (2, 'Джордж Оруэлл: Да здравствует фикус!',
         'Роман "Да здравствует фикус!" Джорджа Оруэлла (1903- 1950), автора знаменитой антиутопии "1984", во многом автобиографичен. Главный герой, талантливый и непризнанный поэт, презирает материальное благополучие и пошлость обыденной жизни, символом которой служит фикус. Только любовь и стремление к земному счастью и благополучию заставляют его понять, что помимо высокого искусства существуют простые радости, а в стремлении заработать деньги нет ничего постыдного.',
         '5751616804',
         '9785751616809',
-        6, 2, 'rus', '2021-01-01', 256,
+        42, 2, 'rus', '2021-01-01', 256,
         'https://img4.labirint.ru/rc/9ef51d4cefee60b3906bae41a47d7c02/220x340/books79/786912/cover.png?1616581505',
         2, 2, TRUE);
 INSERT INTO book_has_author (book_id, author_id)
 VALUES (2, 15);
 
-INSERT INTO book (id, title, description, isbn_10, isbn_13, section_id, publisher_id, language, publishing_date, print_length, picture_url, total_count, available_count, available)
+INSERT INTO book (id, title, description, isbn_10, isbn_13, category_id, publisher_id, language, publishing_date, print_length, picture_url, total_count, available_count, available)
 VALUES (3, 'Джордж Оруэлл: 1984',
         'Прошло всего три года после окончания Второй мировой войны, когда Джордж Оруэлл (1903-1950) написал самое знаменитое свое произведение - роман-антиутопию "1984". Многое из того, о чем писал Джордж Оруэлл, покажется вам до безумия знакомым. Некоторые исследователи считают, что ни один западный читатель не постигнет суть "1984" так глубоко, как человек родом из Советского Союза.',
         '5751616790',
         '9785751616793',
-        6, 1, 'rus', '2021-01-01', 320,
+        42, 1, 'rus', '2021-01-01', 320,
         'https://img4.labirint.ru/rc/6b0e6c27a90bf6b792d1b8363df35293/220x340/books80/790566/cover.png?1618316737',
         2, 2, TRUE);
 INSERT INTO book_has_author (book_id, author_id)
 VALUES (3, 15);
 
-INSERT INTO book (id, title, description, isbn_10, isbn_13, section_id, publisher_id, language, publishing_date, print_length, picture_url, total_count, available_count, available)
+INSERT INTO book (id, title, description, isbn_10, isbn_13, category_id, publisher_id, language, publishing_date, print_length, picture_url, total_count, available_count, available)
 VALUES (4, 'Станислав Лем: Фиаско',
         'Космос - пространство загадки, пространство вечного поиска, и любая ошибка, продиктованная небрежностью или неверной логической посылкой, способна привести исследователя к краху. Экспедиция "Гермеса", призванная установить контакт с обитателями планеты Квинта, совершает ряд промахов, цена которых слишком высока…',
         '5171350728',
         '9785171350727',
-        6, 1, 'rus', '2021-01-01', 448,
+        42, 1, 'rus', '2021-01-01', 448,
         'https://img3.labirint.ru/rc/ce8a22290d7021c1308f1b75b3b9edaa/220x340/books81/800623/cover.jpg?1618550720',
         2, 2, TRUE);
 INSERT INTO book_has_author (book_id, author_id)
 VALUES (4, 16);
 
-INSERT INTO book (id, title, description, isbn_10, isbn_13, section_id, publisher_id, language, publishing_date, print_length, picture_url, total_count, available_count, available)
+INSERT INTO book (id, title, description, isbn_10, isbn_13, category_id, publisher_id, language, publishing_date, print_length, picture_url, total_count, available_count, available)
 VALUES (5, 'Рэй Брэдбери: Вино из одуванчиков',
         'Яркое, фантастическое лето 1928 года: двенадцатилетний Дуглас Сполдинг ведет записи о событиях того лета, которые складываются в отдельные истории, гротескные искажения ординарных будней маленького городка, где живут Дуглас и его семья. Там все кажется не тем, чем является, а сила детского воображения создает новую реальность, которую не отличить от вымысла. Выросший из отдельных рассказов, филигранных в своей лиричности, роман "Вино из одуванчиков" — классическая хроника детства Рэя Брэдбери, окно в творческий мир писателя, создавшего такие шедевры мировой литературы, как "Марсианские хроники" и "451 градус по Фаренгейту".',
         '5171350728',
         '9785040988358',
-        6, 3, 'rus', '2019-01-01', 256,
+        43, 3, 'rus', '2019-01-01', 256,
         'https://img3.labirint.ru/rc/3ed50890722042ff78db15eb83c84530/220x340/books73/720915/cover.jpg?1617258303',
         2, 2, TRUE);
 INSERT INTO book_has_author (book_id, author_id)

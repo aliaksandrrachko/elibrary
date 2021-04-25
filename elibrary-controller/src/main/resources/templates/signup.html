@@ -13,7 +13,7 @@
 </head>
 
 <body>
-<div class="container m-auto">
+<main class="container m-auto">
         <div class="md-4 text-danger" th:if="${param.error}">
             Invalid username and password.
             <p th:text="${param.error}">
@@ -23,8 +23,7 @@
             <p th:text="${param.logout}">
         </div>
 
-        <div class="form-signin-2">
-            <form action="#" th:href="@{/singup}" th:method="post" th:object="${userDto}">
+            <form class="form-signin-2" action="#" th:href="@{/singup}" th:method="post" th:object="${userDto}">
                 <h2>Please sign up</h2>
                 <div>
                     <div class="mb-3">
@@ -188,11 +187,7 @@
 
                 <p class="text-center"><a href="/">Home page</a></p>
             </form>
-        </div>
-
-    <footer class="modal-footer">
-        <span>Copyright © 2021, All Right Reserved Aliaksandr Rachko</span>
-    </footer>
-</div>
+</main>
+<div th:replace="fragments/footer :: copy"></div>
 </body>
 </html>
