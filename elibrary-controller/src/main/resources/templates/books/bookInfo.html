@@ -24,61 +24,66 @@
 <body>
 <div th:replace="fragments/upperNavbar :: copy"></div>
 
-<main class="container">
+<div th:replace="fragments/subNavbarUpButton :: navAsideButton"></div>
 
-    <div class="starter-template text-center py-5 px-3">
-        <h1>All books</h1>
-        <p class="lead">Table of books in the database</p>
-        <table class="table">
-            <thead class="thead-dark">
-            <tr>
-                <th scope="col">Picture</th>
-                <th scope="col">About</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:object="${book}">
-                <th scope="row">
-                    <!--/*@thymesVar id="book" type="by.it.academy.grodno.elibrary.api.dto.books.BookDto"*/-->
-                    <img class="rounded" src="#" th:src="${book.pictureUrl}" alt="no picture" width="200"/>
-                </th>
-                <th scope="row">
-                    <h6 class="text-sm-start text-muted m-0" th:text="'N' + ${book.id}"></h6>
-                    <span class="text-start">
+<div class="container-xxl my-md-4 bd-layout">
+    <div th:replace="fragments/subNavbarCategory :: navAsideCategory(categoryDtoSet=${categoryDtoSet})"></div>
+
+    <main class="bd-main order-1">
+        <div class="bd-intro ps-lg-4">
+            <h1>Book info</h1>
+        </div>
+        <div class="bd-content ps-lg-4">
+            <table class="table">
+                <thead class="thead-dark">
+                <tr>
+                    <th scope="col">Picture</th>
+                    <th scope="col">About</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:object="${book}">
+                    <th scope="row">
+                        <!--/*@thymesVar id="book" type="by.it.academy.grodno.elibrary.api.dto.books.BookDto"*/-->
+                        <img class="rounded" src="#" th:src="${book.pictureUrl}" alt="no picture" width="200"/>
+                    </th>
+                    <th scope="row">
+                        <h6 class="text-sm-start text-muted m-0" th:text="'N' + ${book.id}"></h6>
+                        <span class="text-start">
                     <small class="text-muted" th:text="${book.getCategory().getCategoryPath()+ '/'}"></small>
                     <small><a class="text-sm-start m-0 link-primary" th:href="@{/books(categoryId=${book.getCategory().getId()})}"
-                             th:text="${book.getCategory().getCategoryName}"></a></small></span>
-                    <!--/*@thymesVar id="book" type="by.it.academy.grodno.elibrary.api.dto.books.BookDto"*/-->
-                    <h2 class="text-sm-start mt-2" th:text="${book.title}"></h2>
-                    <h5 class="text-sm-start m-0">
-                        <span th:each="authorName : ${book.authors}" th:text="${authorName} + ', '"></span>
-                        <span th:text="${book.datePublishing}"></span>
-                    </h5>
+                              th:text="${book.getCategory().getCategoryName}"></a></small></span>
+                        <!--/*@thymesVar id="book" type="by.it.academy.grodno.elibrary.api.dto.books.BookDto"*/-->
+                        <h2 class="text-sm-start mt-2" th:text="${book.title}"></h2>
+                        <h5 class="text-sm-start m-0">
+                            <span th:each="authorName : ${book.authors}" th:text="${authorName} + ', '"></span>
+                            <span th:text="${book.datePublishing}"></span>
+                        </h5>
 
-                    <h5 class="text-sm-start mt-1" th:text="'Publisher: ' + ${book.publisher}"></h5>
-                    <h5 class="text-sm-start mt-1 border-top" th:text="'ISBN-10: ' + ${book.isbn10}"></h5>
-                    <h5 class="text-sm-start mt-1 border-bottom" th:text="'ISBN-10: ' + ${book.isbn13}"></h5>
-                    <h5 class="text-sm-start mt-1" th:text="'Language: ' + ${book.language}"></h5>
-                    <h5 class="text-sm-start mt-1" th:text="'Print length: ' + ${book.printLength}"></h5>
-                    <h6 class="text-sm-start mt-2" th:text="'Description: ' + ${book.description}"></h6>
-                    <h6 class="text-sm-start mt-4">
-                        <span th:text="'Total count: ' + ${book.totalCount} + '. '"></span>
-                        <span th:text="'Available count: ' + ${book.availableCount} + '. '"></span>
-                        <span th:text="'Available: ' + ${book.available} + '. '"></span>
-                    </h6>
+                        <h5 class="text-sm-start mt-1" th:text="'Publisher: ' + ${book.publisher}"></h5>
+                        <h5 class="text-sm-start mt-1 border-top" th:text="'ISBN-10: ' + ${book.isbn10}"></h5>
+                        <h5 class="text-sm-start mt-1 border-bottom" th:text="'ISBN-10: ' + ${book.isbn13}"></h5>
+                        <h5 class="text-sm-start mt-1" th:text="'Language: ' + ${book.language}"></h5>
+                        <h5 class="text-sm-start mt-1" th:text="'Print length: ' + ${book.printLength}"></h5>
+                        <h6 class="text-sm-start mt-2" th:text="'Description: ' + ${book.description}"></h6>
+                        <h6 class="text-sm-start mt-4">
+                            <span th:text="'Total count: ' + ${book.totalCount} + '. '"></span>
+                            <span th:text="'Available count: ' + ${book.availableCount} + '. '"></span>
+                            <span th:text="'Available: ' + ${book.available} + '. '"></span>
+                        </h6>
 
-                    <h6 class="text-sm-start mt-sm-4" th:text="'Created: ' + ${book.created}"></h6>
-                    <h6 class="text-sm-start" th:text="'Updated: ' + ${book.updated}"></h6>
-                    <h6 class="text-sm-start mt-sm-4" th:text="'Rating: ' + ${book.rating}"></h6>
+                        <h6 class="text-sm-start mt-sm-4" th:text="'Created: ' + ${book.created}"></h6>
+                        <h6 class="text-sm-start" th:text="'Updated: ' + ${book.updated}"></h6>
+                        <h6 class="text-sm-start mt-sm-4" th:text="'Rating: ' + ${book.rating}"></h6>
 
-                    <div th:replace="fragments/bookingBookModal :: bookingBookModal (thisBook=${book})"></div>
-                </th>
-            </tr>
-            </tbody>
-        </table>
-    </div>
-
-</main><!-- /.container -->
+                        <div th:replace="fragments/bookingBookModal :: bookingBookModal (thisBook=${book})"></div>
+                    </th>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </main>
+</div>
 
 <div th:replace="fragments/footer :: copy"></div>
 

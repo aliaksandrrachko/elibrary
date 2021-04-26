@@ -1,5 +1,6 @@
 package by.it.academy.grodno.elibrary.service.services;
 
+import by.it.academy.grodno.elibrary.api.dao.RoleJpaRepository;
 import by.it.academy.grodno.elibrary.api.dao.UserJpaRepository;
 import by.it.academy.grodno.elibrary.api.dto.users.UserDto;
 import by.it.academy.grodno.elibrary.api.mappers.UserMapper;
@@ -34,6 +35,9 @@ public class UserService implements IUserService {
 
     @Autowired
     private UserMapper userMapper;
+
+    @Autowired
+    private RoleJpaRepository roleJpaRepository;
 
     @Override
     public Optional<UserDto> findUserByUserName(String username) {
@@ -156,5 +160,36 @@ public class UserService implements IUserService {
         if (address != null){
             entityDto.getAddressDto().setId(userFromDb.getAddress().getId());
         }
+    }
+
+    @Override
+    @Transactional
+    public void deleteRole(long userId, String roleName) {
+        Optional<User> userOptionalFromDB = userJpaRepository.findById(userId);
+        userOptionalFromDB.ifPresent(user -> {
+            user.setRoles(user.getRoles().stream().filter(r -> !r.getRoleName().equals(roleName)).collect(Collectors.toSet()));
+            userJpaRepository.save(user);
+        });
+    }
+
+
+    @Override
+    @Transactional
+    public void addRole(long userId, String roleName) {
+        Optional<User> userOptionalFromDB = userJpaRepository.findById(userId);
+        userOptionalFromDB.ifPresent(user -> {
+            roleJpaRepository.findByRoleName(roleName).ifPresent(r -> user.getRoles().add(r));
+            userJpaRepository.save(user);
+        });
+    }
+
+    @Override
+    @Transactional
+    public void setAvailability(long userId) {
+        Optional<User> userOptionalFromDB = userJpaRepository.findById(userId);
+        userOptionalFromDB.ifPresent(user -> {
+            user.setEnabled(!user.isEnabled());
+            userJpaRepository.save(user);
+        });
     }
 }

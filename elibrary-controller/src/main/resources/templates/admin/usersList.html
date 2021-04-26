@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="Ales' Rachko, and Bootstrap contributors">
+    <meta name="generator" content="Hugo 0.80.0">
+    <title>My subscription</title>
+
+    <link rel="canonical" href="https://getbootstrap.com/docs/5.0/examples/starter-template/">
+
+    <!-- Bootstrap core CSS -->
+    <link href="/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+    <link href="/css/docs.css" rel="stylesheet" crossorigin="anonymous">
+
+    <!-- Favicons -->
+    <link rel="icon" href="/img/favicons/subscription.png" sizes="32x32" type="image/png">
+    <meta name="theme-color" content="#7952b3">
+
+    <!-- Custom styles for this template -->
+    <link href="/css/starter-template.css" rel="stylesheet">
+</head>
+<body>
+<div th:replace="fragments/upperNavbar :: copy"></div>
+
+<div class="container-xxl my-md-4 bd-layout">
+    <aside class="bd-sidebar"></aside>
+
+    <main class="bd-main order-1">
+        <div class="bd-intro ps-lg-4">
+            <h1>Users</h1>
+            <p class="lead">Table of users in the database</p>
+        </div>
+        <div class="bd-content ps-lg-4">
+        <table class="table">
+            <thead class="thead-dark">
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Username</th>
+                <th scope="col">Email</th>
+                <th scope="col">Created</th>
+                <th scope="col">Roles</th>
+                <th scope="col"></th>
+                <th scope="col">Subscription</th>
+                <th scope="col"></th>
+                <th scope="col"></th>
+                <th scope="col"></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr class="visually-hidden">
+                <th scope="row">ID</th>
+                <td>User</td>
+                <td>user@mail.ru</td>
+                <td>2021-03-07T21:26:05</td>
+                <td>ROLE_USER</td>
+                <td>Add</td>
+                <td>Disable</td>
+                <td>Delete</td>
+            </tr>
+            <tr th:each="user : ${pageUsersDto.content}">
+                <th scope="row" th:text="*{user.id}"></th>
+                <td th:text="*{user.username}"></td>
+                <td th:text="*{user.email}"></td>
+                <td th:text="*{user.created}"></td>
+                <td>
+                    <table>
+                        <tr th:each="role : *{user.roles}">
+                            <p class="m-0" th:text="*{role}"></p>
+                        </tr>
+                    </table>
+                </td>
+                <td>
+                    <div th:replace="fragments/editRolesModal :: editRolesModal(user=${user})"></div>
+                </td>
+                <td>
+                    <a class="btn btn-secondary btn-sm mt-2" th:href="@{/admin/subscriptions(status='0', userId=${user.id})}">See</a>
+                </td>
+                <td>
+                    <div th:replace="fragments/setAvailabilityModal :: setAvailabilityModal(user=${user})"></div>
+                </td>
+                <td>
+                    <div th:replace="fragments/deleteUserModal :: deleteUserModal(user=${user})"></div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+        <nav aria-label="Page navigation">
+            <ul class="pagination">
+                <li th:class="'page-item ' + ${pageUsersDto.getNumber() > 0 ? '' : 'disabled'}">
+                    <a class="page-link" th:href="@{/admin/users(size=${pageUsersDto.size}, page=${pageUsersDto.getNumber() - 1})}">Previous</a>
+                </li>
+                <li class="page-item active"
+                    th:if="${pageUsersDto.totalPages > 0}"
+                    th:each="pageNumber : ${pageNumbers}"
+                    th:class="'page-item' + ${pageNumber == pageUsersDto.number ? ' active' : ''}">
+                    <a class="page-link"
+                       th:href="@{/admin/users(size=${pageUsersDto.size}, page=${pageNumber})}"
+                       th:text="${pageNumber + 1}"></a>
+                </li>
+                <li th:class="'page-item ' + ${pageUsersDto.getNumber() < pageUsersDto.getTotalPages() - 1 ? '' : 'disabled'}">
+                    <a class="page-link"
+                       th:href="@{/admin/users(size=${pageUsersDto.size}, page=${pageUsersDto.getNumber() + 1})}">Next</a></li>
+            </ul>
+        </nav>
+        </div>
+    </main>
+</div>
+
+<div th:replace="fragments/footer :: copy"></div>
+
+<script src="/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+<script src="/js/docs.min.js.js" crossorigin="anonymous"></script>
+</body>
+</html>

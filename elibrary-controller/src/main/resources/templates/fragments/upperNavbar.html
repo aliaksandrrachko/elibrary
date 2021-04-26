@@ -26,8 +26,9 @@
                     <a class="nav-link dropdown-toggle" href="#" id="dropdown01" data-bs-toggle="dropdown"
                        aria-expanded="false">Admin</a>
                     <ul class="dropdown-menu" aria-labelledby="dropdown01">
-                        <li><a class="dropdown-item" th:href="@{/admin/users}">Manage users</a></li>
+                        <li><a class="dropdown-item" th:href="@{/admin/subscriptions}">Manage subscriptions</a></li>
                         <li><a class="dropdown-item" th:href="@{/admin/books}">Manage books</a></li>
+                        <li><a class="dropdown-item" th:href="@{/admin/users}">Manage users</a></li>
                         <li><a class="dropdown-item" th:href="@{/admin/books/add}">Add book</a></li>
                     </ul>
                 </li>
@@ -37,7 +38,7 @@
                 <!--/*@thymesVar id="currentUser" type="by.it.academy.grodno.elibrary.api.dto.users.UserDto"*/-->
                 <div th:object="${currentUser}">
                     <div th:if="${currentUser != null}">
-                        <a class="btn btn btn-outline-secondary" th:href="@{'/subscription'}">My subscriptions</a>
+                        <a class="btn btn btn-outline-secondary" th:href="@{'/subscriptions'}">My subscriptions</a>
                         <a class="btn btn btn-outline-primary" th:href="@{'/users/info'}" th:text="*{username}"></a>
                         <a class="btn btn-outline-danger" href="/logout">Log out</a>
                     </div>

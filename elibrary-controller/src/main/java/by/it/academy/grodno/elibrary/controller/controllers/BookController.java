@@ -52,11 +52,15 @@ public class BookController {
     @GetMapping(value = "/{id}")
     public ModelAndView bookInfo(Principal principal, @PathVariable Long id){
         UserDto currentUser = userService.findUser(principal).orElse(null);
+
+        Set<CategoryDto> categoryDtoList = new HashSet<>(categoryService.findAll());
+
         BookDto bookDto = bookService.findById(id).orElse(null);
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("books/bookInfo");
         modelAndView.addObject("currentUser", currentUser);
         modelAndView.addObject("book", bookDto);
+        modelAndView.addObject("categoryDtoSet", categoryDtoList);
         return modelAndView;
     }
 }

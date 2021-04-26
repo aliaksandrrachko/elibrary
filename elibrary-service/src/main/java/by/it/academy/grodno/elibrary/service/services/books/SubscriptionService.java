@@ -51,12 +51,14 @@ public class SubscriptionService implements ISubscriptionService {
     }
 
     @Override
-    public Page<SubscriptionDto> findAllByUserIdAndStatus(Long userId, Integer statusCode, Pageable pageable) {
-        if (userId == null && statusCode != null) {
+    public Page<SubscriptionDto> findAllByUserIdAndStatus(Long userId, @NotNull Integer statusCode, Pageable pageable) {
+        if (userId == null && statusCode == 0){
+            return findAll(pageable);
+        } else if (userId == null && statusCode > 0) {
             return findAllByStatus(statusCode, pageable);
-        } else if (statusCode == null && userId != null){
+        } else if (statusCode == 0 && userId != null){
             return findAllByUserId(userId, pageable);
-        } else if (userId != null){
+        } else if (userId != null && statusCode > 0){
             return findAllAllByUserIdAndStatusIfItPresent(userId, statusCode, pageable);
         } else {
             return Page.empty(pageable);
@@ -69,12 +71,12 @@ public class SubscriptionService implements ISubscriptionService {
     }
 
     @Override
-    public Page<SubscriptionDto> findAllByStatus(Integer statusCode, Pageable pageable){
+    public Page<SubscriptionDto> findAllByStatus(@NotNull Integer statusCode, Pageable pageable){
         SubscriptionStatus status = SubscriptionStatus.getSubscriptionStatus(statusCode);
         Page<Subscription> subscriptionPage;
         if (status.equals(SubscriptionStatus.EXPIRED)){
             subscriptionPage = subscriptionJpaRepository
-                    .findByDeadlineAfterAndStatusNot(LocalDateTime.now().withNano(0),
+                    .findByDeadlineBeforeAndStatusNot(LocalDateTime.now().withNano(0),
                             SubscriptionStatus.COMPLETED, pageable);
         } else {
             subscriptionPage = subscriptionJpaRepository.findAllByStatusIn(Collections.singleton(status), pageable);
@@ -82,12 +84,14 @@ public class SubscriptionService implements ISubscriptionService {
         return subscriptionMapper.toPageDto(subscriptionPage);
     }
 
-    private Page<SubscriptionDto> findAllAllByUserIdAndStatusIfItPresent(Long userId, Integer statusCode, Pageable pageable){
+    private Page<SubscriptionDto> findAllAllByUserIdAndStatusIfItPresent(@NotNull Long userId,
+                                                                         @NotNull Integer statusCode,
+                                                                         Pageable pageable){
         SubscriptionStatus status = SubscriptionStatus.getSubscriptionStatus(statusCode);
         Page<Subscription> subscriptionPage;
         if (status.equals(SubscriptionStatus.EXPIRED)){
             subscriptionPage = subscriptionJpaRepository
-                    .findByUserIdAndDeadlineAfterAndStatusNot(userId, LocalDateTime.now().withNano(0), status, pageable);
+                    .findByUserIdAndDeadlineBeforeAndStatusNot(userId, LocalDateTime.now().withNano(0), status, pageable);
         } else {
             subscriptionPage = subscriptionJpaRepository.findAllByUserIdAndStatusIn(userId, Collections.singleton(status), pageable);
         }
@@ -114,17 +118,17 @@ public class SubscriptionService implements ISubscriptionService {
 
     @Override
     @Transactional
-    public Optional<SubscriptionDto> booking(SubscriptionRequest entityDto) {
-        entityDto.setCount(DEFAULT_BOOKING_COUNT);
-        entityDto.setDays(DEFAULT_BOOKING_DAYS);
-        entityDto.setStatus(1);
-        return createAndSave(entityDto);
+    public Optional<SubscriptionDto> booking(SubscriptionRequest request) {
+        request.setCount(DEFAULT_BOOKING_COUNT);
+        request.setDays(DEFAULT_BOOKING_DAYS);
+        request.setCode(1);
+        return createAndSave(request);
     }
 
     @Override
     @Transactional
-    public Optional<SubscriptionDto> create(SubscriptionRequest entityDto) {
-        return createAndSave(entityDto);
+    public Optional<SubscriptionDto> create(SubscriptionRequest request) {
+        return createAndSave(request);
     }
 
     private Optional<SubscriptionDto> createAndSave(SubscriptionRequest request) {
@@ -171,7 +175,7 @@ public class SubscriptionService implements ISubscriptionService {
             return Optional.empty();
         }
         Subscription subscription = optionalSubscription.get();
-        SubscriptionRequestCode requestCode = SubscriptionRequestCode.getSubscriptionRequestCode(request.getStatus());
+        SubscriptionRequestCode requestCode = SubscriptionRequestCode.getSubscriptionRequestCode(request.getCode());
 
         switch (requestCode) {
             case TAKE_BOOK:

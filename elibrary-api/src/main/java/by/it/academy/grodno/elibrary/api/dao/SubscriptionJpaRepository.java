@@ -17,10 +17,10 @@ public interface SubscriptionJpaRepository extends JpaRepository<Subscription, L
 
     Page<Subscription> findAllByUserIdAndStatusIn(Long userId, Collection<SubscriptionStatus> status, Pageable pageable);
 
-    Page<Subscription> findByUserIdAndDeadlineAfterAndStatusNot(Long userId,
-                                                                LocalDateTime deadline,
-                                                                SubscriptionStatus status,
-                                                                Pageable pageable);
+    Page<Subscription> findByUserIdAndDeadlineBeforeAndStatusNot(Long userId,
+                                                                 LocalDateTime deadline,
+                                                                 SubscriptionStatus status,
+                                                                 Pageable pageable);
 
-    Page<Subscription> findByDeadlineAfterAndStatusNot(LocalDateTime deadLine, SubscriptionStatus status, Pageable pageable);
+    Page<Subscription> findByDeadlineBeforeAndStatusNot(LocalDateTime deadLine, SubscriptionStatus status, Pageable pageable);
 }

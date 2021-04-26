@@ -13,11 +13,13 @@ import javax.validation.constraints.Min;
 @Builder
 public class SubscriptionRequest {
 
+    private long id;
+
     @Min(0L)
     private long userId;
 
     @Builder.Default
-    private int status = 1;
+    private int code = 1;
 
     @Builder.Default
     private int days = 1;

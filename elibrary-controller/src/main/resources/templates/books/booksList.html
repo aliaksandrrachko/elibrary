@@ -24,10 +24,11 @@
 
 <body>
 <div th:replace="fragments/upperNavbar :: copy"></div>
-<div th:replace="fragments/subNavbarCategory :: navAsideButton"></div>
+
+<div th:replace="fragments/subNavbarUpButton :: navAsideButton"></div>
 
 <div class="container-xxl my-md-4 bd-layout">
-    <div th:replace="fragments/subNavbarCategory :: navAsideCategory"></div>
+    <div th:replace="fragments/subNavbarCategory :: navAsideCategory(categoryDtoSet=${categoryDtoSet})"></div>
 
     <main class="bd-main order-1">
         <div class="bd-intro ps-lg-4">
@@ -69,7 +70,7 @@
                         <div class="text-md-start">
                             <a class="btn btn-secondary btn-sm mt-2" th:href="'/books/' + ${book.id}">More info...</a>
                         </div>
-                        <div th:replace="fragments/bookingBookModal :: bookingBookModal (thisBook=${book})"></div>
+                        <div th:replace="fragments/bookingBookModal :: bookingBookModal(thisBook=${book})"></div>
                     </th>
                 </tr>
                 </tbody>

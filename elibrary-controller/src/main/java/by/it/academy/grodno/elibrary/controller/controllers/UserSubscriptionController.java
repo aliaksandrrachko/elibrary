@@ -16,19 +16,19 @@ import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @RestController
-@RequestMapping(value = "/subscription")
-public class SubscriptionController {
+@RequestMapping(value = "/subscriptions")
+public class UserSubscriptionController {
 
     private final IUserService userService;
     private final ISubscriptionService subscriptionService;
 
-    public SubscriptionController(IUserService userService, ISubscriptionService subscriptionService) {
+    public UserSubscriptionController(IUserService userService, ISubscriptionService subscriptionService) {
         this.userService = userService;
         this.subscriptionService = subscriptionService;
     }
 
     @GetMapping
-    public ModelAndView findAll(@RequestParam(value = "status", required = false) Integer status,
+    public ModelAndView findAll(@RequestParam(value = "status", required = false, defaultValue = "0") Integer status,
                                 Pageable pageable,
                                 Principal principal){
         Optional<UserDto> optionalUserDto = userService.findUser(principal);
@@ -38,7 +38,7 @@ public class SubscriptionController {
                 subscriptionService.findAllByUserIdAndStatus(userDto.getId(), status, pageable);
 
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("subscription/subscriptionInfo");
+        modelAndView.setViewName("subscriptions/subscriptionInfo");
         modelAndView.addObject("currentUser", userDto);
         modelAndView.addObject("pageSubscriptionDto", subscriptionPage);
         modelAndView.addObject("currentStatusCode", status);

@@ -24,50 +24,10 @@
 <body>
 <div th:replace="fragments/upperNavbar :: copy"></div>
 
-<nav class="bd-subnavbar py-2" aria-label="Secondary navigation">
-    <div class="container-xxl d-flex align-items-md-center">
-        <button class="btn bd-sidebar-toggle d-md-none py-0 px-1 ms-3 order-3 collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#bd-docs-nav" aria-controls="bd-docs-nav" aria-expanded="false" aria-label="Toggle docs navigation">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" class="bi bi-expand" fill="currentColor" viewBox="0 0 16 16">
-                <title>Expand</title>
-                <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h13a.5.5 0 0 1 0 1h-13A.5.5 0 0 1 1 8zM7.646.146a.5.5 0 0 1 .708 0l2 2a.5.5 0 0 1-.708.708L8.5 1.707V5.5a.5.5 0 0 1-1 0V1.707L6.354 2.854a.5.5 0 1 1-.708-.708l2-2zM8 10a.5.5 0 0 1 .5.5v3.793l1.146-1.147a.5.5 0 0 1 .708.708l-2 2a.5.5 0 0 1-.708 0l-2-2a.5.5 0 0 1 .708-.708L7.5 14.293V10.5A.5.5 0 0 1 8 10z"></path>
-            </svg>
-
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" class="bi bi-collapse" fill="currentColor" viewBox="0 0 16 16">
-                <title>Collapse</title>
-                <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h13a.5.5 0 0 1 0 1h-13A.5.5 0 0 1 1 8zm7-8a.5.5 0 0 1 .5.5v3.793l1.146-1.147a.5.5 0 0 1 .708.708l-2 2a.5.5 0 0 1-.708 0l-2-2a.5.5 0 1 1 .708-.708L7.5 4.293V.5A.5.5 0 0 1 8 0zm-.5 11.707l-1.146 1.147a.5.5 0 0 1-.708-.708l2-2a.5.5 0 0 1 .708 0l2 2a.5.5 0 0 1-.708.708L8.5 11.707V15.5a.5.5 0 0 1-1 0v-3.793z"></path>
-            </svg>
-
-        </button>
-    </div>
-</nav>
+<div th:replace="fragments/subNavbarUpButton :: navAsideButton"></div>
 
 <div class="container-xxl my-md-4 bd-layout">
-    <aside class="bd-sidebar">
-        <nav class="collapse bd-links" id="bd-docs-nav" aria-label="Docs navigation"><ul class="list-unstyled mb-0 py-3 pt-md-1">
-            <li class="mb-1">
-                <button class="btn d-inline-flex align-items-center rounded collapsed" data-bs-toggle="collapse" data-bs-target="#subscription-status" aria-expanded="false">
-                    Subscription status
-                </button>
-
-                <div class="collapse" id="subscription-status">
-                    <ul class="list-unstyled fw-normal pb-1 small">
-                        <li><a href="/subscription?status=1" class="d-inline-flex align-items-center rounded">Booking</a></li>
-                        <li><a href="/subscription?status=2" class="d-inline-flex align-items-center rounded">Reading</a></li>
-                        <li><a href="/subscription?status=3" class="d-inline-flex align-items-center rounded">Reading extended</a></li>
-                        <li><a href="/subscription?status=4" class="d-inline-flex align-items-center rounded">Completed</a></li>
-                        <li><a href="/subscription?status=5" class="d-inline-flex align-items-center rounded">Expired</a></li>
-                    </ul>
-                </div>
-            </li>
-            <li class="my-3 mx-4 border-top"></li>
-            <li>
-                <a href="/subscription" class="d-inline-flex align-items-center rounded">
-                    All subscription
-                </a>
-            </li>
-        </ul>
-        </nav>
-    </aside>
+    <div th:replace="fragments/subNavbarSubscriptionStatus :: navAsideSubcriptionStatus(currentStatusCode=${currentStatusCode})"></div>
 
     <main class="bd-main order-1">
         <div class="bd-intro ps-lg-4">
@@ -84,7 +44,7 @@
                 <tbody>
                 <tr th:each="subscription : ${pageSubscriptionDto.content}">
                     <th scope="row">
-                        <!--/*@thymesVar id="bookDetails" type="by.it.academy.grodno.elibrary.api.dto.books.BookDto"*/-->
+                        <!--/*@thymesVar id="bookDetails" type=""by.it.academy.grodno.elibrary.api.dto.books.BookDto"*/-->
                         <img class="rounded" src="#" th:src="${subscription.bookDetails.pictureUrl}" alt="no picture" width="200"/>
                     </th>
                     <th scope="row">
@@ -128,7 +88,7 @@
                         th:each="pageNumber : ${pageNumbers}"
                         th:class="'page-item' + ${pageNumber == pageSubscriptionDto.number ? ' active' : ''}">
                         <a class="page-link"
-                           th:href="@{/sbuscription(status=${currentStatusCode}, size=${pageSubscriptionDto.size}, page=${pageNumber})}"
+                           th:href="@{/subscription(status=${currentStatusCode}, size=${pageSubscriptionDto.size}, page=${pageNumber})}"
                            th:text="${pageNumber + 1}"></a>
                     </li>
                     <li th:class="'page-item ' + ${pageSubscriptionDto.getNumber() < pageSubscriptionDto.getTotalPages() - 1 ? '' : 'disabled'}">

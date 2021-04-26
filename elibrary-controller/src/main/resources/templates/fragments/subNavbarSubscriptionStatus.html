@@ -1,0 +1,41 @@
+<!doctype html>
+
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+
+<body>
+
+<!--/*@thymesVar id="currentStatusCode" type="java.lang.Integer"*/-->
+<aside th:fragment="navAsideSubcriptionStatus(currentStatusCode)" class="bd-sidebar">
+    <div th:replace="::navAsideSubcriptionStatusList(statusCode=${currentStatusCode})"></div>
+</aside>
+
+<aside th:fragment="navAsideSubcriptionStatusAndUserIdInput(currentStatusCode)" class="bd-sidebar">
+    <div th:replace="::navAsideSubcriptionStatusList(statusCode=${currentStatusCode})"></div>
+    <div class="input-group mb-3">
+        <button class="btn btn-outline-secondary" type="button" id="button-addon1">Button</button>
+        <input type="text" class="form-control" placeholder="" aria-label="Example text with button addon" aria-describedby="button-addon1">
+    </div>
+</aside>
+
+<nav th:fragment="navAsideSubcriptionStatusList(statusCode)" class="collapse bd-links" id="bd-docs-nav" aria-label="Docs navigation">
+    <p>Subscription status</p>
+    <div class="list-group">
+        <!--/*@thymesVar id="statusCode" type="java.lang.Integer"*/-->
+        <a href="subscriptions?status=0"
+           th:class="'m-0 list-group-item list-group-item-action' + ${statusCode.equals(0)? ' acitve' : ''}">All</a>
+        <a href="subscriptions?status=1"
+           th:class="'m-0 list-group-item list-group-item-action' + ${statusCode.equals(1) ? ' acitve' : ''}">Booking</a>
+        <a href="subscriptions?status=2"
+           th:class="'m-0 list-group-item list-group-item-action' + ${statusCode.equals(2) ? ' acitve' : ''}">Reading</a>
+        <a href="subscriptions?status=3"
+           th:class="'m-0 list-group-item list-group-item-action' + ${statusCode.equals(3) ? ' acitve' : ''}">Reading extended</a>
+        <a href="subscriptions?status=4"
+           th:class="'m-0 list-group-item list-group-item-action' + ${statusCode.equals(4) ? ' acitve' : ''}">Completed</a>
+        <a href="subscriptions?status=5"
+           th:class="'m-0 list-group-item list-group-item-action' + ${statusCode.equals(5) ? ' acitve' : ''}">Expired</a>
+    </div>
+</nav>
+
+</body>
+
+</html>

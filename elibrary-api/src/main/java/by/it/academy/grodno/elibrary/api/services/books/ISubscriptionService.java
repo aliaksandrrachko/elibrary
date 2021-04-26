@@ -13,9 +13,9 @@ public interface ISubscriptionService {
     List<SubscriptionDto> findAll();
     Optional<SubscriptionDto> findById(Long id);
     void delete(Long id);
-    Optional<SubscriptionDto> booking(SubscriptionRequest entityDto);
-    Optional<SubscriptionDto> create(SubscriptionRequest entityDto);
-    Optional<SubscriptionDto> update(Long id, SubscriptionRequest entityDto);
+    Optional<SubscriptionDto> booking(SubscriptionRequest request);
+    Optional<SubscriptionDto> create(SubscriptionRequest request);
+    Optional<SubscriptionDto> update(Long id, SubscriptionRequest request);
     Page<SubscriptionDto> findAll(Pageable pageable);
     Page<SubscriptionDto> findAllByUserId(Long userId, Pageable pageable);
     Page<SubscriptionDto> findAllByUserIdAndStatus(Long userId, Integer statusCode, Pageable pageable);

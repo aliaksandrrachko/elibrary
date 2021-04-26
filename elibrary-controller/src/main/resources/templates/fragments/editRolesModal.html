@@ -1,0 +1,90 @@
+<!doctype html>
+
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+
+<body>
+
+<!--/*@thymesVar id="user" type="by.it.academy.grodno.elibrary.api.dto.users.UserDto"*/-->
+<div th:fragment="editRolesModal(user)">
+
+    <!-- Button trigger modal EDIT PERMISSION -->
+    <button type="button" class="btn btn-sm" data-bs-toggle="modal"
+            th:attr="data-bs-target='#editRoles' + *{user.id}">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+             class="bi bi-pen" viewBox="0 0 16 16">
+            <path d="M13.498.795l.149-.149a1.207 1.207 0 1 1 1.707 1.708l-.149.148a1.5 1.5 0 0 1-.059 2.059L4.854 14.854a.5.5 0 0 1-.233.131l-4 1a.5.5 0 0 1-.606-.606l1-4a.5.5 0 0 1 .131-.232l9.642-9.642a.5.5 0 0 0-.642.056L6.854 4.854a.5.5 0 1 1-.708-.708L9.44.854A1.5 1.5 0 0 1 11.5.796a1.5 1.5 0 0 1 1.998-.001zm-.644.766a.5.5 0 0 0-.707 0L1.95 11.756l-.764 3.057 3.057-.764L14.44 3.854a.5.5 0 0 0 0-.708l-1.585-1.585z"></path>
+        </svg>
+    </button>
+
+    <!-- EDIT PERMISSION Modal -->
+    <div class="modal fade" th:id="'editRoles' + *{user.id}" tabindex="-1"
+         th:attr="aria-labelledby='#editRolesModalLabel' + *{user.id}"
+         aria-hidden="true">
+
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"
+                        th:id="'editRolesModalLabel' + *{user.id}">
+                        Edit Permission</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
+                </div>
+
+                <div class="modal-body">
+                    <table>
+                        <tr th:each="role : *{user.roles}">
+                            <td>
+                                <p class="m-0 right" th:text="*{role}"></p>
+                            </td>
+                            <td>
+                                <form action="#" th:action="@{/admin/users/roles/delete}" th:method="post">
+                                    <div class="form-group visually-hidden">
+                                        <label class="form-label" for="user-role">User ID</label>
+                                        <input class="form-control" id="user-role" name="roleName"
+                                               placeholder="RoleName"
+                                               th:value="*{role}" type="text">
+                                    </div>
+                                    <button class="btn btn-success btn-sm" type="submit">Delete</button>
+                                </form>
+                            </td>
+                        </tr>
+                    </table>
+                    <form action="#" th:action="@{/admin/users/roles/add}"
+                          th:method="post">
+                        <div class="mb-3 row">
+                            <div class="col-sm visually-hidden">
+                                <label class="form-label" for="editUserId">User ID</label>
+                                <input class="form-control" id="editUserId"
+                                       name="userId"
+                                       placeholder="ID" th:value="*{user.id}"
+                                       type="text">
+                            </div>
+                            <div class="m-3 col-sm">
+                                <label class="form-label visually-hidden" for="role">Role</label>
+                                <select id="role" class="form-select form-control-sm" name="roleName">
+                                    <option value="ROLE_USER" selected>ROLE_USER</option>
+                                    <option value="ROLE_ADMIN">ROLE_ADMIN</option>
+                                </select>
+                            </div>
+                            <div class="mb-3 col-sm">
+                                <button class="btn btn-success" type="submit">Add
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" data-bs-dismiss="modal" type="button">
+                        Close
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+
+</html>

@@ -26,7 +26,7 @@
     </div>
 </nav>
 
-<aside th:fragment="navAsideCategory" class="bd-sidebar">
+<aside th:fragment="navAsideCategory(categoryDtoSet)" class="bd-sidebar">
     <nav class="collapse bd-links" id="bd-docs-nav" aria-label="Docs navigation">
         <ul class="list-unstyled m-1 py-3 pt-md-1">
             <!--/*@thymesVar id="categoryDtoSet" type="java.util.Set<by.it.academy.grodno.elibrary.api.dto.books.CategoryDto>"*/-->
@@ -97,7 +97,6 @@
            class="m-0 p-0"></a>
     </div>
 </div>
-
 
 </body>
 
