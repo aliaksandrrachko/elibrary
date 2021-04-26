@@ -24,8 +24,25 @@
 <body>
 <div th:replace="fragments/upperNavbar :: copy"></div>
 
+<div th:replace="fragments/subNavbarUpButton :: navAsideButton"></div>
+
 <div class="container-xxl my-md-4 bd-layout">
-    <aside class="bd-sidebar"></aside>
+    <aside class="bd-sidebar">
+        <nav class="collapse" id="bd-docs-nav" aria-label="Docs navigation">
+            <form class="input-group mt-3" action="#" th:action="@{/admin/users}" th:method="get">
+                <input type="text" name="userId" class="form-control"
+                       placeholder="User ID" aria-label="User library card number"
+                       aria-describedby="button-addon1">
+                <button class="btn btn-outline-secondary" type="submit" id="button-addon1">Find</button>
+            </form>
+            <form class="input-group mt-3" action="#" th:action="@{/admin/users}" th:method="get">
+                <input type="text" name="email" class="form-control"
+                       placeholder="Email" aria-label="User library card number"
+                       aria-describedby="button-addon2">
+                <button class="btn btn-outline-secondary" type="submit" id="button-addon2">Find</button>
+            </form>
+        </nav>
+    </aside>
 
     <main class="bd-main order-1">
         <div class="bd-intro ps-lg-4">
@@ -75,7 +92,7 @@
                     <div th:replace="fragments/editRolesModal :: editRolesModal(user=${user})"></div>
                 </td>
                 <td>
-                    <a class="btn btn-secondary btn-sm mt-2" th:href="@{/admin/subscriptions(status='0', userId=${user.id})}">See</a>
+                    <a class="btn btn-secondary btn-sm" th:href="@{/admin/subscriptions(status='0', userId=${user.id})}">See</a>
                 </td>
                 <td>
                     <div th:replace="fragments/setAvailabilityModal :: setAvailabilityModal(user=${user})"></div>

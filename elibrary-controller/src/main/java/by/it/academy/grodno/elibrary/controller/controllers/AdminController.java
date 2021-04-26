@@ -4,12 +4,10 @@ import by.it.academy.grodno.elibrary.api.dto.books.SubscriptionDto;
 import by.it.academy.grodno.elibrary.api.dto.books.SubscriptionRequest;
 import by.it.academy.grodno.elibrary.api.dto.users.UserDto;
 import by.it.academy.grodno.elibrary.api.services.IUserService;
-import by.it.academy.grodno.elibrary.api.services.books.IBookService;
-import by.it.academy.grodno.elibrary.api.services.books.ICategoryService;
 import by.it.academy.grodno.elibrary.api.services.books.ISubscriptionService;
 import by.it.academy.grodno.elibrary.controller.utils.PageNumberListCreator;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.validation.BindingResult;
@@ -19,6 +17,7 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import java.security.Principal;
+import java.util.Collections;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
@@ -26,14 +25,13 @@ import java.util.Optional;
 @RequestMapping("/admin")
 public class AdminController {
 
-    @Autowired
-    private IUserService userService;
-    @Autowired
-    private ICategoryService categoryService;
-    @Autowired
-    private IBookService bookService;
-    @Autowired
-    private ISubscriptionService subscriptionService;
+    private final IUserService userService;
+    private final ISubscriptionService subscriptionService;
+
+    public AdminController(IUserService userService, ISubscriptionService subscriptionService) {
+        this.userService = userService;
+        this.subscriptionService = subscriptionService;
+    }
 
     @GetMapping(value = "/subscriptions")
     public ModelAndView findAllSubscription(@RequestParam(value = "status", required = false, defaultValue = "0") Integer status,
@@ -57,7 +55,7 @@ public class AdminController {
     }
 
     @PostMapping(value = "/subscriptions")
-    public ModelAndView updateSubscription(@Valid @RequestBody SubscriptionRequest request,
+    public ModelAndView updateSubscription(@Valid SubscriptionRequest request,
                                            BindingResult result) {
         if (!result.hasErrors()) {
             subscriptionService.update(request.getId(), request);
@@ -68,17 +66,33 @@ public class AdminController {
     }
 
     @GetMapping("/users")
-    public ModelAndView findAllUser(Principal principal,
+    public ModelAndView findAllUser(@RequestParam(value = "userId", required = false) Long userId,
+                                    @RequestParam(value = "email", required = false) String email,
+                                    Principal principal,
                                     @PageableDefault Pageable pageable) {
         Optional<UserDto> optionalUserDto = userService.findUser(principal);
         UserDto userDto = optionalUserDto.orElseThrow(NoSuchElementException::new);
 
-        Page<UserDto> pageUsersDto = userService.findAll(pageable);
+        Page<UserDto> pageUsersDto;
+        Optional<UserDto> foundUser;
+        if (userId != null){
+            foundUser = userService.findById(userId);
+        } else if (email != null){
+            foundUser = userService.findUserByEmail(email);
+        } else {
+            foundUser = Optional.empty();
+        }
+
+        if (foundUser.isPresent()) {
+            pageUsersDto = new PageImpl<>(Collections.singletonList(foundUser.get()));
+        } else {
+            pageUsersDto = userService.findAll(pageable);
+        }
+
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("admin/usersList");
         modelAndView.addObject("currentUser", userDto);
         modelAndView.addObject("pageUsersDto", pageUsersDto);
-//      modelAndView.addObject("roleDtoList", roleService.findAll());
         modelAndView.addObject("pageNumbers",
                 PageNumberListCreator.getListOfPagesNumber(pageUsersDto.getNumber(), pageUsersDto.getTotalPages()));
         return modelAndView;

@@ -13,6 +13,9 @@ import javax.validation.constraints.Min;
 @Builder
 public class SubscriptionRequest {
 
+    /**
+     * The Subscription ID
+     */
     private long id;
 
     @Min(0L)

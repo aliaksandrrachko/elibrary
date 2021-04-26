@@ -58,7 +58,7 @@ public class UserSubscriptionController {
             }
         }
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("redirect:/books/" + request.getBookId());
+        modelAndView.setViewName("redirect:/subscriptions");
         return modelAndView;
     }
 }

@@ -91,8 +91,11 @@ public class UserService implements IUserService {
 
     @Override
     public Optional<UserDto> findById(Long id) {
-        Optional<User> optionalUser = userJpaRepository.findById(id);
-        return optionalUser.map(user -> userMapper.toDto(user));
+        if (id != null) {
+            return userJpaRepository.findById(id).map(userMapper::toDto);
+        } else {
+            return Optional.empty();
+        }
     }
 
     @Override

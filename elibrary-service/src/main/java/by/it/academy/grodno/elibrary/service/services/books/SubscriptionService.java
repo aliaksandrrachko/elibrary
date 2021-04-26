@@ -14,7 +14,6 @@ import by.it.academy.grodno.elibrary.entities.books.SubscriptionStatus;
 import by.it.academy.grodno.elibrary.entities.users.User;
 import by.it.academy.grodno.elibrary.service.exceptions.UnknownSubscriptionUpdateCodeRequest;
 import org.jetbrains.annotations.NotNull;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
@@ -28,17 +27,20 @@ import java.util.Optional;
 @Component
 public class SubscriptionService implements ISubscriptionService {
 
-    @Autowired
-    private SubscriptionJpaRepository subscriptionJpaRepository;
+    private final SubscriptionJpaRepository subscriptionJpaRepository;
+    private final UserJpaRepository userJpaRepository;
+    private final BookJpaRepository bookJpaRepository;
+    private final SubscriptionMapper subscriptionMapper;
 
-    @Autowired
-    private UserJpaRepository userJpaRepository;
-
-    @Autowired
-    private BookJpaRepository bookJpaRepository;
-
-    @Autowired
-    private SubscriptionMapper subscriptionMapper;
+    public SubscriptionService(SubscriptionJpaRepository subscriptionJpaRepository,
+                               BookJpaRepository bookJpaRepository,
+                               SubscriptionMapper subscriptionMapper,
+                               UserJpaRepository userJpaRepository) {
+        this.subscriptionJpaRepository = subscriptionJpaRepository;
+        this.bookJpaRepository = bookJpaRepository;
+        this.subscriptionMapper = subscriptionMapper;
+        this.userJpaRepository = userJpaRepository;
+    }
 
     @Override
     public List<SubscriptionDto> findAll() {
@@ -56,7 +58,7 @@ public class SubscriptionService implements ISubscriptionService {
             return findAll(pageable);
         } else if (userId == null && statusCode > 0) {
             return findAllByStatus(statusCode, pageable);
-        } else if (statusCode == 0 && userId != null){
+        } else if (statusCode == 0){
             return findAllByUserId(userId, pageable);
         } else if (userId != null && statusCode > 0){
             return findAllAllByUserIdAndStatusIfItPresent(userId, statusCode, pageable);
@@ -101,7 +103,7 @@ public class SubscriptionService implements ISubscriptionService {
 
     @Override
     public Optional<SubscriptionDto> findById(Long id) {
-        return subscriptionJpaRepository.findById(id).map(s -> subscriptionMapper.toDto(s));
+        return subscriptionJpaRepository.findById(id).map(subscriptionMapper::toDto);
     }
 
     @Override
@@ -109,18 +111,18 @@ public class SubscriptionService implements ISubscriptionService {
     public void delete(Long id) {
         Optional<Subscription> bookOptional = subscriptionJpaRepository.findById(id);
         if (bookOptional.isPresent() && bookOptional.get().getStatus().equals(SubscriptionStatus.COMPLETED)) {
-            bookOptional.ifPresent(book -> subscriptionJpaRepository.delete(book));
+            bookOptional.ifPresent(subscriptionJpaRepository::delete);
         }
     }
 
-    private static final int DEFAULT_BOOKING_COUNT = 1;
-    private static final int DEFAULT_BOOKING_DAYS = 1;
+    private static final int DEFAULT_BOOKING_BOOK_COUNT = 1;
+    private static final int DEFAULT_BOOKING_BOOK_DAYS = 1;
 
     @Override
     @Transactional
     public Optional<SubscriptionDto> booking(SubscriptionRequest request) {
-        request.setCount(DEFAULT_BOOKING_COUNT);
-        request.setDays(DEFAULT_BOOKING_DAYS);
+        request.setCount(DEFAULT_BOOKING_BOOK_COUNT);
+        request.setDays(DEFAULT_BOOKING_BOOK_DAYS);
         request.setCode(1);
         return createAndSave(request);
     }
@@ -149,7 +151,7 @@ public class SubscriptionService implements ISubscriptionService {
                         .user(user)
                         .build();
                 subscription = subscriptionJpaRepository.save(subscription);
-                return Optional.of(subscription).map(s -> subscriptionMapper.toDto(s));
+                return Optional.of(subscription).map(subscriptionMapper::toDto);
             }
         }
         return Optional.empty();
