@@ -27,7 +27,7 @@
 <div th:replace="fragments/subNavbarUpButton :: navAsideButton"></div>
 
 <div class="container-xxl my-md-4 bd-layout">
-    <div th:replace="fragments/subNavbarSubscriptionStatus :: navAsideSubcriptionStatus(currentStatusCode=${currentStatusCode})"></div>
+    <div th:replace="fragments/subNavbarSubscriptionUser :: navAsideSubcriptionStatus(currentStatusCode=${currentStatusCode})"></div>
 
     <main class="bd-main order-1">
         <div class="bd-intro ps-lg-4">
@@ -37,44 +37,45 @@
             <table class="table">
                 <thead class="thead-dark">
                 <tr>
+                    <th scope="col">#</th>
                     <th scope="col">Picture</th>
-                    <th scope="col">About</th>
+                    <th scope="col">Book details</th>
+                    <th scope="col">Count</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">Returned</th>
+                    <th scope="col">Created</th>
+                    <th scope="col">Deadline</th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr th:each="subscription : ${pageSubscriptionDto.content}">
-                    <th scope="row">
+                    <th scope="row" th:text="${subscription.id}"></th>
+                    <td>
                         <!--/*@thymesVar id="bookDetails" type=""by.it.academy.grodno.elibrary.api.dto.books.BookDto"*/-->
-                        <img class="rounded" src="#" th:src="${subscription.bookDetails.pictureUrl}" alt="no picture" width="200"/>
-                    </th>
-                    <th scope="row">
-                        <h6 class="text-sm-start m-0" th:text="'N' + ${subscription.bookDetails.id}"></h6>
-                        <h6 class="text-sm-start m-0" th:text="${subscription.bookDetails.getCategory().getCategoryPath()+ '/'}"></h6>
-                        <span class="h6"><a class="text-sm-start m-0 link-primary" th:href="@{/books(categoryId=${subscription.bookDetails.getCategory().getId()})}"
-                                 th:text="${subscription.bookDetails.getCategory().getCategoryName}"></a></span>
+                        <img class="rounded" src="#" th:src="${subscription.bookDetails.pictureUrl}" alt="no picture" width="70"/>
+                    </td>
+                    <td>
+                        <h6 class="text-sm-start mt-2" th:text="${subscription.bookDetails.title}"></h6>
                         <!--/*@thymesVar id="bookDetails" type="by.it.academy.grodno.elibrary.api.dto.books.BookDto"*/-->
-                        <h2 class="text-sm-start mt-2" th:text="${subscription.bookDetails.title}"></h2>
-                        <h5 class="text-sm-start m-0">
+                        <p class="text-sm-start m-0">
                             <span th:each="authorName : ${subscription.bookDetails.authors}" th:text="${authorName} + ', '"></span>
                             <span th:text="${subscription.bookDetails.datePublishing}"></span>
-                        </h5>
-                        <h5 class="text-sm-start mt-1" th:text="'Publisher: ' + ${subscription.bookDetails.publisher}"></h5>
-                        <div class="text-md-start">
-                            <a class="btn btn-secondary btn-sm mt-2" th:href="'/books/' + ${subscription.bookDetails.id}">More info...</a>
-                        </div>
+                        </p>
+                        <p class="text-sm-start m-0" th:text="'Book id:' + ${subscription.bookDetails.id}"></p>
 
-                        <h6 class="text-sm-start mt-4">
-                            <span th:text="'Created: ' + ${subscription.created} + '. '"></span>
-                            <span th:text="'Deadline: ' + ${subscription.deadline} + '. '"></span>
-                        </h6>
-                        <h6 class="text-sm-start mt-4">
-                            <span th:text="'Took: ' + ${subscription.took} + '. '"></span>
-                            <span th:text="'Returned: ' + ${subscription.returned} + '. '"></span>
-                        </h6>
-                        <h6 class="text-sm-start mt-4">
-                            <span th:text="'Status: ' + ${subscription.status} + '. '"></span>
-                        </h6>
-                    </th>
+                        <p class="text-sm-start m-0" th:text="${subscription.bookDetails.getCategory().getCategoryPath()+ '/'}"></p>
+                        <span class="p"><a class="text-sm-start m-0 link-primary" th:href="@{/books(categoryId=${subscription.bookDetails.getCategory().getId()})}"
+                                 th:text="${subscription.bookDetails.getCategory().getCategoryName}"></a></span>
+                        <p class="text-sm-start mt-1" th:text="'Publisher: ' + ${subscription.bookDetails.publisher}"></p>
+                        <div class="text-md-start">
+                            <a class="btn btn-secondary btn-sm mt-2" th:href="'/books/' + ${subscription.bookDetails.id}">More...</a>
+                        </div>
+                    </td>
+                    <td th:text="${subscription.took}"></td>
+                    <td th:text="${subscription.status}"></td>
+                    <td th:text="${subscription.returned}"></td>
+                    <td th:text="${subscription.created}"></td>
+                    <td th:text="${subscription.deadline}"></td>
                 </tr>
                 </tbody>
             </table>
@@ -82,17 +83,17 @@
             <nav aria-label="Page navigation">
                 <ul class="pagination">
                     <li th:class="'page-item ' + ${pageSubscriptionDto.getNumber() > 0 ? '' : 'disabled'}">
-                        <a class="page-link" th:href="@{/sbuscription(status=${currentStatusCode}, size=${pageSubscriptionDto.size}, page=${pageSubscriptionDto.getNumber() - 1})}">Previous</a></li>
+                        <a class="page-link" th:href="@{/sbuscriptions(status=${currentStatusCode}, size=${pageSubscriptionDto.size}, page=${pageSubscriptionDto.getNumber() - 1})}">Previous</a></li>
                     <li class="page-item active"
                         th:if="${pageSubscriptionDto.totalPages > 0}"
                         th:each="pageNumber : ${pageNumbers}"
                         th:class="'page-item' + ${pageNumber == pageSubscriptionDto.number ? ' active' : ''}">
                         <a class="page-link"
-                           th:href="@{/subscription(status=${currentStatusCode}, size=${pageSubscriptionDto.size}, page=${pageNumber})}"
+                           th:href="@{/subscriptions(status=${currentStatusCode}, size=${pageSubscriptionDto.size}, page=${pageNumber})}"
                            th:text="${pageNumber + 1}"></a>
                     </li>
                     <li th:class="'page-item ' + ${pageSubscriptionDto.getNumber() < pageSubscriptionDto.getTotalPages() - 1 ? '' : 'disabled'}">
-                        <a class="page-link" th:href="@{/sbuscription(status=${currentStatusCode}, size=${pageSubscriptionDto.size}, page=${pageSubscriptionDto.getNumber() + 1})}">Next</a></li>
+                        <a class="page-link" th:href="@{/sbuscriptions(status=${currentStatusCode}, size=${pageSubscriptionDto.size}, page=${pageSubscriptionDto.getNumber() + 1})}">Next</a></li>
                 </ul>
             </nav>
         </div>

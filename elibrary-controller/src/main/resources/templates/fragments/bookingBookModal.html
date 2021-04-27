@@ -29,7 +29,7 @@
                     <div class="modal-body">
                         <h5 class="modal-title" th:text="${thisBook.title}"></h5>
                         <h6 class="modal-title" th:text="'Available count: ' + ${thisBook.availableCount} + '. '"></h6>
-                        <form class="row g-3 mt-1" action="#" th:action="@{/subscription}" method="post">
+                        <form class="row g-3 mt-1" action="#" th:action="@{/subscriptions}" method="post">
                             <div class="col-auto">
                                 <label for="bookId" class="form-label visually-hidden">Book Id</label>
                                 <input type="text" id="bookId" name="bookId" class="form-control visually-hidden"

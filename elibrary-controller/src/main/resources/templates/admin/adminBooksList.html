@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="Ales' Rachko, and Bootstrap contributors">
+    <meta name="generator" content="Hugo 0.80.0">
+    <title>Books</title>
+
+    <link rel="canonical" href="https://getbootstrap.com/docs/5.0/examples/starter-template/">
+
+    <!-- Bootstrap core CSS -->
+    <link href="/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+    <link href="/css/docs.css" rel="stylesheet" crossorigin="anonymous">
+
+    <!-- Favicons -->
+    <link rel="icon" href="/img/favicons/books-stack-of-three.png" sizes="32x32" type="image/png">
+    <meta name="theme-color" content="#7952b3">
+
+    <!-- Custom styles for this template -->
+    <link href="/css/starter-template.css" rel="stylesheet">
+</head>
+
+<body>
+<div th:replace="fragments/upperNavbar :: copy"></div>
+
+<div th:replace="fragments/subNavbarUpButton :: navAsideButton"></div>
+
+<div class="container-xxl my-md-4 bd-layout">
+    <div th:replace="fragments/subNavbarCategory :: navAsideCategory(categoryDtoSet=${categoryDtoSet})"></div>
+    <main class="bd-main order-1">
+        <div class="bd-intro ps-lg-4">
+            <h1>Books</h1>
+            <p class="lead">Table of books in the database</p>
+        </div>
+        <div class="bd-content ps-lg-4">
+            <table class="table">
+                <thead class="thead-dark">
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Picture</th>
+                    <th scope="col">About</th>
+                    <th scope="col">Rating</th>
+                    <th scope="col">Available</th>
+                    <th scope="col">Total count</th>
+                    <th scope="col">Available count</th>
+                    <th scope="col">Created</th>
+                    <th scope="col">Updated</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="book : ${pageBookDto.content}">
+                    <!--/*@thymesVar id="book" type="by.it.academy.grodno.elibrary.api.dto.books.BookDto"*/-->
+                    <th scope="row" th:text="${book.id}"></th>
+                    <td>
+                        <img class="rounded" src="#" th:src="${book.pictureUrl}" alt="no picture" width="70"/>
+                    </td>
+                    <td>
+                        <h6 class="text-sm-start mt-2" th:text="${book.title}"></h6>
+                        <!--/*@thymesVar id="bookDetails" type="by.it.academy.grodno.elibrary.api.dto.books.BookDto"*/-->
+                        <p class="text-sm-start m-0">
+                            <span th:each="authorName : ${book.authors}" th:text="${authorName} + ', '"></span>
+                            <span th:text="${book.datePublishing}"></span>
+                        </p>
+                        <p class="text-sm-start m-0" th:text="'Book id:' + ${book.id}"></p>
+
+                        <p class="text-sm-start m-0" th:text="${book.getCategory().getCategoryPath()+ '/'}"></p>
+                        <span class="p"><a class="text-sm-start m-0 link-primary" th:href="@{/books(categoryId=${book.getCategory().getId()})}"
+                                           th:text="${book.getCategory().getCategoryName}"></a></span>
+                        <p class="text-sm-start mt-1" th:text="'Publisher: ' + ${book.publisher}"></p>
+                        <div class="text-md-start">
+                            <a class="btn btn-secondary btn-sm mt-2" th:href="'/books/' + ${book.id}">More...</a>
+                        </div>
+                    </td>
+                    <td th:text="${book.rating}"></td>
+                    <td th:text="${book.available}"></td>
+                    <td th:text="${book.totalCount}"></td>
+                    <td th:text="${book.availableCount}"></td>
+                    <td th:text="${book.created}"></td>
+                    <td th:text="${book.updated}"></td>
+                </tr>
+                </tbody>
+            </table>
+
+            <nav aria-label="Page navigation">
+                <ul class="pagination">
+                    <li th:class="'page-item ' + ${pageBookDto.getNumber() > 0 ? '' : 'disabled'}">
+                        <a class="page-link" th:href="@{/books(size=${pageBookDto.size}, page=${pageBookDto.getNumber() - 1})}">Previous</a></li>
+                    <li class="page-item active"
+                        th:if="${pageBookDto.totalPages > 0}"
+                        th:each="pageNumber : ${pageNumbers}"
+                        th:class="'page-item' + ${pageNumber == pageBookDto.number ? ' active' : ''}">
+                        <a class="page-link"
+                           th:href="@{/books(size=${pageBookDto.size}, page=${pageNumber})}"
+                           th:text="${pageNumber + 1}"></a>
+                    </li>
+                    <li th:class="'page-item ' + ${pageBookDto.getNumber() < pageBookDto.getTotalPages() - 1 ? '' : 'disabled'}">
+                        <a class="page-link" th:href="@{/books(size=${pageBookDto.size}, page=${pageBookDto.getNumber() + 1})}">Next</a></li>
+                </ul>
+            </nav>
+        </div>
+    </main>
+</div>
+
+<div th:replace="fragments/footer :: copy"></div>
+
+<script src="/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+<script src="/js/docs.min.js.js" crossorigin="anonymous"></script>
+</body>
+</html>

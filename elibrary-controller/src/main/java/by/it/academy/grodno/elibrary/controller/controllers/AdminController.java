@@ -1,5 +1,7 @@
 package by.it.academy.grodno.elibrary.controller.controllers;
 
+import by.it.academy.grodno.elibrary.api.dto.books.BookDto;
+import by.it.academy.grodno.elibrary.api.dto.books.CategoryDto;
 import by.it.academy.grodno.elibrary.api.dto.books.SubscriptionDto;
 import by.it.academy.grodno.elibrary.api.dto.books.SubscriptionRequest;
 import by.it.academy.grodno.elibrary.api.dto.users.UserDto;
@@ -17,9 +19,7 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import java.security.Principal;
-import java.util.Collections;
-import java.util.NoSuchElementException;
-import java.util.Optional;
+import java.util.*;
 
 @RestController
 @RequestMapping("/admin")
@@ -36,16 +36,22 @@ public class AdminController {
     @GetMapping(value = "/subscriptions")
     public ModelAndView findAllSubscription(@RequestParam(value = "status", required = false, defaultValue = "0") Integer status,
                                             @RequestParam(value = "userId", required = false) Long userId,
+                                            @RequestParam(value = "subscriptionId", required = false) Long subscriptionId,
                                             Pageable pageable,
                                             Principal principal) {
         Optional<UserDto> optionalUserDto = userService.findUser(principal);
         UserDto userDto = optionalUserDto.orElseThrow(NoSuchElementException::new);
 
-        Page<SubscriptionDto> subscriptionPage =
-                subscriptionService.findAllByUserIdAndStatus(userId, status, pageable);
+        Page<SubscriptionDto> subscriptionPage;
+        Optional<SubscriptionDto> optionalSubscriptionDto;
+        if (subscriptionId != null && (optionalSubscriptionDto = subscriptionService.findById(subscriptionId)).isPresent()) {
+            subscriptionPage = new PageImpl<>(Collections.singletonList(optionalSubscriptionDto.get()));
+        } else {
+            subscriptionPage = subscriptionService.findAllByUserIdAndStatus(userId, status, pageable);
+        }
 
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("admin/subscriptionUpdate");
+        modelAndView.setViewName("admin/adminSubscriptionList");
         modelAndView.addObject("currentUser", userDto);
         modelAndView.addObject("pageSubscriptionDto", subscriptionPage);
         modelAndView.addObject("currentStatusCode", status);
@@ -62,6 +68,19 @@ public class AdminController {
         }
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("redirect:/admin/subscriptions");
+        return modelAndView;
+    }
+
+    @PostMapping(value = "/subscriptions/create")
+    public ModelAndView createSubscription(@Valid SubscriptionRequest request,
+                                           BindingResult result){
+        ModelAndView modelAndView = new ModelAndView();
+        Optional<SubscriptionDto> optionalSubscriptionDto;
+        String redirectUrl = "redirect:/admin/subscriptions";
+        if (!result.hasErrors() && (optionalSubscriptionDto = subscriptionService.create(request)).isPresent()){
+            redirectUrl += "?subscriptionId=" + optionalSubscriptionDto.get().getId();
+        }
+        modelAndView.setViewName(redirectUrl);
         return modelAndView;
     }
 

@@ -28,52 +28,75 @@
 
 <div class="container-xxl my-md-4 bd-layout">
     <!--/*@thymesVar id="currentStatusCode" type="java.lang.Integer"*/-->
-    <div th:replace="fragments/subNavbarSubscriptionStatus :: navAsideSubcriptionStatusAndUserIdInput(currentStatusCode=${currentStatusCode})"></div>
+    <div th:replace="fragments/subNavbarSubscriptionAdmin :: navAsideSubcriptionStatusAndInput(currentStatusCode=${currentStatusCode})"></div>
 
     <main class="bd-main order-1">
         <div class="bd-intro ps-lg-4">
             <h1>Subscriptions</h1>
         </div>
         <div class="bd-content ps-lg-4">
+            <form class="input-group mb-3" action="#" th:action="@{/admin/subscriptions/create}" method="post">
+                <div class="input-group mb-3">
+                    <label for="bookId" class="input-group-text">Book Id</label>
+                    <input type="text" id="bookId" name="bookId" class="form-control" placeholder="ID" required autofocus>
+                    <label for="count" class="input-group-text">Count</label>
+                    <input type="number" id="count" name="count" class="form-control" placeholder="Count" required autofocus>
+                    <label for="days" class="input-group-text">Days</label>
+                    <input type="number" id="days" name="days" class="form-control" th:value="10" required autofocus>
+                    <select name="code" class="form-select" aria-label="request code">
+                        <option value="1" selected>Booking</option>
+                        <option value="2">Take book</option>
+                    </select>
+                    <button class="btn btn-outline-primary" type="submit">Add</button>
+                </div>
+            </form>
             <table class="table">
                 <thead class="thead-dark">
                 <tr>
+                    <th scope="col">#</th>
                     <th scope="col">Picture</th>
-                    <th scope="col">About</th>
+                    <th scope="col">Book</th>
+                    <th scope="col">User</th>
+                    <th scope="col">Count</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">Returned</th>
+                    <th scope="col">Created</th>
+                    <th scope="col">Deadline</th>
+                    <th scope="col">Change</th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr th:each="subscription : ${pageSubscriptionDto.content}">
-                    <th scope="row">
+                    <th scope="row" th:text="${subscription.id}"></th>
+                    <td>
+                        <!--/*@thymesVar id="bookDetails" type=""by.it.academy.grodno.elibrary.api.dto.books.BookDto"*/-->
+                        <img class="rounded" src="#" th:src="${subscription.bookDetails.pictureUrl}" alt="no picture" width="70"/>
+                    </td>
+                    <td>
+                        <h6 class="text-sm-start mt-2" th:text="${subscription.bookDetails.title}"></h6>
                         <!--/*@thymesVar id="bookDetails" type="by.it.academy.grodno.elibrary.api.dto.books.BookDto"*/-->
-                        <img class="rounded" src="#" th:src="${subscription.bookDetails.pictureUrl}" alt="no picture" width="100"/>
-                    </th>
-                    <th scope="row">
-                        <h6 class="text-sm-start m-0" th:text="'N' + ${subscription.bookDetails.id}"></h6>
-                        <h6 class="text-sm-start m-0" th:text="${subscription.bookDetails.getCategory().getCategoryPath()+ '/'}"></h6>
-                        <span class="h6"><a class="text-sm-start m-0 link-primary" th:href="@{/books(categoryId=${subscription.bookDetails.getCategory().getId()})}"
-                                            th:text="${subscription.bookDetails.getCategory().getCategoryName}"></a></span>
-                        <!--/*@thymesVar id="bookDetails" type="by.it.academy.grodno.elibrary.api.dto.books.BookDto"*/-->
-                        <h2 class="text-sm-start mt-2" th:text="${subscription.bookDetails.title}"></h2>
-                        <h5 class="text-sm-start m-0">
+                        <p class="text-sm-start m-0">
                             <span th:each="authorName : ${subscription.bookDetails.authors}" th:text="${authorName} + ', '"></span>
                             <span th:text="${subscription.bookDetails.datePublishing}"></span>
-                        </h5>
-                        <h5 class="text-sm-start mt-1" th:text="'Publisher: ' + ${subscription.bookDetails.publisher}"></h5>
-
-                        <h6 class="text-sm-start mt-4">
-                            <span th:text="'Created: ' + ${subscription.created} + '. '"></span>
-                            <span th:text="'Deadline: ' + ${subscription.deadline} + '. '"></span>
-                        </h6>
-                        <h6 class="text-sm-start mt-4">
-                            <span th:text="'Took: ' + ${subscription.took} + '. '"></span>
-                            <span th:text="'Returned: ' + ${subscription.returned} + '. '"></span>
-                        </h6>
-                        <h6 class="text-sm-start mt-4">
-                            <span th:text="'Status: ' + ${subscription.status} + '. '"></span>
-                        </h6>
+                        </p>
+                        <p class="text-sm-start m-0" th:text="'Book id:' + ${subscription.bookDetails.id}"></p>
+                        <div class="text-md-start">
+                            <a class="btn btn-secondary btn-sm mt-2" th:href="'/books/' + ${subscription.bookDetails.id}">More...</a>
+                        </div>
+                    </td>
+                    <td>
+                        <h6 class="text-sm-start m-0" th:text="${subscription.username}"></h6>
+                        <h6 class="text-sm-start mt-1" th:text="${subscription.userEmail}"></h6>
+                        <p class="text-sm-start m-0" th:text="'ID:' + ${subscription.userId}"></p>
+                    </td>
+                    <td th:text="${subscription.took}"></td>
+                    <td th:text="${subscription.status}"></td>
+                    <td th:text="${subscription.returned}"></td>
+                    <td th:text="${subscription.created}"></td>
+                    <td th:text="${subscription.deadline}"></td>
+                    <td>
                         <div th:replace="fragments/subscriptionUpdateModal :: subscriptionUpdateModal(thisSubscription=${subscription})"></div>
-                    </th>
+                    </td>
                 </tr>
                 </tbody>
             </table>

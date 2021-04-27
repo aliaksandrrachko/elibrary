@@ -7,11 +7,11 @@
 <!--/*@thymesVar id="thisSubscription" type="by.it.academy.grodno.elibrary.api.dto.books.SubscriptionDto"*/-->
 <div th:fragment="subscriptionUpdateModal(thisSubscription)">
     <!-- Button trigger modal - subscription -->
-    <div th:if="${!thisSubscription.status.equals('completed')}">
+    <div th:if="${!thisSubscription.getStatus().equalsIgnoreCase('completed')}">
         <button type="button" class="btn btn-primary btn-sm mt-2"
                 data-bs-toggle="modal"
                 th:attr="data-bs-target='#subscriptionUpdateForm' + ${thisSubscription.id}">
-            Update
+            Change
         </button>
 
         <!-- Modal -->
@@ -28,47 +28,31 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <h5 class="modal-title" th:text="'Username: ' + ${thisSubscription.bookDetails.title}"></h5>
-                        <h5 class="modal-title" th:text="'User ID: ' + ${thisSubscription.bookDetails.title}"></h5>
                         <h5 class="modal-title" th:text="${thisSubscription.bookDetails.title}"></h5>
-                        <h6 class="modal-title" th:text="'Took: ' + ${thisSubscription.took} + '. '"></h6>
-                        <h6 class="modal-title" th:text="'Returned: ' + ${thisSubscription.returned} + '. '"></h6>
-                        <h6 class="modal-title" th:text="'Status: ' + ${thisSubscription.status} + '. '"></h6>
-                        <h6 class="modal-title" th:text="'Created: ' + ${thisSubscription.created} + '. '"></h6>
-                        <h6 class="modal-title" th:text="'Deadline: ' + ${thisSubscription.deadline} + '. '"></h6>
-                        <form class="row g-3 mt-1" action="#" th:action="@{/admin/subscriptions}" method="post">
-                            <div class="col-auto">
-                                <label for="bookId" class="form-label visually-hidden">Book Id</label>
-                                <input type="text" id="bookId" name="bookId" class="form-control visually-hidden"
-                                       th:value="${thisSubscription.bookDetails.id}"
-                                       placeholder="Book Id" required autofocus>
-                            </div>
-                            <div class="col-auto">
-                                <label for="count" class="form-label">Count</label>
+                        <h6 class="modal-title" th:text="'Took: ' + ${thisSubscription.took}"></h6>
+                        <h6 class="modal-title" th:text="'Returned: ' + ${thisSubscription.returned} "></h6>
+                        <h6 class="modal-title" th:text="'Status: ' + ${thisSubscription.status}"></h6>
+                        <form class="input-group mt-3 mb-3" action="#" th:action="@{/admin/subscriptions}" method="post">
+                                <label for="count" class="input-group-text">Count</label>
                                 <input type="number" id="count" name="count" class="form-control"
                                        th:value="${thisSubscription.took}"
                                        placeholder="Count" required autofocus>
-                            </div>
-                            <div class="col-auto">
-                                <label for="days" class="form-label">Days</label>
+                                <label for="bookId" class="input-group-text visually-hidden">Book ID</label>
+                                <input type="text" id="bookId" name="bookId" class="form-control visually-hidden"
+                                       th:value="${thisSubscription.bookDetails.id}"
+                                       placeholder="Book Id" required autofocus>
+                                <label for="days" class="input-group-text">Days</label>
                                 <input type="number" id="days" name="days" class="form-control"
                                        th:value="10" required autofocus>
-                            </div>
-                            <div class="col-auto">
-                                <label for="subscriptionId" class="form-label visually-hidden">Id</label>
+                                <label for="subscriptionId" class="input-group-text visually-hidden">Id</label>
                                 <input type="text" id="subscriptionId" name="id" class="form-control visually-hidden"
                                        th:value="${thisSubscription.bookDetails.id}" required>
-                            </div>
-                            <div class="col-auto">
                                 <select name="code" class="form-select" aria-label="request code">
                                     <option value="2" selected>Take book</option>
                                     <option value="3">Leave book</option>
                                     <option value="4">Extended subscription</option>
                                 </select>
-                            </div>
-                            <div class="col-auto">
-                                <button class="btn btn-primary" type="submit">Booking</button>
-                            </div>
+                                <button class="btn btn-outline-primary" type="submit">Change</button>
                         </form>
                     </div>
                     <div class="modal-footer">

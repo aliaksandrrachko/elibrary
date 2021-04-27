@@ -136,13 +136,22 @@ public class SubscriptionService implements ISubscriptionService {
     private Optional<SubscriptionDto> createAndSave(SubscriptionRequest request) {
         Optional<Book> optionalBook = bookJpaRepository.findById(request.getBookId());
         Optional<User> optionalUser = userJpaRepository.findById(request.getUserId());
+
+        SubscriptionRequestCode code = SubscriptionRequestCode.getSubscriptionRequestCode(request.getCode());
+        SubscriptionStatus status;
+        if (code.equals(SubscriptionRequestCode.TAKE_BOOK)){
+            status = SubscriptionStatus.READING;
+        } else {
+            status = SubscriptionStatus.BOOKING;
+        }
+
         if (optionalBook.isPresent() && optionalUser.isPresent()) {
             Book book = optionalBook.get();
             User user = optionalUser.get();
             if (book.isAvailable()) {
                 int amountTaken = takeBook(book, request.getCount());
                 Subscription subscription = Subscription.builder()
-                        .status(SubscriptionStatus.BOOKING)
+                        .status(status)
                         .created(LocalDateTime.now().withNano(0))
                         .deadline(LocalDateTime.now().withNano(0).plusDays(request.getDays()))
                         .returned(0)
