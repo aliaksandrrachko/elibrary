@@ -32,11 +32,24 @@ public class BookController {
     }
 
     @GetMapping
-    public ModelAndView findAllBook(Principal principal, @RequestParam(value = "categoryId", required = false) Integer categoryId,
-                                    @PageableDefault Pageable pageable) {
+    public ModelAndView findAllBook(@RequestParam(value = "categoryId", required = false) Integer categoryId,
+                                    @RequestParam(value = "title", required = false) String title,
+                                    @RequestParam(value = "author", required = false) String author,
+                                    @PageableDefault Pageable pageable,
+                                    Principal principal) {
         UserDto currentUser = userService.findUser(principal).orElse(null);
 
-        Page<BookDto> pageBookDto = bookService.findAll(categoryId, pageable);
+        Page<BookDto> pageBookDto;
+        if (categoryId != null){
+            pageBookDto = bookService.findAll(categoryId, pageable);
+        } else if (title != null) {
+            pageBookDto = bookService.findAllByTitle(title, pageable);
+        } else if (author != null){
+            pageBookDto = bookService.findAllByAuthorName(author, pageable);
+        } else {
+            pageBookDto = bookService.findAll(pageable);
+        }
+
         Set<CategoryDto> categoryDtoList = new HashSet<>(categoryService.findAll());
 
         ModelAndView modelAndView = new ModelAndView();

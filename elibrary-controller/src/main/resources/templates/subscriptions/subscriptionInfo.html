@@ -39,10 +39,10 @@
                 <tr>
                     <th scope="col">#</th>
                     <th scope="col">Picture</th>
-                    <th scope="col">Book details</th>
+                    <th scope="col">Book</th>
                     <th scope="col">Count</th>
                     <th scope="col">Status</th>
-                    <th scope="col">Returned</th>
+                    <th scope="col">Ret</th>
                     <th scope="col">Created</th>
                     <th scope="col">Deadline</th>
                 </tr>
@@ -50,11 +50,14 @@
                 <tbody>
                 <tr th:each="subscription : ${pageSubscriptionDto.content}">
                     <th scope="row" th:text="${subscription.id}"></th>
-                    <td>
+                    <td class="p-1">
                         <!--/*@thymesVar id="bookDetails" type=""by.it.academy.grodno.elibrary.api.dto.books.BookDto"*/-->
                         <img class="rounded" src="#" th:src="${subscription.bookDetails.pictureUrl}" alt="no picture" width="70"/>
+                        <div class="text-md-start">
+                            <a class="btn btn-secondary btn-sm mt-2" th:href="'/books/' + ${subscription.bookDetails.id}">More...</a>
+                        </div>
                     </td>
-                    <td>
+                    <td class="p-1">
                         <h6 class="text-sm-start mt-2" th:text="${subscription.bookDetails.title}"></h6>
                         <!--/*@thymesVar id="bookDetails" type="by.it.academy.grodno.elibrary.api.dto.books.BookDto"*/-->
                         <p class="text-sm-start m-0">
@@ -62,20 +65,12 @@
                             <span th:text="${subscription.bookDetails.datePublishing}"></span>
                         </p>
                         <p class="text-sm-start m-0" th:text="'Book id:' + ${subscription.bookDetails.id}"></p>
-
-                        <p class="text-sm-start m-0" th:text="${subscription.bookDetails.getCategory().getCategoryPath()+ '/'}"></p>
-                        <span class="p"><a class="text-sm-start m-0 link-primary" th:href="@{/books(categoryId=${subscription.bookDetails.getCategory().getId()})}"
-                                 th:text="${subscription.bookDetails.getCategory().getCategoryName}"></a></span>
-                        <p class="text-sm-start mt-1" th:text="'Publisher: ' + ${subscription.bookDetails.publisher}"></p>
-                        <div class="text-md-start">
-                            <a class="btn btn-secondary btn-sm mt-2" th:href="'/books/' + ${subscription.bookDetails.id}">More...</a>
-                        </div>
                     </td>
-                    <td th:text="${subscription.took}"></td>
-                    <td th:text="${subscription.status}"></td>
-                    <td th:text="${subscription.returned}"></td>
-                    <td th:text="${subscription.created}"></td>
-                    <td th:text="${subscription.deadline}"></td>
+                    <td class="p-1" th:text="${subscription.took}"></td>
+                    <td class="p-1" th:text="${subscription.status}"></td>
+                    <td class="p-1" th:text="${subscription.returned}"></td>
+                    <td class="p-1" th:text="${subscription.created}"></td>
+                    <td class="p-1" th:text="${subscription.deadline}"></td>
                 </tr>
                 </tbody>
             </table>

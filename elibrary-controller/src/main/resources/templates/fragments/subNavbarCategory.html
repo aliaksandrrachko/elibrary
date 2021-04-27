@@ -27,7 +27,7 @@
 </nav>
 
 <aside th:fragment="navAsideCategory(categoryDtoSet)" class="bd-sidebar">
-    <nav class="collapse bd-links" id="bd-docs-nav" aria-label="Docs navigation">
+    <nav id="bd-docs-nav" aria-label="Docs navigation">
         <ul class="list-unstyled m-1 py-3 pt-md-1">
             <!--/*@thymesVar id="categoryDtoSet" type="java.util.Set<by.it.academy.grodno.elibrary.api.dto.books.CategoryDto>"*/-->
             <!--<div th:replace="::subnavbar (categorySet=${categoryDtoSet})"></div>-->
@@ -40,6 +40,20 @@
                 </a>
             </li>
         </ul>
+        <div>
+            <form class="input-group mt-3" action="#" th:action="@{/books}" th:method="get">
+                <input type="text" name="title" class="form-control"
+                       placeholder="Title" aria-label="Book's title"
+                       aria-describedby="button-addon1">
+                <button class="btn btn-outline-secondary" type="submit" id="button-addon1">Find</button>
+            </form>
+            <form class="input-group mt-3" action="#" th:action="@{/books}" th:method="get">
+                <input type="text" name="author" class="form-control"
+                       placeholder="Author name" aria-label="Author's name"
+                       aria-describedby="button-addon2">
+                <button class="btn btn-outline-secondary" type="submit" id="button-addon2">Find</button>
+            </form>
+        </div>
     </nav>
 </aside>
 

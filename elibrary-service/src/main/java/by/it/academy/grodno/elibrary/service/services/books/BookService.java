@@ -1,10 +1,12 @@
 package by.it.academy.grodno.elibrary.service.services.books;
 
+import by.it.academy.grodno.elibrary.api.dao.AuthorJpaRepository;
 import by.it.academy.grodno.elibrary.api.dao.BookJpaRepository;
 import by.it.academy.grodno.elibrary.api.dao.CategoryJpaRepository;
 import by.it.academy.grodno.elibrary.api.dto.books.BookDto;
 import by.it.academy.grodno.elibrary.api.mappers.BookMapper;
 import by.it.academy.grodno.elibrary.api.services.books.IBookService;
+import by.it.academy.grodno.elibrary.entities.books.Author;
 import by.it.academy.grodno.elibrary.entities.books.Book;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -22,6 +24,9 @@ public class BookService implements IBookService {
 
     @Autowired
     private BookMapper bookMapper;
+
+    @Autowired
+    private AuthorJpaRepository authorJpaRepository;
 
     @Autowired
     private BookJpaRepository bookJpaRepository;
@@ -94,5 +99,16 @@ public class BookService implements IBookService {
         } else {
             return findAllByCategoryId(categoryId, pageable);
         }
+    }
+
+    @Override
+    public Page<BookDto> findAllByTitle(String title, Pageable pageable) {
+        return bookMapper.toPageDto(bookJpaRepository.findAllByTitleContaining(title, pageable));
+    }
+
+    @Override
+    public Page<BookDto> findAllByAuthorName(String author, Pageable pageable) {
+        List<Author> authors = authorJpaRepository.findByAuthorNameContaining(author);
+        return bookMapper.toPageDto(bookJpaRepository.findAllByAuthorsIn(authors, pageable));
     }
 }

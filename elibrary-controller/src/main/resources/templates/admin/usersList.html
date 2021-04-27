@@ -47,7 +47,6 @@
     <main class="bd-main order-1">
         <div class="bd-intro ps-lg-4">
             <h1>Users</h1>
-            <p class="lead">Table of users in the database</p>
         </div>
         <div class="bd-content ps-lg-4">
         <table class="table">
@@ -59,7 +58,7 @@
                 <th scope="col">Created</th>
                 <th scope="col">Roles</th>
                 <th scope="col"></th>
-                <th scope="col">Subscription</th>
+                <th scope="col"></th>
                 <th scope="col"></th>
                 <th scope="col"></th>
                 <th scope="col"></th>
@@ -78,26 +77,26 @@
             </tr>
             <tr th:each="user : ${pageUsersDto.content}">
                 <th scope="row" th:text="*{user.id}"></th>
-                <td th:text="*{user.username}"></td>
-                <td th:text="*{user.email}"></td>
-                <td th:text="*{user.created}"></td>
-                <td>
+                <td class="p-1" th:text="*{user.username}"></td>
+                <td class="p-1" th:text="*{user.email}"></td>
+                <td class="p-1" th:text="*{user.created}"></td>
+                <td class="p-1">
                     <table>
                         <tr th:each="role : *{user.roles}">
                             <p class="m-0" th:text="*{role}"></p>
                         </tr>
                     </table>
                 </td>
-                <td>
+                <td class="p-1">
                     <div th:replace="fragments/editRolesModal :: editRolesModal(user=${user})"></div>
                 </td>
-                <td>
+                <td class="p-1">
                     <a class="btn btn-secondary btn-sm" th:href="@{/admin/subscriptions(status='0', userId=${user.id})}">See</a>
                 </td>
-                <td>
+                <td  class="p-1">
                     <div th:replace="fragments/setAvailabilityModal :: setAvailabilityModal(user=${user})"></div>
                 </td>
-                <td>
+                <td class="p-1">
                     <div th:replace="fragments/deleteUserModal :: deleteUserModal(user=${user})"></div>
                 </td>
             </tr>

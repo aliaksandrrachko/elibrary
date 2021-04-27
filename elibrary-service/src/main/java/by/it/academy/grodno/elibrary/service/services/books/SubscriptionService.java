@@ -53,18 +53,16 @@ public class SubscriptionService implements ISubscriptionService {
     }
 
     @Override
-    public Page<SubscriptionDto> findAllByUserIdAndStatus(Long userId, @NotNull Integer statusCode, Pageable pageable) {
-        if (userId == null && statusCode == 0){
-            return findAll(pageable);
-        } else if (userId == null && statusCode > 0) {
-            return findAllByStatus(statusCode, pageable);
-        } else if (statusCode == 0){
-            return findAllByUserId(userId, pageable);
-        } else if (userId != null && statusCode > 0){
-            return findAllAllByUserIdAndStatusIfItPresent(userId, statusCode, pageable);
+    public Page<SubscriptionDto> findAllByUserIdAndStatus(@NotNull Long userId, @NotNull Integer statusCode, Pageable pageable) {
+        SubscriptionStatus status = SubscriptionStatus.getSubscriptionStatus(statusCode);
+        Page<Subscription> subscriptionPage;
+        if (status.equals(SubscriptionStatus.EXPIRED)){
+            subscriptionPage = subscriptionJpaRepository
+                    .findByUserIdAndDeadlineBeforeAndStatusNot(userId, LocalDateTime.now().withNano(0), status, pageable);
         } else {
-            return Page.empty(pageable);
+            subscriptionPage = subscriptionJpaRepository.findAllByUserIdAndStatusIn(userId, Collections.singleton(status), pageable);
         }
+        return subscriptionMapper.toPageDto(subscriptionPage);
     }
 
     @Override
@@ -85,21 +83,6 @@ public class SubscriptionService implements ISubscriptionService {
         }
         return subscriptionMapper.toPageDto(subscriptionPage);
     }
-
-    private Page<SubscriptionDto> findAllAllByUserIdAndStatusIfItPresent(@NotNull Long userId,
-                                                                         @NotNull Integer statusCode,
-                                                                         Pageable pageable){
-        SubscriptionStatus status = SubscriptionStatus.getSubscriptionStatus(statusCode);
-        Page<Subscription> subscriptionPage;
-        if (status.equals(SubscriptionStatus.EXPIRED)){
-            subscriptionPage = subscriptionJpaRepository
-                    .findByUserIdAndDeadlineBeforeAndStatusNot(userId, LocalDateTime.now().withNano(0), status, pageable);
-        } else {
-            subscriptionPage = subscriptionJpaRepository.findAllByUserIdAndStatusIn(userId, Collections.singleton(status), pageable);
-        }
-        return subscriptionMapper.toPageDto(subscriptionPage);
-    }
-
 
     @Override
     public Optional<SubscriptionDto> findById(Long id) {

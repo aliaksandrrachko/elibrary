@@ -40,12 +40,15 @@
                             <td>
                                 <form action="#" th:action="@{/admin/users/roles/delete}" th:method="post">
                                     <div class="form-group visually-hidden">
-                                        <label class="form-label" for="user-role">User ID</label>
+                                        <label class="form-label" for="user-id">User ID</label>
+                                        <input class="form-control" id="user-id" name="userId"
+                                               placeholder="User ID" th:value="${user.id}" type="text">
+                                        <label class="form-label" for="user-role">User role</label>
                                         <input class="form-control" id="user-role" name="roleName"
                                                placeholder="RoleName"
                                                th:value="*{role}" type="text">
                                     </div>
-                                    <button class="btn btn-success btn-sm" type="submit">Delete</button>
+                                    <button class="btn btn-danger btn-sm" type="submit">Delete</button>
                                 </form>
                             </td>
                         </tr>
@@ -62,7 +65,7 @@
                                 <option value="ROLE_USER" selected>ROLE_USER</option>
                                 <option value="ROLE_ADMIN">ROLE_ADMIN</option>
                             </select>
-                            <button class="btn btn-outline-success" type="submit">Add</button>
+                            <button class="btn btn-outline-primary" type="submit">Add</button>
                         </div>
                     </form>
                 </div>

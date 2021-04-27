@@ -33,7 +33,6 @@
     <main class="bd-main order-1">
         <div class="bd-intro ps-lg-4">
             <h1>Books</h1>
-            <p class="lead">Table of books in the database</p>
         </div>
         <div class="bd-content ps-lg-4">
             <table class="table">
@@ -51,9 +50,10 @@
                     </th>
                     <th scope="row">
                         <h6 class="text-sm-start text-muted m-0" th:text="'N' + ${book.id}"></h6>
-                        <h6 class="text-sm-start m-0" th:text="${book.getCategory().getCategoryPath()+ '/'}"></h6>
-                        <span class="h6"><a class="text-sm-start m-0 link-primary" th:href="@{/books(categoryId=${book.getCategory().getId()})}"
-                                 th:text="${book.getCategory().getCategoryName}"></a></span>
+                        <p class="text-sm-start m-0" th:text="'(Rating: ' + ${book.rating} + ')'"></p>
+                        <small class="text-sm-start text-muted m-0" th:text="${book.getCategory().getCategoryPath()+ '/'}"></small>
+                        <small><a class="text-sm-start m-0 link-primary" th:href="@{/books(categoryId=${book.getCategory().getId()})}"
+                                 th:text="${book.getCategory().getCategoryName}"></a></small>
                         <!--/*@thymesVar id="book" type="by.it.academy.grodno.elibrary.api.dto.books.BookDto"*/-->
                         <h2 class="text-sm-start mt-2" th:text="${book.title}"></h2>
                         <h5 class="text-sm-start m-0">
@@ -61,16 +61,17 @@
                             <span th:text="${book.datePublishing}"></span>
                         </h5>
                         <h5 class="text-sm-start mt-1" th:text="'Publisher: ' + ${book.publisher}"></h5>
-                        <h6 class="text-sm-start mt-2" th:text="'Description: ' + ${book.description.substring(0, 200) + '...'}"></h6>
+                        <h6 class="text-sm-start mt-4 text-muted" th:text="'Description: ' + ${book.description.substring(0, 200) + '...'}"></h6>
                         <h6 class="text-sm-start mt-4">
+                            <span th:class="${book.available} ? 'text-success' : 'text-danger'"
+                                  th:text="${book.available} ? 'Availabel.' : 'Not available.'"></span>
                             <span th:text="'Total count: ' + ${book.totalCount} + '. '"></span>
                             <span th:text="'Available count: ' + ${book.availableCount} + '. '"></span>
-                            <span th:text="'Available: ' + ${book.available} + '. '"></span>
                         </h6>
                         <div class="text-md-start">
                             <a class="btn btn-secondary btn-sm mt-2" th:href="'/books/' + ${book.id}">More info...</a>
+                            <div th:replace="fragments/bookingBookModal :: bookingBookModal(thisBook=${book})"></div>
                         </div>
-                        <div th:replace="fragments/bookingBookModal :: bookingBookModal(thisBook=${book})"></div>
                     </th>
                 </tr>
                 </tbody>

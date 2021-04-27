@@ -10,6 +10,6 @@ import java.util.Optional;
 @Repository
 public interface AuthorJpaRepository extends JpaRepository<Author, Integer> {
 
-    List<Author> getByAuthorNameLike(String authorNameLikeExpression);
+    List<Author> findByAuthorNameContaining(String authorName);
     Optional<Author> getByAuthorName(String authorName);
 }

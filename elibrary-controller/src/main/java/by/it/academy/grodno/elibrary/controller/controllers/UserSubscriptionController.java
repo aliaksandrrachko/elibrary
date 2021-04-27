@@ -11,6 +11,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import java.security.Principal;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -28,14 +30,18 @@ public class UserSubscriptionController {
     }
 
     @GetMapping
-    public ModelAndView findAll(@RequestParam(value = "status", required = false, defaultValue = "0") Integer status,
+    public ModelAndView findAll(@RequestParam(value = "status", required = false) @Min(1) @Max(5) Integer status,
                                 Pageable pageable,
                                 Principal principal){
         Optional<UserDto> optionalUserDto = userService.findUser(principal);
         UserDto userDto = optionalUserDto.orElseThrow(NoSuchElementException::new);
 
-        Page<SubscriptionDto> subscriptionPage =
-                subscriptionService.findAllByUserIdAndStatus(userDto.getId(), status, pageable);
+        Page<SubscriptionDto> subscriptionPage;
+        if (status != null){
+            subscriptionPage = subscriptionService.findAllByUserIdAndStatus(userDto.getId(), status, pageable);
+        } else {
+            subscriptionPage = subscriptionService.findAllByUserId(userDto.getId(), pageable);
+        }
 
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("subscriptions/subscriptionInfo");

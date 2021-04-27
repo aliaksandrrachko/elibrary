@@ -12,6 +12,7 @@
 
     <!-- Bootstrap core CSS -->
     <link href="/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+    <link href="/css/docs.css" rel="stylesheet" crossorigin="anonymous">
 
     <!-- Favicons -->
     <link rel="icon" href="/img/favicons/openBook.png" sizes="32x32" type="image/png">
@@ -49,9 +50,10 @@
                     </th>
                     <th scope="row">
                         <h6 class="text-sm-start text-muted m-0" th:text="'N' + ${book.id}"></h6>
+                        <p class="text-sm-start m-0" th:text="'(Rating: ' + ${book.rating} + ')'"></p>
                         <span class="text-start">
-                    <small class="text-muted" th:text="${book.getCategory().getCategoryPath()+ '/'}"></small>
-                    <small><a class="text-sm-start m-0 link-primary" th:href="@{/books(categoryId=${book.getCategory().getId()})}"
+                        <small class="text-muted" th:text="${book.getCategory().getCategoryPath()+ '/'}"></small>
+                        <small><a class="text-sm-start m-0 link-primary" th:href="@{/books(categoryId=${book.getCategory().getId()})}"
                               th:text="${book.getCategory().getCategoryName}"></a></small></span>
                         <!--/*@thymesVar id="book" type="by.it.academy.grodno.elibrary.api.dto.books.BookDto"*/-->
                         <h2 class="text-sm-start mt-2" th:text="${book.title}"></h2>
@@ -62,19 +64,19 @@
 
                         <h5 class="text-sm-start mt-1" th:text="'Publisher: ' + ${book.publisher}"></h5>
                         <h5 class="text-sm-start mt-1 border-top" th:text="'ISBN-10: ' + ${book.isbn10}"></h5>
-                        <h5 class="text-sm-start mt-1 border-bottom" th:text="'ISBN-10: ' + ${book.isbn13}"></h5>
+                        <h5 class="text-sm-start mt-1 border-bottom" th:text="'ISBN-13: ' + ${book.isbn13}"></h5>
                         <h5 class="text-sm-start mt-1" th:text="'Language: ' + ${book.language}"></h5>
                         <h5 class="text-sm-start mt-1" th:text="'Print length: ' + ${book.printLength}"></h5>
                         <h6 class="text-sm-start mt-2" th:text="'Description: ' + ${book.description}"></h6>
                         <h6 class="text-sm-start mt-4">
+                            <span th:class="${book.available} ? 'text-success' : 'text-danger'"
+                                    th:text="${book.available} ? 'Availabel.' : 'Not available.'"></span>
                             <span th:text="'Total count: ' + ${book.totalCount} + '. '"></span>
                             <span th:text="'Available count: ' + ${book.availableCount} + '. '"></span>
-                            <span th:text="'Available: ' + ${book.available} + '. '"></span>
                         </h6>
 
                         <h6 class="text-sm-start mt-sm-4" th:text="'Created: ' + ${book.created}"></h6>
                         <h6 class="text-sm-start" th:text="'Updated: ' + ${book.updated}"></h6>
-                        <h6 class="text-sm-start mt-sm-4" th:text="'Rating: ' + ${book.rating}"></h6>
 
                         <div th:replace="fragments/bookingBookModal :: bookingBookModal (thisBook=${book})"></div>
                     </th>

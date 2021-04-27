@@ -5,8 +5,7 @@
 <body>
 
 <!--/*@thymesVar id="thisBook" type="java.util.Set<by.it.academy.grodno.elibrary.api.dto.books.BookDto>"*/-->
-<div th:fragment="bookingBookModal(thisBook)">
-    <div th:if="${thisBook.isAvailable()}">
+<div th:fragment="bookingBookModal(thisBook)" th:if="${thisBook.isAvailable()}">
         <!-- Button trigger modal - subscription -->
         <button type="button" class="btn btn-primary btn-sm mt-2"
                 data-bs-toggle="modal"
@@ -53,7 +52,6 @@
                 </div>
             </div>
         </div>
-    </div>
 </div>
 </body>
 
