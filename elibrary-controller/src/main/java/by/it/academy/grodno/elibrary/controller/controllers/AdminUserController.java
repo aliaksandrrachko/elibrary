@@ -18,7 +18,7 @@ import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @RestController
-@RequestMapping(value = "/admin")
+@RequestMapping(value = "/admin/users")
 public class AdminUserController {
 
     private final IUserService userService;
@@ -27,7 +27,7 @@ public class AdminUserController {
         this.userService = userService;
     }
 
-    @GetMapping("/users")
+    @GetMapping
     public ModelAndView findAllUser(@RequestParam(value = "userId", required = false) Long userId,
                                     @RequestParam(value = "email", required = false) String email,
                                     Principal principal,
@@ -52,7 +52,7 @@ public class AdminUserController {
         }
 
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("admin/usersList");
+        modelAndView.setViewName("admin/adminUsersList");
         modelAndView.addObject("currentUser", userDto);
         modelAndView.addObject("pageUsersDto", pageUsersDto);
         modelAndView.addObject("pageNumbers",
@@ -60,7 +60,7 @@ public class AdminUserController {
         return modelAndView;
     }
 
-    @PostMapping("users/delete")
+    @PostMapping("/delete")
     public ModelAndView deleteUser(@Valid @Min(0) long userId) {
         userService.delete(userId);
         ModelAndView modelAndView = new ModelAndView();
@@ -68,7 +68,7 @@ public class AdminUserController {
         return modelAndView;
     }
 
-    @PostMapping("users/roles/delete")
+    @PostMapping("/roles/delete")
     public ModelAndView deleteUserRole(String roleName, @Valid @Min(0) long userId) {
         userService.deleteRole(userId, roleName);
         ModelAndView modelAndView = new ModelAndView();
@@ -76,7 +76,7 @@ public class AdminUserController {
         return modelAndView;
     }
 
-    @PostMapping("users/roles/add")
+    @PostMapping("/roles/add")
     public ModelAndView addRoleToUser(String roleName, @Valid @Min(0) long userId) {
         userService.addRole(userId, roleName);
         ModelAndView modelAndView = new ModelAndView();
@@ -84,7 +84,7 @@ public class AdminUserController {
         return modelAndView;
     }
 
-    @PostMapping("users/setAvailability")
+    @PostMapping("/setAvailability")
     public ModelAndView setUsersAvailability(@Valid @Min(0) long userId) {
         userService.setAvailability(userId);
         ModelAndView modelAndView = new ModelAndView();

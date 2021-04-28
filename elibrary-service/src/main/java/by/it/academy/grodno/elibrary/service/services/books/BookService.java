@@ -8,6 +8,7 @@ import by.it.academy.grodno.elibrary.api.mappers.BookMapper;
 import by.it.academy.grodno.elibrary.api.services.books.IBookService;
 import by.it.academy.grodno.elibrary.entities.books.Author;
 import by.it.academy.grodno.elibrary.entities.books.Book;
+import by.it.academy.grodno.elibrary.entities.users.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -110,5 +111,15 @@ public class BookService implements IBookService {
     public Page<BookDto> findAllByAuthorName(String author, Pageable pageable) {
         List<Author> authors = authorJpaRepository.findByAuthorNameContaining(author);
         return bookMapper.toPageDto(bookJpaRepository.findAllByAuthorsIn(authors, pageable));
+    }
+
+    @Override
+    @Transactional
+    public void setAvailability(long bookId) {
+        Optional<Book> bookOptional = bookJpaRepository.findById(bookId);
+        bookOptional.ifPresent(book -> {
+            book.setAvailable(!book.isAvailable());
+            bookJpaRepository.save(book);
+        });
     }
 }

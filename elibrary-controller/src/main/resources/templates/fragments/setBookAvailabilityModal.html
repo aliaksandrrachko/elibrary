@@ -1,0 +1,50 @@
+<!doctype html>
+
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+
+<body>
+
+<!--/*@thymesVar id="book" type="by.it.academy.grodno.elibrary.api.dto.books.BookDto"*/-->
+<div th:fragment="setAvailabilityModal(book)">
+    <!-- Button trigger modal SET AVAILABILITY -->
+    <button th:class="'btn btn-sm btn-' + ${book.available ? 'success' : 'danger'}" type="button" data-bs-toggle="modal"
+            th:attr="data-bs-target='#setAvailabilityModal' + *{book.id}"
+            th:text="*{book.available} ? 'Available' : 'Not availabel'"></button>
+
+    <!-- To SET AVAILABILITY Modal -->
+    <div class="modal fade" th:id="'setAvailabilityModal' + *{book.id}" tabindex="-1"
+         aria-labelledby="setAvailabilityModalLabel" aria-hidden="true">
+
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="setAvailabilityModalLabel">To set availability</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
+                </div>
+
+                <div class="modal-body">
+                    <p th:text="'Do you really want to '
+                                    + ${book.available ? 'not availabel ' : 'available '} + 'book - ' +  *{book.title} + '?'"></p>
+                </div>
+
+                <div class="modal-footer">
+                    <form action="#" th:action="@{/admin/books/setAvailability}" th:method="POST">
+                        <div class="mb-3 visually-hidden">
+                            <label for="bookId" class="form-label">User ID</label>
+                            <input class="form-control" id="bookId" name="bookId" placeholder="Book Id"
+                                   th:value="*{book.id}" type="text">
+                        </div>
+
+                        <button class="btn btn-secondary" data-bs-dismiss="modal" type="button">Close</button>
+                        <button class="btn btn-success" type="submit">Change</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+
+</html>

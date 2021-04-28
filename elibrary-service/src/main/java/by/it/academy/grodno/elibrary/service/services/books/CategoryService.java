@@ -12,8 +12,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class CategoryService implements ICategoryService {
@@ -109,5 +109,11 @@ public class CategoryService implements ICategoryService {
     public Optional<CategoryDto> findByCategoryName(String categoryName) {
         Optional<Category> optionalCategory = categoryJpaRepository.findByCategoryName(categoryName);
         return optionalCategory.map(category -> categoryMapper.toDto(category));
+    }
+
+    @Override
+    public Set<CategoryDto> findAllUnique() {
+        Set<Category> categories = new HashSet<>(categoryJpaRepository.findAll());
+        return categories.stream().map(category -> categoryMapper.toDto(category)).collect(Collectors.toSet());
     }
 }

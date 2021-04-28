@@ -42,11 +42,12 @@
                     <th scope="col">Picture</th>
                     <th scope="col">About</th>
                     <th scope="col">Rating</th>
-                    <th scope="col">Available</th>
+                    <th scope="col"></th>
                     <th scope="col">Total count</th>
                     <th scope="col">Available count</th>
                     <th scope="col">Created</th>
                     <th scope="col">Updated</th>
+                    <th></th>
                 </tr>
                 </thead>
                 <tbody>
@@ -55,6 +56,7 @@
                     <th scope="row" th:text="${book.id}"></th>
                     <td>
                         <img class="rounded" src="#" th:src="${book.pictureUrl}" alt="no picture" width="70"/>
+                        <a class="btn btn-secondary btn-sm mt-2" th:href="'/books/' + ${book.id}">More...</a>
                     </td>
                     <td>
                         <h6 class="text-sm-start mt-2" th:text="${book.title}"></h6>
@@ -63,22 +65,24 @@
                             <span th:each="authorName : ${book.authors}" th:text="${authorName} + ', '"></span>
                             <span th:text="${book.datePublishing}"></span>
                         </p>
-                        <p class="text-sm-start m-0" th:text="'Book id:' + ${book.id}"></p>
-
-                        <p class="text-sm-start m-0" th:text="${book.getCategory().getCategoryPath()+ '/'}"></p>
-                        <span class="p"><a class="text-sm-start m-0 link-primary" th:href="@{/books(categoryId=${book.getCategory().getId()})}"
-                                           th:text="${book.getCategory().getCategoryName}"></a></span>
                         <p class="text-sm-start mt-1" th:text="'Publisher: ' + ${book.publisher}"></p>
-                        <div class="text-md-start">
-                            <a class="btn btn-secondary btn-sm mt-2" th:href="'/books/' + ${book.id}">More...</a>
-                        </div>
+                        <a class="text-sm-start m-0 link-primary" th:href="@{/books(categoryId=${book.getCategory().getId()})}"
+                                           th:text="${book.getCategory().getCategoryName}"></a>
                     </td>
                     <td th:text="${book.rating}"></td>
-                    <td th:text="${book.available}"></td>
-                    <td th:text="${book.totalCount}"></td>
+                    <td>
+                        <div th:replace="fragments/setBookAvailabilityModal :: setAvailabilityModal(book=${book})"></div>
+                    </td>
+                    <td>
+                        <p th:text="${book.totalCount}"></p>
+                        <div th:replace="fragments/addSpecimenBooksModal :: addSpecimenBooksModal(book=${book})"></div>
+                    </td>
                     <td th:text="${book.availableCount}"></td>
                     <td th:text="${book.created}"></td>
                     <td th:text="${book.updated}"></td>
+                    <td>
+                        Edit
+                    </td>
                 </tr>
                 </tbody>
             </table>
