@@ -49,9 +49,10 @@
                                 <input type="text" id="subscriptionId" name="id" class="form-control visually-hidden"
                                        th:value="${thisSubscription.id}" required>
                                 <select name="code" class="form-select" aria-label="request code">
-                                    <option value="2" selected>Take book</option>
-                                    <option value="3">Leave book</option>
-                                    <option value="4">Extended subscription</option>
+                                    <option value="2" selected>Take</option>
+                                    <option value="3">Leave</option>
+                                    <option value="4">Extended</option>
+                                    <option value="5">Undo booking</option>
                                 </select>
                                 <button class="btn btn-outline-primary" type="submit">Change</button>
                         </form>

@@ -28,10 +28,8 @@ public class AdminBookController {
 
     @Autowired
     private IUserService userService;
-
     @Autowired
     private IBookService bookService;
-
     @Autowired
     private ICategoryService categoryService;
 
@@ -57,21 +55,14 @@ public class AdminBookController {
     }
 
     @PostMapping("/setAvailability")
-    public ModelAndView setUsersAvailability(@Valid @Min(0) long bookId) {
+    public ModelAndView setBookAvailability(@Valid @Min(0) long bookId) {
         bookService.setAvailability(bookId);
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("redirect:/admin/books?bookId=" + bookId);
         return modelAndView;
     }
 
-    @PostMapping("/add/specimen")
-    public ModelAndView addRoleToUser(@Valid @Min(0) int count, @Valid @Min(0) long bookId) {
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("redirect:/admin/books?bookId=" + bookId);
-        return modelAndView;
-    }
-
-    @GetMapping("/addStepOne")
+    @GetMapping("/add")
     public ModelAndView getAddBookFormStepOne(Principal principal) {
         UserDto currentUser = userService.findById(principal.getName()).orElse(null);
 
@@ -91,7 +82,7 @@ public class AdminBookController {
         return modelAndView;
     }
 
-    @PostMapping("/addStepOne")
+    @PostMapping("/add")
     public ModelAndView addBook(@Valid @ModelAttribute(value = "bookDto") BookDto bookDto,
                                 BindingResult result,
                                 Principal principal) {

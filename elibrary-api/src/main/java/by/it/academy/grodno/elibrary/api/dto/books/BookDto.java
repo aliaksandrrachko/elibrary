@@ -11,7 +11,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Set;
+import java.util.List;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -36,7 +36,7 @@ public class BookDto extends AEntityDto<Long> {
 
     private String publisher;
 
-    private Set<String> authors;
+    private List<String> authors;
 
     @Pattern(regexp = "^\\w{3}$", message = "Code by alpha-3/ISO 639-2.")
     private String language;

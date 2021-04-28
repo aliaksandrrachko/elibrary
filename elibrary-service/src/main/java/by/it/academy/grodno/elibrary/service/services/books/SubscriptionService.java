@@ -112,6 +112,13 @@ public class SubscriptionService implements ISubscriptionService {
 
     @Override
     @Transactional
+    public Optional<SubscriptionDto> undoBooking(SubscriptionRequest request) {
+        request.setCode(5);
+        return update(request.getId(), request);
+    }
+
+    @Override
+    @Transactional
     public Optional<SubscriptionDto> create(SubscriptionRequest request) {
         return createAndSave(request);
     }
@@ -181,10 +188,28 @@ public class SubscriptionService implements ISubscriptionService {
             case EXTENDED_SUBSCRIPTION:
                 prepareToExtendedSubscription(subscription, request);
                 break;
+            case UNDO_BOOKING:
+                prepareToUndoBookingSubscription(subscription, request);
+                break;
             default:
                 throw new UnknownSubscriptionUpdateCodeRequest(requestCode);
         }
         return Optional.of(subscriptionMapper.toDto(subscriptionJpaRepository.save(subscription)));
+    }
+
+    private void prepareToUndoBookingSubscription(Subscription subscription, SubscriptionRequest request) {
+        int debtBook = subscription.getTook() - subscription.getReturned();
+        int returnsBook = request.getCount();
+        if (debtBook >= returnsBook && (subscription.getStatus().equals(SubscriptionStatus.BOOKING))){
+            leaveBook(subscription.getBook(), returnsBook);
+            subscription.setReturned(subscription.getReturned() + returnsBook);
+            if (debtBook == returnsBook) {
+                subscription.setStatus(SubscriptionStatus.COMPLETED);
+                subscription.setDeadline(LocalDateTime.now().withNano(0));
+            } else {
+                subscription.setStatus(SubscriptionStatus.BOOKING);
+            }
+        }
     }
 
     private void prepareToExtendedSubscription(Subscription subscription, SubscriptionRequest request) {

@@ -73,10 +73,7 @@
                     <td>
                         <div th:replace="fragments/setBookAvailabilityModal :: setAvailabilityModal(book=${book})"></div>
                     </td>
-                    <td>
-                        <p th:text="${book.totalCount}"></p>
-                        <div th:replace="fragments/addSpecimenBooksModal :: addSpecimenBooksModal(book=${book})"></div>
-                    </td>
+                    <td th:text="${book.totalCount}"></td>
                     <td th:text="${book.availableCount}"></td>
                     <td th:text="${book.created}"></td>
                     <td th:text="${book.updated}"></td>

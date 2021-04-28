@@ -67,7 +67,11 @@
                         <p class="text-sm-start m-0" th:text="'Book id:' + ${subscription.bookDetails.id}"></p>
                     </td>
                     <td class="p-1" th:text="${subscription.took}"></td>
-                    <td class="p-1" th:text="${subscription.status}"></td>
+                    <td class="p-1">
+                        <p th:text="${subscription.status}"></p>
+                        <div th:if="${subscriptin.getStatus().equalsIgnoreCase('booking')}"
+                             th:replace="fragments/undoBookingModal :: undoBookingBookModal(thisBook=${bookDetails})"></div>
+                    </td>
                     <td class="p-1" th:text="${subscription.returned}"></td>
                     <td class="p-1" th:text="${subscription.created}"></td>
                     <td class="p-1" th:text="${subscription.deadline}"></td>

@@ -12,6 +12,7 @@
 
     <!-- Bootstrap core CSS -->
     <link href="/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+    <link href="/css/docs.css" rel="stylesheet" crossorigin="anonymous">
 
     <!-- Favicons -->
     <link rel="icon" href="/img/favicons/userEdit.png" sizes="32x32" type="image/png">
@@ -24,23 +25,29 @@
 <body>
 <div th:replace="fragments/upperNavbar :: copy"></div>
 
-<main class="container">
-    <div class="starter-template py-5 px-3">
-        <div class="text-center">
+<div th:replace="fragments/subNavbarUpButton :: navAsideButton"></div>
+
+<div class="container-xxl my-md-4 bd-layout">
+    <div th:replace="fragments/subNavbarCategory :: navAsideCategory(categoryDtoSet=${categoryDtoSet})"></div>
+
+    <main class="bd-main order-1">
+        <div class="bd-intro ps-lg-4">
             <h1>Add book</h1>
-            <p class="lead">You need filling all fields.</p>
         </div>
+        <div class="bd-content ps-lg-4">
         <form action="#" enctype="multipart/form-data" th:href="@{'/addStepOne'}" th:method="post" th:object="${bookDto}">
-                    <div class="col-md-4">
-                        <label class="form-label visually-hidden" for="isbn10">ISBN-10</label>
-                        <input class="form-control" id="isbn10" placeholder="ISBN-10" th:field="*{isbn10}" th:value="*{isbn10}" type="text">
-                        <span class="text-danger" th:errors="*{isbn10}" th:if="${#fields.hasErrors('isbn10')}"></span>
-                    </div>
-                    <div class="col-md-4">
-                        <label class="form-label visually-hidden" for="isbn13">ISBN-13</label>
-                        <input class="form-control" id="isbn13" placeholder="ISBN-13" th:field="*{isbn13}" th:value="*{isbn13}" type="text">
-                        <span class="text-danger" th:errors="*{isbn13}" th:if="${#fields.hasErrors('isbn13')}"></span>
-                    </div>
+            <div class="row g-3">
+                <div class="col-md-4">
+                    <label class="form-label " for="isbn10">ISBN-10</label>
+                    <input class="form-control" id="isbn10" placeholder="ISBN-10" th:field="*{isbn10}" th:value="*{isbn10}" type="text">
+                    <span class="text-danger" th:errors="*{isbn10}" th:if="${#fields.hasErrors('isbn10')}"></span>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label" for="isbn13">ISBN-13</label>
+                    <input class="form-control" id="isbn13" placeholder="ISBN-13" th:field="*{isbn13}" th:value="*{isbn13}" type="text">
+                    <span class="text-danger" th:errors="*{isbn13}" th:if="${#fields.hasErrors('isbn13')}"></span>
+                </div>
+            </div>
             <div class="col-md-6">
                 <label class="form-label visually-hidden" for="title">Title</label>
                 <input class="form-control" id="title" placeholder="Title" th:field="*{title}" th:value="*{title}" type="text">
@@ -53,8 +60,8 @@
             </div>
             <div>
                 <select class="form-select" aria-label="Default select category" th:field="*{category.categoryName}">
-                    <option th:each="categoryFromSet : ${categoriesSet}" th:value="*{categoryFromSet}"
-                            th:text="*{categoryFromSet.categoryName}"></option>
+          <!--          <option th:each="categoryFromSet : ${categoriesSet}" th:value="*{categoryFromSet.categoryName}"
+                            th:text="*{categoryFromSet.categoryName}"></option>-->
                 </select>
             </div>
             <div>
@@ -103,14 +110,18 @@
                 <label class="form-check-label" for="availableRadio2">Not available</label>
             </div>
 
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+
 <!--            <tr th:each="book, itemStat : *{books}">
                 <td><input th:field="*{books[__${itemStat.index}__].title}" /></td>
                 <td><input th:field="*{books[__${itemStat.index}__].author}" /></td>
             </tr>-->
         </form>
     </div>
-
 </main>
+</div>
 
 <div th:replace="fragments/footer :: copy"></div>
 

@@ -8,7 +8,8 @@ public enum SubscriptionRequestCode {
     BOOKING(1),
     TAKE_BOOK(2),
     LEAVE_BOOK(3),
-    EXTENDED_SUBSCRIPTION(4);
+    EXTENDED_SUBSCRIPTION(4),
+    UNDO_BOOKING(5);
 
     private final int requestCode;
 

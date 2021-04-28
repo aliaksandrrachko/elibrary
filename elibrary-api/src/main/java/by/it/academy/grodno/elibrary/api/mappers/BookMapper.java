@@ -53,7 +53,7 @@ public class BookMapper extends AGenericMapper<Book, BookDto, Long> {
 
     @Override
     public void mapSpecificFields(Book source, BookDto destination) {
-        destination.setAuthors(source.getAuthors().stream().map(Author::getAuthorName).collect(Collectors.toSet()));
+        destination.setAuthors(source.getAuthors().stream().map(Author::getAuthorName).collect(Collectors.toList()));
         destination.setPublisher(source.getPublisher().getPublisherName());
         destination.setCategory(categoryMapper.toDto(source.getCategory()));
     }

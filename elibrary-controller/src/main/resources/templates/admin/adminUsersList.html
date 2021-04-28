@@ -91,7 +91,7 @@
                     <div th:replace="fragments/editRolesModal :: editRolesModal(user=${user})"></div>
                 </td>
                 <td class="p-1">
-                    <a class="btn btn-secondary btn-sm" th:href="@{/admin/subscriptions(status='0', userId=${user.id})}">See</a>
+                    <a class="btn btn-secondary btn-sm" th:href="@{/admin/subscriptions(userId=${user.id})}">See</a>
                 </td>
                 <td  class="p-1">
                     <div th:replace="fragments/setAvailabilityModal :: setAvailabilityModal(user=${user})"></div>

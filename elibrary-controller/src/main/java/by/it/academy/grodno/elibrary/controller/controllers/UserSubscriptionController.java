@@ -67,4 +67,19 @@ public class UserSubscriptionController {
         modelAndView.setViewName("redirect:/subscriptions");
         return modelAndView;
     }
+
+    @PostMapping(value = "/undo")
+    public ModelAndView undoBookingBook(SubscriptionRequest request,
+                                    Principal principal){
+        if (principal != null){
+            Optional<UserDto> userDtoOptional = userService.findById(principal.getName());
+            if (userDtoOptional.isPresent()) {
+                request.setUserId(userDtoOptional.get().getId());
+                subscriptionService.undoBooking(request);
+            }
+        }
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("redirect:/subscriptions");
+        return modelAndView;
+    }
 }
