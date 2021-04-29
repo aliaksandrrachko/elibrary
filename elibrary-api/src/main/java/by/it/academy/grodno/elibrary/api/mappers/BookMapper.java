@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import java.util.HashSet;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -60,14 +61,9 @@ public class BookMapper extends AGenericMapper<Book, BookDto, Long> {
 
     @Override
     public void mapSpecificFields(BookDto source, Book destination) {
-        Set<Author> authorSet = new HashSet<>();
-        source.getAuthors().forEach(a -> {
-            Optional<Author> authorOptional = authorJpaRepository.getByAuthorName(a);
-            authorOptional.ifPresent(authorSet::add);
-        });
-        destination.setAuthors(authorSet);
-        publisherJpaRepository.findByPublisherName(source.getPublisher()).ifPresent(destination::setPublisher);
+        destination.setPublisher(publisherJpaRepository.findByPublisherName(source.getPublisher())
+                .orElse(null));
         destination.setCategory(categoryJpaRepository.findByCategoryName(source.getCategory().getCategoryName())
-                .orElseThrow(IllegalArgumentException::new));
+                .orElseThrow(NoSuchElementException::new));
     }
 }

@@ -2,14 +2,12 @@ package by.it.academy.grodno.elibrary.service.services.books;
 
 import by.it.academy.grodno.elibrary.api.dao.AuthorJpaRepository;
 import by.it.academy.grodno.elibrary.api.dao.BookJpaRepository;
-import by.it.academy.grodno.elibrary.api.dao.CategoryJpaRepository;
 import by.it.academy.grodno.elibrary.api.dto.books.BookDto;
 import by.it.academy.grodno.elibrary.api.mappers.BookMapper;
 import by.it.academy.grodno.elibrary.api.services.books.IBookService;
 import by.it.academy.grodno.elibrary.entities.books.Author;
 import by.it.academy.grodno.elibrary.entities.books.Book;
-import by.it.academy.grodno.elibrary.entities.users.User;
-import org.springframework.beans.factory.annotation.Autowired;
+import by.it.academy.grodno.elibrary.entities.books.Publisher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
@@ -18,22 +16,22 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Component
 @Transactional(readOnly = true)
 public class BookService implements IBookService {
 
-    @Autowired
-    private BookMapper bookMapper;
+    private final BookMapper bookMapper;
+    private final AuthorJpaRepository authorJpaRepository;
+    private final BookJpaRepository bookJpaRepository;
 
-    @Autowired
-    private AuthorJpaRepository authorJpaRepository;
-
-    @Autowired
-    private BookJpaRepository bookJpaRepository;
-
-    @Autowired
-    private CategoryJpaRepository categoryJpaRepository;
+    public BookService(BookMapper bookMapper, AuthorJpaRepository authorJpaRepository, BookJpaRepository bookJpaRepository) {
+        this.bookMapper = bookMapper;
+        this.authorJpaRepository = authorJpaRepository;
+        this.bookJpaRepository = bookJpaRepository;
+    }
 
     @Override
     public Class<BookDto> getGenericClass() {
@@ -48,14 +46,14 @@ public class BookService implements IBookService {
     @Override
     public Optional<BookDto> findById(Long id) {
         Optional<Book> bookOptional = bookJpaRepository.findById(id);
-        return bookOptional.map(book -> bookMapper.toDto(book));
+        return bookOptional.map(bookMapper::toDto);
     }
 
     @Override
     @Transactional
     public void delete(Long id) {
         Optional<Book> bookOptional = bookJpaRepository.findById(id);
-        bookOptional.ifPresent(book -> bookJpaRepository.delete(book));
+        bookOptional.ifPresent(bookJpaRepository::delete);
     }
 
     @Override
@@ -63,8 +61,28 @@ public class BookService implements IBookService {
     public Optional<BookDto> create(BookDto entityDto) {
         entityDto.setCreated(LocalDateTime.now().withNano(0));
         entityDto.setUpdated(LocalDateTime.now().withNano(0));
+        Book newBookData = bookMapper.toEntity(entityDto);
+        createAndSetPublisherIfNotExists(newBookData, entityDto);
+        createAndSetAuthorIfNotExists(newBookData, entityDto);
         Book createdBook = bookJpaRepository.saveAndFlush(bookMapper.toEntity(entityDto));
         return Optional.of(bookMapper.toDto(createdBook));
+    }
+
+    private void createAndSetPublisherIfNotExists(Book book, BookDto bookDto){
+        if (book.getPublisher() == null) {
+            Publisher publisher = new Publisher(bookDto.getPublisher());
+            book.setPublisher(publisher);
+        }
+    }
+
+    private void createAndSetAuthorIfNotExists(Book book, BookDto bookDto){
+        Set<String> booksAuthors = book.getAuthors().stream().map(Author::getAuthorName)
+                .collect(Collectors.toSet());
+        bookDto.getAuthors().forEach(authorName -> {
+            if (!booksAuthors.contains(authorName)){
+                book.getAuthors().add(new Author(authorName));
+            }
+        });
     }
 
     @Override
@@ -75,9 +93,11 @@ public class BookService implements IBookService {
             Book bookFromDb = optionalBook.get();
             entityDto.setCreated(bookFromDb.getCreated());
             entityDto.setUpdated(LocalDateTime.now().withNano(0));
-            Book newDataBook = bookMapper.toEntity(entityDto);
-            newDataBook.setId(id);
-            Book updatedBook = bookJpaRepository.save(newDataBook);
+            Book newBookData = bookMapper.toEntity(entityDto);
+            newBookData.setId(id);
+            createAndSetPublisherIfNotExists(newBookData, entityDto);
+            createAndSetAuthorIfNotExists(newBookData, entityDto);
+            Book updatedBook = bookJpaRepository.save(newBookData);
             return Optional.of(bookMapper.toDto(updatedBook));
         }
         return Optional.empty();

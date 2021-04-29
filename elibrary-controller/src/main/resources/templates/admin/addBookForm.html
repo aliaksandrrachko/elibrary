@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="Ales' Rachko, and Bootstrap contributors">
+    <meta name="generator" content="Hugo 0.80.0">
+    <title>Add Book</title>
+
+    <link rel="canonical" href="https://getbootstrap.com/docs/5.0/examples/starter-template/">
+
+    <!-- Bootstrap core CSS -->
+    <link href="/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+    <link href="/css/docs.css" rel="stylesheet" crossorigin="anonymous">
+
+    <!-- Favicons -->
+    <link rel="icon" href="/img/favicons/userEdit.png" sizes="32x32" type="image/png">
+    <meta name="theme-color" content="#7952b3">
+
+    <!-- Custom styles for this template -->
+    <link href="/css/starter-template.css" rel="stylesheet">
+</head>
+
+<body>
+<div th:replace="fragments/upperNavbar :: copy"></div>
+
+<div th:replace="fragments/subNavbarUpButton :: navAsideButton"></div>
+
+<div class="container-xxl my-md-4 bd-layout">
+    <!--/*@thymesVar id="categoryDtoSet" type="java.util.Set<by.it.academy.grodno.elibrary.api.dto.books.CategoryDto>"*/-->
+    <div th:replace="fragments/subNavbarCategoryWithoutFind :: navAsideCategory(categoryDtoSet=${categoryDtoSet})"></div>
+
+    <main class="bd-main order-1">
+        <div class="bd-intro ps-lg-4">
+            <h1>Add book</h1>
+        </div>
+
+        <div class="bd-toc mt-4 mb-5 my-md-0 ps-xl-3 mb-lg-5 text-muted">
+            <strong class="d-block h6 my-2 pb-2 border-bottom">Publishers in data base</strong>
+            <nav id="TableOfPublishers">
+                <ul>
+                    <li th:each="publisher : ${publishersList}" th:text="*{publisher.publisherName}"></li>
+                </ul>
+            </nav>
+            <strong class="d-block h6 my-2 pb-2 border-bottom">Authors in data base</strong>
+            <nav id="TableOfAuthors">
+                <ul>
+                    <li th:each="author : ${authorsList}" th:text="${author.authorName}"></li>
+                </ul>
+            </nav>
+        </div>
+
+        <div class="bd-content ps-lg-4">
+        <form action="#" enctype="multipart/form-data" th:href="@{'/addStepOne'}" th:method="post" th:object="${bookDto}">
+            <div class="row row-cols-auto pb-4 container-sm">
+                <div class="col">
+                    <label class="form-label mb-1" for="isbn10">ISBN-10</label>
+                    <input class="form-control" id="isbn10" placeholder="ISBN-10" th:field="*{isbn10}" th:value="*{isbn10}" type="text">
+                    <span class="text-danger" th:errors="*{isbn10}" th:if="${#fields.hasErrors('isbn10')}"></span>
+                </div>
+                <div class="col">
+                    <label class="form-label mb-1" for="isbn13">ISBN-13</label>
+                    <input class="form-control" id="isbn13" placeholder="ISBN-13" th:field="*{isbn13}" th:value="*{isbn13}" type="text">
+                    <span class="text-danger" th:errors="*{isbn13}" th:if="${#fields.hasErrors('isbn13')}"></span>
+                </div>
+            </div>
+            <div class="row pb-4 container-sm">
+                <div class="col">
+                <label class="form-label" for="title">Title</label>
+                <input class="form-control" id="title" placeholder="Title" th:field="*{title}" th:value="*{title}" type="text">
+                <span class="text-danger" th:errors="*{title}" th:if="${#fields.hasErrors('title')}"></span>
+                </div>
+            </div>
+            <div class="row pb-4 container-sm">
+                <div class="col">
+                <label class="form-label mb-1" for="description">Description</label>
+                <textarea class="form-control" id="description" placeholder="Description" th:field="*{description}" th:value="*{description}" type="text"></textarea>
+                <span class="text-danger" th:errors="*{description}" th:if="${#fields.hasErrors('description')}"></span>
+                </div>
+            </div>
+            <div class="row pb-4 container-sm">
+                <div class="col-6">
+                    <select class="form-select" aria-label="Default select category" th:field="*{category.categoryName}">
+                        <option th:each="category : ${categoriesSet}" th:text="${category.categoryName}" th:value="${category.categoryName}"></option>
+                    </select>
+                </div>
+            </div>
+            <div  class="row row-cols-auto pb-4 container-sm">
+                <div class="col mb-1" th:each="author, item : ${bookDto.authors}">
+                    <label class="col" th:for="'authorName' + ${item.index}" th:text="'Author ' + ${item.index}"></label>
+                    <input th:id="'authorName' + ${item.index}" class="form-control"
+                           th:placeholder="'Authors name ' + ${item.index}" name="authors"
+                           th:value="${author}" type="text"/>
+                </div>
+            </div>
+            <div class="row pb-4 container-sm">
+                <div class="col">
+                    <label class="form-label mb-1" for="publisher">Publisher</label>
+                    <input class="form-control" id="publisher" placeholder="Publisher" th:field="*{publisher}" th:value="*{publisher}" type="text">
+                    <span class="text-danger" th:errors="*{publisher}" th:if="${#fields.hasErrors('publisher')}"></span>
+                </div>
+            </div>
+            <div  class="row pb-4 container-sm">
+                <div class="col">
+                    <label class="form-label mb-1" for="datePublishing">Date publishing</label>
+                    <input class="form-control" id="datePublishing" placeholder="Date publishing" th:field="*{datePublishing}" th:value="*{datePublishing}" type="date">
+                    <span class="text-danger" th:errors="*{datePublishing}" th:if="${#fields.hasErrors('datePublishing')}"></span>
+                </div>
+                <div class="col">
+                    <label class="form-label mb-1" for="language">Language</label>
+                    <input class="form-control" id="language" placeholder="Language" th:field="*{language}" th:value="*{language}" type="text">
+                    <span class="text-danger" th:errors="*{language}" th:if="${#fields.hasErrors('language')}"></span>
+                </div>
+                <div class="col">
+                    <label class="form-label  mb-1" for="printLength">Print length</label>
+                    <input class="form-control" id="printLength" placeholder="Print length" th:field="*{printLength}" th:value="*{printLength}" type="number">
+                    <span class="text-danger" th:errors="*{printLength}" th:if="${#fields.hasErrors('printLength')}"></span>
+                </div>
+            </div>
+            <div class="row pb-4 container-sm">
+                <div class="col-3">
+                    <label class="form-label mb-2" for="totalCount">Total count</label>
+                    <input class="form-control" id="totalCount" placeholder="Total count" th:field="*{totalCount}" th:value="*{totalCount}" type="number">
+                    <span class="text-danger" th:errors="*{totalCount}" th:if="${#fields.hasErrors('totalCount')}"></span>
+                </div>
+                <div class="col-3">
+                    <p class="form-label mb-1">This book:</p>
+                    <label class="form-check-label" for="availableRadio1">
+                        <input class="form-check-input" id="availableRadio1" type="radio"
+                               th:field="*{available}" value="1" name="available" checked>
+                        Available</label>
+                    <label class="form-check-label" for="availableRadio2">
+                        <input class="form-check-input" type="radio" id="availableRadio2"
+                               th:field="*{available}" value="0" name="available" >
+                        Not available</label>
+                </div>
+            </div>
+            <div class="row row-cols-auto pb-4 container-sm">
+                <div class="col-6">
+                <label class="form-label mb-2" for="pictureUrl">Picture url</label>
+                <input class="form-control" id="pictureUrl" placeholder="Picture url" th:field="*{pictureUrl}" th:value="*{pictureUrl}" type="url">
+                <span class="text-danger" th:errors="*{pictureUrl}" th:if="${#fields.hasErrors('pictureUrl')}"></span>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-primary" data-bs-dismiss="modal">Add</button>
+            </div>
+        </form>
+    </div>
+</main>
+</div>
+
+<div th:replace="fragments/footer :: copy"></div>
+
+<script src="/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+</body>
+</html>

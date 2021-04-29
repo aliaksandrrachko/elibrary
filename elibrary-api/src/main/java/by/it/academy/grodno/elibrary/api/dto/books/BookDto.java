@@ -6,11 +6,13 @@ import lombok.experimental.SuperBuilder;
 import org.hibernate.validator.constraints.ISBN;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @NoArgsConstructor
@@ -34,6 +36,7 @@ public class BookDto extends AEntityDto<Long> {
 
     private CategoryDto category;
 
+    @NotBlank(message = "Field 'Publisher' can not be empty.")
     private String publisher;
 
     private List<String> authors;
@@ -41,15 +44,16 @@ public class BookDto extends AEntityDto<Long> {
     @Pattern(regexp = "^\\w{3}$", message = "Code by alpha-3/ISO 639-2.")
     private String language;
 
-    @NotNull
     @NotNull(message = "Field 'Publishing date' can not be empty.")
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private LocalDate datePublishing;
 
+    @Min(value = 1, message = "'Print length' can not be less then '1'")
     private int printLength;
 
     private String pictureUrl;
 
+    @Min(value = 0, message = "'Total count' can not be less then '0'")
     private int totalCount;
 
     private int availableCount;

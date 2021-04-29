@@ -4,7 +4,8 @@
 
 <body>
 <nav th:fragment="copy" class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
-    <div class="container-fluid">
+    <!--/*@thymesVar id="currentUser" type="by.it.academy.grodno.elibrary.api.dto.users.UserDto"*/-->
+    <div class="container-fluid" th:object="${currentUser}">
         <a class="navbar-brand" href="/">E-Library</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarsExampleDefault"
                 aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
@@ -17,26 +18,31 @@
                     <a class="nav-link" href="/books">Book</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/users/search">Searching book</a>
-                </li>
-                <li class="nav-item">
                     <a class="nav-link disabled" href="/admin" tabindex="-1" aria-disabled="true">Disabled</a>
                 </li>
-                <li class="nav-item dropdown">
+                <li th:if="${currentUser != null && currentUser.getRoles().contains('ROLE_ADMIN')}" class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="dropdown01" data-bs-toggle="dropdown"
                        aria-expanded="false">Admin</a>
                     <ul class="dropdown-menu" aria-labelledby="dropdown01">
                         <li><a class="dropdown-item" th:href="@{/admin/subscriptions}">Manage subscriptions</a></li>
                         <li><a class="dropdown-item" th:href="@{/admin/books}">Manage books</a></li>
                         <li><a class="dropdown-item" th:href="@{/admin/users}">Manage users</a></li>
-                        <li><a class="dropdown-item" th:href="@{/admin/books/add}">Add book</a></li>
+                        <li><a class="dropdown-item" th:href="@{/admin/categories/add}">Manage categories</a></li>
+                        <li>
+                           <!-- <a class="dropdown-item" th:href="@{/admin/books/add}">Add book</a>-->
+                            <form class="input-group mt-3" action="#" th:action="@{/admin/books/add}" th:method="get">
+                                <input type="number" name="countAuthors" class="form-control"
+                                       placeholder="Count of authors" aria-label="Count of authors"
+                                       aria-describedby="button-addon2" value="5">
+                                <button class="btn btn-outline-secondary" type="submit" id="button-addon2">Add</button>
+                            </form>
+                        </li>
                     </ul>
                 </li>
             </ul>
 
             <div class="d-flex">
-                <!--/*@thymesVar id="currentUser" type="by.it.academy.grodno.elibrary.api.dto.users.UserDto"*/-->
-                <div th:object="${currentUser}">
+                <div>
                     <div th:if="${currentUser != null}">
                         <a class="btn btn btn-outline-secondary" th:href="@{'/subscriptions'}">My subscriptions</a>
                         <a class="btn btn btn-outline-primary" th:href="@{'/users/info'}" th:text="*{username}"></a>

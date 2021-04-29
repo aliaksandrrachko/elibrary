@@ -4,44 +4,38 @@
 
 <body>
 
-<!--/*@thymesVar id="thisBook" type="java.util.Set<by.it.academy.grodno.elibrary.api.dto.books.BookDto>"*/-->
-<div th:fragment="undoBookingBookModal(thisBook)">
+<!--/*@thymesVar id="thisSubscription" type="java.util.Set<by.it.academy.grodno.elibrary.api.dto.books.SubscriptionDto>"*/-->
+<div th:fragment="undoBookingBookModal(thisSubscription)" th:if="${thisSubscription.status.equals('booking')}">
     <!-- Button trigger modal - subscription -->
+    <!--/*@thymesVar id="thisBook" type="java.util.Set<by.it.academy.grodno.elibrary.api.dto.books.BookDto>"*/-->
     <button type="button" class="btn btn-primary btn-sm mt-2"
             data-bs-toggle="modal"
-            th:attr="data-bs-target='#undoBookingBookForm' + ${thisBook.id}">
-        Booking
-    </button>
+            th:attr="data-bs-target='#undoBookingBookForm' + ${thisSubscription.id}">Undo</button>
 
     <!-- Modal -->
     <div class="modal fade"
-         th:id="'undoBookingBookForm' + ${thisBook.id}"
+         th:id="'undoBookingBookForm' + ${thisSubscription.id}"
          tabindex="-1"
-         th:attr="aria-labelledby='#undoBookingBookFormLabel' + ${thisBook.id}"
+         th:attr="aria-labelledby='#undoBookingBookFormLabel' + ${thisSubscription.id}"
          aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" th:id="'undoBookingBookFormLabel' + ${thisBook.id}">Undo booking</h5>
+                    <h5 class="modal-title" th:id="'undoBookingBookFormLabel' + ${thisSubscription.id}">Undo booking</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <h5 class="modal-title" th:text="${thisBook.title}"></h5>
-                    <form class="row g-3 mt-1" action="#" th:action="@{/subscriptions/undo}" method="post">
-                        <div class="col-auto">
-                            <label for="bookId" class="form-label visually-hidden">Book Id</label>
-                            <input type="text" id="bookId" name="bookId" class="form-control visually-hidden"
-                                   th:value="${thisBook.id}"
-                                   placeholder="Book Id" required autofocus>
-                        </div>
-                        <div class="col-auto">
-                            <label for="count" class="form-label visually-hidden">Count</label>
+                    <h5 class="modal-title" th:text="${thisSubscription.bookDetails.title}"></h5>
+                    <form class="row container-sm" action="#" th:action="@{/subscriptions/undo}" method="post">
+                        <div class="input-group mt-3 mb-3">
+                            <label for="count" class="input-group-text">Count</label>
                             <input type="number" id="count" name="count" class="form-control"
-                                   th:value="1"
-                                   placeholder="Count" required autofocus>
-                        </div>
-                        <div class="col-auto">
-                            <button class="btn btn-primary" type="submit">Undo booking</button>
+                                   th:value="1" placeholder="Count" required autofocus>
+                            <label for="subscriptionId" class="form-label visually-hidden">Subscription Id</label>
+                            <input type="text" id="subscriptionId" name="id" class="form-control visually-hidden"
+                                   th:value="${thisSubscription.id}"
+                                   placeholder="Book Id" required autofocus>
+                            <button class="btn btn-outline-primary" type="submit">Undo</button>
                         </div>
                     </form>
                 </div>

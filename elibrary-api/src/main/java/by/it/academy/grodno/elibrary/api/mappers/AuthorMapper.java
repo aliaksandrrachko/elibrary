@@ -11,6 +11,4 @@ public class AuthorMapper extends AGenericMapper<Author, AuthorDto, Integer>{
     protected AuthorMapper(ModelMapper modelMapper) {
         super(modelMapper, Author.class, AuthorDto.class);
     }
-
-
 }

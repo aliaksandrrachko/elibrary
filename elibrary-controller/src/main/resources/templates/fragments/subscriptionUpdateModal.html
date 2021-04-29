@@ -24,11 +24,11 @@
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" th:id="'subscriptionUpdateFormLabel' + ${thisSubscription.id}">
-                            Update</h5>
+                        <h5 class="modal-title" th:id="'subscriptionUpdateFormLabel' + ${thisSubscription.id}">Update</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
+                        <!--/*@thymesVar id="bookDetails" type="by.it.academy.grodno.elibrary.api.dto.books.BookDto"*/-->
                         <h5 class="modal-title" th:text="${thisSubscription.bookDetails.title}"></h5>
                         <h6 class="modal-title" th:text="'Took: ' + ${thisSubscription.took}"></h6>
                         <h6 class="modal-title" th:text="'Returned: ' + ${thisSubscription.returned} "></h6>
