@@ -33,7 +33,9 @@
                         <h6 class="modal-title" th:text="'Took: ' + ${thisSubscription.took}"></h6>
                         <h6 class="modal-title" th:text="'Returned: ' + ${thisSubscription.returned} "></h6>
                         <h6 class="modal-title" th:text="'Status: ' + ${thisSubscription.status}"></h6>
-                        <form class="input-group mt-3 mb-3" action="#" th:action="@{/admin/subscriptions}" method="post">
+                        <form class="input-group mt-3 mb-3" action="#"
+                              th:id="'subscriptionUpdateForlmInput' + ${thisSubscription.id}"
+                              th:action="@{/admin/subscriptions}" method="post">
                                 <label for="count" class="input-group-text">Count</label>
                                 <input type="number" id="count" name="count" class="form-control"
                                        th:value="${thisSubscription.took}"
@@ -54,11 +56,12 @@
                                     <option value="4">Extended</option>
                                     <option value="5">Undo booking</option>
                                 </select>
-                                <button class="btn btn-outline-primary" type="submit">Change</button>
                         </form>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button class="btn btn-primary" type="submit"
+                            th:form="'subscriptionUpdateForlmInput' + ${thisSubscription.id}">Change</button>
                     </div>
                 </div>
             </div>

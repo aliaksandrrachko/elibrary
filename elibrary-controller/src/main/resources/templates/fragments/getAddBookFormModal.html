@@ -1,0 +1,46 @@
+<!doctype html>
+
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+
+<body>
+
+<div th:fragment="getAddBookForm">
+    <!-- Button trigger modal set count of authors -->
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+            data-bs-target="#getAddBookFormInputCountOfAuthors">
+        Add Book
+    </button>
+
+    <!-- Modal -->
+    <div class="modal fade" id="getAddBookFormInputCountOfAuthors" tabindex="-1"
+         aria-labelledby="getAddBookFormInputCountOfAuthorsLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="getAddBookFormInputCountOfAuthorsLabel">Do you want add new book?</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <h5 class="modal-title">Write count of authors for the book</h5>
+                    <form class="input-group m-0 row justify-content-md-center" id="countAuthorsForm" action="#"
+                          th:action="@{/admin/books/add}" th:method="get">
+                        <div class="col-sm-3">
+                            <label class="text-center" for="countAuthors">Count of authors</label>
+                            <input type="number" name="countAuthors" class="form-control"
+                                   placeholder="Count of authors" aria-label="Count of authors"
+                                   value="5" id="countAuthors">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary" form="countAuthorsForm">Add book</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+
+</html>

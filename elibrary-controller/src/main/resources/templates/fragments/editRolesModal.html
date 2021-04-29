@@ -38,7 +38,8 @@
                                 <p class="m-0 right" th:text="*{role}"></p>
                             </td>
                             <td>
-                                <form action="#" th:action="@{/admin/users/roles/delete}" th:method="post">
+                                <form class="m-0 row justify-content-md-center" action="#"
+                                      th:action="@{/admin/users/roles/delete}" th:method="post">
                                     <div class="form-group visually-hidden">
                                         <label class="form-label" for="user-id">User ID</label>
                                         <input class="form-control" id="user-id" name="userId"

@@ -12,6 +12,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -61,10 +62,11 @@ public class BookService implements IBookService {
     public Optional<BookDto> create(BookDto entityDto) {
         entityDto.setCreated(LocalDateTime.now().withNano(0));
         entityDto.setUpdated(LocalDateTime.now().withNano(0));
+        entityDto.setAvailableCount(entityDto.getTotalCount());
         Book newBookData = bookMapper.toEntity(entityDto);
         createAndSetPublisherIfNotExists(newBookData, entityDto);
         createAndSetAuthorIfNotExists(newBookData, entityDto);
-        Book createdBook = bookJpaRepository.saveAndFlush(bookMapper.toEntity(entityDto));
+        Book createdBook = bookJpaRepository.save(newBookData);
         return Optional.of(bookMapper.toDto(createdBook));
     }
 
@@ -79,7 +81,7 @@ public class BookService implements IBookService {
         Set<String> booksAuthors = book.getAuthors().stream().map(Author::getAuthorName)
                 .collect(Collectors.toSet());
         bookDto.getAuthors().forEach(authorName -> {
-            if (!booksAuthors.contains(authorName)){
+            if (!booksAuthors.contains(authorName) && StringUtils.hasText(authorName)){
                 book.getAuthors().add(new Author(authorName));
             }
         });

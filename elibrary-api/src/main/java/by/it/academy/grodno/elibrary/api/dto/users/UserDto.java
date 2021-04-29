@@ -68,7 +68,7 @@ public class UserDto extends AEntityDto<Long> {
 
     public Set<String> getRoles(){
         if (roles == null){
-            return new HashSet<>();
+            return roles = new HashSet<>();
         } else {
             return roles;
         }

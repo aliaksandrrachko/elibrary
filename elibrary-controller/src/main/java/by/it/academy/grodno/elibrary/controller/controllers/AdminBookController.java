@@ -67,8 +67,8 @@ public class AdminBookController {
     }
 
     @GetMapping("/add")
-    public ModelAndView getAddBookFormStepOne(@RequestParam int countAuthors,
-                                                Principal principal) {
+    public ModelAndView getAddBookForm(@RequestParam int countAuthors,
+                                       Principal principal) {
         UserDto currentUser = userService.findById(principal.getName()).orElse(null);
 
         ModelAndView modelAndView = new ModelAndView();
@@ -99,7 +99,6 @@ public class AdminBookController {
     public ModelAndView addBook(@Valid @ModelAttribute(value = "bookDto") BookDto bookDto,
                                 BindingResult result,
                                 Principal principal) {
-
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("redirect:/books");
         if (principal == null) {
