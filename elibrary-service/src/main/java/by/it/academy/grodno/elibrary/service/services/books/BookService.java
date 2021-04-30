@@ -62,7 +62,6 @@ public class BookService implements IBookService {
     public Optional<BookDto> create(BookDto entityDto) {
         entityDto.setCreated(LocalDateTime.now().withNano(0));
         entityDto.setUpdated(LocalDateTime.now().withNano(0));
-        entityDto.setAvailableCount(entityDto.getTotalCount());
         Book newBookData = bookMapper.toEntity(entityDto);
         createAndSetPublisherIfNotExists(newBookData, entityDto);
         createAndSetAuthorIfNotExists(newBookData, entityDto);

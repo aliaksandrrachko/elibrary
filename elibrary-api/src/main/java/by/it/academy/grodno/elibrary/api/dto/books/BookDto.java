@@ -67,4 +67,12 @@ public class BookDto extends AEntityDto<Long> {
 
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private LocalDateTime updated;
+
+    public List<String> getAuthors() {
+        if (authors == null){
+            return authors = new ArrayList<>();
+        } else {
+            return authors;
+        }
+    }
 }

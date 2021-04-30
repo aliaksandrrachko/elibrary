@@ -89,17 +89,20 @@
                 <tr><th scope="row">Gender</th><td>
                     <div class="form-check form-check-inline">
                         <input class="form-check-input" th:field="${userDto.gender}" type="radio" name="genderRadio"
-                               id="genderMale" value="male">
+                               id="genderMale" value="male"
+                               th:checked="*{gender.equals('male')}">
                         <label class="form-check-label" for="genderMale">male</label>
                     </div>
                     <div class="form-check form-check-inline">
                         <input class="form-check-input" th:field="${userDto.gender}" type="radio" name="genderRadio"
-                               id="genderFemale" value="female">
+                               id="genderFemale" value="female"
+                               th:checked="*{gender.equals('female')}">
                         <label class="form-check-label" for="genderFemale">female</label>
                     </div>
                     <div class="form-check form-check-inline">
                         <input class="form-check-input" th:field="${userDto.gender}" type="radio" name="genderRadio"
-                               id="genderUnknown" value="unknown" checked="checked">
+                               id="genderUnknown" value="unknown" checked="checked"
+                               th:checked="*{gender.equals('unknown')}">
                         <label class="form-check-label" for="genderUnknown">don't say</label>
                     </div>
                 </td></tr>

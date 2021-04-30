@@ -98,7 +98,7 @@
                     <td class="p-1" th:text="${subscription.created}"></td>
                     <td class="p-1" th:text="${subscription.deadline}"></td>
                     <td class="p-1">
-                        <div th:replace="fragments/subscriptionUpdateModal :: subscriptionUpdateModal(thisSubscription=${subscription})"></div>
+                        <div th:replace="fragments/updateSubscriptionModal :: updateSubscriptionModal(thisSubscription=${subscription})"></div>
                     </td>
                 </tr>
                 </tbody>

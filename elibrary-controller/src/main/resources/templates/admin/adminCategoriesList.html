@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="Ales' Rachko, and Bootstrap contributors">
+    <meta name="generator" content="Hugo 0.80.0">
+    <title>Books</title>
+
+    <link rel="canonical" href="https://getbootstrap.com/docs/5.0/examples/starter-template/">
+
+    <!-- Bootstrap core CSS -->
+    <link href="/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+    <link href="/css/docs.css" rel="stylesheet" crossorigin="anonymous">
+
+    <!-- Favicons -->
+    <link rel="icon" href="/img/favicons/books-stack-of-three.png" sizes="32x32" type="image/png">
+    <meta name="theme-color" content="#7952b3">
+
+    <!-- Custom styles for this template -->
+    <link href="/css/starter-template.css" rel="stylesheet">
+</head>
+
+<body>
+<div th:replace="fragments/upperNavbar :: copy"></div>
+
+<div class="container-xxl my-md-4 bd-layout">
+    <main class="bd-main order-1">
+        <div class="bd-intro ps-lg-4">
+            <h1>Books</h1>
+            <p class="lead">Table of books in the database</p>
+        </div>
+        <div class="bd-content ps-lg-4">
+            <!-- There rending tree of categories with edit elements -->
+        </div>
+    </main>
+</div>
+
+<div th:replace="fragments/footer :: copy"></div>
+
+<script src="/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+<script src="/js/docs.min.js.js" crossorigin="anonymous"></script>
+</body>
+</html>

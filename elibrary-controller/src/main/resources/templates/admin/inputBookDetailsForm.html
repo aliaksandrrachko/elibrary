@@ -6,7 +6,7 @@
     <meta name="description" content="">
     <meta name="author" content="Ales' Rachko, and Bootstrap contributors">
     <meta name="generator" content="Hugo 0.80.0">
-    <title>Add Book</title>
+    <title>Write book data</title>
 
     <link rel="canonical" href="https://getbootstrap.com/docs/5.0/examples/starter-template/">
 
@@ -52,7 +52,10 @@
         </div>
 
         <div class="bd-content ps-lg-4">
-        <form action="#" enctype="multipart/form-data" th:href="@{'/addStepOne'}" th:method="post" th:object="${bookDto}">
+        <form action="#" enctype="multipart/form-data"
+              th:object="${bookDto}"
+              th:href="'admin/books/' + ${bookDto.id == null ? 'add' : 'update/'}"
+              th:method="post">
             <div class="row row-cols-auto pb-4 container-sm">
                 <div class="col">
                     <label class="form-label mb-1" for="isbn10">ISBN-10</label>
@@ -82,7 +85,8 @@
             <div class="row pb-4 container-sm">
                 <div class="col-6">
                     <select class="form-select" aria-label="Default select category" th:field="*{category.categoryName}">
-                        <option th:each="category : ${categoriesSet}" th:text="${category.categoryName}" th:value="${category.categoryName}"></option>
+                        <option th:each="category : ${categoriesSet}" th:text="${category.categoryName}" th:value="${category.categoryName}"
+                        th:selected="${bookDto.category != null && bookDto.category.categoryName != null && bookDto.category.getCategoryName().equals(category.categoryName)}"></option>
                     </select>
                 </div>
             </div>
@@ -125,15 +129,20 @@
                     <span class="text-danger" th:errors="*{totalCount}" th:if="${#fields.hasErrors('totalCount')}"></span>
                 </div>
                 <div class="col-3">
+                    <label class="form-label mb-2" for="availableCount">Available count</label>
+                    <input class="form-control" id="availableCount" placeholder="Available count" th:field="*{availableCount}" th:value="*{availableCount}" type="number">
+                    <span class="text-danger" th:errors="*{availableCount}" th:if="${#fields.hasErrors('availableCount')}"></span>
+                </div>
+                <div class="col-3">
                     <p class="form-label mb-1">This book:</p>
                     <label class="form-check-label" for="availableRadio1">
                         <input class="form-check-input" id="availableRadio1" type="radio"
-                               th:field="*{available}" value="1" name="available" checked>
-                        Available</label>
+                               th:field="*{available}" value="1" name="available"
+                               th:checked="*{available}">Available</label>
                     <label class="form-check-label" for="availableRadio2">
                         <input class="form-check-input" type="radio" id="availableRadio2"
-                               th:field="*{available}" value="0" name="available" >
-                        Not available</label>
+                               th:field="*{available}" value="0" name="available"
+                               th:checked="*{available}">Not available</label>
                 </div>
             </div>
             <div class="row row-cols-auto pb-4 container-sm">

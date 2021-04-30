@@ -7,13 +7,13 @@
 <aside th:fragment="navAsideSubcriptionStatusAndInput(currentStatusCode)" class="bd-sidebar">
     <nav id="bd-docs-nav" aria-label="Docs navigation">
         <div th:replace="::statusList(statusCode=${currentStatusCode})"></div>
-        <form class="input-group mt-5" action="#" th:action="@{/admin/subscriptions}" th:method="get">
+        <form class="input-group mt-5" action="#" th:action="@{subscriptions}" th:method="get">
             <input type="text" name="userId" class="form-control"
                    placeholder="User ID" aria-label="User library card number"
                    aria-describedby="button-addon1">
             <button class="btn btn-outline-secondary" type="submit" id="button-addon1">Find</button>
         </form>
-        <form class="input-group mt-3" action="#" th:action="@{/admin/subscriptions}" th:method="get">
+        <form class="input-group mt-3" action="#" th:action="@{subscriptions}" th:method="get">
             <input type="text" name="subscriptionId" class="form-control"
                    placeholder="Subscription ID" aria-label="User library card number"
                    aria-describedby="button-addon2">

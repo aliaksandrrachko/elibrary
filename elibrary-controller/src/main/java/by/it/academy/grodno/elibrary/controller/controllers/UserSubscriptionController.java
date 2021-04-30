@@ -31,6 +31,9 @@ public class UserSubscriptionController {
 
     @GetMapping
     public ModelAndView findAll(@RequestParam(value = "status", required = false) @Min(1) @Max(5) Integer status,
+                                @RequestParam(value = "subscriptionId", required = false) Long subscriptionId,
+                                @RequestParam(value = "title", required = false) String title,
+                                @RequestParam(value = "author", required = false) String author,
                                 Pageable pageable,
                                 Principal principal){
         Optional<UserDto> optionalUserDto = userService.findUser(principal);

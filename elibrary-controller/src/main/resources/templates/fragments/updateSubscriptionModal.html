@@ -5,7 +5,7 @@
 <body>
 
 <!--/*@thymesVar id="thisSubscription" type="by.it.academy.grodno.elibrary.api.dto.books.SubscriptionDto"*/-->
-<div th:fragment="subscriptionUpdateModal(thisSubscription)"
+<div th:fragment="updateSubscriptionModal(thisSubscription)"
      th:if="${!thisSubscription.getStatus().equalsIgnoreCase('completed')}">
     <!-- Button trigger modal - subscription -->
         <button type="button" class="btn btn-secondary btn-sm" data-bs-toggle="modal"

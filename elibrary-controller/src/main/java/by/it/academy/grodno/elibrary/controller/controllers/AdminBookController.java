@@ -9,7 +9,6 @@ import by.it.academy.grodno.elibrary.api.services.books.IBookService;
 import by.it.academy.grodno.elibrary.api.services.books.ICategoryService;
 import by.it.academy.grodno.elibrary.api.services.books.IPublisherService;
 import by.it.academy.grodno.elibrary.controller.utils.PageNumberListCreator;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -26,31 +25,42 @@ import java.util.*;
 @RequestMapping(value = "/admin/books")
 public class AdminBookController {
 
-    @Autowired
-    private IUserService userService;
-    @Autowired
-    private IBookService bookService;
-    @Autowired
-    private ICategoryService categoryService;
-    @Autowired
-    private IPublisherService publisherService;
-    @Autowired
-    private IAuthorService authorService;
+    private final IUserService userService;
+    private final IBookService bookService;
+    private final ICategoryService categoryService;
+    private final IPublisherService publisherService;
+    private final IAuthorService authorService;
+
+    public AdminBookController(IUserService userService, IBookService bookService, ICategoryService categoryService,
+                               IPublisherService publisherService, IAuthorService authorService) {
+        this.userService = userService;
+        this.bookService = bookService;
+        this.categoryService = categoryService;
+        this.publisherService = publisherService;
+        this.authorService = authorService;
+    }
 
     @GetMapping
     public ModelAndView findAllBook(@RequestParam(value = "categoryId", required = false) Integer categoryId,
-                                    @RequestParam(value = "bookId", required = false) Long bookId,
-                                    @RequestParam(value = "authorName", required = false) String authorName,
+                                    @RequestParam(value = "title", required = false) String title,
+                                    @RequestParam(value = "author", required = false) String author,
                                     @PageableDefault Pageable pageable,
                                     Principal principal) {
-        UserDto currentUser = userService.findUser(principal).orElse(null);
 
-        Page<BookDto> pageBookDto = bookService.findAll(categoryId, pageable);
         Set<CategoryDto> categoryDtoList = new HashSet<>(categoryService.findAll());
+        Page<BookDto> pageBookDto;
+        if (categoryId != null){
+            pageBookDto = bookService.findAll(categoryId, pageable);
+        } else if (title != null) {
+            pageBookDto = bookService.findAllByTitle(title, pageable);
+        } else if (author != null){
+            pageBookDto = bookService.findAllByAuthorName(author, pageable);
+        } else {
+            pageBookDto = bookService.findAll(pageable);
+        }
 
-        ModelAndView modelAndView = new ModelAndView();
+        ModelAndView modelAndView = getModelAndViewWithCurrentUserFromDb(principal);
         modelAndView.setViewName("admin/adminBooksList");
-        modelAndView.addObject("currentUser", currentUser);
         modelAndView.addObject("categoryDtoSet", categoryDtoList);
         modelAndView.addObject("pageBookDto", pageBookDto);
         modelAndView.addObject("pageNumbers",
@@ -69,60 +79,105 @@ public class AdminBookController {
     @GetMapping("/add")
     public ModelAndView getAddBookForm(@RequestParam int countAuthors,
                                        Principal principal) {
-        UserDto currentUser = userService.findById(principal.getName()).orElse(null);
-
-        ModelAndView modelAndView = new ModelAndView();
-        if (currentUser == null) {
-            modelAndView.setViewName("error");
-            modelAndView.addObject("error", "Authentication error!");
-        } else {
-            modelAndView.setViewName("admin/addBookForm");
-            modelAndView.addObject("currentUser", currentUser);
-            BookDto bookDto = new BookDto();
-            bookDto.setAuthors(getBlankListOfString(countAuthors));
-            bookDto.setCategory(new CategoryDto());
-            modelAndView.addObject("bookDto", bookDto);
-            prepareModelAndViewForAddBookForm(modelAndView);
-        }
+        ModelAndView modelAndView = getModelAndViewWithCurrentUserFromDb(principal);
+        modelAndView.setViewName("admin/inputBookDetailsForm");
+        BookDto bookDto = new BookDto();
+        bookDto.setAuthors(addEmptyStringToList(bookDto.getAuthors(), countAuthors));
+        bookDto.setCategory(new CategoryDto());
+        modelAndView.addObject("bookDto", bookDto);
+        prepareModelAndViewForAddAndUpdateBookForm(modelAndView);
         return modelAndView;
     }
 
-    private List<String> getBlankListOfString(int size){
-        List<String> list = new ArrayList<>();
+    private List<String> addEmptyStringToList(List<String> authors, int size){
         for (int i = 0; i < size; i++) {
-            list.add("");
+            authors.add("");
         }
-        return list;
+        return authors;
     }
 
     @PostMapping("/add")
     public ModelAndView addBook(@Valid @ModelAttribute(value = "bookDto") BookDto bookDto,
                                 BindingResult result,
                                 Principal principal) {
-        ModelAndView modelAndView = new ModelAndView();
+        ModelAndView modelAndView = getModelAndViewWithCurrentUserFromDb(principal);
         modelAndView.setViewName("redirect:/books");
-        if (principal == null) {
-            modelAndView.setViewName("error");
-            modelAndView.addObject("error", "You don't have permission");
-        } else if (result.hasErrors()) {
-            modelAndView.setViewName("admin/addBookForm");
+       if (result.hasErrors()) {
+            modelAndView.setViewName("admin/inputBookDetailsForm");
             modelAndView.addAllObjects(result.getModel());
             UserDto currentUser = userService.findById(principal.getName()).orElse(new UserDto());
             modelAndView.addObject("currentUser", currentUser);
             modelAndView.addObject("bookDto", bookDto);
-            prepareModelAndViewForAddBookForm(modelAndView);
+            prepareModelAndViewForAddAndUpdateBookForm(modelAndView);
         } else {
             Optional<BookDto> optionalAddedBook = bookService.create(bookDto);
-            optionalAddedBook.ifPresent(dto -> modelAndView.setViewName("redirect:/books/info/" + dto.getId()));
+            optionalAddedBook.ifPresent(dto -> modelAndView.setViewName("redirect:/books/" + dto.getId()));
         }
         return modelAndView;
     }
 
-    private void prepareModelAndViewForAddBookForm(ModelAndView modelAndView){
+    private void prepareModelAndViewForAddAndUpdateBookForm(ModelAndView modelAndView){
         modelAndView.addObject("categoriesSet", categoryService.findAllUnique());
         modelAndView.addObject("publishersList", publisherService.findAll());
         modelAndView.addObject("authorsList", authorService.findAll());
         Set<CategoryDto> categoryDtoList = new HashSet<>(categoryService.findAll());
         modelAndView.addObject("categoryDtoSet", categoryDtoList);
+    }
+
+    private ModelAndView getModelAndViewWithCurrentUserFromDb(Principal principal){
+        ModelAndView modelAndView = new ModelAndView();
+        UserDto currentUser = null;
+        if (principal != null){
+            currentUser = userService.findById(principal.getName()).orElse(null);
+        }
+        modelAndView.addObject("currentUser", currentUser);
+        return modelAndView;
+    }
+
+    @PostMapping("/delete")
+    public ModelAndView deleteUser(@Valid @Min(0) long bookId) {
+        bookService.delete(bookId);
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("redirect:/admin/books");
+        return modelAndView;
+    }
+
+    @GetMapping("/update/{bookId}")
+    public ModelAndView getUpdateBookForm(@PathVariable Long bookId,
+                                            @RequestParam(value = "countAuthors", defaultValue = "2") int countAuthors,
+                                           Principal principal) {
+
+        BookDto bookDtoForUpdate = bookService.findById(bookId).orElse(null);
+
+        ModelAndView modelAndView = getModelAndViewWithCurrentUserFromDb(principal);
+        if (bookDtoForUpdate == null) {
+            modelAndView.setViewName("error");
+            modelAndView.addObject("error", "Book not exists!");
+        } else {
+            modelAndView.setViewName("admin/inputBookDetailsForm");
+            bookDtoForUpdate.setAuthors(addEmptyStringToList(bookDtoForUpdate.getAuthors(), countAuthors));
+            modelAndView.addObject("bookDto", bookDtoForUpdate);
+            prepareModelAndViewForAddAndUpdateBookForm(modelAndView);
+        }
+        return modelAndView;
+    }
+
+    @PostMapping("/update/{bookId}")
+    public ModelAndView updateBook(@PathVariable @Valid @Min(0)  long bookId,
+                                    @Valid @ModelAttribute(value = "bookDto") BookDto bookDto,
+                                   BindingResult result,
+                                   Principal principal) {
+        ModelAndView modelAndView = getModelAndViewWithCurrentUserFromDb(principal);
+        modelAndView.setViewName("redirect:/books");
+        if (result.hasErrors()) {
+            modelAndView.setViewName("admin/inputBookDetailsForm");
+            modelAndView.addAllObjects(result.getModel());
+            modelAndView.addObject("bookDto", bookDto);
+            prepareModelAndViewForAddAndUpdateBookForm(modelAndView);
+        } else {
+            Optional<BookDto> optionalAddedBook = bookService.update(bookId, bookDto);
+            optionalAddedBook.ifPresent(dto -> modelAndView.setViewName("redirect:/books/" + dto.getId()));
+        }
+        return modelAndView;
     }
 }

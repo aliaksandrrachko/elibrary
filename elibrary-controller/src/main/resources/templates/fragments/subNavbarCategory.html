@@ -41,13 +41,13 @@
             </li>
         </ul>
         <div>
-            <form class="input-group mt-3" action="#" th:action="@{/books}" th:method="get">
+            <form class="input-group mt-3" action="#" th:action="@{books}" th:method="get">
                 <input type="text" name="title" class="form-control"
                        placeholder="Title" aria-label="Book's title"
                        aria-describedby="button-addon1">
                 <button class="btn btn-outline-secondary" type="submit" id="button-addon1">Find</button>
             </form>
-            <form class="input-group mt-3" action="#" th:action="@{/books}" th:method="get">
+            <form class="input-group mt-3" action="#" th:action="@{books}" th:method="get">
                 <input type="text" name="author" class="form-control"
                        placeholder="Author name" aria-label="Author's name"
                        aria-describedby="button-addon2">
@@ -76,7 +76,7 @@
             <div th:replace="::subnavbar (categorySet=${category.categories})"></div>
         </div>
         <a th:if="${category.categories == null || category.categories.isEmpty()}"
-           th:href="@{/books(categoryId=${category.id})}"
+           th:href="@{books(categoryId=${category.id})}"
            th:text="${category.categoryName}"
            class="d-inline-flex align-items-center rounded"></a>
     </li>
@@ -106,7 +106,7 @@
             </div>
         </div>
         <a th:if="${category.categories == null || category.categories.isEmpty()}"
-           th:href="@{/books(categoryId=${category.id})}"
+           th:href="@{books(categoryId=${category.id})}"
            th:text="${category.categoryName}"
            class="m-0 p-0"></a>
     </div>
