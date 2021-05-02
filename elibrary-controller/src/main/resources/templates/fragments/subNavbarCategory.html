@@ -35,7 +35,7 @@
             <div th:replace="::accordion-menu (categorySet=${categoryDtoSet})"></div>
             <li class="my-3 mx-4 border-top"></li>
             <li>
-                <a href="/books" class="d-inline-flex align-items-center rounded">
+                <a th:href="@{books}" class="d-inline-flex align-items-center rounded">
                     All books
                 </a>
             </li>

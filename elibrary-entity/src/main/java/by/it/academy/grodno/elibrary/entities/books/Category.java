@@ -25,7 +25,7 @@ public class Category extends AEntity<Integer> {
     @JoinColumn(name = "parent_id")
     private Category parentCategory;
 
-    @OneToMany(fetch = FetchType.EAGER)
+    @OneToMany(fetch = FetchType.EAGER, cascade = {CascadeType.REMOVE, CascadeType.MERGE})
     @JoinColumn(name = "parent_id", referencedColumnName = "id")
     private Set<Category> categories;
 

@@ -5,6 +5,8 @@ import by.it.academy.grodno.elibrary.api.services.IAGenericCrudService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.util.Optional;
+
 public interface IBookService extends IAGenericCrudService<BookDto, Long> {
 
     Page<BookDto> findAllByCategoryId(Integer categoryId, Pageable pageable);
@@ -12,4 +14,5 @@ public interface IBookService extends IAGenericCrudService<BookDto, Long> {
     Page<BookDto> findAllByTitle(String title, Pageable pageable);
     Page<BookDto> findAllByAuthorName(String author, Pageable pageable);
     void setAvailability(long bookId);
+    Optional<BookDto> findByIsbnInWeb(String isbn);
 }

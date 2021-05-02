@@ -18,7 +18,6 @@ import javax.persistence.EntityManager;
 import javax.sql.DataSource;
 
 import java.time.LocalDate;
-import java.util.Collections;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;

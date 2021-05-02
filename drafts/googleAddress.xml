@@ -1,0 +1,17 @@
+<entry xmlns="http://www.w3.org/2005/Atom" xmlns:gd="http://schemas.google.com/g/2005">
+    <gd:name>
+        <gd:givenName>First</gd:givenName>
+        <gd:familyName>Last</gd:familyName>
+        <gd:fullName>First Last</gd:fullName>
+    </gd:name>
+    <!-- ... -->
+    <gd:structuredPostalAddress rel="http://schemas.google.com/g/2005#work" primary="true">
+        <gd:city>Mountain View</gd:city>
+        <gd:street>1600 Amphitheatre Pkwy</gd:street>
+        <gd:region>CA</gd:region>
+        <gd:postcode>94043</gd:postcode>
+        <gd:country>United States</gd:country>
+        <gd:formattedAddress>1600 Amphitheatre Pkwy Mountain View, CA 94043 United States</gd:formattedAddress>
+    </gd:structuredPostalAddress>
+    <!-- ... -->
+</entry>

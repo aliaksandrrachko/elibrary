@@ -5,9 +5,13 @@ import by.it.academy.grodno.elibrary.api.dao.BookJpaRepository;
 import by.it.academy.grodno.elibrary.api.dto.books.BookDto;
 import by.it.academy.grodno.elibrary.api.mappers.BookMapper;
 import by.it.academy.grodno.elibrary.api.services.books.IBookService;
+import by.it.academy.grodno.elibrary.api.utils.BookDataProvider;
 import by.it.academy.grodno.elibrary.entities.books.Author;
 import by.it.academy.grodno.elibrary.entities.books.Book;
 import by.it.academy.grodno.elibrary.entities.books.Publisher;
+import by.it.academy.grodno.elibrary.entities.utils.IsbnUtils;
+import org.jetbrains.annotations.NotNull;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
@@ -142,5 +146,14 @@ public class BookService implements IBookService {
             book.setAvailable(!book.isAvailable());
             bookJpaRepository.save(book);
         });
+    }
+
+    @Autowired
+    private BookDataProvider bookDataWebProvider;
+
+    @Override
+    public Optional<BookDto> findByIsbnInWeb(@NotNull String isbn) {
+        String isbn13 = IsbnUtils.toIsbn13(isbn);
+        return bookDataWebProvider.getBook(isbn13).map(bookMapper::toDto);
     }
 }

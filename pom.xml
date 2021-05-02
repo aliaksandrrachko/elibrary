@@ -24,6 +24,7 @@
         <module>elibrary-api</module>
         <module>elibrary-controller</module>
         <module>elibrary-rest</module>
+        <module>elibrary-web</module>
     </modules>
 
     <properties>

@@ -9,7 +9,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Min;
 import java.security.Principal;
+import java.util.HashSet;
 import java.util.Set;
 
 @RestController
@@ -26,7 +28,7 @@ public class AdminCategoryController {
 
     @GetMapping
     public ModelAndView getEditCategoryPage(Principal principal) {
-        Set<CategoryDto> categoryDtoSet = categoryService.findAllUnique();
+        Set<CategoryDto> categoryDtoSet = new HashSet<>(categoryService.findAll());
 
         ModelAndView modelAndView = getModelAndViewWithCurrentUserFromDb(principal);
         modelAndView.setViewName("admin/adminCategoriesList");
@@ -36,9 +38,8 @@ public class AdminCategoryController {
 
     @PostMapping
     public ModelAndView createCategory(@Valid @ModelAttribute(value = "categoryDto") CategoryDto categoryDto,
-                                       BindingResult result,
-                                       Principal principal){
-        ModelAndView modelAndView = getModelAndViewWithCurrentUserFromDb(principal);
+                                       BindingResult result){
+        ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("redirect:/admin/categories");
         if (result.hasErrors()){
             modelAndView.addObject(result.getModel());
@@ -46,6 +47,29 @@ public class AdminCategoryController {
         } else {
             categoryService.create(categoryDto);
         }
+        return modelAndView;
+    }
+
+    @PostMapping("/rename/{categoryId}")
+    public ModelAndView renameCategory(@PathVariable @Valid @Min(0) int categoryId,
+                                        @Valid @ModelAttribute(value = "categoryDto") CategoryDto categoryDto,
+                                       BindingResult result){
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("redirect:/admin/categories");
+        if (result.hasErrors()){
+            modelAndView.addObject(result.getModel());
+            modelAndView.addObject("categoryDto", categoryDto);
+        } else {
+            categoryService.update(categoryId, categoryDto);
+        }
+        return modelAndView;
+    }
+
+    @PostMapping("/delete/{categoryId}")
+    public ModelAndView deleteCategory(@PathVariable @Valid @Min(0) int categoryId){
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("redirect:/admin/categories");
+        categoryService.delete(categoryId);
         return modelAndView;
     }
 

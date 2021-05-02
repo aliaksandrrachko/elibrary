@@ -21,4 +21,5 @@ public interface ISubscriptionService {
     Page<SubscriptionDto> findAllByUserIdAndStatus(Long userId, Integer statusCode, Pageable pageable);
     Page<SubscriptionDto> findAllByStatus(Integer statusCode, Pageable pageable);
     Optional<SubscriptionDto> undoBooking(SubscriptionRequest request);
+    Optional<SubscriptionDto> findBySubscriptionIdAndUserId(Long subscriptionId, Long id);
 }

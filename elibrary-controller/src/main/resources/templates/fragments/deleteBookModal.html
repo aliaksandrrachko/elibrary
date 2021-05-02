@@ -31,12 +31,8 @@
 
                 <div class="modal-body">
                     <p th:text="'Do you really want to delete: ' + *{book.title} + '?'"></p>
-                    <form action="#" th:action="@{/admin/books/delete}" th:method="POST"
+                    <form action="#" th:action="@{'books/delete/' + ${book.id}}" th:method="POST"
                           th:id="'deleteBookFormId' + *{book.id}">
-                        <label for="bookId" class="form-label visually-hidden">Book ID</label>
-                        <input class="form-control visually-hidden" id="bookId" name="userId"
-                               placeholder="UserId" th:value="*{book.id}"
-                               type="text">
                     </form>
                 </div>
 

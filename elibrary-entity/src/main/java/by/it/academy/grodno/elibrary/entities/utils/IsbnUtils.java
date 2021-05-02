@@ -17,6 +17,9 @@ package by.it.academy.grodno.elibrary.entities.utils;
  */
 public final class IsbnUtils {
 
+    private IsbnUtils() {
+    }
+
     private static final String CONSTANT_PREFIX_GS1 = "978";
 
     public static boolean isValid(String isbnString){
@@ -46,24 +49,30 @@ public final class IsbnUtils {
     }
 
     public static String toIsbn10(String isbn13){
-        if (isIsbn13(isbn13)) {
-            String informationDigits = isbn13.substring(3, 12);
+        String cleanerIsbn = getOnlyDigit(isbn13);
+        if (isIsbn13(cleanerIsbn)) {
+            String informationDigits = cleanerIsbn.substring(3, 12);
             int cheekNumber = calculateCheekNumberIsbn10(informationDigits);
             return informationDigits + cheekNumber;
+        } else if (isIsbn10(cleanerIsbn)){
+            return cleanerIsbn;
         } else {
             throw new IllegalArgumentException(
-                    String.format("The number '%s' is not ISBN-13", isbn13));
+                    String.format("The number '%s' is not ISBN", isbn13));
         }
     }
 
     public static String toIsbn13(String isbn10){
-        if (isIsbn10(isbn10)) {
-            String informationDigits = CONSTANT_PREFIX_GS1 + isbn10.substring(0, 9);
+        String cleanerIsbn = getOnlyDigit(isbn10);
+        if (isIsbn10(cleanerIsbn)) {
+            String informationDigits = CONSTANT_PREFIX_GS1 + cleanerIsbn.substring(0, 9);
             int cheekNumber = calculateCheekNumberIsbn13(informationDigits);
             return informationDigits + cheekNumber;
+        } else if (isIsbn13(cleanerIsbn)) {
+            return cleanerIsbn;
         } else {
             throw new IllegalArgumentException(
-                    String.format("The number '%s' is not ISBN-10", isbn10));
+                    String.format("The number '%s' is not ISBN", isbn10));
         }
     }
 

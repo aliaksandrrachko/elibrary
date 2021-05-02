@@ -48,6 +48,7 @@ public class UserDto extends AEntityDto<Long> {
     @Pattern(regexp = "^\\d{9}$", message = "'Phone' can be in format (xx)xxxxxxx")
     private String phoneNumber;
     @Valid
+    @Builder.Default
     private AddressDto addressDto = new AddressDto();
     private String gender;
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)

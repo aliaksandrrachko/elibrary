@@ -1,0 +1,50 @@
+<!doctype html>
+
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+
+<body>
+
+<!--/*@thymesVar id="parentCategory" type="by.it.academy.grodno.elibrary.api.dto.books.CategoryDto"*/-->
+<div th:fragment="addParentCategoryModal">
+    <!-- Button trigger modal delete category -->
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+            data-bs-target="#addParentCategoryModal">Add parent category</button>
+
+    <!-- delete category modal -->
+    <div class="modal fade" id="addParentCategoryModal" tabindex="-1"
+         aria-labelledby="#addParentCategoryModallLabel"
+         aria-hidden="true">
+
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"
+                        id="addParentCategoryModalLabel">Do you want add new category?</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <div class="modal-body">
+                    <p>Do you really want to add new parent cateogry ?</p>
+                    <form action="#" th:action="@{categories}" th:method="POST"
+                         id="addParentCategoryFormId">
+                        <div class="input-group mt-3 mb-3">
+                            <label for="categoryName" class="input-group-text">Category name</label>
+                            <input type="text" id="categoryName" name="categoryName" class="form-control"
+                                   placeholder="Category name" required autofocus>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" data-bs-dismiss="modal" type="button">Close</button>
+                    <button class="btn btn-primary" type="submit"
+                            form="addParentCategoryFormId">Add</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+
+</html>

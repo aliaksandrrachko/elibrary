@@ -60,7 +60,7 @@ public class AdminSubscriptionController {
         return modelAndView;
     }
 
-    @PostMapping(value = "/subscriptions")
+    @PostMapping(value = "/subscriptions/update")
     public ModelAndView updateSubscription(@Valid SubscriptionRequest request,
                                            BindingResult result) {
         if (!result.hasErrors()) {
@@ -71,7 +71,7 @@ public class AdminSubscriptionController {
         return modelAndView;
     }
 
-    @PostMapping(value = "/subscriptions/create")
+    @PostMapping(value = "/subscriptions")
     public ModelAndView createSubscription(@Valid SubscriptionRequest request,
                                            BindingResult result){
         ModelAndView modelAndView = new ModelAndView();

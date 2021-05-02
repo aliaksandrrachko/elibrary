@@ -35,7 +35,7 @@
                         <h6 class="modal-title" th:text="'Status: ' + ${thisSubscription.status}"></h6>
                         <form class="input-group mt-3 mb-3" action="#"
                               th:id="'subscriptionUpdateForlmInput' + ${thisSubscription.id}"
-                              th:action="@{/admin/subscriptions}" method="post">
+                              th:action="@{/admin/subscriptions/update}" method="post">
                                 <label for="count" class="input-group-text">Count</label>
                                 <input type="number" id="count" name="count" class="form-control"
                                        th:value="${thisSubscription.took}"

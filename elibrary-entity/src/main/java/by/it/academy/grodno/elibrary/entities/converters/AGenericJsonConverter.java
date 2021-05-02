@@ -31,7 +31,7 @@ public abstract class AGenericJsonConverter<X> implements AttributeConverter<X, 
     @Override
     public String convertToDatabaseColumn(X attribute) {
         if (attribute == null) {
-            return "";
+            return null;
         }
         try {
             return OBJECT_MAPPER.writeValueAsString(attribute);

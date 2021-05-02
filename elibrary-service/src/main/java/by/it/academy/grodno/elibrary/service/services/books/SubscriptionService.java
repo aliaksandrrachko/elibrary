@@ -92,9 +92,9 @@ public class SubscriptionService implements ISubscriptionService {
     @Override
     @Transactional
     public void delete(Long id) {
-        Optional<Subscription> bookOptional = subscriptionJpaRepository.findById(id);
-        if (bookOptional.isPresent() && bookOptional.get().getStatus().equals(SubscriptionStatus.COMPLETED)) {
-            bookOptional.ifPresent(subscriptionJpaRepository::delete);
+        Optional<Subscription> subscriptionOptional = subscriptionJpaRepository.findById(id);
+        if (subscriptionOptional.isPresent() && subscriptionOptional.get().getStatus().equals(SubscriptionStatus.COMPLETED)) {
+            subscriptionOptional.ifPresent(subscriptionJpaRepository::delete);
         }
     }
 
@@ -115,6 +115,11 @@ public class SubscriptionService implements ISubscriptionService {
     public Optional<SubscriptionDto> undoBooking(SubscriptionRequest request) {
         request.setCode(5);
         return update(request.getId(), request);
+    }
+
+    @Override
+    public Optional<SubscriptionDto> findBySubscriptionIdAndUserId(Long subscriptionId, Long id) {
+        return subscriptionJpaRepository.findByIdAndUserId(subscriptionId, id).map(subscriptionMapper::toDto);
     }
 
     @Override

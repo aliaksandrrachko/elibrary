@@ -9,6 +9,7 @@ import by.it.academy.grodno.elibrary.entities.users.Address;
 import by.it.academy.grodno.elibrary.entities.users.Role;
 import by.it.academy.grodno.elibrary.entities.users.User;
 import by.it.academy.grodno.elibrary.service.exceptions.PasswordMatchException;
+import by.it.academy.grodno.elibrary.service.utils.RandomPasswordGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -19,9 +20,7 @@ import org.springframework.util.StringUtils;
 
 import java.security.Principal;
 import java.time.LocalDateTime;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -40,21 +39,9 @@ public class UserService implements IUserService {
     private RoleJpaRepository roleJpaRepository;
 
     @Override
-    public Optional<UserDto> findUserByUserName(String username) {
-        Optional<User> optionalUser = userJpaRepository.findByUsername(username);
-        return optionalUser.map(user -> userMapper.toDto(user));
-    }
-
-    @Override
     public Page<UserDto> findAll(Pageable pageable) {
         Page<User> user = userJpaRepository.findAll(pageable);
         return userMapper.toPageDto(user);
-    }
-
-    @Override
-    public Optional<UserDto> getUserBySocialId(Long socialId) {
-        Optional<User> optionalUser = userJpaRepository.findBySocialId(socialId);
-        return optionalUser.map(user -> userMapper.toDto(user));
     }
 
     @Override
@@ -108,9 +95,6 @@ public class UserService implements IUserService {
     @Override
     @Transactional
     public Optional<UserDto> create(UserDto entityDto) {
-  /*      if (entityDto.getPassword() == null && entityDto.getPasswordConfirm() == null) {
-
-        } */
         if (entityDto.getPassword().equals(entityDto.getPasswordConfirm())){
             entityDto.setRoles(Collections.singleton("ROLE_USER"));
             entityDto.setUsername(entityDto.getFirstName() + " " + entityDto.getLastName());
@@ -124,6 +108,25 @@ public class UserService implements IUserService {
         } else  {
             throw new PasswordMatchException(entityDto);
         }
+    }
+
+    @Override
+    @Transactional
+    public Optional<User> createUserFromSocialNetwork(User user){
+        user.setCreated(LocalDateTime.now().withNano(0));
+        user.setUpdated(LocalDateTime.now().withNano(0));
+        String randomPassword = RandomPasswordGenerator.generateRandomPassword();
+        user.setPassword(bCryptPasswordEncoder.encode(randomPassword));
+        Set<Role> roleSet = new HashSet<>();
+        user.getRoles().forEach(r -> roleJpaRepository.findByRoleName(r.getRoleName()).ifPresent(roleSet::add));
+        user.setRoles(roleSet);
+        user = userJpaRepository.save(user);
+        return Optional.of(user);
+    }
+
+    @Override
+    public Optional<User> findByEmailOrSocialId(String email, Long socialId){
+        return userJpaRepository.findByEmailOrSocialId(email, socialId);
     }
 
     @Override

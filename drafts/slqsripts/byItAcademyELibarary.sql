@@ -583,3 +583,5 @@ VALUES (5, 17);
 # into subscription (book_id, subscription_created, subscription_deadline, returned, status_code, took, user_id)
 # values (1, NOW(), DATE_ADD(NOW(), INTERVAL 1 DAY), 0, 1, 2, 2);
 
+INSERT INTO user (email, username, first_name, last_name, middle_name, phone_number, address_id, gender, birthday, password)
+VALUES ('egsdset.od12io@Donec.ca', 'Arm1ansd Parrish', 'Clf12eo', 'Maci1ass', 'Gretdc2hen', '', 2, 'm', '2021-03-01', '$2a$10$Z1/.F4bRuyOGyL7NQrmjhufHf8XrHIEjPfBz9tlPbPcWrLpvPWKfq');
