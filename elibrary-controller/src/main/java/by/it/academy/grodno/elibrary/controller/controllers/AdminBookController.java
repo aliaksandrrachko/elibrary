@@ -77,7 +77,7 @@ public class AdminBookController {
     }
 
     @GetMapping("/add")
-    public ModelAndView getAddBookForm(@RequestParam(value = "countAuthors", required = false) Integer countAuthors,
+    public ModelAndView getAddBookForm(@RequestParam(value = "countAuthors", required = false, defaultValue = "3") int countAuthors,
                                        @RequestParam(value = "isbn", required = false) String isbn,
                                        Principal principal) {
         ModelAndView modelAndView = getModelAndViewWithCurrentUserFromDb(principal);
@@ -87,6 +87,7 @@ public class AdminBookController {
             BookDto bookDto;
             if (optionalBookDto.isPresent()){
                 bookDto = optionalBookDto.get();
+                addEmptyStringToList(bookDto.getAuthors(), countAuthors);
             } else {
                 modelAndView.setViewName("redirect:/error");
                 modelAndView.addObject("error", "Resource didn't find.");
