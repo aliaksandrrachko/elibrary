@@ -39,8 +39,8 @@
 </aside>
 
 <!--/*@thymesVar id="categorySet" type="java.util.Set<by.it.academy.grodno.elibrary.api.dto.books.CategoryDto>"*/-->
-<div th:fragment="accordion-menu (categorySet)">
-    <div th:if="${categorySet != null && !categorySet.isEmpty()}"
+<div th:fragment="accordion-menu (categorySet)"
+     th:if="${categorySet != null && !categorySet.isEmpty()}"
          th:each="category : ${categorySet}" th:id="'accordionCategory' + *{category.id}"
          th:class="${category.categories != null && !category.categories.isEmpty() ? 'accordion' : 'p-1 border-bottom'}">
         <!--/*@thymesVar id="categories" type="java.util.Set<by.it.academy.grodno.elibrary.api.dto.books.CategoryDto>"*/-->
@@ -58,14 +58,14 @@
                  th:attr="aria-labelledby='heading' + *{category.id}, data-bs-parent='#accordionCategory' + *{category.id}">
                 <div class="accordion-body p-1">
                     <div th:replace="::accordion-menu (categorySet=${category.categories})"></div>
+                    <a class="p-2" th:href="@{books(categoryId=${category.id})}">All</a>
                 </div>
             </div>
         </div>
         <a th:if="${category.categories == null || category.categories.isEmpty()}"
-           th:href="@{/books(categoryId=${category.id})}"
+           th:href="@{books(categoryId=${category.id})}"
            th:text="${category.categoryName}"
            class="m-0 p-0"></a>
-    </div>
 </div>
 
 </body>

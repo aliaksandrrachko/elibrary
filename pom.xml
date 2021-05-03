@@ -25,6 +25,7 @@
         <module>elibrary-controller</module>
         <module>elibrary-rest</module>
         <module>elibrary-web</module>
+        <module>elibrary-utils</module>
     </modules>
 
     <properties>

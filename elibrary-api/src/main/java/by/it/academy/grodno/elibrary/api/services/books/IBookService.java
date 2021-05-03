@@ -15,4 +15,5 @@ public interface IBookService extends IAGenericCrudService<BookDto, Long> {
     Page<BookDto> findAllByAuthorName(String author, Pageable pageable);
     void setAvailability(long bookId);
     Optional<BookDto> findByIsbnInWeb(String isbn);
+    Page<BookDto> findAllIncludeSubCategories(Integer categoryId, Pageable pageable);
 }

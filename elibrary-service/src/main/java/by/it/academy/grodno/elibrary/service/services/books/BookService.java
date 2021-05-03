@@ -2,12 +2,14 @@ package by.it.academy.grodno.elibrary.service.services.books;
 
 import by.it.academy.grodno.elibrary.api.dao.AuthorJpaRepository;
 import by.it.academy.grodno.elibrary.api.dao.BookJpaRepository;
+import by.it.academy.grodno.elibrary.api.dao.CategoryJpaRepository;
 import by.it.academy.grodno.elibrary.api.dto.books.BookDto;
 import by.it.academy.grodno.elibrary.api.mappers.BookMapper;
 import by.it.academy.grodno.elibrary.api.services.books.IBookService;
 import by.it.academy.grodno.elibrary.api.utils.BookDataProvider;
 import by.it.academy.grodno.elibrary.entities.books.Author;
 import by.it.academy.grodno.elibrary.entities.books.Book;
+import by.it.academy.grodno.elibrary.entities.books.Category;
 import by.it.academy.grodno.elibrary.entities.books.Publisher;
 import by.it.academy.grodno.elibrary.entities.utils.IsbnUtils;
 import org.jetbrains.annotations.NotNull;
@@ -19,9 +21,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
+import java.util.concurrent.LinkedBlockingQueue;
 import java.util.stream.Collectors;
 
 @Component
@@ -31,11 +32,14 @@ public class BookService implements IBookService {
     private final BookMapper bookMapper;
     private final AuthorJpaRepository authorJpaRepository;
     private final BookJpaRepository bookJpaRepository;
+    private final CategoryJpaRepository categoryJpaRepository;
 
-    public BookService(BookMapper bookMapper, AuthorJpaRepository authorJpaRepository, BookJpaRepository bookJpaRepository) {
+    public BookService(BookMapper bookMapper, AuthorJpaRepository authorJpaRepository,
+                       BookJpaRepository bookJpaRepository, CategoryJpaRepository categoryJpaRepository) {
         this.bookMapper = bookMapper;
         this.authorJpaRepository = authorJpaRepository;
         this.bookJpaRepository = bookJpaRepository;
+        this.categoryJpaRepository = categoryJpaRepository;
     }
 
     @Override
@@ -155,5 +159,30 @@ public class BookService implements IBookService {
     public Optional<BookDto> findByIsbnInWeb(@NotNull String isbn) {
         String isbn13 = IsbnUtils.toIsbn13(isbn);
         return bookDataWebProvider.getBook(isbn13).map(bookMapper::toDto);
+    }
+
+    @Override
+    public Page<BookDto> findAllIncludeSubCategories(Integer categoryId, Pageable pageable) {
+        Optional<Category> parentCategoryOptional = categoryJpaRepository.findById(categoryId);
+        if (!parentCategoryOptional.isPresent()){
+            return Page.empty(pageable);
+        }
+        Set<Category> allCategoryIncludeSubCategories = getNestedCategory(parentCategoryOptional.get());
+        return bookMapper.toPageDto(bookJpaRepository.findByCategoryIn(allCategoryIncludeSubCategories, pageable));
+    }
+
+    private Set<Category> getNestedCategory(Category category){
+        Queue<Category> categoryQueue = new LinkedBlockingQueue<>();
+        categoryQueue.add(category);
+        Set<Category> categorySet = new HashSet<>();
+        while(!categoryQueue.isEmpty()){
+            Category categoryFromQueue = categoryQueue.poll();
+            Set<Category> subCategories = categoryFromQueue.getCategories();
+            if (subCategories != null && !subCategories.isEmpty()){
+                categoryQueue.addAll(subCategories);
+            }
+            categorySet.add(categoryFromQueue);
+        }
+        return categorySet;
     }
 }

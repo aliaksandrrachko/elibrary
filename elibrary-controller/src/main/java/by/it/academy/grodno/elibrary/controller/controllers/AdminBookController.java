@@ -50,7 +50,7 @@ public class AdminBookController {
         Set<CategoryDto> categoryDtoSet = new HashSet<>(categoryService.findAll());
         Page<BookDto> pageBookDto;
         if (categoryId != null){
-            pageBookDto = bookService.findAll(categoryId, pageable);
+            pageBookDto = bookService.findAllIncludeSubCategories(categoryId, pageable);
         } else if (title != null) {
             pageBookDto = bookService.findAllByTitle(title, pageable);
         } else if (author != null){
