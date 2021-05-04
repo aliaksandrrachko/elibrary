@@ -20,20 +20,24 @@ import java.util.concurrent.Executor;
 @Slf4j
 public class MailConfiguration {
 
+    @Value("${spring.mail.username}") private String mailUsername;
+    @Value("${spring.mail.password}") private String encoderPassword;
+    @Value("${spring.mail.properties.mail.debug}") private String mailDebugProperty;
+    @Value("${spring.mail.properties.mail.smtp.auth}") private String mailSmtpAuthProperty;
+    @Value("${spring.mail.properties.mail.smtp.starttls.enable}") private String mailSmtpStarttlsEnableProperty;
+    @Value("${spring.mail.properties.mail.transport.protocol}") private String mailTransportProtocolProperty;
+    @Value("${spring.mail.host}") private String mailHostProperty;
+    @Value("${spring.mail.port}") private int mailPortProperty;
+    @Value("${spring.mail.default-encoding}") private String defaultEncoding;
+
     @Bean("applicationMailSender")
-    public JavaMailSender mailSender(@Value("${spring.mail.username}") String mailUsername,
-                                     @Value("${spring.mail.password}") String encoderPassword,
-                                    @Value("${spring.mail.properties.mail.debug}") String mailDebugProperty,
-                                     @Value("${spring.mail.properties.mail.smtp.auth}") String mailSmtpAuthProperty,
-                                     @Value("${spring.mail.properties.mail.smtp.starttls.enable}") String mailSmtpStarttlsEnableProperty,
-                                     @Value("${spring.mail.properties.mail.transport.protocol}") String mailTransportProtocolProperty,
-                                     @Value("${spring.mail.host}") String mailHostProperty,
-                                     @Value("${spring.mail.port}") int mailPortProperty) {
+    public JavaMailSender mailSender() {
         JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
 
         mailSender.setHost(mailHostProperty);
         mailSender.setPort(mailPortProperty);
         mailSender.setUsername(mailUsername);
+        mailSender.setDefaultEncoding(defaultEncoding);
         mailSender.setPassword(getDecryptPassword(encoderPassword));
 
         Properties javaMailProperties = new Properties();

@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" >
 <head>
     <title>Email</title>
 
@@ -7,16 +7,19 @@
         .table {
             font-size: 12px;
             font-family: Arial, sans-serif;
-            margin-left: auto;
-            margin-right: auto;
+            margin: 4px auto;
+        }
+        p {
+            margin: 4px;
         }
         .welcome {
             font-size: 24px;
             font-family: Arial, sans-serif;
         }
         .p1 {
-            font-size: 12px;
+            font-size: 16px;
             font-family: Arial, sans-serif;
+            margin: 3px;
         }
     </style>
 </head>
@@ -40,8 +43,7 @@
                 <tr>
                     <td style="padding:20px 20px 20px 20px;background-color:#b4d1db;color:#022731;text-align:center;border-radius:8px">
                         <p class="welcome">Hello <span th:text="${user.username}"></span>, welcome to E-Library!</p>
-                        <p class="p1">You booking book, you can pick up the
-                            order</p>
+                        <p class="p1">You booking book, you can pick up the order by: 184 Dominicans Street, Hrodna, Belarus</p>
                         <p class="p1">Number of your order: <span th:text="${subscription.id}"></span></p>
                         <p style="font-family:Arial,sans-serif;">Book info:</p>
 
@@ -51,7 +53,7 @@
                                 <td>
                                     <!--/*@thymesVar id="subscription" type="by.it.academy.grodno.elibrary.entities.books.Subscription"*/-->
                                     <!--/*@thymesVar id="book" type="by.it.academy.grodno.elibrary.entities.books.Book"*/-->
-                                    <img src="#" th:src="${subscription.book.pictureUrl}" alt="no picture" width="90"/>
+                                    <img src="#" th:src="${subscription.book.pictureUrl}" alt="no picture" width="110"/>
                                 </td>
                                 <td>
                                     <!--/*@thymesVar id="subscription" type="by.it.academy.grodno.elibrary.entities.books.Subscription"*/-->
@@ -100,9 +102,9 @@
                         184 Dominicans Street, Hrodna, Belarus
                         <br>
                         <a style="color:#878787!important"
-                           href=""
+                           href="https://www.freeprivacypolicy.com/live/61b275fc-0ad7-455b-82ff-04d5cf038b94"
                            target="_blank"
-                           data-saferedirecturl="https://www.google.com/url?q=">Privacy Policy</a>
+                           data-saferedirecturl="https://www.google.com/url?q=https://www.freeprivacypolicy.com/live/61b275fc-0ad7-455b-82ff-04d5cf038b94">Privacy Policy</a>
                     </td>
                 </tr>
                 </tbody>

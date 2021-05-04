@@ -125,7 +125,7 @@ public class UserService implements IUserService {
         user.getRoles().forEach(r -> roleJpaRepository.findByRoleName(r.getRoleName()).ifPresent(roleSet::add));
         user.setRoles(roleSet);
         user = userJpaRepository.save(user);
-        emailSender.sendEmailFromAdmin(user, UserMailMessageType.REGISTERED_WITH_PASSWORD, Collections.singletonMap("verifyPassword", randomPassword));
+        emailSender.sendEmailFromAdmin(user, UserMailMessageType.REGISTERED_WITH_PASSWORD, Collections.singletonMap("password", randomPassword));
         return Optional.of(user);
     }
 

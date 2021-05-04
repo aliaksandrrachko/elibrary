@@ -15,7 +15,7 @@ public abstract class AGenericMessageTextCreator<E extends Enum<?>> implements I
     protected final Locale locale;
     private final Class<E> clazz;
 
-    public AGenericMessageTextCreator(ITemplateEngine templateEngine, Class<E> clazz) {
+    protected AGenericMessageTextCreator(ITemplateEngine templateEngine, Class<E> clazz) {
         this.templateEngine = templateEngine;
         this.locale = LocaleContextHolder.getLocale();
         this.clazz = clazz;

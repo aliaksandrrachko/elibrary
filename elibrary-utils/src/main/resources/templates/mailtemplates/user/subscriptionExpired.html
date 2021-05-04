@@ -6,7 +6,8 @@
         .table {
             font-size: 12px;
             font-family: Arial, sans-serif;
-            margin: 0 0;
+            margin-right: auto;
+            margin-left: auto;
         }
         .welcome {
             font-size: 24px;
@@ -38,6 +39,7 @@
                     <td style="padding:20px 20px 20px 20px;background-color:#b4d1db;color:#022731;text-align:center;border-radius:8px">
                         <p class="welcome">Hello <span th:text="${user.username}"></span>, welcome to E-Library!</p>
                         <p class="p1" style="color: brown">Time of your subscription expired!</p>
+                        <!--/*@thymesVar id="subscription" type="by.it.academy.grodno.elibrary.entities.books.Subscription"*/-->
                         <p class="p1">Number of your subscription: <span th:text="${subscription.id}"></span></p>
                         <p class="p1">Book info:</p>
                         <table class="table">
@@ -81,8 +83,7 @@
                         <a style="color:#878787" th:href="'mailto:' + ${user.getEmail()}" target="_blank" th:text="${user.getEmail()}"></a>
                         <br>
                         <p>
-                            Questions? Send email to <a style="color:#878787!important"
-                                                        href="mailto:rachko.a.ch@gmail.com"
+                            Questions? Send email to <a style="color:#878787!important" href="mailto:rachko.a.ch@gmail.com"
                                                         target="_blank">rachko.a.ch@gmail.com</a>
                         </p>
                     </td>
@@ -94,9 +95,9 @@
                         184 Dominicans Street, Hrodna, Belarus
                         <br>
                         <a style="color:#878787!important"
-                           href=""
+                           href="https://www.freeprivacypolicy.com/live/61b275fc-0ad7-455b-82ff-04d5cf038b94"
                            target="_blank"
-                           data-saferedirecturl="https://www.google.com/url?q=">Privacy Policy</a>
+                           data-saferedirecturl="https://www.google.com/url?q=https://www.freeprivacypolicy.com/live/61b275fc-0ad7-455b-82ff-04d5cf038b94">Privacy Policy</a>
                     </td>
                 </tr>
                 </tbody>

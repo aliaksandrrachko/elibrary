@@ -61,7 +61,7 @@
                             <span th:text="${book.datePublishing}"></span>
                         </h5>
                         <h5 class="text-sm-start mt-1" th:text="'Publisher: ' + ${book.publisher}"></h5>
-                        <h6 class="text-sm-start mt-4 text-muted" th:text="'Description: ' + ${book.description.substring(0, 200) + '...'}"></h6>
+                        <h6 class="text-sm-start mt-4 text-muted" th:text="'Description: ' + ${book.description.substring(0, (book.description.length() >= 200 ? 200 : book.description.length())) + '...'}"></h6>
                         <h6 class="text-sm-start mt-4">
                             <span th:class="${book.available} ? 'text-success' : 'text-danger'"
                                   th:text="${book.available} ? 'Availabel.' : 'Not available.'"></span>

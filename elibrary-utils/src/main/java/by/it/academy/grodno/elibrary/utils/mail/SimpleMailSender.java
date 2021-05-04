@@ -16,13 +16,13 @@ import java.util.Map;
 
 @Service
 @Slf4j
-public class MailSender implements IEmailSender {
+public class SimpleMailSender implements IEmailSender {
 
-    @Value("${mail}")
-    private static boolean sendMail;
+    @Value("${spring.mail.send}")
+    private boolean sendMail;
 
     @Value("${spring.mail.username}")
-    private static String adminMail;
+    private String adminMail;
 
     private static final String SUBJECT = "E-Library";
 
@@ -30,14 +30,13 @@ public class MailSender implements IEmailSender {
     private final IUserMessageTextCreator userMessageTextCreator;
     private final IAdminMessageTextCreator adminMessageTextCreator;
 
-    public MailSender(@Qualifier("applicationMailSender") JavaMailSender mailSender,
-                      IUserMessageTextCreator userMessageTextCreator,
-                      IAdminMessageTextCreator adminMessageTextCreator) {
+    public SimpleMailSender(@Qualifier("applicationMailSender") JavaMailSender mailSender,
+                            IUserMessageTextCreator userMessageTextCreator,
+                            IAdminMessageTextCreator adminMessageTextCreator) {
         this.mailSender = mailSender;
         this.userMessageTextCreator = userMessageTextCreator;
         this.adminMessageTextCreator = adminMessageTextCreator;
     }
-
 
     @Async
     @Override

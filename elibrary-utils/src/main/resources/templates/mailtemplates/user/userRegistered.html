@@ -22,8 +22,9 @@
                 <tr>
                     <td style="padding:20px 20px 20px 20px;background-color:#b4d1db;color:#022731;text-align:center;border-radius:8px">
                         <p style="font-size:24px;font-family:Arial,sans-serif">Hello <span th:text="${user.username}"></span>, welcome to E-Library!</p>
-                        <!--/*@thymesVar id="verifyPassword" type="String"*/-->
-                        <p th:if="${verifyPassword != null}" style="font-family:Arial,sans-serif" th:text="'Your password: '${verifyPassword}"></p>
+                        <!--/*@thymesVar id="password" type="java.lang.String"*/-->
+                        <p th:if="${user.email != null}" style="font-family:Arial,sans-serif" th:text="'Your email: ' + ${user.email}"></p>
+                        <p th:if="${password != null && user.email != null}" style="font-family:Arial,sans-serif" th:text="'Your password: ' + ${password}"></p>
                         <p style="font-family:Arial,sans-serif">To get started discovering great new books, click here:</p>
                         <p style="padding:12px 0">
                             <a style="font-family:Helvetica,Arial,sans-serif;font-size:24px;color:#efefef;font-weight:bold;border-radius:6px;background:#5c6586;border-style:solid;border-color:#70a1dc;border-width:3px;text-align:center;padding:11px 22px;text-decoration:none;border-top-color:#7fa6d5;border-bottom-color:#7fa6d5;border-left-color:#7fa6d5;border-right-color:#7fa6d5"
@@ -60,9 +61,9 @@
                         184 Dominicans Street, Hrodna, Belarus
                         <br>
                         <a style="color:#878787!important"
-                           href=""
+                           href="https://www.freeprivacypolicy.com/live/61b275fc-0ad7-455b-82ff-04d5cf038b94"
                            target="_blank"
-                           data-saferedirecturl="https://www.google.com/url?q=">Privacy Policy</a>
+                           data-saferedirecturl="https://www.google.com/url?q=https://www.freeprivacypolicy.com/live/61b275fc-0ad7-455b-82ff-04d5cf038b94">Privacy Policy</a>
                     </td>
                 </tr>
                 </tbody>

@@ -1,7 +1,24 @@
 <!doctype html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title></title>
+    <title>Subscription expired</title>
+
+    <style>
+        .table {
+            font-size: 12px;
+            font-family: Arial, sans-serif;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .welcome {
+            font-size: 24px;
+            font-family: Arial, sans-serif;
+        }
+        .p1 {
+            font-size: 12px;
+            font-family: Arial, sans-serif;
+        }
+    </style>
 </head>
 
 <body>
@@ -21,9 +38,9 @@
                 </tr>
                 <tr>
                     <td style="padding:20px 20px 20px 20px;background-color:#b4d1db;color:#022731;text-align:center;border-radius:8px">
-                        <p style="font-size:24px;font-family:Arial,sans-serif">Hello <span th:text="${user.username}"></span>, welcome to E-Library!</p>
-                        <p style="font-family:Arial,sans-serif;">The list of expired subscriptions</p>
-                        <table>
+                        <p class="welcome">Hello <span th:text="${user.username}"></span>, welcome to E-Library!</p>
+                        <p class="p1">The list of expired subscriptions</p>
+                        <table class="table">
                             <thead>
                                 <tr>
                                     <th scope="col">#</th>
@@ -37,11 +54,12 @@
                                 </tr>
                             </thead>
                             <tbody>
-                            <tr th:each="subscription : ${subscriptions.content}">
+                            <tr th:each="subscription : ${subscriptions}">
+                                <!--/*@thymesVar id="subscription" type="by.it.academy.grodno.elibrary.entities.books.Subscription"*/-->
                                 <th scope="row" th:text="${subscription.id}"></th>
+                                <!--/*@thymesVar id="bookDetails" type="by.it.academy.grodno.elibrary.api.dto.books.BookDto"*/-->
                                 <td>
                                     <h6 class="text-sm-start mt-2" th:text="${subscription.book.title}"></h6>
-                                    <!--/*@thymesVar id="bookDetails" type="by.it.academy.grodno.elibrary.api.dto.books.BookDto"*/-->
                                     <p class="text-sm-start m-0">
                                         <span th:each="authorName : ${subscription.book.authors}" th:text="${authorName} + ', '"></span>
                                         <span th:text="${subscription.book.datePublishing}"></span>
@@ -89,9 +107,9 @@
                         184 Dominicans Street, Hrodna, Belarus
                         <br>
                         <a style="color:#878787!important"
-                           href=""
+                           href="https://www.freeprivacypolicy.com/live/61b275fc-0ad7-455b-82ff-04d5cf038b94"
                            target="_blank"
-                           data-saferedirecturl="https://www.google.com/url?q=">Privacy Policy</a>
+                           data-saferedirecturl="https://www.google.com/url?q=https://www.freeprivacypolicy.com/live/61b275fc-0ad7-455b-82ff-04d5cf038b94">Privacy Policy</a>
                     </td>
                 </tr>
                 </tbody>
