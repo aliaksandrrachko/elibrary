@@ -7,10 +7,10 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
+import java.util.Base64;
 import java.util.Properties;
 import java.util.concurrent.Executor;
 
@@ -20,11 +20,10 @@ import java.util.concurrent.Executor;
 @Slf4j
 public class MailConfiguration {
 
-    private static final String ADMIN_EMAIL = "ssaannyyaa25@gmail.com";
-    private static final String EMAIL_PASSWORD = "sanya252115";
-
-    @Bean
-    public JavaMailSender mailSender(@Value("${spring.mail.properties.mail.debug}") String mailDebugProperty,
+    @Bean("applicationMailSender")
+    public JavaMailSender mailSender(@Value("${spring.mail.username}") String mailUsername,
+                                     @Value("${spring.mail.password}") String encoderPassword,
+                                    @Value("${spring.mail.properties.mail.debug}") String mailDebugProperty,
                                      @Value("${spring.mail.properties.mail.smtp.auth}") String mailSmtpAuthProperty,
                                      @Value("${spring.mail.properties.mail.smtp.starttls.enable}") String mailSmtpStarttlsEnableProperty,
                                      @Value("${spring.mail.properties.mail.transport.protocol}") String mailTransportProtocolProperty,
@@ -34,8 +33,8 @@ public class MailConfiguration {
 
         mailSender.setHost(mailHostProperty);
         mailSender.setPort(mailPortProperty);
-        mailSender.setUsername(ADMIN_EMAIL);
-        mailSender.setPassword(EMAIL_PASSWORD);
+        mailSender.setUsername(mailUsername);
+        mailSender.setPassword(getDecryptPassword(encoderPassword));
 
         Properties javaMailProperties = new Properties();
         javaMailProperties.put("mail.smtp.starttls.enable", mailSmtpStarttlsEnableProperty);
@@ -52,8 +51,7 @@ public class MailConfiguration {
         return new ThreadPoolTaskExecutor();
     }
 
-    @Async("threadPoolTaskExecutor")
-    public void asyncMethodWithConfiguredExecutor() {
-        log.info("Execute method with configured executor - {}", Thread.currentThread().getName());
+    private static String getDecryptPassword(String data){
+        return new String(Base64.getDecoder().decode(data));
     }
 }

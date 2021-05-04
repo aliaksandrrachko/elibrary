@@ -5,12 +5,13 @@ import by.it.academy.grodno.elibrary.api.dao.UserJpaRepository;
 import by.it.academy.grodno.elibrary.api.dto.users.UserDto;
 import by.it.academy.grodno.elibrary.api.mappers.UserMapper;
 import by.it.academy.grodno.elibrary.api.services.IUserService;
+import by.it.academy.grodno.elibrary.api.utils.mail.IEmailSender;
+import by.it.academy.grodno.elibrary.api.utils.mail.UserMailMessageType;
 import by.it.academy.grodno.elibrary.entities.users.Address;
 import by.it.academy.grodno.elibrary.entities.users.Role;
 import by.it.academy.grodno.elibrary.entities.users.User;
 import by.it.academy.grodno.elibrary.service.exceptions.PasswordMatchException;
 import by.it.academy.grodno.elibrary.service.utils.RandomPasswordGenerator;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -26,17 +27,19 @@ import java.util.stream.Collectors;
 @Service
 public class UserService implements IUserService {
 
-    @Autowired
-    PasswordEncoder bCryptPasswordEncoder;
+    private final PasswordEncoder bCryptPasswordEncoder;
+    private final UserJpaRepository userJpaRepository;
+    private final UserMapper userMapper;
+    private final RoleJpaRepository roleJpaRepository;
+    private final IEmailSender emailSender;
 
-    @Autowired
-    private UserJpaRepository userJpaRepository;
-
-    @Autowired
-    private UserMapper userMapper;
-
-    @Autowired
-    private RoleJpaRepository roleJpaRepository;
+    public UserService(PasswordEncoder bCryptPasswordEncoder, UserJpaRepository userJpaRepository, UserMapper userMapper, RoleJpaRepository roleJpaRepository, IEmailSender emailSender) {
+        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
+        this.userJpaRepository = userJpaRepository;
+        this.userMapper = userMapper;
+        this.roleJpaRepository = roleJpaRepository;
+        this.emailSender = emailSender;
+    }
 
     @Override
     public Page<UserDto> findAll(Pageable pageable) {
@@ -47,14 +50,14 @@ public class UserService implements IUserService {
     @Override
     public Optional<UserDto> findUserByEmail(String email) {
         Optional<User> optionalUser = userJpaRepository.findByEmail(email);
-        return optionalUser.map(user -> userMapper.toDto(user));
+        return optionalUser.map(userMapper::toDto);
     }
 
     @Override
     public Optional<UserDto> findById(String userId) {
         Long userIdNumber = Long.parseLong(userId);
         Optional<User> optionalUser = userJpaRepository.findById(userIdNumber);
-        return optionalUser.map(user -> userMapper.toDto(user));
+        return optionalUser.map(userMapper::toDto);
     }
 
     @Override
@@ -89,7 +92,7 @@ public class UserService implements IUserService {
     @Transactional
     public void delete(Long id) {
         Optional<User> optionalUser = userJpaRepository.findById(id);
-        optionalUser.ifPresent(user -> userJpaRepository.delete(user));
+        optionalUser.ifPresent(userJpaRepository::delete);
     }
 
     @Override
@@ -104,6 +107,7 @@ public class UserService implements IUserService {
             User user = userMapper.toEntity(entityDto);
             user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
             user = userJpaRepository.save(user);
+            emailSender.sendEmailFromAdmin(user, UserMailMessageType.REGISTERED, null);
             return Optional.of(userMapper.toDto(user));
         } else  {
             throw new PasswordMatchException(entityDto);
@@ -121,6 +125,7 @@ public class UserService implements IUserService {
         user.getRoles().forEach(r -> roleJpaRepository.findByRoleName(r.getRoleName()).ifPresent(roleSet::add));
         user.setRoles(roleSet);
         user = userJpaRepository.save(user);
+        emailSender.sendEmailFromAdmin(user, UserMailMessageType.REGISTERED_WITH_PASSWORD, Collections.singletonMap("verifyPassword", randomPassword));
         return Optional.of(user);
     }
 

@@ -1,66 +1,78 @@
 package by.it.academy.grodno.elibrary.utils.mail;
 
-import by.it.academy.grodno.elibrary.api.utils.mail.IEmailSender;
-import by.it.academy.grodno.elibrary.api.utils.mail.MailMessageType;
+import by.it.academy.grodno.elibrary.api.utils.mail.*;
 import by.it.academy.grodno.elibrary.entities.users.User;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
+import java.util.Map;
+
 @Service
+@Slf4j
 public class MailSender implements IEmailSender {
 
+    @Value("${mail}")
+    private static boolean sendMail;
 
-    @Override
-    public void sendEmailToAdmin(User user, MailMessageType type) {
+    @Value("${spring.mail.username}")
+    private static String adminMail;
 
+    private static final String SUBJECT = "E-Library";
+
+    private final JavaMailSender mailSender;
+    private final IUserMessageTextCreator userMessageTextCreator;
+    private final IAdminMessageTextCreator adminMessageTextCreator;
+
+    public MailSender(@Qualifier("applicationMailSender") JavaMailSender mailSender,
+                      IUserMessageTextCreator userMessageTextCreator,
+                      IAdminMessageTextCreator adminMessageTextCreator) {
+        this.mailSender = mailSender;
+        this.userMessageTextCreator = userMessageTextCreator;
+        this.adminMessageTextCreator = adminMessageTextCreator;
     }
 
-    @Override
-    public void sendEmailFromAdmin(User user, MailMessageType type) {
-
-    }
-/*
-    private static final String ADMIN_EMAIL_ADDRESS = "ssaannyyaa25@gmail.com";
-
-    @Autowired
-    private JavaMailSender mailSender;
-
-    @Autowired
-    @Qualifier(value = "messageTextCreatorVelocityImpl")
-    private IMessageTextCreator messageTextCreator;
 
     @Async
     @Override
-    public void sendEmailToAdmin(UserDto dto, MailMessageType type) throws MessagingException {
+    public void sendEmailToAdmin(User user, AdminMailMessageType type, Map<String, Object> attributes) {
         MimeMessage message = mailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message);
-
-        Map<String, Object> map = new LinkedHashMap<>();
-        map.put("userDto", dto);
-        String text = messageTextCreator.createMessageText(type, map);
-        String subject = "User: " + dto.getUsername() + " update account!";
-        configureMimeMessageHelper(helper, ADMIN_EMAIL_ADDRESS, ADMIN_EMAIL_ADDRESS, text, subject);
-        mailSender.send(message);
+        String text = adminMessageTextCreator.createMessageText(type, user, attributes);
+        String subject = SUBJECT + " [" + type + "]";
+        configureMimeMessageHelper(helper, adminMail, adminMail, text, subject);
+        if (sendMail) {
+            mailSender.send(message);
+        }
     }
 
     @Async
     @Override
-    public void sendEmailFromAdmin(UserDto userDto, MailMessageType type) throws MessagingException {
+    public void sendEmailFromAdmin(User user, UserMailMessageType type, Map<String, Object> attributes) {
         MimeMessage message = mailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message);
-
-        Map<String, Object> map = new LinkedHashMap<>();
-        map.put("userDto", userDto);
-        String text = messageTextCreator.createMessageText(type, map);
-        configureMimeMessageHelper(helper, ADMIN_EMAIL_ADDRESS, userDto.getEmail(), text, "You registered in The Final Project");
-        mailSender.send(message);
+        String text = userMessageTextCreator.createMessageText(type, user, attributes);
+        configureMimeMessageHelper(helper, adminMail, user.getEmail(), text, SUBJECT);
+        if (sendMail) {
+            mailSender.send(message);
+        }
     }
 
-    private void configureMimeMessageHelper(MimeMessageHelper helper,
-                                            String mailFrom, String mailTo, String mailText,
-                                            String mailSubject) throws MessagingException {
-        helper.setFrom(mailFrom);
-        helper.setTo(mailTo);
-        helper.setText(mailText, true);
-        helper.setSubject(mailSubject);
-    }*/
+    private void configureMimeMessageHelper(MimeMessageHelper helper, String mailFrom, String mailTo,
+                                            String mailText, String mailSubject) {
+        try {
+            helper.setFrom(mailFrom);
+            helper.setTo(mailTo);
+            helper.setText(mailText, true);
+            helper.setSubject(mailSubject);
+        } catch (MessagingException e) {
+            log.error(e.getMessage());
+        }
+    }
 }

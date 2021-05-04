@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title></title>
+</head>
+
+<body>
+<table style="background-color:#d8dfe7;width:100%;border:0;padding:0 30px 0 30px">
+    <tbody>
+    <tr>
+        <td>
+            <table style="width:600px;margin-left:auto;margin-right:auto;border:0">
+                <tbody>
+                <tr>
+                    <td>
+                        <a href="https://lacalhost:8080/" target="_blank" style="padding:20px 0 20px 20px" class="CToWUd">
+                            <img src="https://github.com/Aliaksandr-Rachko/elibrary/blob/master/elibrary-controller/src/main/resources/static/img/logo/logo_200_200.png"
+                                 alt="e-library">
+                        </a>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="padding:20px 20px 20px 20px;background-color:#b4d1db;color:#022731;text-align:center;border-radius:8px">
+                        <p style="font-size:24px;font-family:Arial,sans-serif">Hello <span th:text="${user.username}"></span>, welcome to E-Library!</p>
+                        <p style="font-family:Arial,sans-serif;">The list of expired subscriptions</p>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">Book</th>
+                                    <th scope="col">User</th>
+                                    <th scope="col">Count</th>
+                                    <th scope="col">Status</th>
+                                    <th scope="col">Ret</th>
+                                    <th scope="col">Created</th>
+                                    <th scope="col">Deadline</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="subscription : ${subscriptions.content}">
+                                <th scope="row" th:text="${subscription.id}"></th>
+                                <td>
+                                    <h6 class="text-sm-start mt-2" th:text="${subscription.book.title}"></h6>
+                                    <!--/*@thymesVar id="bookDetails" type="by.it.academy.grodno.elibrary.api.dto.books.BookDto"*/-->
+                                    <p class="text-sm-start m-0">
+                                        <span th:each="authorName : ${subscription.book.authors}" th:text="${authorName} + ', '"></span>
+                                        <span th:text="${subscription.book.datePublishing}"></span>
+                                    </p>
+                                    <p class="text-sm-start m-0" th:text="'Book id:' + ${subscription.book.id}"></p>
+                                </td>
+                                <td>
+                                    <h6 class="text-sm-start m-0" th:text="${subscription.username}"></h6>
+                                    <h6 class="text-sm-start mt-1" th:text="${subscription.userEmail}"></h6>
+                                    <p class="text-sm-start m-0" th:text="'ID:' + ${subscription.userId}"></p>
+                                </td>
+                                <td th:text="${subscription.took}"></td>
+                                <td th:text="${subscription.status}"></td>
+                                <td th:text="${subscription.returned}"></td>
+                                <td th:text="${subscription.created}"></td>
+                                <td th:text="${subscription.deadline}"></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </td>
+    </tr>
+    <tr>
+        <td style="padding-top:20px;text-align:center;font-family:Helvetica,Arial,sans-serif;font-size:11px;line-height:14px;color:#878787">
+            <table style="margin-left:auto;margin-right:auto;width:600px;border:0">
+                <tbody>
+                <tr>
+                    <td style="text-align:center;font-family:Helvetica,Arial,sans-serif;font-size:11px;line-height:14px;color:#878787">
+                        This email was sent by request to
+                        <a style="color:#878787" th:href="'mailto:' + ${user.getEmail()}" target="_blank" th:text="${user.getEmail()}"></a>
+                        <br>
+                        <p>
+                            Questions? Send email to <a style="color:#878787!important" href="mailto:rachko.a.ch@gmail.com"
+                                                        target="_blank">rachko.a.ch@gmail.com</a>
+                        </p>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="padding:8px 0 30px 0;text-align:center;font-family:Helvetica,Arial,sans-serif;font-size:11px;color:#878787">
+                        Copyright &copy; 2021, All Right Reserved Aliaksandr Rachko
+                        <br>
+                        184 Dominicans Street, Hrodna, Belarus
+                        <br>
+                        <a style="color:#878787!important"
+                           href=""
+                           target="_blank"
+                           data-saferedirecturl="https://www.google.com/url?q=">Privacy Policy</a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+</body>
+</html>

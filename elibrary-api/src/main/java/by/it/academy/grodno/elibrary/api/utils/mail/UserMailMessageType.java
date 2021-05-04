@@ -1,8 +1,8 @@
 package by.it.academy.grodno.elibrary.api.utils.mail;
 
-public enum MailMessageType {
+public enum UserMailMessageType {
     REGISTERED,
-    REGISTERED_WITH_SECURITY_CODE,
+    REGISTERED_WITH_PASSWORD,
     USER_BOOKING_BOOK,
     SUBSCRIPTION_EXPIRED
 }

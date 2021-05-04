@@ -8,6 +8,8 @@ import by.it.academy.grodno.elibrary.api.dto.books.SubscriptionDto;
 import by.it.academy.grodno.elibrary.api.dto.books.SubscriptionRequestCode;
 import by.it.academy.grodno.elibrary.api.mappers.SubscriptionMapper;
 import by.it.academy.grodno.elibrary.api.services.books.ISubscriptionService;
+import by.it.academy.grodno.elibrary.api.utils.mail.IEmailSender;
+import by.it.academy.grodno.elibrary.api.utils.mail.UserMailMessageType;
 import by.it.academy.grodno.elibrary.entities.books.Book;
 import by.it.academy.grodno.elibrary.entities.books.Subscription;
 import by.it.academy.grodno.elibrary.entities.books.SubscriptionStatus;
@@ -31,15 +33,17 @@ public class SubscriptionService implements ISubscriptionService {
     private final UserJpaRepository userJpaRepository;
     private final BookJpaRepository bookJpaRepository;
     private final SubscriptionMapper subscriptionMapper;
+    private final IEmailSender emailSender;
 
     public SubscriptionService(SubscriptionJpaRepository subscriptionJpaRepository,
                                BookJpaRepository bookJpaRepository,
                                SubscriptionMapper subscriptionMapper,
-                               UserJpaRepository userJpaRepository) {
+                               UserJpaRepository userJpaRepository, IEmailSender emailSender) {
         this.subscriptionJpaRepository = subscriptionJpaRepository;
         this.bookJpaRepository = bookJpaRepository;
         this.subscriptionMapper = subscriptionMapper;
         this.userJpaRepository = userJpaRepository;
+        this.emailSender = emailSender;
     }
 
     @Override
@@ -107,7 +111,13 @@ public class SubscriptionService implements ISubscriptionService {
         request.setCount(DEFAULT_BOOKING_BOOK_COUNT);
         request.setDays(DEFAULT_BOOKING_BOOK_DAYS);
         request.setCode(1);
-        return createAndSave(request);
+        Optional<Subscription> subscriptionOptional = createAndSave(request);
+        if (subscriptionOptional.isPresent()){
+            Subscription subscription = subscriptionOptional.get();
+            emailSender.sendEmailFromAdmin(subscription.getUser(), UserMailMessageType.USER_BOOKING_BOOK,
+                    Collections.singletonMap("subscription", subscription));
+        }
+        return subscriptionOptional.map(subscriptionMapper::toDto);
     }
 
     @Override
@@ -125,10 +135,10 @@ public class SubscriptionService implements ISubscriptionService {
     @Override
     @Transactional
     public Optional<SubscriptionDto> create(SubscriptionRequest request) {
-        return createAndSave(request);
+        return createAndSave(request).map(subscriptionMapper::toDto);
     }
 
-    private Optional<SubscriptionDto> createAndSave(SubscriptionRequest request) {
+    private Optional<Subscription> createAndSave(SubscriptionRequest request) {
         Optional<Book> optionalBook = bookJpaRepository.findById(request.getBookId());
         Optional<User> optionalUser = userJpaRepository.findById(request.getUserId());
 
@@ -155,7 +165,7 @@ public class SubscriptionService implements ISubscriptionService {
                         .user(user)
                         .build();
                 subscription = subscriptionJpaRepository.save(subscription);
-                return Optional.of(subscription).map(subscriptionMapper::toDto);
+                return Optional.of(subscription);
             }
         }
         return Optional.empty();
