@@ -48,14 +48,15 @@
             <tr><th scope="row">Middle name</th><td th:text="${userDto.middleName}"></td></tr>
             <tr><th scope="row">Username</th><td th:text="${userDto.username}"></td></tr>
             <tr><th scope="row">Email</th><td th:text="${userDto.email}"></td></tr>
-            <tr><th scope="row">Phone number</th><td th:text="${userDto.phoneNumber}"></td></tr>
+            <tr><th scope="row">Phone number</th><td th:text="${userDto.phoneNumber.countryCode + ' ' + userDto.phoneNumber.nationalNumber}"></td></tr>
             <tr><th scope="row">Gender</th><td th:text="${userDto.gender}"></td></tr>
             <tr><th scope="row">Birthday date</th><td th:text="${userDto.birthday}"></td></tr>
             <tr><th scope="row">Address</th><td th:object="${userDto.addressDto}">
-                <p class="m-0" th:text="'Region name: ' + *{region}"></p>
-                <p class="m-0" th:text="'District name: ' + *{district}"></p>
-                <p class="m-0" th:text="'City name: ' + *{cityName}"></p>
-                <p class="m-0" th:text="'Street name: ' + *{streetName}"></p>
+                <p class="m-0" th:text="'Country: ' + *{country}"></p>
+                <p class="m-0" th:text="'Region: ' + *{region}"></p>
+                <p class="m-0" th:text="'District: ' + *{district}"></p>
+                <p class="m-0" th:text="'City: ' + *{cityName}"></p>
+                <p class="m-0" th:text="'Street: ' + *{streetName}"></p>
                 <p class="m-0" th:text="'House number: ' + *{houseNumber}"></p>
                 <p class="m-0" th:text="'Apartment number: ' + *{apartmentNumber}"></p>
                 <p class="m-0" th:text="'Postal code: ' + *{postalCode}"></p>

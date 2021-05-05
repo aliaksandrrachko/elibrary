@@ -30,7 +30,7 @@ public class UserDto extends AEntityDto<Long> {
     @NotBlank(message = "Field 'Email' can not be empty.")
     @Pattern(regexp = "^(?:[a-zA-Z0-9_'^&/+-])+(?:\\.(?:[a-zA-Z0-9_'^&/+-])+)" +
             "*@(?:(?:\\[?(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?))\\.)" +
-            "{3}(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\]?)|(?:[a-zA-Z0-9-]+\\.)" +
+            "{3}(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)]?)|(?:[a-zA-Z0-9-]+\\.)" +
             "+(?:[a-zA-Z]){2,}\\.?)$",
             message = "Invalid 'Email'")
     private String email;
@@ -44,9 +44,9 @@ public class UserDto extends AEntityDto<Long> {
     @NotBlank(message = "Field 'Middle name' can not be empty.")
     @Size(min = 2, max = 20, message = "The 'Middle name' must be between 2 and 20 characters.")
     private String middleName;
-    @NotBlank(message = "Field 'Phone' can not be empty.")
-    @Pattern(regexp = "^\\d{9}$", message = "'Phone' can be in format (xx)xxxxxxx")
-    private String phoneNumber;
+    @Valid
+    @Builder.Default
+    private PhoneNumberDto phoneNumber = new PhoneNumberDto();
     @Valid
     @Builder.Default
     private AddressDto addressDto = new AddressDto();

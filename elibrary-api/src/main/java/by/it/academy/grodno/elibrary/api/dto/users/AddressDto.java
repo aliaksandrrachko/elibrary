@@ -18,6 +18,9 @@ import java.time.LocalDateTime;
 @SuperBuilder
 public class AddressDto extends AEntityDto<Long> {
 
+    @NotBlank(message = "Field 'Country' can not be empty")
+    private String country;
+
     @NotBlank(message = "Field 'Region' can not be empty.")
     @Size(min = 4, message = "The 'Region' must be longer than 4 characters.")
     private String region;
@@ -43,7 +46,8 @@ public class AddressDto extends AEntityDto<Long> {
 
 
     public boolean isFullAddress(){
-        return StringUtils.hasText(region) &&
+        return StringUtils.hasText(country) &&
+                StringUtils.hasText(region) &&
                 StringUtils.hasText(cityName) &&
                 StringUtils.hasText(streetName) &&
                 StringUtils.hasText(postalCode) &&

@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Optional;
+import java.util.Set;
 
 public interface SubscriptionJpaRepository extends JpaRepository<Subscription, Long> {
 
@@ -20,5 +21,6 @@ public interface SubscriptionJpaRepository extends JpaRepository<Subscription, L
                                                                  SubscriptionStatus status,
                                                                  Pageable pageable);
     Page<Subscription> findByDeadlineBeforeAndStatusNot(LocalDateTime deadLine, SubscriptionStatus status, Pageable pageable);
+    Set<Subscription> findByDeadlineBeforeAndStatusNot(LocalDateTime deadLine, SubscriptionStatus status);
     Optional<Subscription> findByIdAndUserId(Long id, Long userId);
 }

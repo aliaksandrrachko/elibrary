@@ -20,6 +20,9 @@ import java.time.LocalDateTime;
 @Table(name = "address")
 public class Address extends AEntity<Long> implements Serializable {
 
+    @Column(name = "country", length = 50)
+    private String country;
+
     @Column(name = "region", length = 50)
     private String region;
 

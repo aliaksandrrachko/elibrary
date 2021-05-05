@@ -1,7 +1,6 @@
-package by.it.academy.grodno.elibrary.api.dao;
+package by.it.academy.grodno.elibrary.service.services;
 
 import org.springframework.boot.SpringBootConfiguration;
-import org.springframework.boot.autoconfigure.AutoConfigurationPackage;
 
 @SpringBootConfiguration
 public class TestConfiguration {

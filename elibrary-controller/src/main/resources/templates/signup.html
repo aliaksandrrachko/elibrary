@@ -61,14 +61,23 @@
                                type="email">
                         <span class="text-danger" th:errors="*{email}" th:if="${#fields.hasErrors('email')}"></span>
                     </div>
-
-                    <div class="mb-3">
-                        <label class="form-label visually-hidden" for="phoneNumber">Phone number</label>
-                        <input class="form-control" id="phoneNumber" placeholder="Phone number" th:field="*{phoneNumber}"
-                               th:value="${userDto.phoneNumber}"
-                               type="text">
-                        <span class="text-danger" th:errors="*{phoneNumber}"
-                              th:if="${#fields.hasErrors('phoneNumber')}"></span>
+                    <div th:object="${userDto.phoneNumber}" class="row row-cols-auto mb-3">
+                        <div class="col-3">
+                            <label class="form-label visually-hidden" for="countryCode">Code</label>
+                            <input class="form-control" id="countryCode" placeholder="Code" th:field="*{countryCode}"
+                                   th:value="*{countryCode}"
+                                   type="text">
+                            <span class="text-danger" th:errors="*{countryCode}"
+                                  th:if="${#fields.hasErrors('countryCode')}"></span>
+                        </div>
+                        <div class="col-5">
+                            <label class="form-label visually-hidden" for="phoneNumber">Phone</label>
+                            <input class="form-control" id="phoneNumber" placeholder="Phone" th:field="*{nationalNumber}"
+                                   th:value="*{nationalNumber}"
+                                   type="text">
+                            <span class="text-danger" th:errors="*{nationalNumber}"
+                                  th:if="${#fields.hasErrors('nationalNumber')}"></span>
+                        </div>
                     </div>
                 </div>
 
@@ -101,6 +110,14 @@
 
                 <div class="mb-3 border-top" th:object="${userDto.addressDto}">
                     <p class="m-1">Address:</p>
+                    <div class="mb-2">
+                        <label class="form-label visually-hidden" for="country">Country</label>
+                        <input class="form-control" id="country" placeholder="Country" th:field="*{country}"
+                               th:value="*{country}"
+                               type="text">
+                        <span class="text-danger" th:errors="*{country}"
+                              th:if="${#fields.hasErrors('country')}"></span>
+                    </div>
                     <div class="mb-2">
                         <label class="form-label visually-hidden" for="region">Region</label>
                         <input class="form-control" id="region" placeholder="Region name" th:field="*{region}"

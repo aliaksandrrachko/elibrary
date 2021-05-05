@@ -86,6 +86,7 @@ CREATE TABLE IF NOT EXISTS user_has_role
 CREATE TABLE IF NOT EXISTS address
 (
     id           BIGINT UNSIGNED        NOT NULL AUTO_INCREMENT UNIQUE COMMENT 'A surrogate primary key used to uniquely identify each address in the table.',
+    country      VARCHAR(50) COMMENT 'Country name',
     region       VARCHAR(50) COMMENT 'The first line of an address.',
     district     VARCHAR(50)            NOT NULL COMMENT 'The region of an address, this may be a state, province, prefecture, etc.',
     city         VARCHAR(50)            NOT NULL COMMENT 'A foreign key pointing to the city table.',
@@ -347,66 +348,51 @@ VALUES (1, 'ROLE_USER'),
 -- -----------------------------------------------------
 -- Initial data by_it_academy_grodno_elibrary.address
 -- -----------------------------------------------------
-INSERT INTO address (id, region, district, city, street, postal_code, house, apt)
-values (1, 'Гродненская', 'Гродненский', 'Kuangyuan', 'Erie', 230005, '278', '4720'),
-       (2, 'Гродненская', 'Гродненский', 'Kutorejo', 'Gerald', 230005, '07', '4292'),
-       (3, 'Гродненская', 'Гродненский', 'Shangshuai', 'Prairieview', 230005, '05843', '07'),
-       (4, 'Гродненская', 'Rhône-Alpes', 'Valbonë', 'Talmadge', 230005, '1', '6'),
-       (5, 'Гродненская', 'Гродненский', 'Montes Claros', 'Kensington', '39400-000', '78523', '77'),
-       (6, 'Гродненская', 'Гродненский', 'Yanhe', 'Heffernan', 230005, '49220', '1096'),
-       (7, 'Québec', 'Гродненский', 'Matagami', 'Barnett', 'N2M', '0866', '245'),
-       (8, 'Гродненская', 'Гродненский', 'Moñitos', 'Stuart', '231008', '114', '0'),
-       (9, 'Гродненская', 'Гродненский', 'Tongqiao', 'International', 230005, '88', '753'),
-       (10, 'Гродненская', 'Гродненский', 'San Marcos', 'Armistice', '704038', '387', '578'),
-       (11, 'Гродненская', 'Гродненский', 'Shuicha', 'Fulton', 230005, '8546', '702'),
-       (12, 'Гродненская', 'Гродненский', 'Sangumata', 'American', 230005, '22', '031');
+INSERT INTO address (id, country, region, district, city, street, postal_code, house, apt)
+values (1, 'Беларусь', 'Гродненская', 'Гродненский', 'Kuangyuan', 'Erie', 230005, '278', '4720'),
+       (2, 'Беларусь','Гродненская', 'Гродненский', 'Kutorejo', 'Gerald', 230005, '07', '4292'),
+       (3,'Беларусь', 'Гродненская', 'Гродненский', 'Shangshuai', 'Prairieview', 230005, '05843', '07'),
+       (4,'Беларусь', 'Гродненская', 'Rhône-Alpes', 'Valbonë', 'Talmadge', 230005, '1', '6'),
+       (5,'Беларусь', 'Гродненская', 'Гродненский', 'Montes Claros', 'Kensington', '39400-000', '78523', '77'),
+       (6,'Беларусь', 'Гродненская', 'Гродненский', 'Yanhe', 'Heffernan', 230005, '49220', '1096'),
+       (7,'Беларусь', 'Гродненская', 'Гродненский', 'Matagami', 'Barnett', 'N2M', '0866', '245'),
+       (8,'Беларусь', 'Гродненская', 'Гродненский', 'Moñitos', 'Stuart', '231008', '114', '0'),
+       (9,'Беларусь', 'Гродненская', 'Гродненский', 'Tongqiao', 'International', 230005, '88', '753'),
+       (10,'Беларусь', 'Гродненская', 'Гродненский', 'San Marcos', 'Armistice', '704038', '387', '578'),
+       (11,'Беларусь', 'Гродненская', 'Гродненский', 'Shuicha', 'Fulton', 230005, '8546', '702'),
+       (12,'Беларусь', 'Гродненская', 'Гродненский', 'Sangumata', 'American', 230005, '22', '031');
 
 -- -----------------------------------------------------
 -- Initial data by_it_academy_grodno_elibrary.user
 -- -----------------------------------------------------
 INSERT INTO user (email, username, first_name, last_name, middle_name, phone_number, address_id, gender, birthday, password)
-VALUES ('admin@mail.ru', 'Admin', 'Dima', 'Petrov', 'Petrovich', '{"code": "29", "number": "2965416"}', 1, 'm', '1995-04-05', '$2a$10$Z1/.F4bRuyOGyL7NQrmjhufHf8XrHIEjPfBz9tlPbPcWrLpvPWKfq'); /*12345*/
+VALUES ('admin@mail.ru', 'Admin', 'Dima', 'Petrov', 'Petrovich', '{"countryCode": "375", "nationalNumber": "292965416"}', 1, 'm', '1995-04-05', '$2a$10$Z1/.F4bRuyOGyL7NQrmjhufHf8XrHIEjPfBz9tlPbPcWrLpvPWKfq'); /*12345*/
 
 INSERT INTO user (email, username, first_name, last_name, middle_name, phone_number, address_id, gender, birthday, password)
-VALUES ('eget.odio@Donec.ca', 'Armand Parrish', 'Cleo', 'Macias', 'Gretchen', '{
-  "code": "67",
-  "number": "6908407"
-}', 2, 'm', '2021-03-01', '$2a$10$Z1/.F4bRuyOGyL7NQrmjhufHf8XrHIEjPfBz9tlPbPcWrLpvPWKfq'),
-       ('ligula.eu@litoratorquent.net', 'Azalia Rosario', 'Raven', 'Barry', 'Jordan', '{
-         "code": "87",
-         "number": "6270309"
-       }', 3, 'm', '2022-02-25', '$2a$10$Z1/.F4bRuyOGyL7NQrmjhufHf8XrHIEjPfBz9tlPbPcWrLpvPWKfq'),
-       ('id@acarcuNunc.edu', 'Leah Moody', 'Mark', 'Mckinney', 'Dalton', '{
-         "code": "97",
-         "number": "9685203"
-       }', 4, 'm', '2020-10-01', '$2a$10$Z1/.F4bRuyOGyL7NQrmjhufHf8XrHIEjPfBz9tlPbPcWrLpvPWKfq'),
-       ('urna.Vivamus.molestie@suscipitest.ca', 'Isabella Ford', 'Keefe', 'Terry', 'Celeste', '{
-         "code": "44",
-         "number": "3526222"
-       }', 5, 'm', '2021-08-23', '$2a$10$Z1/.F4bRuyOGyL7NQrmjhufHf8XrHIEjPfBz9tlPbPcWrLpvPWKfq'),
-       ('dictum@mus.net', 'Jaime Castillo', 'Fredericka', 'York', 'Armand', '{
-         "code": "24",
-         "number": "8526313"
-       }', 6, 'f', '2022-04-04', '$2a$10$Z1/.F4bRuyOGyL7NQrmjhufHf8XrHIEjPfBz9tlPbPcWrLpvPWKfq'),
+VALUES ('eget.odio@Donec.ca', 'Armand Parrish', 'Cleo', 'Macias', 'Gretchen', '{"countryCode": "375", "nationalNumber": "296908407"}', 2, 'm', '2021-03-01', '$2a$10$Z1/.F4bRuyOGyL7NQrmjhufHf8XrHIEjPfBz9tlPbPcWrLpvPWKfq'),
+       ('ligula.eu@litoratorquent.net', 'Azalia Rosario', 'Raven', 'Barry', 'Jordan', '{"countryCode": "375", "nationalNumber": "296270309"}', 3, 'm', '2022-02-25', '$2a$10$Z1/.F4bRuyOGyL7NQrmjhufHf8XrHIEjPfBz9tlPbPcWrLpvPWKfq'),
+       ('id@acarcuNunc.edu', 'Leah Moody', 'Mark', 'Mckinney', 'Dalton', '{"countryCode": "375", "nationalNumber": "339685203"}', 4, 'm', '2020-10-01', '$2a$10$Z1/.F4bRuyOGyL7NQrmjhufHf8XrHIEjPfBz9tlPbPcWrLpvPWKfq'),
+       ('urna.Vivamus.molestie@suscipitest.ca', 'Isabella Ford', 'Keefe', 'Terry', 'Celeste', '{"countryCode": "375", "nationalNumber": "443526222"}', 5, 'm', '2021-08-23', '$2a$10$Z1/.F4bRuyOGyL7NQrmjhufHf8XrHIEjPfBz9tlPbPcWrLpvPWKfq'),
+       ('dictum@mus.net', 'Jaime Castillo', 'Fredericka', 'York', 'Armand', '{"countryCode": "375", "nationalNumber": "338526313"}', 6, 'f', '2022-04-04', '$2a$10$Z1/.F4bRuyOGyL7NQrmjhufHf8XrHIEjPfBz9tlPbPcWrLpvPWKfq'),
        ('nec@dolorsit.co.uk', 'Hollee Mejia', 'Winter', 'Vasquez', 'Brenda', '{
-         "code": "73",
-         "number": "7728818"
+         "countryCode": "375",
+         "nationalNumber": "337728818"
        }', 7, 'f', '2020-12-07', '$2a$10$Z1/.F4bRuyOGyL7NQrmjhufHf8XrHIEjPfBz9tlPbPcWrLpvPWKfq'),
        ('ac.mattis.ornare@elementumat.org', 'Octavius Case', 'Phyllis', 'Christian', 'Luke', '{
-         "code": "21",
-         "number": "9467819"
+         "countryCode": "375",
+         "nationalNumber": "299467819"
        }', 8, 'u', '2021-04-02', '$2a$10$Z1/.F4bRuyOGyL7NQrmjhufHf8XrHIEjPfBz9tlPbPcWrLpvPWKfq'),
        ('erat.Sed.nunc@temporbibendum.org', 'Xena Albert', 'Fulton', 'Mcbride', 'Marny', '{
-         "code": "07",
-         "number": "3555666"
+         "countryCode": "375",
+         "nationalNumber": "344555666"
        }', 9, 'u', '2022-03-22', '$2a$10$Z1/.F4bRuyOGyL7NQrmjhufHf8XrHIEjPfBz9tlPbPcWrLpvPWKfq'),
        ('dolor.nonummy.ac@neque.com', 'Ivy Whitfield', 'Lara', 'Forbes', 'Anjolie', '{
-         "code": "34",
-         "number": "4574811"
+         "countryCode": "375",
+         "nationalNumber": "294574811"
        }', 10, 'f', '2022-03-21', '$2a$10$Z1/.F4bRuyOGyL7NQrmjhufHf8XrHIEjPfBz9tlPbPcWrLpvPWKfq'),
        ('mauris@malesuada.org', 'Claire Contreras', 'Kimberly', 'Castaneda', 'Darryl', '{
-         "code": "34",
-         "number": "2424054"
+         "countryCode": "375",
+         "nationalNumber": "292424054"
        }', 11, 'm', '2021-10-23', '$2a$10$Z1/.F4bRuyOGyL7NQrmjhufHf8XrHIEjPfBz9tlPbPcWrLpvPWKfq');
 
 -- -----------------------------------------------------
@@ -584,4 +570,4 @@ VALUES (5, 17);
 # values (1, NOW(), DATE_ADD(NOW(), INTERVAL 1 DAY), 0, 1, 2, 2);
 
 INSERT INTO user (email, username, first_name, last_name, middle_name, phone_number, address_id, gender, birthday, password)
-VALUES ('egsdset.od12io@Donec.ca', 'Arm1ansd Parrish', 'Clf12eo', 'Maci1ass', 'Gretdc2hen', '', 2, 'm', '2021-03-01', '$2a$10$Z1/.F4bRuyOGyL7NQrmjhufHf8XrHIEjPfBz9tlPbPcWrLpvPWKfq');
+VALUES ('egsdset.od12io@Donec.ca', 'Arm1ansd Parrish', 'Clf12eo', 'Maci1ass', 'Gretdc2hen',  null, 2, 'm', '2021-03-01', '$2a$10$Z1/.F4bRuyOGyL7NQrmjhufHf8XrHIEjPfBz9tlPbPcWrLpvPWKfq');

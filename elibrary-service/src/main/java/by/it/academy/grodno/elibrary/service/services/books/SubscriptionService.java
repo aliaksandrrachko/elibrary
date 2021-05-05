@@ -8,6 +8,7 @@ import by.it.academy.grodno.elibrary.api.dto.books.SubscriptionDto;
 import by.it.academy.grodno.elibrary.api.dto.books.SubscriptionRequestCode;
 import by.it.academy.grodno.elibrary.api.mappers.SubscriptionMapper;
 import by.it.academy.grodno.elibrary.api.services.books.ISubscriptionService;
+import by.it.academy.grodno.elibrary.api.utils.mail.AdminMailMessageType;
 import by.it.academy.grodno.elibrary.api.utils.mail.IEmailSender;
 import by.it.academy.grodno.elibrary.api.utils.mail.UserMailMessageType;
 import by.it.academy.grodno.elibrary.entities.books.Book;
@@ -15,18 +16,19 @@ import by.it.academy.grodno.elibrary.entities.books.Subscription;
 import by.it.academy.grodno.elibrary.entities.books.SubscriptionStatus;
 import by.it.academy.grodno.elibrary.entities.users.User;
 import by.it.academy.grodno.elibrary.service.exceptions.UnknownSubscriptionUpdateCodeRequest;
+import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Component
+@Slf4j
 public class SubscriptionService implements ISubscriptionService {
 
     private final SubscriptionJpaRepository subscriptionJpaRepository;
@@ -265,5 +267,21 @@ public class SubscriptionService implements ISubscriptionService {
 
     private void leaveBook(Book book, int count) {
         book.setAvailableCount(book.getAvailableCount() + count);
+    }
+
+    @Scheduled(cron = "0 0 8 * * *")
+    public void findAllExpiredSubscriptionChangeStatusToExpiredAndSendEmailToUserAndAdmin() {
+        Set<Subscription> subscriptions = subscriptionJpaRepository
+                .findByDeadlineBeforeAndStatusNot(LocalDateTime.now().withNano(0), SubscriptionStatus.COMPLETED);
+        subscriptions.forEach(subscription -> {
+            subscription.setStatus(SubscriptionStatus.EXPIRED);
+            subscriptionJpaRepository.save(subscription);
+            emailSender.sendEmailFromAdmin(subscription.getUser(), UserMailMessageType.SUBSCRIPTION_EXPIRED,
+                    Collections.singletonMap("subscription", subscription));
+        });
+        emailSender.sendEmailToAdmin(null, AdminMailMessageType.SUBSCRIPTION_EXPIRED_INFO,
+                Collections.singletonMap("subscriptions", subscriptions));
+        log.info("Was execute scheduled task [{}.findAllExpiredSubscriptionChangeStatusToExpiredAndSendEmailToUserAndAdmin()]"
+        , Subscription.class.getName());
     }
 }
