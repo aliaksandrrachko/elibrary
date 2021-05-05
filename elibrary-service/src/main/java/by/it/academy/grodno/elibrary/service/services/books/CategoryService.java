@@ -5,7 +5,9 @@ import by.it.academy.grodno.elibrary.api.dto.books.CategoryDto;
 import by.it.academy.grodno.elibrary.api.mappers.CategoryMapper;
 import by.it.academy.grodno.elibrary.api.services.books.ICategoryService;
 import by.it.academy.grodno.elibrary.entities.books.Category;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -16,12 +18,16 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
+@Slf4j
 public class CategoryService implements ICategoryService {
 
-    @Autowired
-    private CategoryMapper categoryMapper;
-    @Autowired
-    private CategoryJpaRepository categoryJpaRepository;
+    private final CategoryMapper categoryMapper;
+    private final CategoryJpaRepository categoryJpaRepository;
+
+    public CategoryService(CategoryMapper categoryMapper, CategoryJpaRepository categoryJpaRepository) {
+        this.categoryMapper = categoryMapper;
+        this.categoryJpaRepository = categoryJpaRepository;
+    }
 
     @Override
     public Class<CategoryDto> getGenericClass() {
@@ -29,25 +35,29 @@ public class CategoryService implements ICategoryService {
     }
 
     @Override
+    @Cacheable(value = "categoryList")
     public List<CategoryDto> findAll() {
+        log.info("Select all category list with parent null.");
         return categoryMapper.toDtos(categoryJpaRepository.findAllByParentCategoryIsNull());
     }
 
     @Override
     public Optional<CategoryDto> findById(Integer id) {
         Optional<Category> optionalCategory = categoryJpaRepository.findById(id);
-        return optionalCategory.map(category -> categoryMapper.toDto(category));
+        return optionalCategory.map(categoryMapper::toDto);
     }
 
     @Override
     @Transactional
+    @CacheEvict("categoryList")
     public void delete(Integer id) {
         Optional<Category> optionalCategory = categoryJpaRepository.findById(id);
-        optionalCategory.ifPresent(category -> categoryJpaRepository.delete(category));
+        optionalCategory.ifPresent(categoryJpaRepository::delete);
     }
 
     @Override
     @Transactional
+    @CacheEvict("categoryList")
     public Optional<CategoryDto> create(CategoryDto entityDto) {
         String parentCategoryName = entityDto.getParentCategory();
         Integer parentCategoryId = entityDto.getParentId();
@@ -86,6 +96,7 @@ public class CategoryService implements ICategoryService {
 
     @Override
     @Transactional
+    @CacheEvict("categoryList")
     public Optional<CategoryDto> update(Integer id, CategoryDto entityDto) {
         Optional<Category> optionalCategory = categoryJpaRepository.findById(id);
         if (entityDto != null &&
@@ -97,7 +108,7 @@ public class CategoryService implements ICategoryService {
             category = categoryJpaRepository.save(category);
             return Optional.of(categoryMapper.toDto(category));
         }
-        return optionalCategory.map(category -> categoryMapper.toDto(category));
+        return optionalCategory.map(categoryMapper::toDto);
     }
 
     @Override
@@ -108,12 +119,12 @@ public class CategoryService implements ICategoryService {
     @Override
     public Optional<CategoryDto> findByCategoryName(String categoryName) {
         Optional<Category> optionalCategory = categoryJpaRepository.findByCategoryName(categoryName);
-        return optionalCategory.map(category -> categoryMapper.toDto(category));
+        return optionalCategory.map(categoryMapper::toDto);
     }
 
     @Override
     public Set<CategoryDto> findAllUnique() {
         Set<Category> categories = new HashSet<>(categoryJpaRepository.findAll());
-        return categories.stream().map(category -> categoryMapper.toDto(category)).collect(Collectors.toSet());
+        return categories.stream().map(categoryMapper::toDto).collect(Collectors.toSet());
     }
 }

@@ -1,13 +1,11 @@
 package by.it.academy.grodno.elibrary.api.mappers;
 
-import by.it.academy.grodno.elibrary.api.dao.AuthorJpaRepository;
 import by.it.academy.grodno.elibrary.api.dao.CategoryJpaRepository;
 import by.it.academy.grodno.elibrary.api.dao.PublisherJpaRepository;
 import by.it.academy.grodno.elibrary.api.dto.books.BookDto;
 import by.it.academy.grodno.elibrary.entities.books.Author;
 import by.it.academy.grodno.elibrary.entities.books.Book;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
@@ -17,20 +15,17 @@ import java.util.stream.Collectors;
 @Component
 public class BookMapper extends AGenericMapper<Book, BookDto, Long> {
 
-    @Autowired
-    private AuthorJpaRepository authorJpaRepository;
+    private final PublisherJpaRepository publisherJpaRepository;
 
-    @Autowired
-    private PublisherJpaRepository publisherJpaRepository;
+    private final CategoryJpaRepository categoryJpaRepository;
 
-    @Autowired
-    private CategoryJpaRepository categoryJpaRepository;
+    private final CategoryMapper categoryMapper;
 
-    @Autowired
-    private CategoryMapper categoryMapper;
-
-    protected BookMapper(ModelMapper modelMapper) {
+    protected BookMapper(ModelMapper modelMapper, PublisherJpaRepository publisherJpaRepository, CategoryJpaRepository categoryJpaRepository, CategoryMapper categoryMapper) {
         super(modelMapper, Book.class, BookDto.class);
+        this.publisherJpaRepository = publisherJpaRepository;
+        this.categoryJpaRepository = categoryJpaRepository;
+        this.categoryMapper = categoryMapper;
     }
 
     @PostConstruct

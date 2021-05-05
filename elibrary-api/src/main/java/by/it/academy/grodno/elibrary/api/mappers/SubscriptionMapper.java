@@ -6,7 +6,6 @@ import by.it.academy.grodno.elibrary.api.dto.books.SubscriptionDto;
 import by.it.academy.grodno.elibrary.entities.books.Subscription;
 import by.it.academy.grodno.elibrary.entities.books.SubscriptionStatus;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
@@ -15,17 +14,18 @@ import java.util.NoSuchElementException;
 @Component
 public class SubscriptionMapper extends AGenericMapper<Subscription, SubscriptionDto, Long>{
 
-    @Autowired
-    private BookMapper bookMapper;
+    private final BookMapper bookMapper;
 
-    @Autowired
-    private BookJpaRepository bookJpaRepository;
+    private final BookJpaRepository bookJpaRepository;
 
-    @Autowired
-    private UserJpaRepository userJpaRepository;
+    private final UserJpaRepository userJpaRepository;
 
-    protected SubscriptionMapper(ModelMapper modelMapper) {
+    protected SubscriptionMapper(ModelMapper modelMapper, BookMapper bookMapper, BookJpaRepository bookJpaRepository,
+                                 UserJpaRepository userJpaRepository) {
         super(modelMapper, Subscription.class, SubscriptionDto.class);
+        this.bookMapper = bookMapper;
+        this.bookJpaRepository = bookJpaRepository;
+        this.userJpaRepository = userJpaRepository;
     }
 
     @PostConstruct

@@ -5,7 +5,6 @@ import by.it.academy.grodno.elibrary.api.dto.books.AuthorDto;
 import by.it.academy.grodno.elibrary.api.mappers.AuthorMapper;
 import by.it.academy.grodno.elibrary.api.services.books.IAuthorService;
 import by.it.academy.grodno.elibrary.entities.books.Author;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -17,10 +16,13 @@ import java.util.Optional;
 @Service
 public class AuthorService implements IAuthorService {
 
-    @Autowired
-    private AuthorJpaRepository authorJpaRepository;
-    @Autowired
-    private AuthorMapper authorMapper;
+    private final AuthorJpaRepository authorJpaRepository;
+    private final AuthorMapper authorMapper;
+
+    public AuthorService(AuthorJpaRepository authorJpaRepository, AuthorMapper authorMapper) {
+        this.authorJpaRepository = authorJpaRepository;
+        this.authorMapper = authorMapper;
+    }
 
     @Override
     public Class<AuthorDto> getGenericClass() {
@@ -35,14 +37,14 @@ public class AuthorService implements IAuthorService {
     @Override
     public Optional<AuthorDto> findById(Integer id) {
         Optional<Author> authorOptional = authorJpaRepository.findById(id);
-        return authorOptional.map(author -> authorMapper.toDto(author));
+        return authorOptional.map(authorMapper::toDto);
     }
 
     @Override
     @Transactional
     public void delete(Integer id) {
         Optional<Author> authorOptional = authorJpaRepository.findById(id);
-        authorOptional.ifPresent(author -> authorJpaRepository.delete(author));
+        authorOptional.ifPresent(authorJpaRepository::delete);
     }
 
     @Override
@@ -67,7 +69,7 @@ public class AuthorService implements IAuthorService {
             author = authorJpaRepository.save(author);
             return Optional.of(authorMapper.toDto(author));
         }
-        return authorOptional.map(author -> authorMapper.toDto(author));
+        return authorOptional.map(authorMapper::toDto);
     }
 
     @Override

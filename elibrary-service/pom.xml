@@ -22,14 +22,13 @@
 
         <dependency>
             <groupId>by.it.academy.grodno.elibrary</groupId>
-            <artifactId>elibrary-dao</artifactId>
+            <artifactId>elibrary-web</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
 
         <dependency>
-            <groupId>by.it.academy.grodno.elibrary</groupId>
-            <artifactId>elibrary-web</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-cache</artifactId>
         </dependency>
 
         <dependency>

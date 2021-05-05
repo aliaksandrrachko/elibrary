@@ -4,7 +4,6 @@ import by.it.academy.grodno.elibrary.api.dao.CategoryJpaRepository;
 import by.it.academy.grodno.elibrary.api.dto.books.CategoryDto;
 import by.it.academy.grodno.elibrary.entities.books.Category;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
@@ -14,11 +13,11 @@ import java.util.stream.Collectors;
 @Component
 public class CategoryMapper extends AGenericMapper<Category, CategoryDto, Integer>{
 
-    @Autowired
-    private CategoryJpaRepository categoryJpaRepository;
+    private final CategoryJpaRepository categoryJpaRepository;
 
-    protected CategoryMapper(ModelMapper modelMapper) {
+    protected CategoryMapper(ModelMapper modelMapper, CategoryJpaRepository categoryJpaRepository) {
         super(modelMapper, Category.class, CategoryDto.class);
+        this.categoryJpaRepository = categoryJpaRepository;
     }
 
     @PostConstruct

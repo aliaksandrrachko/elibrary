@@ -3,12 +3,9 @@ package by.it.academy.grodno.elibrary.api.mappers;
 import by.it.academy.grodno.elibrary.api.dao.RoleJpaRepository;
 import by.it.academy.grodno.elibrary.api.dto.users.AddressDto;
 import by.it.academy.grodno.elibrary.api.dto.users.UserDto;
-import by.it.academy.grodno.elibrary.entities.users.Address;
-import by.it.academy.grodno.elibrary.entities.users.Gender;
-import by.it.academy.grodno.elibrary.entities.users.Role;
-import by.it.academy.grodno.elibrary.entities.users.User;
+import by.it.academy.grodno.elibrary.entities.users.*;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
@@ -20,14 +17,17 @@ import java.util.stream.Collectors;
 @Component
 public class UserMapper extends AGenericMapper<User, UserDto, Long>{
 
-    @Autowired
-    private RoleJpaRepository roleJpaRepository;
+    private final RoleJpaRepository roleJpaRepository;
 
-    @Autowired
-    private AddressMapper addressMapper;
+    private final AddressMapper addressMapper;
+    private final PhoneNumberMapper phoneNumberMapper;
 
-    public UserMapper(ModelMapper modelMapper) {
+    public UserMapper(ModelMapper modelMapper, RoleJpaRepository roleJpaRepository, AddressMapper addressMapper,
+                      PhoneNumberMapper phoneNumberMapper) {
         super(modelMapper, User.class, UserDto.class);
+        this.roleJpaRepository = roleJpaRepository;
+        this.addressMapper = addressMapper;
+        this.phoneNumberMapper = phoneNumberMapper;
     }
 
     @PostConstruct
@@ -54,7 +54,7 @@ public class UserMapper extends AGenericMapper<User, UserDto, Long>{
         destination.setGender(source.getGender().name().toLowerCase());
         setAddressToUserDto(source, destination);
         destination.setRoles(source.getRoles().stream().map(Role::getRoleName).collect(Collectors.toSet()));
-        destination.setPhoneNumber(PhoneNumberMapper.toStringNumber(source.getPhoneNumber()));
+        destination.setPhoneNumber(phoneNumberMapper.toDto(source.getPhoneNumber()));
     }
 
     @Override
@@ -69,7 +69,7 @@ public class UserMapper extends AGenericMapper<User, UserDto, Long>{
         });
 
         destination.setRoles(roles);
-        destination.setPhoneNumber(PhoneNumberMapper.toEntity(source.getPhoneNumber()));
+        destination.setPhoneNumber(phoneNumberMapper.toEntity(source.getPhoneNumber()));
     }
 
     private void setAddressToUserDto(User source, UserDto destination){

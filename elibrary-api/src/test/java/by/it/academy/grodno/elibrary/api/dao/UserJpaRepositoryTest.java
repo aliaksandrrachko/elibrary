@@ -49,13 +49,13 @@ class UserJpaRepositoryTest {
         assertThat(userJpaRepository).isNotNull();
     }
 
-    private static final User test_user = new User("some@email.com",
+    private static final User TEST_USER = new User("some@email.com",
             "Alex 1",
             "Alex",
             "Smirnov",
             "Petrovich",
-            new PhoneNumber("29", "2205641"),
-            new Address("Гродненская", "Гродненский район", "Гродно",
+            new PhoneNumber("375", "292205641"),
+            new Address("Беларусь", "Гродненская", "Гродненский район", "Гродно",
                     "Терешковой", "230005", "50", "1a", null),
             Gender.MALE,
             LocalDate.of(2000, 12, 14),
@@ -69,7 +69,7 @@ class UserJpaRepositoryTest {
     @Rollback(false)
     @Test
     void saveUser() {
-        User user = userJpaRepository.save(test_user);
+        User user = userJpaRepository.save(TEST_USER);
         assertThat(user.getId()).isNotNull();
         assertThat(user.getAddress().getId()).isNotNull();
     }
@@ -77,30 +77,30 @@ class UserJpaRepositoryTest {
     @Rollback(false)
     @Test
     void getUser(){
-        Optional<User> userOptional = userJpaRepository.findByEmail(test_user.getEmail());
+        Optional<User> userOptional = userJpaRepository.findByEmail(TEST_USER.getEmail());
         User userFromDb = userOptional.orElse(new User());
-        assertThat(userFromDb.getFirstName()).isEqualTo(test_user.getFirstName());
+        assertThat(userFromDb.getFirstName()).isEqualTo(TEST_USER.getFirstName());
     }
 
     @Rollback(false)
     @Test
     void updateUser(){
-        test_user.setFirstName("updatedFirst");
-        userJpaRepository.save(test_user);
+        TEST_USER.setFirstName("updatedFirst");
+        userJpaRepository.save(TEST_USER);
 
-        Optional<User> userOptional = userJpaRepository.findByEmail(test_user.getEmail());
+        Optional<User> userOptional = userJpaRepository.findByEmail(TEST_USER.getEmail());
         User userFromDb = userOptional.orElse(new User());
-        assertThat(userFromDb.getFirstName()).isEqualTo(test_user.getFirstName());
+        assertThat(userFromDb.getFirstName()).isEqualTo(TEST_USER.getFirstName());
     }
 
     @Rollback(false)
     @Test
     void updateAddressUser(){
-        test_user.getAddress().setApartmentNumber("100");
-        userJpaRepository.save(test_user);
+        TEST_USER.getAddress().setApartmentNumber("100");
+        userJpaRepository.save(TEST_USER);
 
-        Optional<User> userOptional = userJpaRepository.findByEmail(test_user.getEmail());
+        Optional<User> userOptional = userJpaRepository.findByEmail(TEST_USER.getEmail());
         User userFromDb = userOptional.orElse(new User());
-        assertThat(userFromDb.getAddress().getApartmentNumber()).isEqualTo(test_user.getAddress().getApartmentNumber());
+        assertThat(userFromDb.getAddress().getApartmentNumber()).isEqualTo(TEST_USER.getAddress().getApartmentNumber());
     }
 }
