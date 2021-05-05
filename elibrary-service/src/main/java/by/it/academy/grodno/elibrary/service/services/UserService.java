@@ -158,7 +158,6 @@ public class UserService implements IUserService {
             setAddressIdIfExists(userFromDb, entityDto);
             User user = userMapper.toEntity(entityDto);
             user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
-            user.setRoles(userFromDb.getRoles());
             user = userJpaRepository.save(user);
             return Optional.of(userMapper.toDto(user));
         } else {

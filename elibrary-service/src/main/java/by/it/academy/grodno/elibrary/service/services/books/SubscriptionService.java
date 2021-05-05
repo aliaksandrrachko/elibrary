@@ -269,7 +269,7 @@ public class SubscriptionService implements ISubscriptionService {
         book.setAvailableCount(book.getAvailableCount() + count);
     }
 
-    @Scheduled(cron = "0 0 8 * * *")
+    @Scheduled(cron = "0 * * * * *")
     public void findAllExpiredSubscriptionChangeStatusToExpiredAndSendEmailToUserAndAdmin() {
         Set<Subscription> subscriptions = subscriptionJpaRepository
                 .findByDeadlineBeforeAndStatusNot(LocalDateTime.now().withNano(0), SubscriptionStatus.COMPLETED);

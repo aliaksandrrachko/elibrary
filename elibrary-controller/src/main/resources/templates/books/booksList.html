@@ -78,19 +78,31 @@
             </table>
 
             <nav aria-label="Page navigation">
+                <div class="text-end">
+                    <a th:href="@{books(size=5, page=${pageBookDto.getNumber()}, sort=${pageBookDto.getSort()})}">5</a>
+                    <a th:href="@{books(size=5, page=${pageBookDto.getNumber()}, sort=${pageBookDto.getSort()})}">5</a>
+                    <a th:href="@{books(size=10, page=${pageBookDto.getNumber()}, sort=${pageBookDto.getSort()})}">10</a>
+                    <a th:href="@{books(size=15, page=${pageBookDto.getNumber()}, sort=${pageBookDto.getSort()})}">15</a>
+                </div>
                 <ul class="pagination">
                     <li th:class="'page-item ' + ${pageBookDto.getNumber() > 0 ? '' : 'disabled'}">
-                        <a class="page-link" th:href="@{/books(size=${pageBookDto.size}, page=${pageBookDto.getNumber() - 1})}">Previous</a></li>
+                        <a class="page-link"
+                           th:href="@{books(size=${pageBookDto.size},
+                           page=${pageBookDto.getNumber() - 1},
+                           sort=${pageBookDto.getSort()})}">Previous</a></li>
                     <li class="page-item active"
                         th:if="${pageBookDto.totalPages > 0}"
                         th:each="pageNumber : ${pageNumbers}"
                         th:class="'page-item' + ${pageNumber == pageBookDto.number ? ' active' : ''}">
                         <a class="page-link"
-                           th:href="@{/books(size=${pageBookDto.size}, page=${pageNumber})}"
+                           th:href="@{books(size=${pageBookDto.size}, page=${pageNumber}, sort=${pageBookDto.getSort()})}"
                            th:text="${pageNumber + 1}"></a>
                     </li>
                     <li th:class="'page-item ' + ${pageBookDto.getNumber() < pageBookDto.getTotalPages() - 1 ? '' : 'disabled'}">
-                        <a class="page-link" th:href="@{/books(size=${pageBookDto.size}, page=${pageBookDto.getNumber() + 1})}">Next</a></li>
+                        <a class="page-link"
+                           th:href="@{books(size=${pageBookDto.size},
+                           page=${pageBookDto.getNumber() + 1},
+                           sort=${pageBookDto.getSort()})}">Next</a></li>
                 </ul>
             </nav>
         </div>

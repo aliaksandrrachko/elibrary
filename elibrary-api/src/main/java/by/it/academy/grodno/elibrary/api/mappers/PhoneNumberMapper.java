@@ -15,6 +15,9 @@ public class PhoneNumberMapper  {
     }
 
     public PhoneNumberDto toDto(PhoneNumber source){
+        if (source == null) {
+            return new PhoneNumberDto();
+        }
         return PhoneNumberDto.builder()
                 .countryCode(source.getCountryCode())
                 .nationalNumber(source.getNationalNumber())
