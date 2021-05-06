@@ -62,9 +62,10 @@ public class SubscriptionService implements ISubscriptionService {
     public Page<SubscriptionDto> findAllByUserIdAndStatus(@NotNull Long userId, @NotNull Integer statusCode, Pageable pageable) {
         SubscriptionStatus status = SubscriptionStatus.getSubscriptionStatus(statusCode);
         Page<Subscription> subscriptionPage;
-        if (status.equals(SubscriptionStatus.EXPIRED)){
+        if (status.equals(SubscriptionStatus.READING_EXPIRED)){
             subscriptionPage = subscriptionJpaRepository
-                    .findByUserIdAndDeadlineBeforeAndStatusNot(userId, LocalDateTime.now().withNano(0), status, pageable);
+                    .findByUserIdAndDeadlineBeforeAndStatusNot(userId, LocalDateTime.now().withNano(0),
+                            SubscriptionStatus.COMPLETED, pageable);
         } else {
             subscriptionPage = subscriptionJpaRepository.findAllByUserIdAndStatusIn(userId, Collections.singleton(status), pageable);
         }
@@ -80,7 +81,7 @@ public class SubscriptionService implements ISubscriptionService {
     public Page<SubscriptionDto> findAllByStatus(@NotNull Integer statusCode, Pageable pageable){
         SubscriptionStatus status = SubscriptionStatus.getSubscriptionStatus(statusCode);
         Page<Subscription> subscriptionPage;
-        if (status.equals(SubscriptionStatus.EXPIRED)){
+        if (status.equals(SubscriptionStatus.READING_EXPIRED)){
             subscriptionPage = subscriptionJpaRepository
                     .findByDeadlineBeforeAndStatusNot(LocalDateTime.now().withNano(0),
                             SubscriptionStatus.COMPLETED, pageable);
@@ -107,6 +108,9 @@ public class SubscriptionService implements ISubscriptionService {
     private static final int DEFAULT_BOOKING_BOOK_COUNT = 1;
     private static final int DEFAULT_BOOKING_BOOK_DAYS = 1;
 
+    static final String SUBSCRIPTION = "subscription";
+    static final String SUBSCRIPTIONS = "subscriptions";
+
     @Override
     @Transactional
     public Optional<SubscriptionDto> booking(SubscriptionRequest request) {
@@ -117,7 +121,7 @@ public class SubscriptionService implements ISubscriptionService {
         if (subscriptionOptional.isPresent()){
             Subscription subscription = subscriptionOptional.get();
             emailSender.sendEmailFromAdmin(subscription.getUser(), UserMailMessageType.USER_BOOKING_BOOK,
-                    Collections.singletonMap("subscription", subscription));
+                    Collections.singletonMap(SUBSCRIPTION, subscription));
         }
         return subscriptionOptional.map(subscriptionMapper::toDto);
     }
@@ -270,18 +274,37 @@ public class SubscriptionService implements ISubscriptionService {
     }
 
     @Scheduled(cron = "0 * * * * *")
-    public void findAllExpiredSubscriptionChangeStatusToExpiredAndSendEmailToUserAndAdmin() {
+    @Transactional
+    public void findAllExpiredSubscriptionsAndSendEmailToUserAndAdmin() {
+        Set<SubscriptionStatus> statuses = new HashSet<>();
+        statuses.add(SubscriptionStatus.COMPLETED);
+        statuses.add(SubscriptionStatus.BOOKING);
         Set<Subscription> subscriptions = subscriptionJpaRepository
-                .findByDeadlineBeforeAndStatusNot(LocalDateTime.now().withNano(0), SubscriptionStatus.COMPLETED);
+                .findByDeadlineBeforeAndStatusNotIn(LocalDateTime.now().withNano(0), statuses);
         subscriptions.forEach(subscription -> {
-            subscription.setStatus(SubscriptionStatus.EXPIRED);
+            subscription.setStatus(SubscriptionStatus.READING_EXPIRED);
             subscriptionJpaRepository.save(subscription);
             emailSender.sendEmailFromAdmin(subscription.getUser(), UserMailMessageType.SUBSCRIPTION_EXPIRED,
-                    Collections.singletonMap("subscription", subscription));
+                    Collections.singletonMap(SUBSCRIPTION, subscription));
         });
         emailSender.sendEmailToAdmin(null, AdminMailMessageType.SUBSCRIPTION_EXPIRED_INFO,
-                Collections.singletonMap("subscriptions", subscriptions));
-        log.info("Was execute scheduled task [{}.findAllExpiredSubscriptionChangeStatusToExpiredAndSendEmailToUserAndAdmin()]"
-        , Subscription.class.getName());
+                Collections.singletonMap(SUBSCRIPTIONS, subscriptions));
+        log.info("Was execute scheduled task: 'change status to expired' count - {}", subscriptions.size());
+    }
+
+    @Scheduled(cron = "0 * * * * *")
+    @Transactional
+    public void findAllExpiredBookingSubscriptionAndUndoBookingAndBeforeSendEmailToUser() {
+        Set<Subscription> subscriptions = subscriptionJpaRepository
+                .findByDeadlineBeforeAndStatus(LocalDateTime.now().withNano(0), SubscriptionStatus.BOOKING);
+        subscriptions.forEach(subscription -> {
+            SubscriptionRequest request = new SubscriptionRequest(subscription.getId(),
+                    subscription.getUser().getId(), SubscriptionRequestCode.UNDO_BOOKING.getRequestCode(),
+                    0, subscription.getBook().getId(), subscription.getTook());
+            undoBooking(request);
+            emailSender.sendEmailFromAdmin(subscription.getUser(), UserMailMessageType.BOOKING_WAS_UNDO,
+                    Collections.singletonMap(SUBSCRIPTION, subscription));
+        });
+        log.info("Was execute scheduled task: 'undo expired booking' count - {}", subscriptions.size());
     }
 }

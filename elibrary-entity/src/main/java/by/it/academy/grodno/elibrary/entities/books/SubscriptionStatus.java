@@ -9,7 +9,7 @@ public enum SubscriptionStatus {
     READING(2),
     READING_EXTENDED(3),
     COMPLETED(4),
-    EXPIRED(5);
+    READING_EXPIRED(5);
 
     private final int statusCode;
 

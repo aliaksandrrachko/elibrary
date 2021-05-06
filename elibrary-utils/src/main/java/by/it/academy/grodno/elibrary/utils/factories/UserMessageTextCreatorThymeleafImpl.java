@@ -22,6 +22,8 @@ public class UserMessageTextCreatorThymeleafImpl extends AGenericMessageTextCrea
                 return "mailtemplates/user/userBookingBook.html";
             case SUBSCRIPTION_EXPIRED:
                 return "mailtemplates/user/subscriptionExpired.html";
+            case BOOKING_WAS_UNDO:
+                return "mailtemplates/user/bookingUndo.html";
             default:
                 throw new IllegalStateException("Unexpected value: " + messageType);
         }

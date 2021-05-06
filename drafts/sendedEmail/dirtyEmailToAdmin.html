@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
 <head>
     <title>Subscription expired</title>
 
@@ -38,45 +38,69 @@
                 </tr>
                 <tr>
                     <td style="padding:20px 20px 20px 20px;background-color:#b4d1db;color:#022731;text-align:center;border-radius:8px">
-                        <p class="welcome">Hello <span th:text="${user != null ? user.username : 'friend'}"></span>, welcome to E-Library!</p>
+                        <p class="welcome">Hello <span>friend</span>, welcome to E-Library!</p>
                         <p class="p1">The list of expired subscriptions</p>
                         <table class="table">
                             <thead>
-                                <tr>
-                                    <th scope="col">#</th>
-                                    <th scope="col">Book</th>
-                                    <th scope="col">User</th>
-                                    <th scope="col">Count</th>
-                                    <th scope="col">Status</th>
-                                    <th scope="col">Ret</th>
-                                    <th scope="col">Created</th>
-                                    <th scope="col">Deadline</th>
-                                </tr>
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">Book</th>
+                                <th scope="col">User</th>
+                                <th scope="col">Count</th>
+                                <th scope="col">Status</th>
+                                <th scope="col">Ret</th>
+                                <th scope="col">Created</th>
+                                <th scope="col">Deadline</th>
+                            </tr>
                             </thead>
                             <tbody>
-                            <!--/*@thymesVar id="subscriptions" type="by.it.academy.grodno.elibrary.entities.books.Subscription"*/-->
-                            <tr th:each="subscription : ${subscriptions}">
-                                <!--/*@thymesVar id="subscription" type="by.it.academy.grodno.elibrary.entities.books.Subscription"*/-->
-                                <th scope="row" th:text="${subscription.id}"></th>
-                                <!--/*@thymesVar id="bookDetails" type="by.it.academy.grodno.elibrary.api.dto.books.BookDto"*/-->
+
+                            <tr>
+
+                                <th scope="row">4</th>
+
                                 <td>
-                                    <h6 class="text-sm-start mt-2" th:text="${subscription.book.title}"></h6>
+                                    <h6 class="text-sm-start mt-2">Voyna i mir. Kniga 1</h6>
                                     <p class="text-sm-start m-0">
-                                        <span th:each="authorName : ${subscription.book.authors}" th:text="${authorName} + ', '"></span>
-                                        <span th:text="${subscription.book.datePublishing}"></span>
+                                        <span>by.it.academy.grodno.elibrary.entities.books.Author@59880cfe, </span>
+                                        <span>2018-01-01</span>
                                     </p>
-                                    <p class="text-sm-start m-0" th:text="'Book id:' + ${subscription.book.id}"></p>
+                                    <p class="text-sm-start m-0">Book id:1</p>
                                 </td>
                                 <td>
-                                    <h6 class="text-sm-start m-0" th:text="${subscription.user.username}"></h6>
-                                    <h6 class="text-sm-start mt-1" th:text="${subscription.user.email}"></h6>
-                                    <p class="text-sm-start m-0" th:text="'ID:' + ${subscription.user.id}"></p>
+                                    <h6 class="text-sm-start m-0">Admin</h6>
+                                    <h6 class="text-sm-start mt-1">admin@mail.ru</h6>
+                                    <p class="text-sm-start m-0">ID:1</p>
                                 </td>
-                                <td th:text="${subscription.took}"></td>
-                                <td th:text="${subscription.status}"></td>
-                                <td th:text="${subscription.returned}"></td>
-                                <td th:text="${subscription.created}"></td>
-                                <td th:text="${subscription.deadline}"></td>
+                                <td>1</td>
+                                <td>READING_EXPIRED</td>
+                                <td>0</td>
+                                <td>2021-05-06T13:25:15</td>
+                                <td>2021-05-06T13:25:15</td>
+                            </tr>
+
+                            <tr>
+
+                                <th scope="row">5</th>
+
+                                <td>
+                                    <h6 class="text-sm-start mt-2">Джордж Оруэлл: Да здравствует фикус!</h6>
+                                    <p class="text-sm-start m-0">
+                                        <span>by.it.academy.grodno.elibrary.entities.books.Author@54bea4cd, </span>
+                                        <span>2021-01-01</span>
+                                    </p>
+                                    <p class="text-sm-start m-0">Book id:2</p>
+                                </td>
+                                <td>
+                                    <h6 class="text-sm-start m-0">Admin</h6>
+                                    <h6 class="text-sm-start mt-1">admin@mail.ru</h6>
+                                    <p class="text-sm-start m-0">ID:1</p>
+                                </td>
+                                <td>1</td>
+                                <td>READING</td>
+                                <td>0</td>
+                                <td>2021-05-06T13:25:29</td>
+                                <td>2021-05-06T13:25:29</td>
                             </tr>
                             </tbody>
                         </table>

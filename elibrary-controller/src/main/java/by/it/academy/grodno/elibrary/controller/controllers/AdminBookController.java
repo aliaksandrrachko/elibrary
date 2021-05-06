@@ -63,6 +63,9 @@ public class AdminBookController {
         modelAndView.setViewName("admin/adminBooksList");
         modelAndView.addObject("categoryDtoSet", categoryDtoSet);
         modelAndView.addObject("pageBookDto", pageBookDto);
+        modelAndView.addObject("categoryId", categoryId);
+        modelAndView.addObject("title", title);
+        modelAndView.addObject("author", author);
         modelAndView.addObject("pageNumbers",
                 PageNumberListCreator.getListOfPagesNumber(pageBookDto.getNumber(), pageBookDto.getTotalPages()));
         return modelAndView;

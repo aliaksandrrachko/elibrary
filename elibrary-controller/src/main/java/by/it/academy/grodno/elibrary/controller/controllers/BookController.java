@@ -57,6 +57,9 @@ public class BookController {
         modelAndView.addObject("currentUser", currentUser);
         modelAndView.addObject("categoryDtoSet", categoryDtoList);
         modelAndView.addObject("pageBookDto", pageBookDto);
+        modelAndView.addObject("categoryId", categoryId);
+        modelAndView.addObject("title", title);
+        modelAndView.addObject("author", author);
         modelAndView.addObject("pageNumbers",
                 PageNumberListCreator.getListOfPagesNumber(pageBookDto.getNumber(), pageBookDto.getTotalPages()));
         return modelAndView;

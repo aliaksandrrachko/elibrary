@@ -21,6 +21,9 @@ public interface SubscriptionJpaRepository extends JpaRepository<Subscription, L
                                                                  SubscriptionStatus status,
                                                                  Pageable pageable);
     Page<Subscription> findByDeadlineBeforeAndStatusNot(LocalDateTime deadLine, SubscriptionStatus status, Pageable pageable);
-    Set<Subscription> findByDeadlineBeforeAndStatusNot(LocalDateTime deadLine, SubscriptionStatus status);
+    Set<Subscription> findByDeadlineBeforeAndStatusNotIn(LocalDateTime deadLine, Collection<SubscriptionStatus> status);
     Optional<Subscription> findByIdAndUserId(Long id, Long userId);
+    Set<Subscription> findByDeadlineBeforeAndStatus(LocalDateTime deadLine, SubscriptionStatus status);
+
+    Page<Subscription> findByUserIdAndDeadlineBeforeAndStatusIn(Long userId, LocalDateTime withNano, Collection<SubscriptionStatus> status, Pageable pageable);
 }

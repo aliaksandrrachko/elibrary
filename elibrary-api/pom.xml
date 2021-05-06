@@ -17,77 +17,31 @@
         <dependency>
             <groupId>by.it.academy.grodno.elibrary</groupId>
             <artifactId>elibrary-entity</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
         </dependency>
-
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-validation</artifactId>
         </dependency>
-
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
         </dependency>
-
-        <!-- For testing -->
-<!--        <dependency>
-            <groupId>by.it.academy.grodno.elibrary</groupId>
-            <artifactId>elibrary-main</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
-            <optional>true</optional>
-            <scope>test</scope>
-            <exclusions>
-                <exclusion>
-                    <groupId>by.it.academy.grodno.elibrary</groupId>
-                    <artifactId>elibrary-api</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>by.it.academy.grodno.elibrary</groupId>
-                    <artifactId>elibrary-service</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>by.it.academy.grodno.elibrary</groupId>
-                    <artifactId>elibrary-entity</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>by.it.academy.grodno.elibrary</groupId>
-                    <artifactId>elibrary-dao</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>by.it.academy.grodno.elibrary</groupId>
-                    <artifactId>elibrary-rest</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>by.it.academy.grodno.elibrary</groupId>
-                    <artifactId>elibrary-controller</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>-->
-
-        <!-- https://mvnrepository.com/artifact/com.h2database/h2 -->
         <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
-            <version>1.4.200</version>
             <scope>test</scope>
         </dependency>
-
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
         </dependency>
-
         <dependency>
             <groupId>com.fasterxml.jackson.datatype</groupId>
             <artifactId>jackson-datatype-jsr310</artifactId>
-            <version>2.11.4</version>
         </dependency>
-
         <dependency>
             <groupId>org.modelmapper</groupId>
             <artifactId>modelmapper</artifactId>
-            <version>2.3.9</version>
         </dependency>
     </dependencies>
 </project>

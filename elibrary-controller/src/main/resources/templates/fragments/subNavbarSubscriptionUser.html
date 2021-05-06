@@ -7,7 +7,21 @@
 <!--/*@thymesVar id="currentStatusCode" type="java.lang.Integer"*/-->
 <aside th:fragment="navAsideSubcriptionStatus(currentStatusCode)" class="bd-sidebar">
     <nav id="bd-docs-nav" aria-label="Docs navigation">
-        <div th:replace="::statusList(statusCode=${currentStatusCode})"></div>
+        <div class="list-group">
+            <!--/*@thymesVar id="currentStatusCode" type="java.lang.Integer"*/-->
+            <a href="subscriptions"
+               th:class="'m-0 list-group-item list-group-item-action' + ${currentStatusCode == null ? ' active' : ''}">All</a>
+            <a href="subscriptions?status=1"
+               th:class="'m-0 list-group-item list-group-item-action' + ${currentStatusCode != null && currentStatusCode == 1 ? ' active' : ''}">Booking</a>
+            <a href="subscriptions?status=2"
+               th:class="'m-0 list-group-item list-group-item-action' + ${currentStatusCode != null && currentStatusCode == 2 ? ' active' : ''}">Reading</a>
+            <a href="subscriptions?status=3"
+               th:class="'m-0 list-group-item list-group-item-action' + ${currentStatusCode != null && currentStatusCode == 3 ? ' active' : ''}">Reading extended</a>
+            <a href="subscriptions?status=4"
+               th:class="'m-0 list-group-item list-group-item-action' + ${currentStatusCode != null && currentStatusCode == 4 ? ' active' : ''}">Completed</a>
+            <a href="subscriptions?status=5"
+               th:class="'m-0 list-group-item list-group-item-action' + ${currentStatusCode != null && currentStatusCode == 5 ? ' active' : ''}">Expired</a>
+        </div>
 
         <form class="input-group mt-3" action="#" th:action="@{subscriptions}" th:method="get">
             <input type="text" name="subscriptionId" class="form-control"
@@ -17,22 +31,6 @@
         </form>
     </nav>
 </aside>
-
-<div th:fragment="statusList(statusCode)" class="list-group">
-    <!--/*@thymesVar id="statusCode" type="java.lang.Integer"*/-->
-    <a href="subscriptions"
-       th:class="'m-0 list-group-item list-group-item-action' + ${statusCode == null ? ' acitve' : ''}">All</a>
-    <a href="subscriptions?status=1"
-       th:class="'m-0 list-group-item list-group-item-action' + ${statusCode != null && statusCode.equals(1) ? ' acitve' : ''}">Booking</a>
-    <a href="subscriptions?status=2"
-       th:class="'m-0 list-group-item list-group-item-action' + ${statusCode != null && statusCode.equals(2) ? ' acitve' : ''}">Reading</a>
-    <a href="subscriptions?status=3"
-       th:class="'m-0 list-group-item list-group-item-action' + ${statusCode != null && statusCode.equals(3) ? ' acitve' : ''}">Reading extended</a>
-    <a href="subscriptions?status=4"
-       th:class="'m-0 list-group-item list-group-item-action' + ${statusCode != null && statusCode.equals(4) ? ' acitve' : ''}">Completed</a>
-    <a href="subscriptions?status=5"
-       th:class="'m-0 list-group-item list-group-item-action' + ${statusCode != null && statusCode.equals(5) ? ' acitve' : ''}">Expired</a>
-</div>
 
 </body>
 

@@ -26,7 +26,7 @@ public abstract class AGenericMessageTextCreator<E extends Enum<?>> implements I
         final Context ctx = new Context();
         ctx.setVariable("user", user);
         ctx.setLocale(locale);
-        setAttributeToContextIfExists(ctx, attributes);
+        ctx.setVariables(attributes);
         String template = getTemplate(messageType);
         return templateEngine.process(template, ctx);
     }
@@ -37,12 +37,4 @@ public abstract class AGenericMessageTextCreator<E extends Enum<?>> implements I
     }
 
     protected abstract String getTemplate(E messageType);
-
-    private void setAttributeToContextIfExists(Context ctx, Map<String, Object> attributes){
-        if (attributes != null && !attributes.isEmpty()){
-            for(Map.Entry<String, Object> entry : attributes.entrySet()){
-                ctx.setVariable(entry.getKey(), entry.getValue());
-            }
-        }
-    }
 }

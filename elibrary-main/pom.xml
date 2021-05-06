@@ -17,38 +17,27 @@
         <dependency>
             <groupId>by.it.academy.grodno.elibrary</groupId>
             <artifactId>elibrary-api</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
         </dependency>
-
         <dependency>
             <groupId>by.it.academy.grodno.elibrary</groupId>
             <artifactId>elibrary-controller</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
         </dependency>
-
         <dependency>
             <groupId>by.it.academy.grodno.elibrary</groupId>
             <artifactId>elibrary-dao</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
         </dependency>
-
         <dependency>
             <groupId>by.it.academy.grodno.elibrary</groupId>
             <artifactId>elibrary-rest</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
         </dependency>
-
         <dependency>
             <groupId>by.it.academy.grodno.elibrary</groupId>
             <artifactId>elibrary-utils</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
         </dependency>
-
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-configuration-processor</artifactId>
         </dependency>
-
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
