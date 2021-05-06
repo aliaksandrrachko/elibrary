@@ -9,6 +9,8 @@
             font-family: Arial, sans-serif;
             margin-left: auto;
             margin-right: auto;
+            border: 1px solid black;
+            border-collapse: collapse;
         }
         .welcome {
             font-size: 24px;
@@ -17,6 +19,13 @@
         .p1 {
             font-size: 12px;
             font-family: Arial, sans-serif;
+        }
+
+        .p2 {
+            font-size: 12px;
+            font-family: Arial, sans-serif;
+            margin-top: 2px;
+            margin-bottom: 2px;
         }
     </style>
 </head>
@@ -42,41 +51,41 @@
                         <p class="p1">The list of expired subscriptions</p>
                         <table class="table">
                             <thead>
-                                <tr>
-                                    <th scope="col">#</th>
-                                    <th scope="col">Book</th>
-                                    <th scope="col">User</th>
-                                    <th scope="col">Count</th>
-                                    <th scope="col">Status</th>
-                                    <th scope="col">Ret</th>
-                                    <th scope="col">Created</th>
-                                    <th scope="col">Deadline</th>
+                                <tr style="border: 1px solid black; border-collapse: collapse;">
+                                    <th style="border: 1px solid black; border-collapse: collapse;margin: 2px 2px;">#</th>
+                                    <th style="border: 1px solid black; border-collapse: collapse;margin: 2px 2px;">Book</th>
+                                    <th style="border: 1px solid black; border-collapse: collapse;margin: 2px 2px;">User</th>
+                                    <th style="border: 1px solid black; border-collapse: collapse;margin: 2px 2px;">Count</th>
+                                    <th style="border: 1px solid black; border-collapse: collapse;margin: 2px 2px;">Status</th>
+                                    <th style="border: 1px solid black; border-collapse: collapse;margin: 2px 2px;">Ret</th>
+                                    <th style="border: 1px solid black; border-collapse: collapse;margin: 2px 2px;">Created</th>
+                                    <th style="border: 1px solid black; border-collapse: collapse;margin: 2px 2px;">Deadline</th>
                                 </tr>
                             </thead>
                             <tbody>
                             <!--/*@thymesVar id="subscriptions" type="by.it.academy.grodno.elibrary.entities.books.Subscription"*/-->
-                            <tr th:each="subscription : ${subscriptions}">
+                            <tr style="border: 1px solid black; border-collapse: collapse;margin: 2px 2px;" th:each="subscription : ${subscriptions}">
                                 <!--/*@thymesVar id="subscription" type="by.it.academy.grodno.elibrary.entities.books.Subscription"*/-->
-                                <th scope="row" th:text="${subscription.id}"></th>
+                                <th style="border: 1px solid black; border-collapse: collapse;margin: 2px 2px;" scope="row" th:text="${subscription.id}"></th>
                                 <!--/*@thymesVar id="bookDetails" type="by.it.academy.grodno.elibrary.api.dto.books.BookDto"*/-->
-                                <td>
-                                    <h6 class="text-sm-start mt-2" th:text="${subscription.book.title}"></h6>
-                                    <p class="text-sm-start m-0">
-                                        <span th:each="authorName : ${subscription.book.authors}" th:text="${authorName} + ', '"></span>
+                                <td style="border: 1px solid black; border-collapse: collapse; margin: 2px 2px;">
+                                    <p class="p2" th:text="${subscription.book.title}"></p>
+                                    <p class="p2">
+                                        <span th:each="author : ${subscription.book.authors}" th:text="${author.authorName} + ', '"></span>
                                         <span th:text="${subscription.book.datePublishing}"></span>
                                     </p>
-                                    <p class="text-sm-start m-0" th:text="'Book id:' + ${subscription.book.id}"></p>
+                                    <p th:text="'Book id:' + ${subscription.book.id}"></p>
                                 </td>
-                                <td>
-                                    <h6 class="text-sm-start m-0" th:text="${subscription.user.username}"></h6>
-                                    <h6 class="text-sm-start mt-1" th:text="${subscription.user.email}"></h6>
-                                    <p class="text-sm-start m-0" th:text="'ID:' + ${subscription.user.id}"></p>
+                                <td style="border: 1px solid black; border-collapse: collapse;margin: 2px 2px;">
+                                    <p class="p2" th:text="${subscription.user.username}"></p>
+                                    <p class="p2" th:text="${subscription.user.email}"></p>
+                                    <p class="p2" th:text="'ID:' + ${subscription.user.id}"></p>
                                 </td>
-                                <td th:text="${subscription.took}"></td>
-                                <td th:text="${subscription.status}"></td>
-                                <td th:text="${subscription.returned}"></td>
-                                <td th:text="${subscription.created}"></td>
-                                <td th:text="${subscription.deadline}"></td>
+                                <td style="border: 1px solid black; border-collapse: collapse; margin: 2px 2px;" th:text="${subscription.took}"></td>
+                                <td style="border: 1px solid black; border-collapse: collapse; margin: 2px 2px;" th:text="${subscription.status}"></td>
+                                <td style="border: 1px solid black; border-collapse: collapse; margin: 2px 2px;" th:text="${subscription.returned}"></td>
+                                <td style="border: 1px solid black; border-collapse: collapse; margin: 2px 2px;" th:text="${subscription.created}"></td>
+                                <td style="border: 1px solid black; border-collapse: collapse; margin: 2px 2px;" th:text="${subscription.deadline}"></td>
                             </tr>
                             </tbody>
                         </table>

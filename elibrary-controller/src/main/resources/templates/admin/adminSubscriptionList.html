@@ -107,17 +107,17 @@
             <nav aria-label="Page navigation">
                 <ul class="pagination">
                     <li th:class="'page-item ' + ${pageSubscriptionDto.getNumber() > 0 ? '' : 'disabled'}">
-                        <a class="page-link" th:href="@{/sbuscription(status=${currentStatusCode}, size=${pageSubscriptionDto.size}, page=${pageSubscriptionDto.getNumber() - 1})}">Previous</a></li>
+                        <a class="page-link" th:href="@{subscriptions(status=${currentStatusCode}, size=${pageSubscriptionDto.size}, page=${pageSubscriptionDto.getNumber() - 1})}">Previous</a></li>
                     <li class="page-item active"
                         th:if="${pageSubscriptionDto.totalPages > 0}"
                         th:each="pageNumber : ${pageNumbers}"
                         th:class="'page-item' + ${pageNumber == pageSubscriptionDto.number ? ' active' : ''}">
                         <a class="page-link"
-                           th:href="@{/sbuscription(status=${currentStatusCode}, size=${pageSubscriptionDto.size}, page=${pageNumber})}"
+                           th:href="@{subscriptions(status=${currentStatusCode}, size=${pageSubscriptionDto.size}, page=${pageNumber})}"
                            th:text="${pageNumber + 1}"></a>
                     </li>
                     <li th:class="'page-item ' + ${pageSubscriptionDto.getNumber() < pageSubscriptionDto.getTotalPages() - 1 ? '' : 'disabled'}">
-                        <a class="page-link" th:href="@{/sbuscription(status=${currentStatusCode}, size=${pageSubscriptionDto.size}, page=${pageSubscriptionDto.getNumber() + 1})}">Next</a></li>
+                        <a class="page-link" th:href="@{subscriptions(status=${currentStatusCode}, size=${pageSubscriptionDto.size}, page=${pageSubscriptionDto.getNumber() + 1})}">Next</a></li>
                 </ul>
             </nav>
         </div>

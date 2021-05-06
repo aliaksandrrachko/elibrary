@@ -28,7 +28,7 @@
 <div th:replace="fragments/subNavbarUpButton :: navAsideButton"></div>
 
 <div class="container-xxl my-md-4 bd-layout">
-    <div th:replace="fragments/subNavbarCategory :: navAsideCategory(categoryDtoSet=${categoryDtoSet})"></div>
+    <div th:replace="fragments/subNavbarCategory :: navAsideCategory(categoryDtoSet=${categoryDtoSet}, title=${title}, author=${author})"></div>
     <main class="bd-main order-1">
         <div class="bd-intro ps-lg-4">
             <h1>Books</h1>

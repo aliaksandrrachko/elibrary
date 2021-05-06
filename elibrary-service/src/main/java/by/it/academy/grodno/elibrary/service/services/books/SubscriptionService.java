@@ -236,6 +236,7 @@ public class SubscriptionService implements ISubscriptionService {
     private void prepareToExtendedSubscription(Subscription subscription, SubscriptionRequest request) {
         if (request.getDays() > 0) {
             subscription.setDeadline(subscription.getDeadline().plusDays(request.getDays()));
+            subscription.setStatus(SubscriptionStatus.READING_EXTENDED);
         }
     }
 
@@ -287,8 +288,10 @@ public class SubscriptionService implements ISubscriptionService {
             emailSender.sendEmailFromAdmin(subscription.getUser(), UserMailMessageType.SUBSCRIPTION_EXPIRED,
                     Collections.singletonMap(SUBSCRIPTION, subscription));
         });
-        emailSender.sendEmailToAdmin(null, AdminMailMessageType.SUBSCRIPTION_EXPIRED_INFO,
-                Collections.singletonMap(SUBSCRIPTIONS, subscriptions));
+        if (!subscriptions.isEmpty()) {
+            emailSender.sendEmailToAdmin(null, AdminMailMessageType.SUBSCRIPTION_EXPIRED_INFO,
+                    Collections.singletonMap(SUBSCRIPTIONS, subscriptions));
+        }
         log.info("Was execute scheduled task: 'change status to expired' count - {}", subscriptions.size());
     }
 
