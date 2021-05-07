@@ -44,7 +44,6 @@
                     <th scope="col">Status</th>
                     <th scope="col">Ret</th>
                     <th scope="col">
-                        <div>
                             <a th:href="@{subscriptions(status=${currentStatusCode}, size=${pageSubscriptionDto.size},
                                page=${pageSubscriptionDto.getNumber()}, sort='created,ASC')}" class="text-decoration-none">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-down-short" viewBox="0 0 16 16">
@@ -58,10 +57,8 @@
                                 </svg>
                             </a>
                             Created
-                        </div>
                     </th>
                     <th scope="col">
-                        <div>
                         <a th:href="@{subscriptions(status=${currentStatusCode}, size=${pageSubscriptionDto.size},
                            page=${pageSubscriptionDto.getNumber()}, sort='deadline,ASC')}" class="text-decoration-none">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-down-short" viewBox="0 0 16 16">
@@ -75,7 +72,6 @@
                                 </svg>
                             </a>
                         Deadline
-                        </div>
                     </th>
                 </tr>
                 </thead>
@@ -110,25 +106,25 @@
             </table>
             <nav aria-label="Page navigation">
                 <div class="text-end">
-                    <a th:href="@{subscriptions(size=5, page=${pageSubscriptionDto.getNumber()}, status=${currentStatusCode}, sort=${pageSubscriptionDto.sort})}">5</a>
-                    <a th:href="@{subscriptions(size=10, page=${pageSubscriptionDto.getNumber()}, status=${currentStatusCode}, sort=${pageSubscriptionDto.sort})}">10</a>
-                    <a th:href="@{subscriptins(size=15, page=${pageSubscriptionDto.getNumber()}, status=${currentStatusCode}, sort=${pageSubscriptionDto.sort})}">15</a>
+                    <a th:href="@{subscriptions(size=5, page=${pageSubscriptionDto.getNumber()}, status=${currentStatusCode}, sort=${pageSubscriptionDto.getSort().toString().replace(': ', ',')})}">5</a>
+                    <a th:href="@{subscriptions(size=10, page=${pageSubscriptionDto.getNumber()}, status=${currentStatusCode}, sort=${pageSubscriptionDto.getSort().toString().replace(': ', ',')})}">10</a>
+                    <a th:href="@{subscriptions(size=15, page=${pageSubscriptionDto.getNumber()}, status=${currentStatusCode}, sort=${pageSubscriptionDto.getSort().toString().replace(': ', ',')})}">15</a>
                 </div>
                 <ul class="pagination">
                     <li th:class="'page-item ' + ${pageSubscriptionDto.getNumber() > 0 ? '' : 'disabled'}">
                         <a class="page-link" th:href="@{/subscriptions(status=${currentStatusCode}, size=${pageSubscriptionDto.size},
-                        page=${pageSubscriptionDto.getNumber() - 1}, sort=${pageSubscriptionDto.sort})}">Previous</a></li>
+                        page=${pageSubscriptionDto.getNumber() - 1}, sort=${pageSubscriptionDto.getSort().toString().replace(': ', ',')})}">Previous</a></li>
                     <li class="page-item active"
                         th:if="${pageSubscriptionDto.totalPages > 0}"
                         th:each="pageNumber : ${pageNumbers}"
                         th:class="'page-item' + ${pageNumber == pageSubscriptionDto.number ? ' active' : ''}">
                         <a class="page-link"
                            th:href="@{/subscriptions(status=${currentStatusCode}, size=${pageSubscriptionDto.size},
-                           page=${pageNumber}, sort=${pageSubscriptionDto.sort})}" th:text="${pageNumber + 1}"></a>
+                           page=${pageNumber}, sort=${pageSubscriptionDto.getSort().toString().replace(': ', ',')})}" th:text="${pageNumber + 1}"></a>
                     </li>
                     <li th:class="'page-item ' + ${pageSubscriptionDto.getNumber() < pageSubscriptionDto.getTotalPages() - 1 ? '' : 'disabled'}">
                         <a class="page-link" th:href="@{/subscriptions(status=${currentStatusCode}, size=${pageSubscriptionDto.size},
-                        page=${pageSubscriptionDto.getNumber() + 1}, sort=${pageSubscriptionDto.sort})}">Next</a></li>
+                        page=${pageSubscriptionDto.getNumber() + 1}, sort=${pageSubscriptionDto.getSort().toString().replace(': ', ',')})}">Next</a></li>
                 </ul>
             </nav>
         </div>

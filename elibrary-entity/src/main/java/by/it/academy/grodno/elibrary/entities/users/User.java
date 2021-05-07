@@ -24,8 +24,7 @@ import java.util.Set;
 @Entity
 @Table(name = ("user"))
 @SecondaryTables(value = {
-        @SecondaryTable(name = "user_social_id", pkJoinColumns = {@PrimaryKeyJoinColumn(name = "user_id", referencedColumnName = "id")}),
-        //@SecondaryTable(name = "address", pkJoinColumns = {@PrimaryKeyJoinColumn(name = "id", referencedColumnName = "address_id")})
+        @SecondaryTable(name = "user_social_id", pkJoinColumns = {@PrimaryKeyJoinColumn(name = "user_id", referencedColumnName = "id")})
 })
 public class User extends AEntity<Long> implements UserDetails, Serializable {
 

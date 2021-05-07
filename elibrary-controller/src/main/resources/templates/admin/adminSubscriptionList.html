@@ -28,7 +28,7 @@
 
 <div class="container-xxl my-md-4 bd-layout">
     <!--/*@thymesVar id="currentStatusCode" type="java.lang.Integer"*/-->
-    <div th:replace="fragments/subNavbarSubscriptionAdmin :: navAsideSubcriptionStatusAndInput(currentStatusCode=${currentStatusCode})"></div>
+    <div th:replace="fragments/subNavbarSubscriptionAdmin :: navAsideSubcriptionStatusAndInput(currentStatusCode=${currentStatusCode}, userId=${userId})"></div>
 
     <main class="bd-main order-1">
         <div class="bd-intro ps-lg-4">
@@ -48,7 +48,6 @@
                     <select name="code" class="form-select" aria-label="request code">
                         <option value="1" selected>Booking</option>
                         <option value="2">Take book</option>
-                        <option value="5">Undo booking</option>
                     </select>
                     <button class="btn btn-outline-primary" type="submit">Add</button>
                 </div>
@@ -63,8 +62,40 @@
                     <th scope="col">Count</th>
                     <th scope="col">Status</th>
                     <th scope="col">Ret</th>
-                    <th scope="col">Created</th>
-                    <th scope="col">Deadline</th>
+                    <th scope="col">
+                        <a th:href="@{subscriptions(status=${currentStatusCode}, size=${pageSubscriptionDto.size},
+                               page=${pageSubscriptionDto.getNumber()},
+                               sort=${pageSubscriptionDto.getSort().toString().replace(': ', ',')},
+                               userId=${userId})}" class="text-decoration-none">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-down-short" viewBox="0 0 16 16">
+                            <path fill-rule="evenodd" d="M8 4a.5.5 0 0 1 .5.5v5.793l2.146-2.147a.5.5 0 0 1 .708.708l-3 3a.5.5 0 0 1-.708 0l-3-3a.5.5 0 1 1 .708-.708L7.5 10.293V4.5A.5.5 0 0 1 8 4z"></path>
+                        </svg>
+                    </a>
+                        <a th:href="@{subscriptions(status=${currentStatusCode}, size=${pageSubscriptionDto.size},
+                               page=${pageSubscriptionDto.getNumber()},
+                               sort=${pageSubscriptionDto.getSort().toString().replace(': ', ',')},
+                               userId=${userId})}" class="text-decoration-none">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-up-short" viewBox="0 0 16 16">
+                                <path fill-rule="evenodd" d="M8 12a.5.5 0 0 0 .5-.5V5.707l2.146 2.147a.5.5 0 0 0 .708-.708l-3-3a.5.5 0 0 0-.708 0l-3 3a.5.5 0 1 0 .708.708L7.5 5.707V11.5a.5.5 0 0 0 .5.5z"></path>
+                            </svg>
+                        </a>
+                        Created</th>
+                    <th scope="col">
+                        <a th:href="@{subscriptions(status=${currentStatusCode}, size=${pageSubscriptionDto.size},
+                           page=${pageSubscriptionDto.getNumber()},
+                           sort=${pageSubscriptionDto.getSort().toString().replace(': ', ',')},
+                           userId=${userId})}" class="text-decoration-none">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-down-short" viewBox="0 0 16 16">
+                            <path fill-rule="evenodd" d="M8 4a.5.5 0 0 1 .5.5v5.793l2.146-2.147a.5.5 0 0 1 .708.708l-3 3a.5.5 0 0 1-.708 0l-3-3a.5.5 0 1 1 .708-.708L7.5 10.293V4.5A.5.5 0 0 1 8 4z"></path>
+                        </svg>
+                    </a>
+                        <a th:href="@{subscriptions(status=${currentStatusCode}, size=${pageSubscriptionDto.size},
+                           page=${pageSubscriptionDto.getNumber()}, sort=${pageSubscriptionDto.getSort().toString().replace(': ', ',')})}" class="text-decoration-none">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-up-short" viewBox="0 0 16 16">
+                                <path fill-rule="evenodd" d="M8 12a.5.5 0 0 0 .5-.5V5.707l2.146 2.147a.5.5 0 0 0 .708-.708l-3-3a.5.5 0 0 0-.708 0l-3 3a.5.5 0 1 0 .708.708L7.5 5.707V11.5a.5.5 0 0 0 .5.5z"></path>
+                            </svg>
+                        </a>
+                        Deadline</th>
                     <th scope="col"></th>
                 </tr>
                 </thead>
@@ -105,19 +136,35 @@
             </table>
 
             <nav aria-label="Page navigation">
+                <div class="text-end">
+                    <a th:href="@{subscriptions(size=5, page=${pageSubscriptionDto.getNumber()}, status=${currentStatusCode},
+                    sort=${pageSubscriptionDto.getSort().toString().replace(': ', ',')}, userId=${userId})}">5</a>
+                    <a th:href="@{subscriptions(size=10, page=${pageSubscriptionDto.getNumber()}, status=${currentStatusCode},
+                    sort=${pageSubscriptionDto.getSort().toString().replace(': ', ',')}, userId=${userId})}">10</a>
+                    <a th:href="@{subscriptions(size=15, page=${pageSubscriptionDto.getNumber()}, status=${currentStatusCode},
+                    sort=${pageSubscriptionDto.getSort().toString().replace(': ', ',')}, userId=${userId})}">15</a>
+                </div>
                 <ul class="pagination">
                     <li th:class="'page-item ' + ${pageSubscriptionDto.getNumber() > 0 ? '' : 'disabled'}">
-                        <a class="page-link" th:href="@{subscriptions(status=${currentStatusCode}, size=${pageSubscriptionDto.size}, page=${pageSubscriptionDto.getNumber() - 1})}">Previous</a></li>
+                        <a class="page-link" th:href="@{subscriptions(status=${currentStatusCode}, size=${pageSubscriptionDto.size},
+                        page=${pageSubscriptionDto.getNumber() - 1},
+                        sort=${pageSubscriptionDto.getSort().toString().replace(': ', ',')},
+                        userId=${userId})}">Previous</a></li>
                     <li class="page-item active"
                         th:if="${pageSubscriptionDto.totalPages > 0}"
                         th:each="pageNumber : ${pageNumbers}"
                         th:class="'page-item' + ${pageNumber == pageSubscriptionDto.number ? ' active' : ''}">
                         <a class="page-link"
-                           th:href="@{subscriptions(status=${currentStatusCode}, size=${pageSubscriptionDto.size}, page=${pageNumber})}"
+                           th:href="@{subscriptions(status=${currentStatusCode}, size=${pageSubscriptionDto.size}, page=${pageNumber},
+                           sort=${pageSubscriptionDto.getSort().toString().replace(': ', ',')},
+                           userId=${userId})}"
                            th:text="${pageNumber + 1}"></a>
                     </li>
                     <li th:class="'page-item ' + ${pageSubscriptionDto.getNumber() < pageSubscriptionDto.getTotalPages() - 1 ? '' : 'disabled'}">
-                        <a class="page-link" th:href="@{subscriptions(status=${currentStatusCode}, size=${pageSubscriptionDto.size}, page=${pageSubscriptionDto.getNumber() + 1})}">Next</a></li>
+                        <a class="page-link" th:href="@{subscriptions(status=${currentStatusCode}, size=${pageSubscriptionDto.size},
+                        page=${pageSubscriptionDto.getNumber() + 1},
+                        sort=${pageSubscriptionDto.getSort().toString().replace(': ', ',')},
+                        userId=${userId})}">Next</a></li>
                 </ul>
             </nav>
         </div>

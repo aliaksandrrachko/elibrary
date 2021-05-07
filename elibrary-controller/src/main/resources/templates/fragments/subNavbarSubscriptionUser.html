@@ -23,11 +23,14 @@
                th:class="'m-0 list-group-item list-group-item-action' + ${currentStatusCode != null && currentStatusCode == 5 ? ' active' : ''}">Expired</a>
         </div>
 
-        <form class="input-group mt-3" action="#" th:action="@{subscriptions}" th:method="get">
-            <input type="text" name="subscriptionId" class="form-control"
-                   placeholder="Subscription ID" aria-label="User library card number"
-                   aria-describedby="button-addon2">
-            <button class="btn btn-outline-secondary" type="submit" id="button-addon2">Find</button>
+        <form class="mt-5" action="#" th:action="@{subscriptions}" th:method="get">
+            <label for="subscriptionId" class="form-label">Subscription ID</label>
+            <div class="input-group mb-3">
+                <input type="number" name="subscriptionId" class="form-control" id="subscriptionId"
+                       placeholder="Subscription ID" aria-label="User library card number"
+                       aria-describedby="button-addon2">
+                <button class="btn btn-outline-secondary" type="submit" id="button-addon2">Find</button>
+            </div>
         </form>
     </nav>
 </aside>

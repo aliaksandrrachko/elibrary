@@ -6,6 +6,7 @@ import by.it.academy.grodno.elibrary.controller.utils.PageNumberListCreator;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -31,7 +32,7 @@ public class AdminUserController {
     public ModelAndView findAllUser(@RequestParam(value = "userId", required = false) Long userId,
                                     @RequestParam(value = "email", required = false) String email,
                                     Principal principal,
-                                    @PageableDefault Pageable pageable) {
+                                    @PageableDefault(sort = {"username"}, direction = Sort.Direction.ASC) Pageable pageable) {
         Optional<UserDto> optionalUserDto = userService.findUser(principal);
         UserDto userDto = optionalUserDto.orElseThrow(NoSuchElementException::new);
 

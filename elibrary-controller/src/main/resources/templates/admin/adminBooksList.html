@@ -36,6 +36,11 @@
             <div th:replace="fragments/getAddBookFormModal :: getAddBookForm"></div>
         </div>
         <div class="bd-content ps-lg-4">
+            <div th:if="${currentCategoryDto != null}" class="mt-5">
+                <small class="text-sm-start text-muted m-0" th:text="${currentCategoryDto.getCategoryPath()+ '/'}"></small>
+                <small><a class="text-sm-start m-0 link-primary" th:href="@{books(categoryId=${currentCategoryDto.getId()})}"
+                          th:text="${currentCategoryDto.getCategoryName}"></a></small>
+            </div>
             <table class="table">
                 <thead class="thead-dark">
                 <tr>
@@ -46,8 +51,38 @@
                     <th scope="col"></th>
                     <th scope="col">Total count</th>
                     <th scope="col">Available count</th>
-                    <th scope="col">Created</th>
-                    <th scope="col">Updated</th>
+                    <th scope="col">
+                        <a th:href="@{books(size=${pageBookDto.size}, page=${pageBookDto.getNumber()},
+                        categoryId=${categoryId}, title=${title}, author=${author},
+                        sort='created,ASC')}" class="text-decoration-none">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-down-short" viewBox="0 0 16 16">
+                                <path fill-rule="evenodd" d="M8 4a.5.5 0 0 1 .5.5v5.793l2.146-2.147a.5.5 0 0 1 .708.708l-3 3a.5.5 0 0 1-.708 0l-3-3a.5.5 0 1 1 .708-.708L7.5 10.293V4.5A.5.5 0 0 1 8 4z"></path>
+                            </svg>
+                        </a>
+                        <a th:href="@{subscriptions(size=${pageBookDto.size}, page=${pageBookDto.getNumber()},
+                            categoryId=${categoryId}, title=${title}, author=${author},
+                            sort='created,DESC')}" class="text-decoration-none">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-up-short" viewBox="0 0 16 16">
+                                <path fill-rule="evenodd" d="M8 12a.5.5 0 0 0 .5-.5V5.707l2.146 2.147a.5.5 0 0 0 .708-.708l-3-3a.5.5 0 0 0-.708 0l-3 3a.5.5 0 1 0 .708.708L7.5 5.707V11.5a.5.5 0 0 0 .5.5z"></path>
+                            </svg>
+                        </a>
+                        Created
+                    </th>
+                    <th scope="col">   <a th:href="@{subscriptions(size=${pageBookDto.size}, page=${pageBookDto.getNumber()},
+                         categoryId=${categoryId}, title=${title}, author=${author},
+                         sort='updated,ASC')}" class="text-decoration-none">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-down-short" viewBox="0 0 16 16">
+                            <path fill-rule="evenodd" d="M8 4a.5.5 0 0 1 .5.5v5.793l2.146-2.147a.5.5 0 0 1 .708.708l-3 3a.5.5 0 0 1-.708 0l-3-3a.5.5 0 1 1 .708-.708L7.5 10.293V4.5A.5.5 0 0 1 8 4z"></path>
+                        </svg>
+                    </a>
+                        <a th:href="@{subscriptions(size=${pageBookDto.size}, page=${pageBookDto.getNumber()},
+                        categoryId=${categoryId}, title=${title}, author=${author},
+                        sort='updated,DESC')}" class="text-decoration-none">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-up-short" viewBox="0 0 16 16">
+                                <path fill-rule="evenodd" d="M8 12a.5.5 0 0 0 .5-.5V5.707l2.146 2.147a.5.5 0 0 0 .708-.708l-3-3a.5.5 0 0 0-.708 0l-3 3a.5.5 0 1 0 .708.708L7.5 5.707V11.5a.5.5 0 0 0 .5.5z"></path>
+                            </svg>
+                        </a>
+                        Updated</th>
                     <th scope="col"></th>
                 </tr>
                 </thead>
@@ -93,24 +128,26 @@
 
             <nav aria-label="Page navigation">
                 <div class="text-end">
-                    <a th:href="@{books(size=5, page=${pageBookDto.getNumber()}, sort=${pageBookDto.getSort()},
+                    <a th:href="@{books(size=5, page=${pageBookDto.getNumber()}, sort=${pageBookDto.getSort().toString().replace(': ', ',')},
                     categoryId=${categoryId}, title=${title}, author=${author})}">5</a>
-                    <a th:href="@{books(size=10, page=${pageBookDto.getNumber()}, sort=${pageBookDto.getSort()},
+                    <a th:href="@{books(size=10, page=${pageBookDto.getNumber()}, sort=${pageBookDto.getSort().toString().replace(': ', ',')},
                     categoryId=${categoryId}, title=${title}, author=${author})}">10</a>
-                    <a th:href="@{books(size=15, page=${pageBookDto.getNumber()}, sort=${pageBookDto.getSort()},
+                    <a th:href="@{books(size=15, page=${pageBookDto.getNumber()}, sort=${pageBookDto.getSort().toString().replace(': ', ',')},
                     categoryId=${categoryId}, title=${title}, author=${author})}">15</a>
                 </div>
                 <ul class="pagination">
                     <li th:class="'page-item ' + ${pageBookDto.getNumber() > 0 ? '' : 'disabled'}">
                         <a class="page-link"
-                           th:href="@{books(size=${pageBookDto.size}, page=${pageBookDto.getNumber() - 1}, sort=${pageBookDto.getSort()},
+                           th:href="@{books(size=${pageBookDto.size}, page=${pageBookDto.getNumber() - 1},
+                           sort=${pageBookDto.getSort().toString().replace(': ', ',')},
                            categoryId=${categoryId}, title=${title}, author=${author})}">Previous</a></li>
                     <li class="page-item active"
                         th:if="${pageBookDto.totalPages > 0}"
                         th:each="pageNumber : ${pageNumbers}"
                         th:class="'page-item' + ${pageNumber == pageBookDto.number ? ' active' : ''}">
                         <a class="page-link"
-                           th:href="@{books(size=${pageBookDto.size}, page=${pageNumber}, sort=${pageBookDto.getSort()},
+                           th:href="@{books(size=${pageBookDto.size}, page=${pageNumber},
+                           sort=${pageBookDto.getSort().toString().replace(': ', ',')},
                            categoryId=${categoryId}, title=${title}, author=${author})}"
                            th:text="${pageNumber + 1}"></a>
                     </li>
@@ -118,7 +155,7 @@
                         <a class="page-link"
                            th:href="@{books(size=${pageBookDto.size},
                            page=${pageBookDto.getNumber() + 1},
-                           sort=${pageBookDto.getSort()},
+                           sort=${pageBookDto.getSort().toString().replace(': ', ',')},
                            categoryId=${categoryId}, title=${title}, author=${author})}">Next</a></li>
                 </ul>
             </nav>

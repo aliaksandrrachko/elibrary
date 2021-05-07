@@ -21,7 +21,8 @@ public class BookMapper extends AGenericMapper<Book, BookDto, Long> {
 
     private final CategoryMapper categoryMapper;
 
-    protected BookMapper(ModelMapper modelMapper, PublisherJpaRepository publisherJpaRepository, CategoryJpaRepository categoryJpaRepository, CategoryMapper categoryMapper) {
+    protected BookMapper(ModelMapper modelMapper, PublisherJpaRepository publisherJpaRepository,
+                         CategoryJpaRepository categoryJpaRepository, CategoryMapper categoryMapper) {
         super(modelMapper, Book.class, BookDto.class);
         this.publisherJpaRepository = publisherJpaRepository;
         this.categoryJpaRepository = categoryJpaRepository;

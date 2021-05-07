@@ -8,7 +8,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Collection;
-import java.util.Set;
 
 public interface BookJpaRepository extends JpaRepository<Book, Long> {
 

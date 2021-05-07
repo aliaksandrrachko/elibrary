@@ -9,6 +9,8 @@ import by.it.academy.grodno.elibrary.controller.utils.PageNumberListCreator;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -33,7 +35,7 @@ public class AdminSubscriptionController {
     public ModelAndView findAllSubscription(@RequestParam(value = "status", required = false) Integer status,
                                             @RequestParam(value = "userId", required = false) Long userId,
                                             @RequestParam(value = "subscriptionId", required = false) Long subscriptionId,
-                                            Pageable pageable,
+                                            @PageableDefault(sort = {"status"}, direction = Sort.Direction.ASC) Pageable pageable,
                                             Principal principal) {
         Optional<UserDto> optionalUserDto = userService.findUser(principal);
         UserDto userDto = optionalUserDto.orElseThrow(NoSuchElementException::new);
@@ -55,6 +57,7 @@ public class AdminSubscriptionController {
         modelAndView.addObject("currentUser", userDto);
         modelAndView.addObject("pageSubscriptionDto", subscriptionPage);
         modelAndView.addObject("currentStatusCode", status);
+        modelAndView.addObject("userId", userId);
         modelAndView.addObject("pageNumbers",
                 PageNumberListCreator.getListOfPagesNumber(subscriptionPage.getNumber(), subscriptionPage.getTotalPages()));
         return modelAndView;

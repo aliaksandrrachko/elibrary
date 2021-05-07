@@ -9,6 +9,7 @@ import by.it.academy.grodno.elibrary.controller.utils.PageNumberListCreator;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -35,7 +36,7 @@ public class UserSubscriptionController {
     @GetMapping
     public ModelAndView findAll(@RequestParam(value = "status", required = false) @Min(1) @Max(5) Integer status,
                                 @RequestParam(value = "subscriptionId", required = false) Long subscriptionId,
-                                @PageableDefault Pageable pageable,
+                                @PageableDefault(sort = {"status"}, direction = Sort.Direction.ASC) Pageable pageable,
                                 Principal principal){
         Optional<UserDto> optionalUserDto = userService.findUser(principal);
         UserDto userDto = optionalUserDto.orElseThrow(NoSuchElementException::new);
@@ -46,7 +47,7 @@ public class UserSubscriptionController {
         } else if(subscriptionId != null) {
             Optional<SubscriptionDto> optionalSubscriptionDto =
                     subscriptionService.findBySubscriptionIdAndUserId(subscriptionId, userDto.getId());
-            subscriptionPage = new PageImpl<>(Collections.singletonList(optionalSubscriptionDto.orElse(null)));
+            subscriptionPage = new PageImpl<>(Collections.singletonList(optionalSubscriptionDto.orElse(null)), pageable, 1L);
         } else {
             subscriptionPage = subscriptionService.findAllByUserId(userDto.getId(), pageable);
         }

@@ -13,7 +13,9 @@ import javax.validation.constraints.Pattern;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -40,6 +42,8 @@ public class BookDto extends AEntityDto<Long> {
     private String publisher;
 
     private List<String> authors;
+
+    private transient Map<String, Object> attributes = new HashMap<>();
 
     @Pattern(regexp = "^\\w{3}$", message = "Code by alpha-3/ISO 639-2.")
     private String language;
@@ -69,10 +73,6 @@ public class BookDto extends AEntityDto<Long> {
     private LocalDateTime updated;
 
     public List<String> getAuthors() {
-        if (authors == null){
-            return authors = new ArrayList<>();
-        } else {
-            return authors;
-        }
+        return authors != null ? authors : new ArrayList<>();
     }
 }

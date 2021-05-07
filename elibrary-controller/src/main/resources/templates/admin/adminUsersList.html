@@ -29,17 +29,23 @@
 <div class="container-xxl my-md-4 bd-layout">
     <aside class="bd-sidebar">
         <nav id="bd-docs-nav" aria-label="Docs navigation">
-            <form class="input-group mt-3" action="#" th:action="@{/admin/users}" th:method="get">
-                <input type="text" name="userId" class="form-control"
-                       placeholder="User ID" aria-label="User library card number"
-                       aria-describedby="button-addon1">
-                <button class="btn btn-outline-secondary" type="submit" id="button-addon1">Find</button>
+            <form class="mt-5" action="#" th:action="@{/admin/users}" th:method="get">
+                <label for="userId" class="form-label">User ID</label>
+                <div class="input-group">
+                    <input type="number" name="userId" class="form-control"
+                           placeholder="User ID" aria-label="User library card number" id="userId"
+                           aria-describedby="button-addon1">
+                    <button class="btn btn-outline-secondary" type="submit" id="button-addon1">Find</button>
+                </div>
             </form>
-            <form class="input-group mt-3" action="#" th:action="@{/admin/users}" th:method="get">
-                <input type="text" name="email" class="form-control"
-                       placeholder="Email" aria-label="User library card number"
-                       aria-describedby="button-addon2">
-                <button class="btn btn-outline-secondary" type="submit" id="button-addon2">Find</button>
+            <form class="mt-5" action="#" th:action="@{/admin/users}" th:method="get">
+                <label for="email" class="form-label">Email</label>
+                <div class="input-group">
+                    <input type="text" name="email" class="form-control" id="email"
+                           placeholder="Email" aria-label="User library card number"
+                           aria-describedby="button-addon2">
+                    <button class="btn btn-outline-secondary" type="submit" id="button-addon2">Find</button>
+                </div>
             </form>
         </nav>
     </aside>
@@ -55,7 +61,18 @@
                 <th scope="col">#</th>
                 <th scope="col">Username</th>
                 <th scope="col">Email</th>
-                <th scope="col">Created</th>
+                <th scope="col">
+                    <a th:href="@{user(size=${pageUsersDto.size}, page=${pageUsersDto.getNumber()}, sort='created,ASC')}" class="text-decoration-none">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-down-short" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd" d="M8 4a.5.5 0 0 1 .5.5v5.793l2.146-2.147a.5.5 0 0 1 .708.708l-3 3a.5.5 0 0 1-.708 0l-3-3a.5.5 0 1 1 .708-.708L7.5 10.293V4.5A.5.5 0 0 1 8 4z"></path>
+                    </svg>
+                </a>
+                    <a th:href="@{users(size=${pageUsersDto.size}, page=${pageUsersDto.getNumber()}, sort='created,DESC')}" class="text-decoration-none">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-up-short" viewBox="0 0 16 16">
+                            <path fill-rule="evenodd" d="M8 12a.5.5 0 0 0 .5-.5V5.707l2.146 2.147a.5.5 0 0 0 .708-.708l-3-3a.5.5 0 0 0-.708 0l-3 3a.5.5 0 1 0 .708.708L7.5 5.707V11.5a.5.5 0 0 0 .5.5z"></path>
+                        </svg>
+                    </a>
+                    Created</th>
                 <th scope="col">Roles</th>
                 <th scope="col"></th>
                 <th scope="col"></th>
@@ -104,21 +121,26 @@
         </table>
 
         <nav aria-label="Page navigation">
+            <div class="text-end">
+                <a th:href="@{users(size=5, page=${pageUsersDto.getNumber()}, sort=${pageUsersDto.getSort().toString().replace(': ', ',')})}">5</a>
+                <a th:href="@{users(size=10, page=${pageUsersDto.getNumber()}, sort=${pageUsersDto.getSort().toString().replace(': ', ',')})}">10</a>
+                <a th:href="@{users(size=15, page=${pageUsersDto.getNumber()}, sort=${pageUsersDto.getSort().toString().replace(': ', ',')})}">15</a>
+            </div>
             <ul class="pagination">
                 <li th:class="'page-item ' + ${pageUsersDto.getNumber() > 0 ? '' : 'disabled'}">
-                    <a class="page-link" th:href="@{/admin/users(size=${pageUsersDto.size}, page=${pageUsersDto.getNumber() - 1})}">Previous</a>
+                    <a class="page-link" th:href="@{users(size=${pageUsersDto.size}, page=${pageUsersDto.getNumber() - 1}, sort=${pageUsersDto.getSort().toString().replace(': ', ',')})}">Previous</a>
                 </li>
                 <li class="page-item active"
                     th:if="${pageUsersDto.totalPages > 0}"
                     th:each="pageNumber : ${pageNumbers}"
                     th:class="'page-item' + ${pageNumber == pageUsersDto.number ? ' active' : ''}">
                     <a class="page-link"
-                       th:href="@{/admin/users(size=${pageUsersDto.size}, page=${pageNumber})}"
+                       th:href="@{users(size=${pageUsersDto.size}, page=${pageNumber}, sort=${pageUsersDto.getSort().toString().replace(': ', ',')})}"
                        th:text="${pageNumber + 1}"></a>
                 </li>
                 <li th:class="'page-item ' + ${pageUsersDto.getNumber() < pageUsersDto.getTotalPages() - 1 ? '' : 'disabled'}">
                     <a class="page-link"
-                       th:href="@{/admin/users(size=${pageUsersDto.size}, page=${pageUsersDto.getNumber() + 1})}">Next</a></li>
+                       th:href="@{users(size=${pageUsersDto.size}, page=${pageUsersDto.getNumber() + 1}, sort=${pageUsersDto.getSort().toString().replace(': ', ',')})}">Next</a></li>
             </ul>
         </nav>
         </div>

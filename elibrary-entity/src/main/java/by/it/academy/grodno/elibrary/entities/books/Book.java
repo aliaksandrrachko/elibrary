@@ -3,11 +3,14 @@ package by.it.academy.grodno.elibrary.entities.books;
 import by.it.academy.grodno.elibrary.entities.AEntity;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 @NoArgsConstructor
@@ -18,9 +21,6 @@ import java.util.Set;
 @SuperBuilder
 @Entity
 @Table(name = "book")
-@SecondaryTables(value = {
-        @SecondaryTable(name = "category", pkJoinColumns = {@PrimaryKeyJoinColumn(name = "id")}),
-        @SecondaryTable(name = "publisher", pkJoinColumns = {@PrimaryKeyJoinColumn(name = "id")})})
 public class Book extends AEntity<Long> {
     @Column(name = "isbn_10", length = 10)
     private String isbn10;
@@ -48,10 +48,9 @@ public class Book extends AEntity<Long> {
             inverseJoinColumns = @JoinColumn(name = "author_id"))
     private Set<Author> authors;
 
-//    @Type(type = "json", typeClass = JsonStringType.class)
-//    @JoinTable(name = "attribute",
-//            joinColumns = {@JoinColumn(name = "attribute", columnDefinition = "json")})
-//    private Map<String, Object> attributes;
+    @Type(type = "json")
+    @Column(name = "attributes")
+    private transient Map<String, Object> attributes = new HashMap<>();
 
     /**
      * Code by alpha-3/ISO 639-2.
@@ -91,10 +90,6 @@ public class Book extends AEntity<Long> {
     }
 
     public Set<Author> getAuthors() {
-        if (authors == null){
-            return authors = new HashSet<>();
-        } else {
-            return authors;
-        }
+        return authors != null ? authors : new HashSet<>();
     }
 }

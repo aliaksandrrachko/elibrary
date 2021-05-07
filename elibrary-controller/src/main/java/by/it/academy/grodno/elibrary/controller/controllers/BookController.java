@@ -15,6 +15,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import java.security.Principal;
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 @RestController
@@ -40,8 +41,10 @@ public class BookController {
         UserDto currentUser = userService.findUser(principal).orElse(null);
 
         Page<BookDto> pageBookDto;
+        Optional<CategoryDto> categoryDtoOptional = Optional.empty();
         if (categoryId != null){
             pageBookDto = bookService.findAllIncludeSubCategories(categoryId, pageable);
+            categoryDtoOptional = categoryService.findById(categoryId);
         } else if (title != null) {
             pageBookDto = bookService.findAllByTitle(title, pageable);
         } else if (author != null){
@@ -58,6 +61,7 @@ public class BookController {
         modelAndView.addObject("categoryDtoSet", categoryDtoList);
         modelAndView.addObject("pageBookDto", pageBookDto);
         modelAndView.addObject("categoryId", categoryId);
+        modelAndView.addObject("currentCategoryDto", categoryDtoOptional.orElse(null));
         modelAndView.addObject("title", title);
         modelAndView.addObject("author", author);
         modelAndView.addObject("pageNumbers",

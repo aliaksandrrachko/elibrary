@@ -47,10 +47,11 @@ public class AdminBookController {
                                     @RequestParam(value = "author", required = false) String author,
                                     @PageableDefault Pageable pageable,
                                     Principal principal) {
-        Set<CategoryDto> categoryDtoSet = new HashSet<>(categoryService.findAll());
         Page<BookDto> pageBookDto;
+        Optional<CategoryDto> categoryDtoOptional = Optional.empty();
         if (categoryId != null){
             pageBookDto = bookService.findAllIncludeSubCategories(categoryId, pageable);
+            categoryDtoOptional = categoryService.findById(categoryId);
         } else if (title != null) {
             pageBookDto = bookService.findAllByTitle(title, pageable);
         } else if (author != null){
@@ -59,11 +60,14 @@ public class AdminBookController {
             pageBookDto = bookService.findAll(pageable);
         }
 
+        Set<CategoryDto> categoryDtoSet = new HashSet<>(categoryService.findAll());
+
         ModelAndView modelAndView = getModelAndViewWithCurrentUserFromDb(principal);
         modelAndView.setViewName("admin/adminBooksList");
         modelAndView.addObject("categoryDtoSet", categoryDtoSet);
         modelAndView.addObject("pageBookDto", pageBookDto);
         modelAndView.addObject("categoryId", categoryId);
+        modelAndView.addObject("currentCategoryDto", categoryDtoOptional.orElse(null));
         modelAndView.addObject("title", title);
         modelAndView.addObject("author", author);
         modelAndView.addObject("pageNumbers",
@@ -81,6 +85,7 @@ public class AdminBookController {
 
     @GetMapping("/add")
     public ModelAndView getAddBookForm(@RequestParam(value = "countAuthors", required = false, defaultValue = "3") int countAuthors,
+                                       @RequestParam(value = "countAttributes", required = false, defaultValue = "3") int countAttributes,
                                        @RequestParam(value = "isbn", required = false) String isbn,
                                        Principal principal) {
         ModelAndView modelAndView = getModelAndViewWithCurrentUserFromDb(principal);
@@ -91,6 +96,7 @@ public class AdminBookController {
             if (optionalBookDto.isPresent()){
                 bookDto = optionalBookDto.get();
                 addEmptyStringToList(bookDto.getAuthors(), countAuthors);
+                addEmptyKeyToMap(bookDto.getAttributes(), countAttributes);
             } else {
                 modelAndView.setViewName("redirect:/error");
                 modelAndView.addObject("error", "Resource didn't find.");
@@ -110,6 +116,10 @@ public class AdminBookController {
         }
         prepareModelAndViewForAddAndUpdateBookForm(modelAndView);
         return modelAndView;
+    }
+
+    private void addEmptyKeyToMap(Map<String, Object> attributes, int size) {
+
     }
 
     private List<String> addEmptyStringToList(List<String> authors, int size){

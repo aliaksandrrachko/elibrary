@@ -1,8 +1,0 @@
-{
-  "properties": [
-    {
-      "name": "spring.mail.send",
-      "type": "java.lang.String",
-      "description": "Determines whether the emails will be send."
-    }
-  ] }

@@ -38,17 +38,6 @@ CREATE TABLE IF NOT EXISTS user_social_id
 );
 
 -- -----------------------------------------------------
--- Trigger on insert user
--- -----------------------------------------------------
-# CREATE
-#     TRIGGER p_user_insert
-#     BEFORE INSERT
-#     ON user
-#     FOR EACH ROW
-#     SET NEW.user_created = NOW(),
-#         NEW.user_updated = NOW();
-
--- -----------------------------------------------------
 -- Trigger on update user
 -- -----------------------------------------------------
 CREATE
@@ -139,18 +128,6 @@ CREATE TABLE IF NOT EXISTS category
 );
 
 -- -----------------------------------------------------
--- Table by_it_academy_grodno_elibrary.section
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS section
-(
-    id           INT UNSIGNED NOT NULL AUTO_INCREMENT UNIQUE COMMENT 'Books sections id',
-    section_name VARCHAR(45)  NOT NULL UNIQUE COMMENT 'Section of books category',
-    category_id  INT UNSIGNED NOT NULL COMMENT 'Category id from category table',
-    CONSTRAINT pk_section PRIMARY KEY (id),
-    CONSTRAINT fk_section_category FOREIGN KEY (category_id) REFERENCES category (id) ON DELETE CASCADE ON UPDATE CASCADE
-);
-
--- -----------------------------------------------------
 -- Table by_it_academy_grodno_elibrary.publisher
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS publisher
@@ -186,28 +163,17 @@ CREATE TABLE IF NOT EXISTS book
     publishing_date DATE COMMENT 'The year and month of publishing',
     print_length    INT UNSIGNED               NOT NULL COMMENT 'Count of pages',
     picture_url     VARCHAR(2083) COMMENT 'Books cover image',
+    attributes      JSON COMMENT 'Books attributes',
     total_count     INT UNSIGNED COMMENT 'Total count of books',
     available_count INT UNSIGNED COMMENT 'Available count',
     available       BOOLEAN      DEFAULT TRUE COMMENT 'Available for booking',
     book_rating     INT UNSIGNED DEFAULT 0 NOT NULL COMMENT 'Book rating, count of viewing',
     book_created    DATETIME     DEFAULT NOW() NOT NULL COMMENT 'The date of adding book',
     book_updated    DATETIME     DEFAULT NOW() NOT NULL COMMENT 'The date of adding book',
-    #cover INT COMMENT 'The books cover',
     CONSTRAINT pk_book PRIMARY KEY (id),
     CONSTRAINT fk_book_category FOREIGN KEY (category_id) REFERENCES category (id) ON DELETE CASCADE ON UPDATE CASCADE,
     CONSTRAINT fk_book_publisher FOREIGN KEY (publisher_id) REFERENCES publisher (id) ON DELETE CASCADE ON UPDATE CASCADE
 );
-
--- -----------------------------------------------------
--- Trigger on insert book
--- -----------------------------------------------------
-# CREATE
-#     TRIGGER p_book_insert
-#     BEFORE INSERT
-#     ON book
-#     FOR EACH ROW
-#     SET NEW.book_created = NOW(),
-#         NEW.book_updated = NOW();
 
 -- -----------------------------------------------------
 -- Trigger on update user
@@ -218,18 +184,6 @@ CREATE
     ON book
     FOR EACH ROW
     SET NEW.book_updated = NOW();
-
-
--- -----------------------------------------------------
--- Table by_it_academy_grodno_elibrary.attribute
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS attribute
-(
-    book_id   BIGINT UNSIGNED NOT NULL UNIQUE COMMENT 'The book id',
-    attribute JSON            NOT NULL COMMENT 'The books attributes',
-    CONSTRAINT pk_attribute PRIMARY KEY (book_id),
-    CONSTRAINT fk_attribute_book FOREIGN KEY (book_id) REFERENCES book (id) ON DELETE CASCADE ON UPDATE CASCADE
-);
 
 -- -----------------------------------------------------
 -- Table by_it_academy_grodno_elibrary.book_has_author
@@ -249,28 +203,14 @@ CREATE TABLE IF NOT EXISTS review
 (
     id             BIGINT UNSIGNED        NOT NULL COMMENT 'Review id',
     book_id        BIGINT UNSIGNED        NOT NULL COMMENT 'Books id',
-    review_created DATETIME DEFAULT NOW() NOT NULL COMMENT 'Date of creating',
     user_id        BIGINT UNSIGNED        NOT NULL COMMENT 'Users id',
     review_text    TEXT                   NOT NULL COMMENT 'Review text',
+    review_grade   TINYINT UNSIGNED       NOT NULL COMMENT 'Review gradle',
+    review_created DATETIME DEFAULT NOW() NOT NULL COMMENT 'Date of creating',
+    review_updated DATETIME DEFAULT NOW() NOT NULL COMMENT 'Date of updating',
     CONSTRAINT fk_review_book FOREIGN KEY (book_id) REFERENCES book (id) ON DELETE CASCADE ON UPDATE CASCADE,
     CONSTRAINT fk_review_user FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE ON UPDATE CASCADE
 );
-
--- -----------------------------------------------------
--- Table by_it_academy_grodno_elibrary.subscription_status
--- -----------------------------------------------------
-# CREATE TABLE IF NOT EXISTS status
-# (
-#     status_code     INT UNSIGNED NOT NULL COMMENT 'Status id',
-#     status_duration INT UNSIGNED NOT NULL COMMENT 'Duration of the event for giving status',
-#     CONSTRAINT pk_subscription_status PRIMARY KEY (status_code)
-# );
-#
-# INSERT INTO status (status_code, status_duration)
-# VALUES (1, 1),
-#        (2, 10),
-#        (3, 2),
-#        (4, 0);
 
 -- -----------------------------------------------------
 -- Table by_it_academy_grodno_elibrary.subscription
@@ -298,41 +238,12 @@ CREATE TABLE IF NOT EXISTS subscription
 #     TRIGGER p_subscription_book_insert
 #     AFTER INSERT
 #     ON subscription
-#     FOR EACH ROW BEGIN
+#     FOR EACH ROW
+#     BEGIN
 #     UPDATE book
 #     SET book.book_rating = ((SELECT book_rating FROM book WHERE id = NEW.book_id) + 1)
 #     WHERE book.id = NEW.book_id;
 #     END;
-#
-# Drop trigger p_subscription_book_insert;
-
--- -----------------------------------------------------
--- Trigger on subscription insert (adds duration for deadline)
--- -----------------------------------------------------
-# CREATE
-#     TRIGGER p_subscription_insert
-#     BEFORE INSERT
-#     ON subscription
-#     FOR EACH ROW
-#     SET NEW.subscription_deadline =
-#             DATE_ADD((SELECT subscription_deadline FROM subscription WHERE id = new.id),
-#                      INTERVAL
-#                      (SELECT status_duration FROM status WHERE status_code = new.status_code)
-#                      DAY);
-
--- -----------------------------------------------------
--- Trigger on subscription update status (add duration for deadline)
--- -----------------------------------------------------
-# CREATE
-#     TRIGGER p_subscription_update
-#     BEFORE UPDATE
-#     ON subscription
-#     FOR EACH ROW
-#     SET NEW.subscription_deadline =
-#             DATE_ADD((SELECT subscription_deadline FROM subscription WHERE id = new.id),
-#                      INTERVAL
-#                      (SELECT status_duration FROM status WHERE status_code = new.status_code)
-#                      DAY);
 
 -- -----------------------------------------------------
 -- Initial data by_it_academy_grodno_elibrary.role
@@ -342,8 +253,7 @@ VALUES (1, 'ROLE_USER'),
        (2, 'ROLE_ADMIN'),
        (3, 'ROLE_USER_FACEBOOK'),
        (4, 'ROLE_USER_GITHUB'),
-       (5, 'ROLE_USER_GOOGLE'),
-       (6, 'ROLE_LIBRARIAN');
+       (5, 'ROLE_USER_GOOGLE');
 
 -- -----------------------------------------------------
 -- Initial data by_it_academy_grodno_elibrary.address
@@ -352,7 +262,7 @@ INSERT INTO address (id, country, region, district, city, street, postal_code, h
 values (1, 'Беларусь', 'Гродненская', 'Гродненский', 'Kuangyuan', 'Erie', 230005, '278', '4720'),
        (2, 'Беларусь','Гродненская', 'Гродненский', 'Kutorejo', 'Gerald', 230005, '07', '4292'),
        (3,'Беларусь', 'Гродненская', 'Гродненский', 'Shangshuai', 'Prairieview', 230005, '05843', '07'),
-       (4,'Беларусь', 'Гродненская', 'Rhône-Alpes', 'Valbonë', 'Talmadge', 230005, '1', '6'),
+       (4,'Беларусь', 'Гродненская', 'Щучинский', 'Valbonë', 'Talmadge', 230005, '1', '6'),
        (5,'Беларусь', 'Гродненская', 'Гродненский', 'Montes Claros', 'Kensington', '39400-000', '78523', '77'),
        (6,'Беларусь', 'Гродненская', 'Гродненский', 'Yanhe', 'Heffernan', 230005, '49220', '1096'),
        (7,'Беларусь', 'Гродненская', 'Гродненский', 'Matagami', 'Barnett', 'N2M', '0866', '245'),
@@ -374,26 +284,11 @@ VALUES ('eget.odio@Donec.ca', 'Armand Parrish', 'Cleo', 'Macias', 'Gretchen', '{
        ('id@acarcuNunc.edu', 'Leah Moody', 'Mark', 'Mckinney', 'Dalton', '{"countryCode": "375", "nationalNumber": "339685203"}', 4, 'm', '2020-10-01', '$2a$10$Z1/.F4bRuyOGyL7NQrmjhufHf8XrHIEjPfBz9tlPbPcWrLpvPWKfq'),
        ('urna.Vivamus.molestie@suscipitest.ca', 'Isabella Ford', 'Keefe', 'Terry', 'Celeste', '{"countryCode": "375", "nationalNumber": "443526222"}', 5, 'm', '2021-08-23', '$2a$10$Z1/.F4bRuyOGyL7NQrmjhufHf8XrHIEjPfBz9tlPbPcWrLpvPWKfq'),
        ('dictum@mus.net', 'Jaime Castillo', 'Fredericka', 'York', 'Armand', '{"countryCode": "375", "nationalNumber": "338526313"}', 6, 'f', '2022-04-04', '$2a$10$Z1/.F4bRuyOGyL7NQrmjhufHf8XrHIEjPfBz9tlPbPcWrLpvPWKfq'),
-       ('nec@dolorsit.co.uk', 'Hollee Mejia', 'Winter', 'Vasquez', 'Brenda', '{
-         "countryCode": "375",
-         "nationalNumber": "337728818"
-       }', 7, 'f', '2020-12-07', '$2a$10$Z1/.F4bRuyOGyL7NQrmjhufHf8XrHIEjPfBz9tlPbPcWrLpvPWKfq'),
-       ('ac.mattis.ornare@elementumat.org', 'Octavius Case', 'Phyllis', 'Christian', 'Luke', '{
-         "countryCode": "375",
-         "nationalNumber": "299467819"
-       }', 8, 'u', '2021-04-02', '$2a$10$Z1/.F4bRuyOGyL7NQrmjhufHf8XrHIEjPfBz9tlPbPcWrLpvPWKfq'),
-       ('erat.Sed.nunc@temporbibendum.org', 'Xena Albert', 'Fulton', 'Mcbride', 'Marny', '{
-         "countryCode": "375",
-         "nationalNumber": "344555666"
-       }', 9, 'u', '2022-03-22', '$2a$10$Z1/.F4bRuyOGyL7NQrmjhufHf8XrHIEjPfBz9tlPbPcWrLpvPWKfq'),
-       ('dolor.nonummy.ac@neque.com', 'Ivy Whitfield', 'Lara', 'Forbes', 'Anjolie', '{
-         "countryCode": "375",
-         "nationalNumber": "294574811"
-       }', 10, 'f', '2022-03-21', '$2a$10$Z1/.F4bRuyOGyL7NQrmjhufHf8XrHIEjPfBz9tlPbPcWrLpvPWKfq'),
-       ('mauris@malesuada.org', 'Claire Contreras', 'Kimberly', 'Castaneda', 'Darryl', '{
-         "countryCode": "375",
-         "nationalNumber": "292424054"
-       }', 11, 'm', '2021-10-23', '$2a$10$Z1/.F4bRuyOGyL7NQrmjhufHf8XrHIEjPfBz9tlPbPcWrLpvPWKfq');
+       ('nec@dolorsit.co.uk', 'Hollee Mejia', 'Winter', 'Vasquez', 'Brenda', '{"countryCode": "375", "nationalNumber": "337728818"}', 7, 'f', '2020-12-07', '$2a$10$Z1/.F4bRuyOGyL7NQrmjhufHf8XrHIEjPfBz9tlPbPcWrLpvPWKfq'),
+       ('ac.mattis.ornare@elementumat.org', 'Octavius Case', 'Phyllis', 'Christian', 'Luke', '{"countryCode": "375", "nationalNumber": "299467819"}', 8, 'u', '2021-04-02', '$2a$10$Z1/.F4bRuyOGyL7NQrmjhufHf8XrHIEjPfBz9tlPbPcWrLpvPWKfq'),
+       ('erat.Sed.nunc@temporbibendum.org', 'Xena Albert', 'Fulton', 'Mcbride', 'Marny', '{"countryCode": "375", "nationalNumber": "344555666"}', 9, 'u', '2022-03-22', '$2a$10$Z1/.F4bRuyOGyL7NQrmjhufHf8XrHIEjPfBz9tlPbPcWrLpvPWKfq'),
+       ('dolor.nonummy.ac@neque.com', 'Ivy Whitfield', 'Lara', 'Forbes', 'Anjolie', '{"countryCode": "375", "nationalNumber": "294574811"}', 10, 'f', '2022-03-21', '$2a$10$Z1/.F4bRuyOGyL7NQrmjhufHf8XrHIEjPfBz9tlPbPcWrLpvPWKfq'),
+       ('mauris@malesuada.org', 'Claire Contreras', 'Kimberly', 'Castaneda', 'Darryl', '{"countryCode": "375", "nationalNumber": "292424054"}', 11, 'm', '2021-10-23', '$2a$10$Z1/.F4bRuyOGyL7NQrmjhufHf8XrHIEjPfBz9tlPbPcWrLpvPWKfq');
 
 -- -----------------------------------------------------
 -- Initial data by_it_academy_grodno_elibrary.user_has_role

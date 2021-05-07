@@ -28,7 +28,7 @@
 <div th:replace="fragments/subNavbarUpButton :: navAsideButton"></div>
 
 <div class="container-xxl my-md-4 bd-layout">
-    <div th:replace="fragments/subNavbarCategory :: navAsideCategory(categoryDtoSet=${categoryDtoSet})"></div>
+    <div th:replace="fragments/subNavbarCategoryWithoutFind :: navAsideCategory(categoryDtoSet=${categoryDtoSet})"></div>
 
     <main class="bd-main order-1">
         <div class="bd-intro ps-lg-4">
@@ -67,7 +67,10 @@
                         <h5 class="text-sm-start mt-1 border-bottom" th:text="'ISBN-13: ' + ${book.isbn13}"></h5>
                         <h5 class="text-sm-start mt-1" th:text="'Language: ' + ${book.language}"></h5>
                         <h5 class="text-sm-start mt-1" th:text="'Print length: ' + ${book.printLength}"></h5>
-                        <h6 class="text-sm-start mt-2" th:text="'Description: ' + ${book.description}"></h6>
+                        <h6 class="text-sm-start mt-2 mb-3" th:text="'Description: ' + ${book.description}"></h6>
+                        <div th:if="${!book.attributes.isEmpty()}">
+                            <h6 class="text-sm-start mt-0" th:each="attribute : ${book.attributes}" th:text="${attribute.key + ' : ' + attribute.value}"></h6>
+                        </div>
                         <h6 class="text-sm-start mt-4">
                             <span th:class="${book.available} ? 'text-success' : 'text-danger'"
                                     th:text="${book.available} ? 'Availabel.' : 'Not available.'"></span>
