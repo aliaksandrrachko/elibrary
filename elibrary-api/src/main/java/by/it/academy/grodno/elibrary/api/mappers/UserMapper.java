@@ -4,6 +4,7 @@ import by.it.academy.grodno.elibrary.api.dao.RoleJpaRepository;
 import by.it.academy.grodno.elibrary.api.dto.users.AddressDto;
 import by.it.academy.grodno.elibrary.api.dto.users.UserDto;
 import by.it.academy.grodno.elibrary.entities.users.*;
+import by.it.academy.grodno.elibrary.entitymetadata.users.Gender;
 import org.modelmapper.ModelMapper;
 
 import org.springframework.stereotype.Component;

@@ -10,7 +10,7 @@ import by.it.academy.grodno.elibrary.api.utils.mail.UserMailMessageType;
 import by.it.academy.grodno.elibrary.entities.users.Address;
 import by.it.academy.grodno.elibrary.entities.users.Role;
 import by.it.academy.grodno.elibrary.entities.users.User;
-import by.it.academy.grodno.elibrary.service.exceptions.PasswordMatchException;
+import by.it.academy.grodno.elibrary.api.exceptions.PasswordMatchException;
 import by.it.academy.grodno.elibrary.service.utils.RandomPasswordGenerator;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

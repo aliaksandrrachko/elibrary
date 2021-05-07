@@ -8,35 +8,31 @@
         <groupId>by.it.academy.grodno.elibrary</groupId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
-    <artifactId>elibrary-entity</artifactId>
+    <artifactId>elibrary-entity-metadata</artifactId>
     <name>elibrary-entity</name>
-    <description>The entity module.</description>
+    <description>The entities metadata (ex. gender, phone number and converters for it).</description>
     <packaging>jar</packaging>
 
     <dependencies>
-        <dependency>
-            <groupId>by.it.academy.grodno.elibrary</groupId>
-            <artifactId>elibrary-entity-metadata</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-        </dependency>
         <dependency>
             <groupId>javax.persistence</groupId>
             <artifactId>javax.persistence-api</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.vladmihalcea</groupId>
-            <artifactId>hibernate-types-52</artifactId>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-annotations</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-core</artifactId>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.springframework.security</groupId>
-            <artifactId>spring-security-core</artifactId>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
         </dependency>
     </dependencies>
 </project>

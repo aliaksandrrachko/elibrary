@@ -1,6 +1,8 @@
 package by.it.academy.grodno.elibrary.api.dao;
 
 import by.it.academy.grodno.elibrary.entities.users.*;
+import by.it.academy.grodno.elibrary.entitymetadata.users.Gender;
+import by.it.academy.grodno.elibrary.entitymetadata.users.PhoneNumber;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;

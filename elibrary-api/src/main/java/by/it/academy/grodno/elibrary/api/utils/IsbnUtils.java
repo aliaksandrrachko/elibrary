@@ -1,16 +1,18 @@
-package by.it.academy.grodno.elibrary.entities.utils;
+package by.it.academy.grodno.elibrary.api.utils;
 
 /**
  * Utility class for validation and converting ISBN-10 and ISBN-13 number.
  * <p> ISBN (International Standard Book Number) is a unique number assigned to each book.
  * <ul>ISBN-10:
  *     <li>The number has 9 information digits and ends with 1 check digit.</li>
- *     <li>Assuming the digits are "abcdefghi-j" where j is the check digit. Then the check digit is computed by the following formula:
+ *     <li>Assuming the digits are "abcdefghi-j" where j is the check digit.
+ *         Then the check digit is computed by the following formula:
  *         <p>j = ( [a b c d e f g h i] * [1 2 3 4 5 6 7 8 9] ) mod 11</p>
  *     </li>
  * <ul> ISBN-13:
  *     <li>The number has 12 information digits and ends with 1 check digit.</li>
- *     <li>Assuming the digits are "abcdefghijkl-m" where m is the check digit. Then the check digit is computed by the following formula:
+ *     <li>Assuming the digits are "abcdefghijkl-m" where m is the check digit.
+ *         Then the check digit is computed by the following formula:
  *         <p>m = ( [a b c d e f g h i j k l] * [1 3 1 3 1 3 1 3 1 3 1 3] ) mod 10</p>
  *     </li>
  * </ul>
@@ -35,7 +37,7 @@ public final class IsbnUtils {
     public static boolean isIsbn13(String isbn13){
         isbn13 = getOnlyDigit(isbn13);
         return isbn13.length() == 13 &&
-                isbn13.substring(0, 3).equals(CONSTANT_PREFIX_GS1) &&
+                isbn13.startsWith(CONSTANT_PREFIX_GS1) &&
                 calculateCheekNumberIsbn13(isbn13.substring(0,12)) == Integer.parseInt(isbn13.substring(12));
     }
 

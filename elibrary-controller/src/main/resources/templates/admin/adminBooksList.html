@@ -59,7 +59,7 @@
                                 <path fill-rule="evenodd" d="M8 4a.5.5 0 0 1 .5.5v5.793l2.146-2.147a.5.5 0 0 1 .708.708l-3 3a.5.5 0 0 1-.708 0l-3-3a.5.5 0 1 1 .708-.708L7.5 10.293V4.5A.5.5 0 0 1 8 4z"></path>
                             </svg>
                         </a>
-                        <a th:href="@{subscriptions(size=${pageBookDto.size}, page=${pageBookDto.getNumber()},
+                        <a th:href="@{books(size=${pageBookDto.size}, page=${pageBookDto.getNumber()},
                             categoryId=${categoryId}, title=${title}, author=${author},
                             sort='created,DESC')}" class="text-decoration-none">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-up-short" viewBox="0 0 16 16">
@@ -68,14 +68,14 @@
                         </a>
                         Created
                     </th>
-                    <th scope="col">   <a th:href="@{subscriptions(size=${pageBookDto.size}, page=${pageBookDto.getNumber()},
+                    <th scope="col">   <a th:href="@{books(size=${pageBookDto.size}, page=${pageBookDto.getNumber()},
                          categoryId=${categoryId}, title=${title}, author=${author},
                          sort='updated,ASC')}" class="text-decoration-none">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-down-short" viewBox="0 0 16 16">
                             <path fill-rule="evenodd" d="M8 4a.5.5 0 0 1 .5.5v5.793l2.146-2.147a.5.5 0 0 1 .708.708l-3 3a.5.5 0 0 1-.708 0l-3-3a.5.5 0 1 1 .708-.708L7.5 10.293V4.5A.5.5 0 0 1 8 4z"></path>
                         </svg>
                     </a>
-                        <a th:href="@{subscriptions(size=${pageBookDto.size}, page=${pageBookDto.getNumber()},
+                        <a th:href="@{books(size=${pageBookDto.size}, page=${pageBookDto.getNumber()},
                         categoryId=${categoryId}, title=${title}, author=${author},
                         sort='updated,DESC')}" class="text-decoration-none">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-up-short" viewBox="0 0 16 16">

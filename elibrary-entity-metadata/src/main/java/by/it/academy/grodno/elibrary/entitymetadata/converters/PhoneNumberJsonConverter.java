@@ -1,6 +1,6 @@
-package by.it.academy.grodno.elibrary.entities.converters;
+package by.it.academy.grodno.elibrary.entitymetadata.converters;
 
-import by.it.academy.grodno.elibrary.entities.users.PhoneNumber;
+import by.it.academy.grodno.elibrary.entitymetadata.users.PhoneNumber;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.persistence.Converter;

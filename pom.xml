@@ -20,12 +20,12 @@
         <module>elibrary-main</module>
         <module>elibrary-entity</module>
         <module>elibrary-service</module>
-        <module>elibrary-dao</module>
         <module>elibrary-api</module>
         <module>elibrary-controller</module>
         <module>elibrary-rest</module>
         <module>elibrary-web</module>
         <module>elibrary-utils</module>
+        <module>elibrary-entity-metadata</module>
     </modules>
 
     <properties>
@@ -50,6 +50,11 @@
             <dependency>
                 <groupId>by.it.academy.grodno.elibrary</groupId>
                 <artifactId>elibrary-entity</artifactId>
+                <version>0.0.1-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>by.it.academy.grodno.elibrary</groupId>
+                <artifactId>elibrary-entity-metadata</artifactId>
                 <version>0.0.1-SNAPSHOT</version>
             </dependency>
             <dependency>

@@ -1,4 +1,4 @@
-package by.it.academy.grodno.elibrary.entities.utils;
+package by.it.academy.grodno.elibrary.api.utils;
 
 import org.junit.jupiter.api.Test;
 

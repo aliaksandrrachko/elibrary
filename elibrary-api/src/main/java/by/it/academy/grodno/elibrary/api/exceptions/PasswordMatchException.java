@@ -1,4 +1,4 @@
-package by.it.academy.grodno.elibrary.service.exceptions;
+package by.it.academy.grodno.elibrary.api.exceptions;
 
 import by.it.academy.grodno.elibrary.api.dto.users.UserDto;
 

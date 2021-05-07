@@ -1,8 +1,9 @@
 package by.it.academy.grodno.elibrary.entities.books;
 
 import by.it.academy.grodno.elibrary.entities.AEntity;
-import by.it.academy.grodno.elibrary.entities.converters.SubscriptionStatusConverter;
 import by.it.academy.grodno.elibrary.entities.users.User;
+import by.it.academy.grodno.elibrary.entitymetadata.books.SubscriptionStatus;
+import by.it.academy.grodno.elibrary.entitymetadata.converters.SubscriptionStatusConverter;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 

@@ -111,6 +111,7 @@ public class AdminBookController {
             modelAndView.setViewName("admin/inputBookDetailsForm");
             BookDto bookDto = new BookDto();
             bookDto.setAuthors(addEmptyStringToList(bookDto.getAuthors(), countAuthors));
+            bookDto.setAttributes(addEmptyKeyToMap(bookDto.getAttributes(), countAttributes));
             bookDto.setCategory(new CategoryDto());
             modelAndView.addObject("bookDto", bookDto);
         }
@@ -118,8 +119,11 @@ public class AdminBookController {
         return modelAndView;
     }
 
-    private void addEmptyKeyToMap(Map<String, Object> attributes, int size) {
-
+    private Map<String, Object> addEmptyKeyToMap(Map<String, Object> attributes, int size) {
+        for (int i = 0; i < size; i++){
+            attributes.put(("key" + 1), ("value" + 1));
+        }
+        return attributes;
     }
 
     private List<String> addEmptyStringToList(List<String> authors, int size){
@@ -175,8 +179,9 @@ public class AdminBookController {
 
     @GetMapping("/update/{bookId}")
     public ModelAndView getUpdateBookForm(@PathVariable Long bookId,
-                                            @RequestParam(value = "countAuthors", defaultValue = "2") int countAuthors,
-                                           Principal principal) {
+                                          @RequestParam(value = "countAuthors", defaultValue = "2") int countAuthors,
+                                          @RequestParam(value = "countAttributes", required = false, defaultValue = "3") int countAttributes,
+                                          Principal principal) {
         BookDto bookDtoForUpdate = bookService.findById(bookId).orElse(null);
 
         ModelAndView modelAndView = getModelAndViewWithCurrentUserFromDb(principal);
@@ -186,6 +191,7 @@ public class AdminBookController {
         } else {
             modelAndView.setViewName("admin/inputBookDetailsForm");
             bookDtoForUpdate.setAuthors(addEmptyStringToList(bookDtoForUpdate.getAuthors(), countAuthors));
+            bookDtoForUpdate.setAttributes(addEmptyKeyToMap(bookDtoForUpdate.getAttributes(), countAttributes));
             modelAndView.addObject("bookDto", bookDtoForUpdate);
             prepareModelAndViewForAddAndUpdateBookForm(modelAndView);
         }

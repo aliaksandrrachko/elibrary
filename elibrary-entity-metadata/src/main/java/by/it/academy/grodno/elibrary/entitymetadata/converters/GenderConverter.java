@@ -1,6 +1,7 @@
-package by.it.academy.grodno.elibrary.entities.converters;
+package by.it.academy.grodno.elibrary.entitymetadata.converters;
 
-import by.it.academy.grodno.elibrary.entities.users.Gender;
+
+import by.it.academy.grodno.elibrary.entitymetadata.users.Gender;
 
 import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;
@@ -10,10 +11,7 @@ public class GenderConverter implements AttributeConverter<Gender, Character> {
 
     @Override
     public Character convertToDatabaseColumn(Gender gender) {
-        if (gender == null) {
-            return null;
-        }
-        return gender.getAbbreviation();
+        return gender == null ? null : gender.getAbbreviation();
     }
 
     @Override

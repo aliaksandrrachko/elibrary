@@ -1,4 +1,4 @@
-package by.it.academy.grodno.elibrary.entities.users;
+package by.it.academy.grodno.elibrary.entitymetadata.users;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;

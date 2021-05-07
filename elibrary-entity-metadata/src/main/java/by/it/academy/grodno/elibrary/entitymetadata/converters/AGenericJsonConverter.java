@@ -1,4 +1,4 @@
-package by.it.academy.grodno.elibrary.entities.converters;
+package by.it.academy.grodno.elibrary.entitymetadata.converters;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -11,12 +11,6 @@ import javax.persistence.AttributeConverter;
 @Slf4j
 public abstract class AGenericJsonConverter<X> implements AttributeConverter<X, String> {
 
-    private final Class<X> clazz;
-
-    protected AGenericJsonConverter(Class<X> clazz) {
-        this.clazz = clazz;
-    }
-
     protected static final ObjectMapper OBJECT_MAPPER;
 
     static {
@@ -24,8 +18,10 @@ public abstract class AGenericJsonConverter<X> implements AttributeConverter<X, 
         OBJECT_MAPPER.setSerializationInclusion(JsonInclude.Include.NON_NULL);
     }
 
-    public static ObjectMapper getObjectMapper() {
-        return OBJECT_MAPPER;
+    private final Class<X> clazz;
+
+    protected AGenericJsonConverter(Class<X> clazz) {
+        this.clazz = clazz;
     }
 
     @Override

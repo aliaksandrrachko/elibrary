@@ -4,7 +4,7 @@ import by.it.academy.grodno.elibrary.api.dao.BookJpaRepository;
 import by.it.academy.grodno.elibrary.api.dao.UserJpaRepository;
 import by.it.academy.grodno.elibrary.api.dto.books.SubscriptionDto;
 import by.it.academy.grodno.elibrary.entities.books.Subscription;
-import by.it.academy.grodno.elibrary.entities.books.SubscriptionStatus;
+import by.it.academy.grodno.elibrary.entitymetadata.books.SubscriptionStatus;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 

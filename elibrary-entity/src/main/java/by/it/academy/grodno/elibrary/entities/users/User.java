@@ -1,8 +1,10 @@
 package by.it.academy.grodno.elibrary.entities.users;
 
 import by.it.academy.grodno.elibrary.entities.AEntity;
-import by.it.academy.grodno.elibrary.entities.converters.GenderConverter;
-import by.it.academy.grodno.elibrary.entities.converters.PhoneNumberJsonConverter;
+import by.it.academy.grodno.elibrary.entitymetadata.converters.GenderConverter;
+import by.it.academy.grodno.elibrary.entitymetadata.converters.PhoneNumberJsonConverter;
+import by.it.academy.grodno.elibrary.entitymetadata.users.Gender;
+import by.it.academy.grodno.elibrary.entitymetadata.users.PhoneNumber;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 import org.springframework.security.core.GrantedAuthority;

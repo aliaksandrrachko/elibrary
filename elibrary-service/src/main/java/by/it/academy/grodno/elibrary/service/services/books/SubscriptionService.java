@@ -13,9 +13,9 @@ import by.it.academy.grodno.elibrary.api.utils.mail.IEmailSender;
 import by.it.academy.grodno.elibrary.api.utils.mail.UserMailMessageType;
 import by.it.academy.grodno.elibrary.entities.books.Book;
 import by.it.academy.grodno.elibrary.entities.books.Subscription;
-import by.it.academy.grodno.elibrary.entities.books.SubscriptionStatus;
 import by.it.academy.grodno.elibrary.entities.users.User;
-import by.it.academy.grodno.elibrary.service.exceptions.UnknownSubscriptionUpdateCodeRequest;
+import by.it.academy.grodno.elibrary.api.exceptions.UnknownSubscriptionUpdateCodeRequestException;
+import by.it.academy.grodno.elibrary.entitymetadata.books.SubscriptionStatus;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.data.domain.Page;
@@ -213,7 +213,7 @@ public class SubscriptionService implements ISubscriptionService {
                 prepareToUndoBookingSubscription(subscription, request);
                 break;
             default:
-                throw new UnknownSubscriptionUpdateCodeRequest(requestCode);
+                throw new UnknownSubscriptionUpdateCodeRequestException(requestCode);
         }
         return Optional.of(subscriptionMapper.toDto(subscriptionJpaRepository.save(subscription)));
     }

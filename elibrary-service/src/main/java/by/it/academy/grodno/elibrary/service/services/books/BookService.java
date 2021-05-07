@@ -11,7 +11,7 @@ import by.it.academy.grodno.elibrary.entities.books.Author;
 import by.it.academy.grodno.elibrary.entities.books.Book;
 import by.it.academy.grodno.elibrary.entities.books.Category;
 import by.it.academy.grodno.elibrary.entities.books.Publisher;
-import by.it.academy.grodno.elibrary.entities.utils.IsbnUtils;
+import by.it.academy.grodno.elibrary.api.utils.IsbnUtils;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;

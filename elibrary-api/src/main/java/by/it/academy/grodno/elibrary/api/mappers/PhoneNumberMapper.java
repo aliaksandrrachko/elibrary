@@ -1,7 +1,7 @@
 package by.it.academy.grodno.elibrary.api.mappers;
 
 import by.it.academy.grodno.elibrary.api.dto.users.PhoneNumberDto;
-import by.it.academy.grodno.elibrary.entities.users.PhoneNumber;
+import by.it.academy.grodno.elibrary.entitymetadata.users.PhoneNumber;
 import org.springframework.stereotype.Component;
 
 @Component

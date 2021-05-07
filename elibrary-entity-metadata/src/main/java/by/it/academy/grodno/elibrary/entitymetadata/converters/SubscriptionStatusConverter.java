@@ -1,6 +1,6 @@
-package by.it.academy.grodno.elibrary.entities.converters;
+package by.it.academy.grodno.elibrary.entitymetadata.converters;
 
-import by.it.academy.grodno.elibrary.entities.books.SubscriptionStatus;
+import by.it.academy.grodno.elibrary.entitymetadata.books.SubscriptionStatus;
 
 import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;
