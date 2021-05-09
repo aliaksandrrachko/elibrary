@@ -26,8 +26,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
         String username = authentication.getPrincipal().toString();
         String password = authentication.getCredentials().toString();
-        User user = null;
-        if (username == null){
+        if (username == null) {
             throw new AuthenticationCredentialsNotFoundException("No credentials found in context");
         }
 
@@ -37,8 +36,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
             throw new BadCredentialsException("User does not exist");
         }
 
-        user = userOptionalFromDb.get();
-
+        User user = userOptionalFromDb.get();
         if (bCryptPasswordEncoder.matches(password, user.getPassword())) {
             user.getAuthorities();
         } else {

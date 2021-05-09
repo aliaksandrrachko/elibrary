@@ -23,7 +23,7 @@ public class BookRestController {
     @GetMapping()
     public Page<BookDto> findAllBook(@RequestParam(value = "categoryId", required = false) Integer categoryId,
                                      @PageableDefault Pageable pageable) {
-        return bookService.findAllByCategoryId(categoryId, pageable);
+        return bookService.findAll(categoryId, pageable);
     }
 
     @GetMapping(value = "/{id}")

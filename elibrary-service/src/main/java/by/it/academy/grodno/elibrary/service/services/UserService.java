@@ -3,14 +3,16 @@ package by.it.academy.grodno.elibrary.service.services;
 import by.it.academy.grodno.elibrary.api.dao.RoleJpaRepository;
 import by.it.academy.grodno.elibrary.api.dao.UserJpaRepository;
 import by.it.academy.grodno.elibrary.api.dto.users.UserDto;
+import by.it.academy.grodno.elibrary.api.exceptions.PasswordMatchException;
 import by.it.academy.grodno.elibrary.api.mappers.UserMapper;
 import by.it.academy.grodno.elibrary.api.services.IUserService;
+import by.it.academy.grodno.elibrary.api.utils.DownloadFileType;
 import by.it.academy.grodno.elibrary.api.utils.mail.IEmailSender;
 import by.it.academy.grodno.elibrary.api.utils.mail.UserMailMessageType;
 import by.it.academy.grodno.elibrary.entities.users.Address;
 import by.it.academy.grodno.elibrary.entities.users.Role;
 import by.it.academy.grodno.elibrary.entities.users.User;
-import by.it.academy.grodno.elibrary.api.exceptions.PasswordMatchException;
+import by.it.academy.grodno.elibrary.service.utils.FileUploader;
 import by.it.academy.grodno.elibrary.service.utils.RandomPasswordGenerator;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -18,7 +20,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.net.URL;
 import java.security.Principal;
 import java.time.LocalDateTime;
 import java.util.*;
@@ -32,13 +37,16 @@ public class UserService implements IUserService {
     private final UserMapper userMapper;
     private final RoleJpaRepository roleJpaRepository;
     private final IEmailSender emailSender;
+    private final FileUploader fileUploader;
 
-    public UserService(PasswordEncoder bCryptPasswordEncoder, UserJpaRepository userJpaRepository, UserMapper userMapper, RoleJpaRepository roleJpaRepository, IEmailSender emailSender) {
+    public UserService(PasswordEncoder bCryptPasswordEncoder, UserJpaRepository userJpaRepository, UserMapper userMapper,
+                       RoleJpaRepository roleJpaRepository, IEmailSender emailSender, FileUploader fileUploader) {
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
         this.userJpaRepository = userJpaRepository;
         this.userMapper = userMapper;
         this.roleJpaRepository = roleJpaRepository;
         this.emailSender = emailSender;
+        this.fileUploader = fileUploader;
     }
 
     @Override
@@ -70,11 +78,6 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public Class<UserDto> getGenericClass() {
-        return UserDto.class;
-    }
-
-    @Override
     public List<UserDto> findAll() {
         return userMapper.toDtos(userJpaRepository.findAll());
     }
@@ -98,7 +101,7 @@ public class UserService implements IUserService {
     @Override
     @Transactional
     public Optional<UserDto> create(UserDto entityDto) {
-        if (entityDto.getPassword().equals(entityDto.getPasswordConfirm())){
+        if (entityDto.getPassword().equals(entityDto.getPasswordConfirm())) {
             entityDto.setRoles(Collections.singleton("ROLE_USER"));
             entityDto.setUsername(entityDto.getFirstName() + " " + entityDto.getLastName());
             entityDto.setCreated(LocalDateTime.now().withNano(0));
@@ -109,14 +112,14 @@ public class UserService implements IUserService {
             user = userJpaRepository.save(user);
             emailSender.sendEmailFromAdmin(user, UserMailMessageType.REGISTERED, null);
             return Optional.of(userMapper.toDto(user));
-        } else  {
+        } else {
             throw new PasswordMatchException(entityDto);
         }
     }
 
     @Override
     @Transactional
-    public Optional<User> createUserFromSocialNetwork(User user){
+    public Optional<User> createUserFromSocialNetwork(User user) {
         user.setCreated(LocalDateTime.now().withNano(0));
         user.setUpdated(LocalDateTime.now().withNano(0));
         String randomPassword = RandomPasswordGenerator.generateRandomPassword();
@@ -130,18 +133,44 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public Optional<User> findByEmailOrSocialId(String email, Long socialId){
+    public Optional<User> findByEmailOrSocialId(String email, Long socialId) {
         return userJpaRepository.findByEmailOrSocialId(email, socialId);
     }
 
     @Override
     @Transactional
     public Optional<UserDto> update(Long id, UserDto entityDto) {
-        Optional<User> optionalUser = userJpaRepository.findById(id);
-        if (!optionalUser.isPresent()){
+        User user = updateUser(id, entityDto);
+        if (user == null){
             return Optional.empty();
         }
-        if (entityDto.getPassword().equals(entityDto.getPasswordConfirm())){
+        return Optional.of(userMapper.toDto(user));
+    }
+
+    @Override
+    public Optional<UserDto> update(Long id, UserDto userDto, MultipartFile file) {
+        User user = updateUser(id, userDto);
+        if (user == null){
+            return Optional.empty();
+        }
+        if (file != null && !file.isEmpty()){
+            try {
+                URL avatarUrl = fileUploader.uploadFile(file, DownloadFileType.USER_AVATAR, String.valueOf(user.getId()));
+                user.setAvatarUrl(avatarUrl.toString());
+                user = userJpaRepository.save(user);
+            } catch (IOException e) {
+                //do nothing
+            }
+        }
+        return Optional.of(userMapper.toDto(user));
+    }
+
+    private User updateUser(Long id, UserDto entityDto){
+        Optional<User> optionalUser = userJpaRepository.findById(id);
+        if (!optionalUser.isPresent()) {
+            return null;
+        }
+        if (entityDto.getPassword().equals(entityDto.getPasswordConfirm())) {
             User userFromDb = optionalUser.get();
             entityDto.setId(id);
             if (!StringUtils.hasText(entityDto.getUsername())) {
@@ -151,7 +180,7 @@ public class UserService implements IUserService {
             entityDto.setUpdated(LocalDateTime.now().withNano(0));
             entityDto.setSocialId(userFromDb.getSocialId());
             entityDto.getAddressDto().setUpdated(LocalDateTime.now().withNano(0));
-            if (entityDto.getAddressDto().isFullAddress()){
+            if (entityDto.getAddressDto().isFullAddress()) {
                 entityDto.getRoles().add("ROLE_USER");
             }
             entityDto.getRoles().addAll(userFromDb.getRoles().stream().map(Role::getAuthority).collect(Collectors.toSet()));
@@ -159,15 +188,15 @@ public class UserService implements IUserService {
             User user = userMapper.toEntity(entityDto);
             user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
             user = userJpaRepository.save(user);
-            return Optional.of(userMapper.toDto(user));
+            return user;
         } else {
             throw new PasswordMatchException(entityDto);
         }
     }
 
-    private void setAddressIdIfExists(User userFromDb, UserDto entityDto){
+    private void setAddressIdIfExists(User userFromDb, UserDto entityDto) {
         Address address = userFromDb.getAddress();
-        if (address != null){
+        if (address != null) {
             entityDto.getAddressDto().setId(userFromDb.getAddress().getId());
         }
     }

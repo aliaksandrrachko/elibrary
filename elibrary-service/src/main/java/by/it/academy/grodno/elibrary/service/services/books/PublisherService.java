@@ -5,7 +5,6 @@ import by.it.academy.grodno.elibrary.api.dto.books.PublisherDto;
 import by.it.academy.grodno.elibrary.api.mappers.PublisherMapper;
 import by.it.academy.grodno.elibrary.api.services.books.IPublisherService;
 import by.it.academy.grodno.elibrary.entities.books.Publisher;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
@@ -17,15 +16,12 @@ import java.util.Optional;
 @Component
 public class PublisherService implements IPublisherService {
 
-    @Autowired
-    private PublisherMapper publisherMapper;
+    private final PublisherMapper publisherMapper;
+    private final PublisherJpaRepository publisherJpaRepository;
 
-    @Autowired
-    private PublisherJpaRepository publisherJpaRepository;
-
-    @Override
-    public Class<PublisherDto> getGenericClass() {
-        return PublisherDto.class;
+    public PublisherService(PublisherMapper publisherMapper, PublisherJpaRepository publisherJpaRepository) {
+        this.publisherMapper = publisherMapper;
+        this.publisherJpaRepository = publisherJpaRepository;
     }
 
     @Override
@@ -36,14 +32,14 @@ public class PublisherService implements IPublisherService {
     @Override
     public Optional<PublisherDto> findById(Integer id) {
         Optional<Publisher> optionalCategory = publisherJpaRepository.findById(id);
-        return optionalCategory.map(publisher -> publisherMapper.toDto(publisher));
+        return optionalCategory.map(publisherMapper::toDto);
 
     }
 
     @Override
     public void delete(Integer id) {
         Optional<Publisher> publisherOptional = publisherJpaRepository.findById(id);
-        publisherOptional.ifPresent(publisher -> publisherJpaRepository.delete(publisher));
+        publisherOptional.ifPresent(publisherJpaRepository::delete);
     }
 
     @Override
@@ -60,15 +56,15 @@ public class PublisherService implements IPublisherService {
     public Optional<PublisherDto> update(Integer id, PublisherDto entityDto) {
         Optional<Publisher> optionalPublisher = publisherJpaRepository.findById(id);
         if (entityDto != null &&
-        optionalPublisher.isPresent() &&
-        entityDto.getPublisherName() != null &&
-        !entityDto.getPublisherName().isEmpty()){
+                optionalPublisher.isPresent() &&
+                entityDto.getPublisherName() != null &&
+                !entityDto.getPublisherName().isEmpty()) {
             Publisher publisher = optionalPublisher.get();
             publisher.setPublisherName(entityDto.getPublisherName());
             publisher = publisherJpaRepository.save(publisher);
             return Optional.of(publisherMapper.toDto(publisher));
         }
-        return optionalPublisher.map(publisher -> publisherMapper.toDto(publisher));
+        return optionalPublisher.map(publisherMapper::toDto);
     }
 
     @Override

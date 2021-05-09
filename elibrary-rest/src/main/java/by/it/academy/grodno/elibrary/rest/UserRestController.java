@@ -42,5 +42,4 @@ public class UserRestController {
     public void deleteUser(@PathVariable Long id) {
         userService.delete(id);
     }
-
 }

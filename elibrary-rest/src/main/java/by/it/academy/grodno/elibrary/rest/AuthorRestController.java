@@ -2,6 +2,7 @@ package by.it.academy.grodno.elibrary.rest;
 
 import by.it.academy.grodno.elibrary.api.dto.books.AuthorDto;
 import by.it.academy.grodno.elibrary.api.services.books.IAuthorService;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.MediaType;
@@ -25,10 +26,9 @@ public class AuthorRestController {
         return authorService.findAll();
     }
 
-    // http://localhost:8080/rest/authors/pages?page=1&size=5 :request example
     @GetMapping("/pages")
-    public List<AuthorDto> findAllAuthors(@PageableDefault Pageable pageable) {
-        return authorService.findAll(pageable).getContent();
+    public Page<AuthorDto> findAllAuthors(@PageableDefault Pageable pageable) {
+        return authorService.findAll(pageable);
     }
 
     @GetMapping(value = "/{id}")

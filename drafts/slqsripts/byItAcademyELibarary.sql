@@ -22,6 +22,7 @@ CREATE TABLE IF NOT EXISTS user
     birthday     DATE COMMENT 'Date of birthday',
     password     VARCHAR(64) COMMENT 'Password encoded with using BCryptPasswordEncoder',
     enabled      BOOLEAN  DEFAULT TRUE COMMENT 'User lock',
+    avatar_url   VARCHAR(2083) COMMENT 'Avatars url',
     user_created DATETIME DEFAULT NOW() NOT NULL COMMENT 'Date of creating',
     user_updated DATETIME DEFAULT NOW() NOT NULL COMMENT 'Date of updated',
     CONSTRAINT pk_user PRIMARY KEY (id)

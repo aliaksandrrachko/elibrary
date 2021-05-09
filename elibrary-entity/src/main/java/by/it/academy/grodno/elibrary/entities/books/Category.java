@@ -30,11 +30,10 @@ public class Category extends AEntity<Integer> {
     private Set<Category> categories;
 
     public Set<Category> getCategories(){
-        if (categories != null){
-            return categories;
-        } else {
-            return new HashSet<>();
+        if (categories == null) {
+            categories = new HashSet<>();
         }
+        return categories;
     }
 
     public String getPath(){

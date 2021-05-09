@@ -46,8 +46,13 @@ public class AdminSubscriptionController {
             subscriptionPage = subscriptionService.findAllByStatus(status, pageable);
         } else if (userId != null){
             subscriptionPage = subscriptionService.findAllByUserId(userId, pageable);
-        } else if (subscriptionId != null && (optionalSubscriptionDto = subscriptionService.findById(subscriptionId)).isPresent()) {
-            subscriptionPage = new PageImpl<>(Collections.singletonList(optionalSubscriptionDto.get()));
+        } else if (subscriptionId != null) {
+            optionalSubscriptionDto = subscriptionService.findById(subscriptionId);
+            if (optionalSubscriptionDto.isPresent()){
+                subscriptionPage = new PageImpl<>(Collections.singletonList(optionalSubscriptionDto.get()));
+            } else {
+                subscriptionPage = Page.empty(pageable);
+            }
         } else {
             subscriptionPage = subscriptionService.findAll(pageable);
         }

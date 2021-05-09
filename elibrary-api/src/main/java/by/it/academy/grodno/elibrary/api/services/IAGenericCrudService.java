@@ -12,8 +12,7 @@ import java.util.Optional;
  * @param <K> key for Entities
  */
 public interface IAGenericCrudService<T, K extends Number> {
-    
-    Class<T> getGenericClass();
+
     List<T> findAll();
     Optional<T> findById(K id);
     void delete(K id);

@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.security.Principal;
+import java.time.LocalDateTime;
 
 @RestController
 public class MainController {
@@ -20,7 +21,7 @@ public class MainController {
     @GetMapping("/")
     public ModelAndView home(Principal principal) {
         UserDto userDto = null;
-        if (principal != null){
+        if (principal != null) {
             String userName = principal.getName();
             userDto = userService.findById(userName).orElse(null);
         }
@@ -41,13 +42,8 @@ public class MainController {
     public ModelAndView error403() {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("error");
-        return modelAndView;
-    }
-
-    @GetMapping("/admin")
-    public ModelAndView adminHome() {
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("adminUsersList");
+        modelAndView.addObject("error", "You don't have permission");
+        modelAndView.addObject("timestamp", LocalDateTime.now().withNano(0));
         return modelAndView;
     }
 }

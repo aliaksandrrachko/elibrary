@@ -1,6 +1,5 @@
 package by.it.academy.grodno.elibrary.service.utils;
 
-
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.Random;

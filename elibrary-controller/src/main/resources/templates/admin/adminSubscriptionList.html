@@ -33,6 +33,7 @@
     <main class="bd-main order-1">
         <div class="bd-intro ps-lg-4">
             <h1>Subscriptions</h1>
+            <h3 th:if="${userId != null && !pageSubscriptionDto.getContent().isEmpty()}" th:text="'For: ' + ${pageSubscriptionDto.getContent().get(0).getUsername()}"></h3>
         </div>
         <div class="bd-content ps-lg-4">
             <form class="input-group mb-3" action="#" th:action="@{/admin/subscriptions}" method="post">

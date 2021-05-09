@@ -42,7 +42,7 @@ public class SignUpController {
         } catch (Exception e) {
             modelAndView = new ModelAndView();
             modelAndView.addAllObjects(result.getModel());
-            modelAndView.addObject("error",e.getMessage());
+            modelAndView.addObject("error", e.getMessage());
             modelAndView.setViewName("redirect:/signup");
         }
         return modelAndView;

@@ -7,25 +7,31 @@ import by.it.academy.grodno.elibrary.api.dto.books.BookDto;
 import by.it.academy.grodno.elibrary.api.mappers.BookMapper;
 import by.it.academy.grodno.elibrary.api.services.books.IBookService;
 import by.it.academy.grodno.elibrary.api.utils.BookDataProvider;
+import by.it.academy.grodno.elibrary.api.utils.IsbnUtils;
+import by.it.academy.grodno.elibrary.api.utils.DownloadFileType;
 import by.it.academy.grodno.elibrary.entities.books.Author;
 import by.it.academy.grodno.elibrary.entities.books.Book;
 import by.it.academy.grodno.elibrary.entities.books.Category;
 import by.it.academy.grodno.elibrary.entities.books.Publisher;
-import by.it.academy.grodno.elibrary.api.utils.IsbnUtils;
+import by.it.academy.grodno.elibrary.service.utils.FileUploader;
+import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.net.URL;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.stream.Collectors;
 
 @Component
+@Slf4j
 @Transactional(readOnly = true)
 public class BookService implements IBookService {
 
@@ -33,18 +39,17 @@ public class BookService implements IBookService {
     private final AuthorJpaRepository authorJpaRepository;
     private final BookJpaRepository bookJpaRepository;
     private final CategoryJpaRepository categoryJpaRepository;
+    private final BookDataProvider bookDataWebProvider;
+    private final FileUploader fileUploader;
 
-    public BookService(BookMapper bookMapper, AuthorJpaRepository authorJpaRepository,
-                       BookJpaRepository bookJpaRepository, CategoryJpaRepository categoryJpaRepository) {
+    public BookService(BookMapper bookMapper, AuthorJpaRepository authorJpaRepository, BookJpaRepository bookJpaRepository,
+                       CategoryJpaRepository categoryJpaRepository, BookDataProvider bookDataWebProvider, FileUploader fileUploader) {
         this.bookMapper = bookMapper;
         this.authorJpaRepository = authorJpaRepository;
         this.bookJpaRepository = bookJpaRepository;
         this.categoryJpaRepository = categoryJpaRepository;
-    }
-
-    @Override
-    public Class<BookDto> getGenericClass() {
-        return BookDto.class;
+        this.bookDataWebProvider = bookDataWebProvider;
+        this.fileUploader = fileUploader;
     }
 
     @Override
@@ -68,27 +73,47 @@ public class BookService implements IBookService {
     @Override
     @Transactional
     public Optional<BookDto> create(BookDto entityDto) {
+        Book createdBook = saveNewBook(entityDto);
+        return Optional.of(bookMapper.toDto(createdBook));
+    }
+
+    private Book saveNewBook(BookDto entityDto) {
         entityDto.setCreated(LocalDateTime.now().withNano(0));
         entityDto.setUpdated(LocalDateTime.now().withNano(0));
         Book newBookData = bookMapper.toEntity(entityDto);
         createAndSetPublisherIfNotExists(newBookData, entityDto);
         createAndSetAuthorIfNotExists(newBookData, entityDto);
-        Book createdBook = bookJpaRepository.save(newBookData);
+        return bookJpaRepository.save(newBookData);
+    }
+
+    @Override
+    @Transactional
+    public Optional<BookDto> create(BookDto entityDto, MultipartFile file) {
+        Book createdBook = saveNewBook(entityDto);
+        if (file != null && !file.isEmpty()) {
+            try {
+                URL bookCoverUri = fileUploader.uploadFile(file, DownloadFileType.BOOK_COVER, String.valueOf(createdBook.getId()));
+                createdBook.setPictureUrl(bookCoverUri.getPath());
+                createdBook = bookJpaRepository.save(createdBook);
+            } catch (IOException e) {
+                log.error("Error uploading book cover image : '{}'.", file.getName());
+            }
+        }
         return Optional.of(bookMapper.toDto(createdBook));
     }
 
-    private void createAndSetPublisherIfNotExists(Book book, BookDto bookDto){
+    private void createAndSetPublisherIfNotExists(Book book, BookDto bookDto) {
         if (book.getPublisher() == null) {
             Publisher publisher = new Publisher(bookDto.getPublisher());
             book.setPublisher(publisher);
         }
     }
 
-    private void createAndSetAuthorIfNotExists(Book book, BookDto bookDto){
+    private void createAndSetAuthorIfNotExists(Book book, BookDto bookDto) {
         Set<String> booksAuthors = book.getAuthors().stream().map(Author::getAuthorName)
                 .collect(Collectors.toSet());
         bookDto.getAuthors().forEach(authorName -> {
-            if (!booksAuthors.contains(authorName) && StringUtils.hasText(authorName)){
+            if (!booksAuthors.contains(authorName) && StringUtils.hasText(authorName)) {
                 book.getAuthors().add(new Author(authorName));
             }
         });
@@ -98,7 +123,7 @@ public class BookService implements IBookService {
     @Transactional
     public Optional<BookDto> update(Long id, BookDto entityDto) {
         Optional<Book> optionalBook = bookJpaRepository.findById(id);
-        if (optionalBook.isPresent()){
+        if (optionalBook.isPresent()) {
             Book bookFromDb = optionalBook.get();
             entityDto.setCreated(bookFromDb.getCreated());
             entityDto.setUpdated(LocalDateTime.now().withNano(0));
@@ -152,9 +177,6 @@ public class BookService implements IBookService {
         });
     }
 
-    @Autowired
-    private BookDataProvider bookDataWebProvider;
-
     @Override
     public Optional<BookDto> findByIsbnInWeb(@NotNull String isbn) {
         String isbn13 = IsbnUtils.toIsbn13(isbn);
@@ -164,21 +186,21 @@ public class BookService implements IBookService {
     @Override
     public Page<BookDto> findAllIncludeSubCategories(Integer categoryId, Pageable pageable) {
         Optional<Category> parentCategoryOptional = categoryJpaRepository.findById(categoryId);
-        if (!parentCategoryOptional.isPresent()){
+        if (!parentCategoryOptional.isPresent()) {
             return Page.empty(pageable);
         }
         Set<Category> allCategoryIncludeSubCategories = getNestedCategory(parentCategoryOptional.get());
         return bookMapper.toPageDto(bookJpaRepository.findByCategoryIn(allCategoryIncludeSubCategories, pageable));
     }
 
-    private Set<Category> getNestedCategory(Category category){
+    private Set<Category> getNestedCategory(Category category) {
         Queue<Category> categoryQueue = new LinkedBlockingQueue<>();
         categoryQueue.add(category);
         Set<Category> categorySet = new HashSet<>();
-        while(!categoryQueue.isEmpty()){
+        while (!categoryQueue.isEmpty()) {
             Category categoryFromQueue = categoryQueue.poll();
             Set<Category> subCategories = categoryFromQueue.getCategories();
-            if (subCategories != null && !subCategories.isEmpty()){
+            if (subCategories != null && !subCategories.isEmpty()) {
                 categoryQueue.addAll(subCategories);
             }
             categorySet.add(categoryFromQueue);

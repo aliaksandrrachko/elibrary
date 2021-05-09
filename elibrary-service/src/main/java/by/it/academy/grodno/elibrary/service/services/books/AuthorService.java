@@ -25,11 +25,6 @@ public class AuthorService implements IAuthorService {
     }
 
     @Override
-    public Class<AuthorDto> getGenericClass() {
-        return AuthorDto.class;
-    }
-
-    @Override
     public List<AuthorDto> findAll() {
         return authorMapper.toDtos(authorJpaRepository.findAll());
     }
@@ -63,7 +58,7 @@ public class AuthorService implements IAuthorService {
         if (entityDto != null &&
                 authorOptional.isPresent() &&
                 entityDto.getAuthorName() != null &&
-                !entityDto.getAuthorName().isEmpty()){
+                !entityDto.getAuthorName().isEmpty()) {
             Author author = authorOptional.get();
             author.setAuthorName(entityDto.getAuthorName());
             author = authorJpaRepository.save(author);

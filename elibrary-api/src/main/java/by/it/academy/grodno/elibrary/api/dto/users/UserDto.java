@@ -54,6 +54,7 @@ public class UserDto extends AEntityDto<Long> {
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     @NotNull(message = "Field 'Birthday' can not be empty.")
     private LocalDate birthday;
+    private String avatarUrl;
     @NotBlank(message = "Field 'Password' can not be empty.")
     @Size(min = 4, message = "The 'Password' must be longer than 4 characters.")
     private String password;
@@ -69,9 +70,8 @@ public class UserDto extends AEntityDto<Long> {
 
     public Set<String> getRoles(){
         if (roles == null){
-            return roles = new HashSet<>();
-        } else {
-            return roles;
+            roles = new HashSet<>();
         }
+        return roles;
     }
 }

@@ -18,9 +18,9 @@ import java.util.Set;
 @RequestMapping("/admin/categories")
 public class AdminCategoryController {
 
+
     private final IUserService userService;
     private final ICategoryService categoryService;
-
     public AdminCategoryController(IUserService userService, ICategoryService categoryService) {
         this.userService = userService;
         this.categoryService = categoryService;
@@ -36,12 +36,14 @@ public class AdminCategoryController {
         return modelAndView;
     }
 
+    private static final String REDIRECT_TO_MAPPING_ADMIN_CATEGORIES = "redirect:/admin/categories";
+
     @PostMapping
     public ModelAndView createCategory(@Valid @ModelAttribute(value = "categoryDto") CategoryDto categoryDto,
-                                       BindingResult result){
+                                       BindingResult result) {
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("redirect:/admin/categories");
-        if (result.hasErrors()){
+        modelAndView.setViewName(REDIRECT_TO_MAPPING_ADMIN_CATEGORIES);
+        if (result.hasErrors()) {
             modelAndView.addObject(result.getModel());
             modelAndView.addObject("categoryDto", categoryDto);
         } else {
@@ -52,11 +54,11 @@ public class AdminCategoryController {
 
     @PostMapping("/rename/{categoryId}")
     public ModelAndView renameCategory(@PathVariable @Valid @Min(0) int categoryId,
-                                        @Valid @ModelAttribute(value = "categoryDto") CategoryDto categoryDto,
-                                       BindingResult result){
+                                       @Valid @ModelAttribute(value = "categoryDto") CategoryDto categoryDto,
+                                       BindingResult result) {
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("redirect:/admin/categories");
-        if (result.hasErrors()){
+        modelAndView.setViewName(REDIRECT_TO_MAPPING_ADMIN_CATEGORIES);
+        if (result.hasErrors()) {
             modelAndView.addObject(result.getModel());
             modelAndView.addObject("categoryDto", categoryDto);
         } else {
@@ -66,17 +68,17 @@ public class AdminCategoryController {
     }
 
     @PostMapping("/delete/{categoryId}")
-    public ModelAndView deleteCategory(@PathVariable @Valid @Min(0) int categoryId){
+    public ModelAndView deleteCategory(@PathVariable @Valid @Min(0) int categoryId) {
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("redirect:/admin/categories");
+        modelAndView.setViewName(REDIRECT_TO_MAPPING_ADMIN_CATEGORIES);
         categoryService.delete(categoryId);
         return modelAndView;
     }
 
-    private ModelAndView getModelAndViewWithCurrentUserFromDb(Principal principal){
+    private ModelAndView getModelAndViewWithCurrentUserFromDb(Principal principal) {
         ModelAndView modelAndView = new ModelAndView();
         UserDto currentUser = null;
-        if (principal != null){
+        if (principal != null) {
             currentUser = userService.findById(principal.getName()).orElse(null);
         }
         modelAndView.addObject("currentUser", currentUser);

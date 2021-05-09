@@ -19,8 +19,8 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import javax.persistence.EntityManager;
 import javax.sql.DataSource;
-
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -34,6 +34,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class AuthorJpaRepositoryTest {
 
+    private static final Author TEST_AUTHOR = new Author("Erich Maria Remarque");
     @Autowired
     @Qualifier("dataSource")
     private DataSource dataSource;
@@ -52,8 +53,6 @@ class AuthorJpaRepositoryTest {
         assertThat(authorJpaRepository).isNotNull();
     }
 
-    private static final Author TEST_AUTHOR = new Author("Erich Maria Remarque");
-
     @Rollback(false)
     @Test
     @Order(1)
@@ -66,16 +65,17 @@ class AuthorJpaRepositoryTest {
     @Rollback(false)
     @Test
     @Order(2)
-    void getAuthor(){
+    void getAuthor() {
         List<Author> authorList = authorJpaRepository.findByAuthorNameContaining(TEST_AUTHOR.getAuthorName());
-        assertThat(authorList.isEmpty()).isFalse();
-        assertThat(authorList.contains(TEST_AUTHOR)).isTrue();
+        assertThat(authorList)
+                .isNotEmpty()
+                .contains(TEST_AUTHOR);
     }
 
     @Rollback(false)
     @Test
     @Order(3)
-    void updateAuthor(){
+    void updateAuthor() {
         TEST_AUTHOR.setAuthorName("Georg Orwell");
         Author author = authorJpaRepository.save(TEST_AUTHOR);
         assertThat(author).isEqualTo(TEST_AUTHOR);
@@ -84,7 +84,9 @@ class AuthorJpaRepositoryTest {
     @Rollback(false)
     @Test
     @Order(4)
-    void deleteAuthor(){
+    void deleteAuthor() {
         authorJpaRepository.delete(TEST_AUTHOR);
+        Optional<Author> authorOptional = authorJpaRepository.findById(TEST_AUTHOR.getId());
+        assertThat(authorOptional).isNotPresent();
     }
 }

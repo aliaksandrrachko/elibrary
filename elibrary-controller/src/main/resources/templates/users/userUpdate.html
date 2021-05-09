@@ -40,6 +40,14 @@
                 </thead>
                 <tbody class="text-left">
                 <tr><th scope="row" class="text-left">Library card number</th><td th:text="${userDto.id}"></td></tr>
+                <tr><th scope="row">Avatar</th><td>
+                    <img class="img-thumbnail" src="#" th:src="@{userDto.avatarUrl}"
+                         alt="Avatar didn't find" width="150" height="150"/>
+                    <div class="mb-3">
+                        <label class="form-label invisible" for="fileAvatar">Choose file</label>
+                        <input accept=".png, .jpg, .jpeg" class="form-control" id="fileAvatar" name="fileAvatar" type="file">
+                    </div>
+                </td></tr>
                 <tr><th scope="row">Username</th><td>
                         <label class="form-label visually-hidden" for="firstName">First name</label>
                         <input class="form-control" id="firstName" placeholder="First name" th:field="*{firstName}"

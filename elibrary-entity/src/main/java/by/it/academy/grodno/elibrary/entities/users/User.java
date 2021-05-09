@@ -73,6 +73,9 @@ public class User extends AEntity<Long> implements UserDetails, Serializable {
     @Builder.Default
     boolean enabled = true;
 
+    @Column(name = "avatar_url")
+    private String avatarUrl;
+
     @Column(name = "social_id", table = "user_social_id")
     private Long socialId;
 

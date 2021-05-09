@@ -1,9 +1,11 @@
 package by.it.academy.grodno.elibrary.entities.books;
 
 import by.it.academy.grodno.elibrary.entities.AEntity;
+import com.vladmihalcea.hibernate.type.json.JsonStringType;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.Type;
+import org.hibernate.annotations.TypeDef;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -21,6 +23,7 @@ import java.util.Set;
 @SuperBuilder
 @Entity
 @Table(name = "book")
+@TypeDef(name = "json", typeClass = JsonStringType.class)
 public class Book extends AEntity<Long> {
     @Column(name = "isbn_10", length = 10)
     private String isbn10;
@@ -49,8 +52,8 @@ public class Book extends AEntity<Long> {
     private Set<Author> authors;
 
     @Type(type = "json")
-    @Column(name = "attributes")
-    private transient Map<String, Object> attributes = new HashMap<>();
+    @Column(name = "attributes", columnDefinition = "json")
+    private Map<String, String> attributes = new HashMap<>();
 
     /**
      * Code by alpha-3/ISO 639-2.
@@ -90,6 +93,9 @@ public class Book extends AEntity<Long> {
     }
 
     public Set<Author> getAuthors() {
-        return authors != null ? authors : new HashSet<>();
+        if (authors == null) {
+            authors = new HashSet<>();
+        }
+        return authors;
     }
 }

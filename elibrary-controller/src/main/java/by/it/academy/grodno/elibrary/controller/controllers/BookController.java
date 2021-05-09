@@ -42,12 +42,12 @@ public class BookController {
 
         Page<BookDto> pageBookDto;
         Optional<CategoryDto> categoryDtoOptional = Optional.empty();
-        if (categoryId != null){
+        if (categoryId != null) {
             pageBookDto = bookService.findAllIncludeSubCategories(categoryId, pageable);
             categoryDtoOptional = categoryService.findById(categoryId);
         } else if (title != null) {
             pageBookDto = bookService.findAllByTitle(title, pageable);
-        } else if (author != null){
+        } else if (author != null) {
             pageBookDto = bookService.findAllByAuthorName(author, pageable);
         } else {
             pageBookDto = bookService.findAll(pageable);
@@ -58,19 +58,25 @@ public class BookController {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("books/booksList");
         modelAndView.addObject("currentUser", currentUser);
+        setBooksViewAttributesToModelAndView(modelAndView, categoryId, title, author, pageBookDto,
+                categoryDtoOptional.orElse(null), categoryDtoList);
+        return modelAndView;
+    }
+
+    static void setBooksViewAttributesToModelAndView(ModelAndView modelAndView, Integer categoryId, String title, String author, Page<BookDto> pageBookDto,
+                                                     CategoryDto categoryDto, Set<CategoryDto> categoryDtoList) {
         modelAndView.addObject("categoryDtoSet", categoryDtoList);
         modelAndView.addObject("pageBookDto", pageBookDto);
         modelAndView.addObject("categoryId", categoryId);
-        modelAndView.addObject("currentCategoryDto", categoryDtoOptional.orElse(null));
+        modelAndView.addObject("currentCategoryDto", categoryDto);
         modelAndView.addObject("title", title);
         modelAndView.addObject("author", author);
         modelAndView.addObject("pageNumbers",
                 PageNumberListCreator.getListOfPagesNumber(pageBookDto.getNumber(), pageBookDto.getTotalPages()));
-        return modelAndView;
     }
 
     @GetMapping(value = "/{id}")
-    public ModelAndView bookInfo(Principal principal, @PathVariable Long id){
+    public ModelAndView bookInfo(Principal principal, @PathVariable Long id) {
         UserDto currentUser = userService.findUser(principal).orElse(null);
 
         Set<CategoryDto> categoryDtoList = new HashSet<>(categoryService.findAll());

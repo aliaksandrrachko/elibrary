@@ -3,24 +3,22 @@ package by.it.academy.grodno.elibrary.service.services.books;
 import by.it.academy.grodno.elibrary.api.dao.BookJpaRepository;
 import by.it.academy.grodno.elibrary.api.dao.SubscriptionJpaRepository;
 import by.it.academy.grodno.elibrary.api.dao.UserJpaRepository;
-import by.it.academy.grodno.elibrary.api.dto.books.SubscriptionRequest;
 import by.it.academy.grodno.elibrary.api.dto.books.SubscriptionDto;
+import by.it.academy.grodno.elibrary.api.dto.books.SubscriptionRequest;
 import by.it.academy.grodno.elibrary.api.dto.books.SubscriptionRequestCode;
+import by.it.academy.grodno.elibrary.api.exceptions.UnknownSubscriptionUpdateCodeRequestException;
 import by.it.academy.grodno.elibrary.api.mappers.SubscriptionMapper;
 import by.it.academy.grodno.elibrary.api.services.books.ISubscriptionService;
-import by.it.academy.grodno.elibrary.api.utils.mail.AdminMailMessageType;
 import by.it.academy.grodno.elibrary.api.utils.mail.IEmailSender;
 import by.it.academy.grodno.elibrary.api.utils.mail.UserMailMessageType;
 import by.it.academy.grodno.elibrary.entities.books.Book;
 import by.it.academy.grodno.elibrary.entities.books.Subscription;
 import by.it.academy.grodno.elibrary.entities.users.User;
-import by.it.academy.grodno.elibrary.api.exceptions.UnknownSubscriptionUpdateCodeRequestException;
 import by.it.academy.grodno.elibrary.entitymetadata.books.SubscriptionStatus;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,6 +28,11 @@ import java.util.*;
 @Component
 @Slf4j
 public class SubscriptionService implements ISubscriptionService {
+
+    static final String SUBSCRIPTION = "subscription";
+
+    private static final int DEFAULT_BOOKING_BOOK_COUNT = 1;
+    private static final int DEFAULT_BOOKING_BOOK_DAYS = 1;
 
     private final SubscriptionJpaRepository subscriptionJpaRepository;
     private final UserJpaRepository userJpaRepository;
@@ -55,14 +58,14 @@ public class SubscriptionService implements ISubscriptionService {
 
     @Override
     public Page<SubscriptionDto> findAll(Pageable pageable) {
-        return subscriptionMapper.toPageDto( subscriptionJpaRepository.findAll(pageable));
+        return subscriptionMapper.toPageDto(subscriptionJpaRepository.findAll(pageable));
     }
 
     @Override
     public Page<SubscriptionDto> findAllByUserIdAndStatus(@NotNull Long userId, @NotNull Integer statusCode, Pageable pageable) {
         SubscriptionStatus status = SubscriptionStatus.getSubscriptionStatus(statusCode);
         Page<Subscription> subscriptionPage;
-        if (status.equals(SubscriptionStatus.READING_EXPIRED)){
+        if (status.equals(SubscriptionStatus.READING_EXPIRED)) {
             subscriptionPage = subscriptionJpaRepository
                     .findByUserIdAndDeadlineBeforeAndStatusNot(userId, LocalDateTime.now().withNano(0),
                             SubscriptionStatus.COMPLETED, pageable);
@@ -73,15 +76,15 @@ public class SubscriptionService implements ISubscriptionService {
     }
 
     @Override
-    public Page<SubscriptionDto> findAllByUserId(Long userId, Pageable pageable){
+    public Page<SubscriptionDto> findAllByUserId(Long userId, Pageable pageable) {
         return subscriptionMapper.toPageDto(subscriptionJpaRepository.findByUserId(userId, pageable));
     }
 
     @Override
-    public Page<SubscriptionDto> findAllByStatus(@NotNull Integer statusCode, Pageable pageable){
+    public Page<SubscriptionDto> findAllByStatus(@NotNull Integer statusCode, Pageable pageable) {
         SubscriptionStatus status = SubscriptionStatus.getSubscriptionStatus(statusCode);
         Page<Subscription> subscriptionPage;
-        if (status.equals(SubscriptionStatus.READING_EXPIRED)){
+        if (status.equals(SubscriptionStatus.READING_EXPIRED)) {
             subscriptionPage = subscriptionJpaRepository
                     .findByDeadlineBeforeAndStatusNot(LocalDateTime.now().withNano(0),
                             SubscriptionStatus.COMPLETED, pageable);
@@ -105,12 +108,6 @@ public class SubscriptionService implements ISubscriptionService {
         }
     }
 
-    private static final int DEFAULT_BOOKING_BOOK_COUNT = 1;
-    private static final int DEFAULT_BOOKING_BOOK_DAYS = 1;
-
-    static final String SUBSCRIPTION = "subscription";
-    static final String SUBSCRIPTIONS = "subscriptions";
-
     @Override
     @Transactional
     public Optional<SubscriptionDto> booking(SubscriptionRequest request) {
@@ -118,7 +115,7 @@ public class SubscriptionService implements ISubscriptionService {
         request.setDays(DEFAULT_BOOKING_BOOK_DAYS);
         request.setCode(1);
         Optional<Subscription> subscriptionOptional = createAndSave(request);
-        if (subscriptionOptional.isPresent()){
+        if (subscriptionOptional.isPresent()) {
             Subscription subscription = subscriptionOptional.get();
             emailSender.sendEmailFromAdmin(subscription.getUser(), UserMailMessageType.USER_BOOKING_BOOK,
                     Collections.singletonMap(SUBSCRIPTION, subscription));
@@ -150,7 +147,7 @@ public class SubscriptionService implements ISubscriptionService {
 
         SubscriptionRequestCode code = SubscriptionRequestCode.getSubscriptionRequestCode(request.getCode());
         SubscriptionStatus status;
-        if (code.equals(SubscriptionRequestCode.TAKE_BOOK)){
+        if (code.equals(SubscriptionRequestCode.TAKE_BOOK)) {
             status = SubscriptionStatus.READING;
         } else {
             status = SubscriptionStatus.BOOKING;
@@ -221,7 +218,7 @@ public class SubscriptionService implements ISubscriptionService {
     private void prepareToUndoBookingSubscription(Subscription subscription, SubscriptionRequest request) {
         int debtBook = subscription.getTook() - subscription.getReturned();
         int returnsBook = request.getCount();
-        if (debtBook >= returnsBook && (subscription.getStatus().equals(SubscriptionStatus.BOOKING))){
+        if (debtBook >= returnsBook && (subscription.getStatus().equals(SubscriptionStatus.BOOKING))) {
             leaveBook(subscription.getBook(), returnsBook);
             subscription.setReturned(subscription.getReturned() + returnsBook);
             if (debtBook == returnsBook) {
@@ -272,42 +269,5 @@ public class SubscriptionService implements ISubscriptionService {
 
     private void leaveBook(Book book, int count) {
         book.setAvailableCount(book.getAvailableCount() + count);
-    }
-
-    @Scheduled(cron = "0 * * * * *")
-    @Transactional
-    public void findAllExpiredSubscriptionsAndSendEmailToUserAndAdmin() {
-        Set<SubscriptionStatus> statuses = new HashSet<>();
-        statuses.add(SubscriptionStatus.COMPLETED);
-        statuses.add(SubscriptionStatus.BOOKING);
-        Set<Subscription> subscriptions = subscriptionJpaRepository
-                .findByDeadlineBeforeAndStatusNotIn(LocalDateTime.now().withNano(0), statuses);
-        subscriptions.forEach(subscription -> {
-            subscription.setStatus(SubscriptionStatus.READING_EXPIRED);
-            subscriptionJpaRepository.save(subscription);
-            emailSender.sendEmailFromAdmin(subscription.getUser(), UserMailMessageType.SUBSCRIPTION_EXPIRED,
-                    Collections.singletonMap(SUBSCRIPTION, subscription));
-        });
-        if (!subscriptions.isEmpty()) {
-            emailSender.sendEmailToAdmin(null, AdminMailMessageType.SUBSCRIPTION_EXPIRED_INFO,
-                    Collections.singletonMap(SUBSCRIPTIONS, subscriptions));
-        }
-        log.info("Was execute scheduled task: 'change status to expired' count - {}", subscriptions.size());
-    }
-
-    @Scheduled(cron = "0 * * * * *")
-    @Transactional
-    public void findAllExpiredBookingSubscriptionAndUndoBookingAndBeforeSendEmailToUser() {
-        Set<Subscription> subscriptions = subscriptionJpaRepository
-                .findByDeadlineBeforeAndStatus(LocalDateTime.now().withNano(0), SubscriptionStatus.BOOKING);
-        subscriptions.forEach(subscription -> {
-            SubscriptionRequest request = new SubscriptionRequest(subscription.getId(),
-                    subscription.getUser().getId(), SubscriptionRequestCode.UNDO_BOOKING.getRequestCode(),
-                    0, subscription.getBook().getId(), subscription.getTook());
-            undoBooking(request);
-            emailSender.sendEmailFromAdmin(subscription.getUser(), UserMailMessageType.BOOKING_WAS_UNDO,
-                    Collections.singletonMap(SUBSCRIPTION, subscription));
-        });
-        log.info("Was execute scheduled task: 'undo expired booking' count - {}", subscriptions.size());
     }
 }

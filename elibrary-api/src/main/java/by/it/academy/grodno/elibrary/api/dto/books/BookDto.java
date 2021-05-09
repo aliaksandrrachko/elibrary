@@ -43,7 +43,7 @@ public class BookDto extends AEntityDto<Long> {
 
     private List<String> authors;
 
-    private transient Map<String, Object> attributes = new HashMap<>();
+    private Map<String, String> attributes = new HashMap<>();
 
     @Pattern(regexp = "^\\w{3}$", message = "Code by alpha-3/ISO 639-2.")
     private String language;
@@ -73,6 +73,9 @@ public class BookDto extends AEntityDto<Long> {
     private LocalDateTime updated;
 
     public List<String> getAuthors() {
-        return authors != null ? authors : new ArrayList<>();
+        if (authors == null) {
+            authors = new ArrayList<>();
+        }
+        return authors;
     }
 }

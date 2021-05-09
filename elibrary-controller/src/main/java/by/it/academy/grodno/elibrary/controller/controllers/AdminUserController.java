@@ -38,9 +38,9 @@ public class AdminUserController {
 
         Page<UserDto> pageUsersDto;
         Optional<UserDto> foundUser;
-        if (userId != null){
+        if (userId != null) {
             foundUser = userService.findById(userId);
-        } else if (email != null){
+        } else if (email != null) {
             foundUser = userService.findUserByEmail(email);
         } else {
             foundUser = Optional.empty();
@@ -61,11 +61,13 @@ public class AdminUserController {
         return modelAndView;
     }
 
+    private static final String REDIRECT_TO_MAPPING_ADMIN_USERS = "redirect:/admin/users";
+
     @PostMapping("/delete")
     public ModelAndView deleteUser(@Valid @Min(0) long userId) {
         userService.delete(userId);
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("redirect:/admin/users");
+        modelAndView.setViewName(REDIRECT_TO_MAPPING_ADMIN_USERS);
         return modelAndView;
     }
 
@@ -73,7 +75,7 @@ public class AdminUserController {
     public ModelAndView deleteUserRole(String roleName, @Valid @Min(0) long userId) {
         userService.deleteRole(userId, roleName);
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("redirect:/admin/users");
+        modelAndView.setViewName(REDIRECT_TO_MAPPING_ADMIN_USERS);
         return modelAndView;
     }
 
@@ -81,7 +83,7 @@ public class AdminUserController {
     public ModelAndView addRoleToUser(String roleName, @Valid @Min(0) long userId) {
         userService.addRole(userId, roleName);
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("redirect:/admin/users");
+        modelAndView.setViewName(REDIRECT_TO_MAPPING_ADMIN_USERS);
         return modelAndView;
     }
 
@@ -89,7 +91,7 @@ public class AdminUserController {
     public ModelAndView setUsersAvailability(@Valid @Min(0) long userId) {
         userService.setAvailability(userId);
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("redirect:/admin/users");
+        modelAndView.setViewName(REDIRECT_TO_MAPPING_ADMIN_USERS);
         return modelAndView;
     }
 }

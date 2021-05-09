@@ -20,7 +20,6 @@ public class CustomAccessDeniedHandler implements AccessDeniedHandler {
     public void handle(HttpServletRequest request,
                        HttpServletResponse response,
                        AccessDeniedException e) throws IOException, ServletException {
-        // this method do some event when throw AccessDeniedException
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication != null){
             log.info("User {} doesn't have permission!", authentication.getName());

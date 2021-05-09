@@ -1,9 +1,8 @@
 package by.it.academy.grodno.elibrary.rest;
 
-import by.it.academy.grodno.elibrary.api.dto.books.SubscriptionRequest;
 import by.it.academy.grodno.elibrary.api.dto.books.SubscriptionDto;
+import by.it.academy.grodno.elibrary.api.dto.books.SubscriptionRequest;
 import by.it.academy.grodno.elibrary.api.services.books.ISubscriptionService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,8 +13,11 @@ import java.util.List;
 @RequestMapping(value = "rest/subscriptions")
 public class SubscriptionRestController {
 
-    @Autowired
-    private ISubscriptionService subscriptionService;
+    private final ISubscriptionService subscriptionService;
+
+    public SubscriptionRestController(ISubscriptionService subscriptionService) {
+        this.subscriptionService = subscriptionService;
+    }
 
     @GetMapping
     public List<SubscriptionDto> findAllSubscription() {
@@ -33,7 +35,7 @@ public class SubscriptionRestController {
     }
 
     @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public SubscriptionDto updateSubscription(@Valid @RequestBody SubscriptionRequest request, @PathVariable Long id){
+    public SubscriptionDto updateSubscription(@Valid @RequestBody SubscriptionRequest request, @PathVariable Long id) {
         return subscriptionService.update(id, request).orElse(null);
     }
 }

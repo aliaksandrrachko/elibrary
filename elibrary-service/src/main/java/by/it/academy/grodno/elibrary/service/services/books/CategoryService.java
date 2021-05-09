@@ -14,7 +14,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -27,11 +30,6 @@ public class CategoryService implements ICategoryService {
     public CategoryService(CategoryMapper categoryMapper, CategoryJpaRepository categoryJpaRepository) {
         this.categoryMapper = categoryMapper;
         this.categoryJpaRepository = categoryJpaRepository;
-    }
-
-    @Override
-    public Class<CategoryDto> getGenericClass() {
-        return CategoryDto.class;
     }
 
     @Override

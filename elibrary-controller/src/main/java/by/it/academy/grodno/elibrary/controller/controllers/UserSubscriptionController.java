@@ -37,14 +37,14 @@ public class UserSubscriptionController {
     public ModelAndView findAll(@RequestParam(value = "status", required = false) @Min(1) @Max(5) Integer status,
                                 @RequestParam(value = "subscriptionId", required = false) Long subscriptionId,
                                 @PageableDefault(sort = {"status"}, direction = Sort.Direction.ASC) Pageable pageable,
-                                Principal principal){
+                                Principal principal) {
         Optional<UserDto> optionalUserDto = userService.findUser(principal);
         UserDto userDto = optionalUserDto.orElseThrow(NoSuchElementException::new);
 
         Page<SubscriptionDto> subscriptionPage;
-        if (status != null){
+        if (status != null) {
             subscriptionPage = subscriptionService.findAllByUserIdAndStatus(userDto.getId(), status, pageable);
-        } else if(subscriptionId != null) {
+        } else if (subscriptionId != null) {
             Optional<SubscriptionDto> optionalSubscriptionDto =
                     subscriptionService.findBySubscriptionIdAndUserId(subscriptionId, userDto.getId());
             subscriptionPage = new PageImpl<>(Collections.singletonList(optionalSubscriptionDto.orElse(null)), pageable, 1L);
@@ -64,8 +64,8 @@ public class UserSubscriptionController {
 
     @PostMapping
     public ModelAndView bookingBook(SubscriptionRequest request,
-                                    Principal principal){
-        if (principal != null){
+                                    Principal principal) {
+        if (principal != null) {
             Optional<UserDto> userDtoOptional = userService.findById(principal.getName());
             if (userDtoOptional.isPresent()) {
                 request.setUserId(userDtoOptional.get().getId());
@@ -79,16 +79,17 @@ public class UserSubscriptionController {
 
     @PostMapping(value = "/undo")
     public ModelAndView undoBookingBook(SubscriptionRequest request,
-                                    Principal principal){
-        if (principal != null){
+                                        Principal principal) {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("redirect:/subscriptions");
+        if (principal != null) {
             Optional<UserDto> userDtoOptional = userService.findById(principal.getName());
             if (userDtoOptional.isPresent()) {
                 request.setUserId(userDtoOptional.get().getId());
-                subscriptionService.undoBooking(request);
+                subscriptionService.undoBooking(request).ifPresent(subscriptionDto ->
+                        modelAndView.setViewName("redirect:/subscriptions?subscriptionId=" + subscriptionDto.getId()));
             }
         }
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("redirect:/subscriptions");
         return modelAndView;
     }
 }

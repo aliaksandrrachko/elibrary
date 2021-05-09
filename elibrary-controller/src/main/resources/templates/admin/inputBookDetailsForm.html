@@ -15,7 +15,7 @@
     <link href="/css/docs.css" rel="stylesheet" crossorigin="anonymous">
 
     <!-- Favicons -->
-    <link rel="icon" href="/img/favicons/userEdit.png" sizes="32x32" type="image/png">
+    <link rel="icon" href="/img/favicons/book-with-add-button.png" sizes="32x32" type="image/png">
     <meta name="theme-color" content="#7952b3">
 
     <!-- Custom styles for this template -->
@@ -90,7 +90,7 @@
                     </select>
                 </div>
             </div>
-            <div  class="row row-cols-auto pb-4 container-sm">
+            <div  class="row row-cols-auto pb-4 pt-4 container-sm border-bottom border-top">
                 <div class="col mb-1" th:each="author, item : ${bookDto.authors}">
                     <label class="col" th:for="'authorName' + ${item.index}" th:text="'Author ' + ${item.index}"></label>
                     <input th:id="'authorName' + ${item.index}" class="form-control"
@@ -98,7 +98,16 @@
                            th:value="${author}" type="text"/>
                 </div>
             </div>
-            <div class="row pb-4 container-sm">
+            <div class="row row-cols-auto pb-4 pt-4 container-sm border-bottom">
+                <label class="form-label">Write book's attributes in format: [name]:[value]</label>
+                <div class="col mb-1 input-group"  th:each="attribute : ${bookDto.attributes}">
+                    <label th:for="${attribute.key}" th:text="${attribute.key}" class="input-group-text"></label>
+                    <input class="form-control" th:id="${attribute.key}"
+                           th:field="*{attributes[__${attribute.key}__]}"
+                           th:value="${attribute.value}">
+                </div>
+            </div>
+            <div class="row pb-4 pt-3 container-sm">
                 <div class="col">
                     <label class="form-label mb-1" for="publisher">Publisher</label>
                     <input class="form-control" id="publisher" placeholder="Publisher" th:field="*{publisher}" th:value="*{publisher}" type="text">
@@ -145,11 +154,16 @@
                                th:checked="*{available}">Not available</label>
                 </div>
             </div>
-            <div class="row row-cols-auto pb-4 container-sm">
-                <div class="col-6">
+            <div class="row pb-4 container-sm">
+                <div>
                 <label class="form-label mb-2" for="pictureUrl">Picture url</label>
-                <input class="form-control" id="pictureUrl" placeholder="Picture url" th:field="*{pictureUrl}" th:value="*{pictureUrl}" type="url">
-                <span class="text-danger" th:errors="*{pictureUrl}" th:if="${#fields.hasErrors('pictureUrl')}"></span>
+                    <input class="form-control" id="pictureUrl" placeholder="Picture url" th:field="*{pictureUrl}" th:value="*{pictureUrl}" type="url">
+                    <span class="text-danger" th:errors="*{pictureUrl}" th:if="${#fields.hasErrors('pictureUrl')}"></span>
+                </div>
+                <p class="text-muted mt-3">OR</p>
+                <div>
+                    <label class="form-label" for="file">Choose file</label>
+                    <input accept=".png, .jpg, .jpeg" class="form-control" id="file" name="fileBookCover" type="file">
                 </div>
             </div>
             <div class="modal-footer">

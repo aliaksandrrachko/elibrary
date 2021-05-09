@@ -38,11 +38,10 @@
             </thead>
             <tbody class="text-left">
             <tr><th scope="row" class="text-left">Library card number</th><td th:text="${userDto.id}"></td></tr>
-            <!-- <tr><th scope="row">Avatar</th><td> lather you can add avatar picture
-                <img class="img-thumbnail" src="#" th:src="@{'/img/avatars/' + ${userDto.username} + '.png'}"
+             <tr><th scope="row">Avatar</th><td>
+                <img class="img-thumbnail" src="#" th:src="@{userDto.avatarUrl}"
                      alt="Avatar didn't find" width="200" height="200"/>
             </td></tr>
-            -->
             <tr><th scope="row">First name</th><td th:text="${userDto.firstName}"></td></tr>
             <tr><th scope="row">Last name</th><td th:text="${userDto.lastName}"></td></tr>
             <tr><th scope="row">Middle name</th><td th:text="${userDto.middleName}"></td></tr>

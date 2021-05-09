@@ -60,7 +60,7 @@ public class OpenLibraryBookStrategy implements BookDataSearchStrategy {
                 Book book = openLibraryResponseBookConverter.convert(openLibraryBookResponseBody);
                 if (book != null) {
                     Set<String> setOfAuthorPath = openLibraryBookResponseBody.getAuthorPath().get(0)
-                            .values().stream().map(v -> (String) v).collect(Collectors.toSet());
+                            .values().stream().map(String.class::cast).collect(Collectors.toSet());
                     book.setAuthors(getAuthors(setOfAuthorPath));
                     book.setDescription(getDescription((String) openLibraryBookResponseBody.getWorks().get(0).get("key")));
                     return Optional.of(book);
@@ -78,7 +78,7 @@ public class OpenLibraryBookStrategy implements BookDataSearchStrategy {
         } catch (RestClientException ex) {
             log.error(ex.getMessage());
         }
-        return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     private static final Converter<OpenLibraryAuthorResponse, Author> openLibraryAuthorResponseConverter =
