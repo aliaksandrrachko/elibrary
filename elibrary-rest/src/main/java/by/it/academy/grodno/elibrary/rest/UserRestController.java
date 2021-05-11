@@ -25,7 +25,7 @@ public class UserRestController {
 
     @GetMapping(value = "/{id}")
     public UserDto findUserById(@PathVariable Long id) {
-        return userService.findById(id).orElse(null);
+        return userService.findById(id);
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)

@@ -202,16 +202,26 @@ CREATE TABLE IF NOT EXISTS book_has_author
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS review
 (
-    id             BIGINT UNSIGNED        NOT NULL COMMENT 'Review id',
-    book_id        BIGINT UNSIGNED        NOT NULL COMMENT 'Books id',
-    user_id        BIGINT UNSIGNED        NOT NULL COMMENT 'Users id',
-    review_text    TEXT                   NOT NULL COMMENT 'Review text',
-    review_grade   TINYINT UNSIGNED       NOT NULL COMMENT 'Review gradle',
-    review_created DATETIME DEFAULT NOW() NOT NULL COMMENT 'Date of creating',
-    review_updated DATETIME DEFAULT NOW() NOT NULL COMMENT 'Date of updating',
+    id             BIGINT UNSIGNED AUTO_INCREMENT UNIQUE NOT NULL COMMENT 'Review id',
+    book_id        BIGINT UNSIGNED                       NOT NULL COMMENT 'Books id',
+    user_id        BIGINT UNSIGNED                       NOT NULL COMMENT 'Users id',
+    review_text    TEXT                                  NOT NULL COMMENT 'Review text',
+    review_grade   TINYINT UNSIGNED                      NOT NULL COMMENT 'Review gradle',
+    review_created DATETIME DEFAULT NOW()                NOT NULL COMMENT 'Date of creating',
+    review_updated DATETIME DEFAULT NOW()                NOT NULL COMMENT 'Date of updating',
     CONSTRAINT fk_review_book FOREIGN KEY (book_id) REFERENCES book (id) ON DELETE CASCADE ON UPDATE CASCADE,
     CONSTRAINT fk_review_user FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE ON UPDATE CASCADE
 );
+
+-- -----------------------------------------------------
+-- Trigger on update review
+-- -----------------------------------------------------
+CREATE
+    TRIGGER p_review_update
+    BEFORE UPDATE
+    ON review
+    FOR EACH ROW
+    SET NEW.review_updated = NOW();
 
 -- -----------------------------------------------------
 -- Table by_it_academy_grodno_elibrary.subscription

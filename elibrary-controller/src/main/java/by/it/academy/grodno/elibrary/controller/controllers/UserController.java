@@ -34,7 +34,7 @@ public class UserController {
 
     @GetMapping("/info")
     public ModelAndView userInfo(Principal principal) {
-        UserDto currentUser = userService.findById(principal.getName()).orElse(null);
+        UserDto currentUser = userService.findById(principal.getName());
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("users/userInfo");
         modelAndView.addObject(MODEL_ATTRIBUTE_NAME_CURRENT_USER, currentUser);
@@ -44,7 +44,7 @@ public class UserController {
 
     @GetMapping("/update")
     public ModelAndView getEditUserProfileForm(Principal principal) {
-        UserDto currentUser = userService.findById(principal.getName()).orElse(null);
+        UserDto currentUser = userService.findById(principal.getName());
 
         ModelAndView modelAndView = new ModelAndView();
         if (currentUser == null) {
@@ -72,7 +72,7 @@ public class UserController {
             modelAndView = new ModelAndView();
             modelAndView.setViewName("users/userUpdate");
             modelAndView.addAllObjects(result.getModel());
-            UserDto currentUser = userService.findById(principal.getName()).orElse(new UserDto());
+            UserDto currentUser = userService.findById(principal.getName());
             modelAndView.addObject(MODEL_ATTRIBUTE_NAME_USER_DTO, currentUser);
             modelAndView.addObject(MODEL_ATTRIBUTE_NAME_CURRENT_USER, currentUser);
         } else {

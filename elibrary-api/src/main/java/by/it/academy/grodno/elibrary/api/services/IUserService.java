@@ -12,8 +12,8 @@ import java.util.Optional;
 public interface IUserService extends IAGenericCrudService<UserDto, Long> {
 
     Page<UserDto> findAll(Pageable pageable);
-    Optional<UserDto> findUserByEmail(String email);
-    Optional<UserDto> findById(String userId);
+    UserDto findUserByEmail(String email);
+    UserDto findById(String userId);
     Optional<UserDto> findUser(Principal principal);
     Optional<User> createUserFromSocialNetwork(User user);
     Optional<User> findByEmailOrSocialId(String email, Long socialId);

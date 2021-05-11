@@ -40,9 +40,8 @@ public class CategoryService implements ICategoryService {
     }
 
     @Override
-    public Optional<CategoryDto> findById(Integer id) {
-        Optional<Category> optionalCategory = categoryJpaRepository.findById(id);
-        return optionalCategory.map(categoryMapper::toDto);
+    public CategoryDto findById(Integer id) {
+        return categoryMapper.toDto(categoryJpaRepository.findById(id).orElse(null));
     }
 
     @Override

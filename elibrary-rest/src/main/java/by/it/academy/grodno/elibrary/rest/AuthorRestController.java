@@ -33,7 +33,7 @@ public class AuthorRestController {
 
     @GetMapping(value = "/{id}")
     public AuthorDto findAuthor(@PathVariable Integer id) {
-        return authorService.findById(id).orElse(null);
+        return authorService.findById(id);
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)

@@ -18,4 +18,6 @@ public interface IBookService extends IAGenericCrudService<BookDto, Long> {
     Optional<BookDto> findByIsbnInWeb(String isbn);
     Page<BookDto> findAllIncludeSubCategories(Integer categoryId, Pageable pageable);
     Optional<BookDto> create(BookDto bookDto, MultipartFile file);
+    Optional<BookDto> update(Long id, BookDto bookDto, MultipartFile file);
+
 }

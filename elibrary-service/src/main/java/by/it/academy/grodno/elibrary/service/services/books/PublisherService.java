@@ -30,10 +30,8 @@ public class PublisherService implements IPublisherService {
     }
 
     @Override
-    public Optional<PublisherDto> findById(Integer id) {
-        Optional<Publisher> optionalCategory = publisherJpaRepository.findById(id);
-        return optionalCategory.map(publisherMapper::toDto);
-
+    public PublisherDto findById(Integer id) {
+        return publisherMapper.toDto(publisherJpaRepository.findById(id).orElse(null));
     }
 
     @Override

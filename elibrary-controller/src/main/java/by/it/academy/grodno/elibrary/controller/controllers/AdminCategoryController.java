@@ -79,7 +79,7 @@ public class AdminCategoryController {
         ModelAndView modelAndView = new ModelAndView();
         UserDto currentUser = null;
         if (principal != null) {
-            currentUser = userService.findById(principal.getName()).orElse(null);
+            currentUser = userService.findById(principal.getName());
         }
         modelAndView.addObject("currentUser", currentUser);
         return modelAndView;

@@ -14,7 +14,7 @@ import java.util.Optional;
 public interface IAGenericCrudService<T, K extends Number> {
 
     List<T> findAll();
-    Optional<T> findById(K id);
+    T findById(K id);
     void delete(K id);
     Optional<T> create(T entityDto);
     Optional<T> update(K id, T entityDto);

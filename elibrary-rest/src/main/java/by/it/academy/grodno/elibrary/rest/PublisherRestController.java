@@ -25,7 +25,7 @@ public class PublisherRestController {
 
     @GetMapping(value = "/{id}")
     public PublisherDto findPublisher(@PathVariable Integer id) {
-        return publisherService.findById(id).orElse(null);
+        return publisherService.findById(id);
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)

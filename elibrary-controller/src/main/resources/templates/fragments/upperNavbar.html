@@ -33,8 +33,9 @@
                 <div>
                     <div th:if="${currentUser != null}">
                         <span class="text-danger" th:if="${!currentUser.roles.contains('ROLE_USER')}">You need filling your profile</span>
-                        <a class="btn btn btn-outline-secondary" th:href="@{'/subscriptions'}">My subscriptions</a>
-                        <a class="btn btn btn-outline-primary" th:href="@{'/users/info'}" th:text="*{username}"></a>
+                        <a class="btn btn-outline-secondary" th:href="@{/reviews}">My reviews</a>
+                        <a class="btn btn btn-outline-secondary" th:href="@{/subscriptions}">My subscriptions</a>
+                        <a class="btn btn btn-outline-primary" th:href="@{/users/info}" th:text="*{username}"></a>
                         <a class="btn btn-outline-danger" href="/logout">Log out</a>
                     </div>
                     <div th:if="${currentUser == null}">

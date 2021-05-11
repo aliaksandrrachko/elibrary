@@ -40,16 +40,14 @@ public class BookService implements IBookService {
     private final BookJpaRepository bookJpaRepository;
     private final CategoryJpaRepository categoryJpaRepository;
     private final BookDataProvider bookDataWebProvider;
-    private final FileUploader fileUploader;
 
     public BookService(BookMapper bookMapper, AuthorJpaRepository authorJpaRepository, BookJpaRepository bookJpaRepository,
-                       CategoryJpaRepository categoryJpaRepository, BookDataProvider bookDataWebProvider, FileUploader fileUploader) {
+                       CategoryJpaRepository categoryJpaRepository, BookDataProvider bookDataWebProvider) {
         this.bookMapper = bookMapper;
         this.authorJpaRepository = authorJpaRepository;
         this.bookJpaRepository = bookJpaRepository;
         this.categoryJpaRepository = categoryJpaRepository;
         this.bookDataWebProvider = bookDataWebProvider;
-        this.fileUploader = fileUploader;
     }
 
     @Override
@@ -58,9 +56,8 @@ public class BookService implements IBookService {
     }
 
     @Override
-    public Optional<BookDto> findById(Long id) {
-        Optional<Book> bookOptional = bookJpaRepository.findById(id);
-        return bookOptional.map(bookMapper::toDto);
+    public BookDto findById(Long id) {
+        return bookMapper.toDto(bookJpaRepository.findById(id).orElse(null));
     }
 
     @Override
@@ -73,26 +70,29 @@ public class BookService implements IBookService {
     @Override
     @Transactional
     public Optional<BookDto> create(BookDto entityDto) {
-        Book createdBook = saveNewBook(entityDto);
+        Book createdBook = saveBook(entityDto);
         return Optional.of(bookMapper.toDto(createdBook));
     }
 
-    private Book saveNewBook(BookDto entityDto) {
+    private Book saveBook(BookDto entityDto) {
         entityDto.setCreated(LocalDateTime.now().withNano(0));
         entityDto.setUpdated(LocalDateTime.now().withNano(0));
         Book newBookData = bookMapper.toEntity(entityDto);
         createAndSetPublisherIfNotExists(newBookData, entityDto);
         createAndSetAuthorIfNotExists(newBookData, entityDto);
+        setDefaultBookCoverImageIfNot(newBookData);
         return bookJpaRepository.save(newBookData);
     }
+
+
 
     @Override
     @Transactional
     public Optional<BookDto> create(BookDto entityDto, MultipartFile file) {
-        Book createdBook = saveNewBook(entityDto);
+        Book createdBook = saveBook(entityDto);
         if (file != null && !file.isEmpty()) {
             try {
-                URL bookCoverUri = fileUploader.uploadFile(file, DownloadFileType.BOOK_COVER, String.valueOf(createdBook.getId()));
+                URL bookCoverUri = FileUploader.uploadFile(file, DownloadFileType.BOOK_COVER, String.valueOf(createdBook.getId()));
                 createdBook.setPictureUrl(bookCoverUri.getPath());
                 createdBook = bookJpaRepository.save(createdBook);
             } catch (IOException e) {
@@ -122,6 +122,33 @@ public class BookService implements IBookService {
     @Override
     @Transactional
     public Optional<BookDto> update(Long id, BookDto entityDto) {
+        Book updatedBook = updateBook(id, entityDto);
+        if (updatedBook != null) {
+            return Optional.of(bookMapper.toDto(updatedBook));
+        }
+        return Optional.empty();
+    }
+
+    @Override
+    @Transactional
+    public Optional<BookDto> update(Long id, BookDto entityDto, MultipartFile file) {
+        Book updatedBook = updateBook(id, entityDto);
+        if (updatedBook == null){
+            return Optional.empty();
+        }
+        if (file != null && !file.isEmpty()){
+            try {
+                URL pictureUrl = FileUploader.uploadFile(file, DownloadFileType.BOOK_COVER, String.valueOf(updatedBook.getId()));
+                updatedBook.setPictureUrl(pictureUrl.toString());
+                updatedBook = bookJpaRepository.save(updatedBook);
+            } catch (IOException e) {
+                log.error("Error uploading books cover image : '{}'.", file.getName());
+            }
+        }
+        return Optional.of(bookMapper.toDto(updatedBook));
+    }
+
+    private Book updateBook(Long id, BookDto entityDto){
         Optional<Book> optionalBook = bookJpaRepository.findById(id);
         if (optionalBook.isPresent()) {
             Book bookFromDb = optionalBook.get();
@@ -131,10 +158,10 @@ public class BookService implements IBookService {
             newBookData.setId(id);
             createAndSetPublisherIfNotExists(newBookData, entityDto);
             createAndSetAuthorIfNotExists(newBookData, entityDto);
-            Book updatedBook = bookJpaRepository.save(newBookData);
-            return Optional.of(bookMapper.toDto(updatedBook));
+            setDefaultBookCoverImageIfNot(newBookData);
+            return bookJpaRepository.save(newBookData);
         }
-        return Optional.empty();
+        return null;
     }
 
     @Override
@@ -206,5 +233,13 @@ public class BookService implements IBookService {
             categorySet.add(categoryFromQueue);
         }
         return categorySet;
+    }
+
+    private static final String DEFAULT_BOOK_COVER_IMAGE = "http://localhost:8080/img/books/covers/default_book_cover.png";
+
+    private void setDefaultBookCoverImageIfNot(Book book){
+        if (!StringUtils.hasText(book.getPictureUrl())){
+            book.setPictureUrl(DEFAULT_BOOK_COVER_IMAGE);
+        }
     }
 }

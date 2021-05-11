@@ -63,6 +63,7 @@ class UserJpaRepositoryTest {
             LocalDate.of(2000, 12, 14),
             "$2a$10$Z1/.F4bRuyOGyL7NQrmjhufHf8XrHIEjPfBz9tlPbPcWrLpvPWKfq",
             true,
+            null,
             13516516541654L,
             null,
             null,

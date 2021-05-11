@@ -50,11 +50,12 @@
                     </th>
                     <th scope="row">
                         <h6 class="text-sm-start text-muted m-0" th:text="'N' + ${book.id}"></h6>
-                        <p class="text-sm-start m-0" th:text="'(Rating: ' + ${book.rating} + ')'"></p>
-                        <span class="text-start">
+                        <span class="text-sm-start m-0" th:text="'(Rating: ' + ${book.rating} + ')'"></span>
+                        <a th:href="@{${book.id} + '/reviews'}" th:text="${totalCountOfReview} + ' Review'"></a>
+                        <p class="text-start">
                         <small class="text-muted" th:text="${book.getCategory().getCategoryPath()+ '/'}"></small>
                         <small><a class="text-sm-start m-0 link-primary" th:href="@{/books(categoryId=${book.getCategory().getId()})}"
-                              th:text="${book.getCategory().getCategoryName}"></a></small></span>
+                              th:text="${book.getCategory().getCategoryName}"></a></small></p>
                         <!--/*@thymesVar id="book" type="by.it.academy.grodno.elibrary.api.dto.books.BookDto"*/-->
                         <h2 class="text-sm-start mt-2" th:text="${book.title}"></h2>
                         <h5 class="text-sm-start m-0">

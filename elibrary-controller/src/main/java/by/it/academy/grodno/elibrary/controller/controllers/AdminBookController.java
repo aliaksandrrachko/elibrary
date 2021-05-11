@@ -56,10 +56,10 @@ public class AdminBookController {
                                     @PageableDefault Pageable pageable,
                                     Principal principal) {
         Page<BookDto> pageBookDto;
-        Optional<CategoryDto> categoryDtoOptional = Optional.empty();
+        CategoryDto categoryDto = null;
         if (categoryId != null) {
             pageBookDto = bookService.findAllIncludeSubCategories(categoryId, pageable);
-            categoryDtoOptional = categoryService.findById(categoryId);
+            categoryDto = categoryService.findById(categoryId);
         } else if (title != null) {
             pageBookDto = bookService.findAllByTitle(title, pageable);
         } else if (author != null) {
@@ -73,7 +73,7 @@ public class AdminBookController {
         ModelAndView modelAndView = getModelAndViewWithCurrentUserFromDb(principal);
         modelAndView.setViewName("admin/adminBooksList");
         BookController.setBooksViewAttributesToModelAndView(modelAndView, categoryId, title, author, pageBookDto,
-                categoryDtoOptional.orElse(null), categoryDtoSet);
+                categoryDto, categoryDtoSet);
         return modelAndView;
     }
 
@@ -183,7 +183,7 @@ public class AdminBookController {
         ModelAndView modelAndView = new ModelAndView();
         UserDto currentUser = null;
         if (principal != null) {
-            currentUser = userService.findById(principal.getName()).orElse(null);
+            currentUser = userService.findById(principal.getName());
         }
         modelAndView.addObject("currentUser", currentUser);
         return modelAndView;
@@ -201,9 +201,8 @@ public class AdminBookController {
     public ModelAndView getUpdateBookForm(@PathVariable Long bookId,
                                           @RequestParam(value = "countAuthors", defaultValue = "2") int countAuthors,
                                           @RequestParam(value = "countAttributes", required = false, defaultValue = "3") int countAttributes,
-                                          @RequestParam(value = "fileBookCover", required = false) MultipartFile file,
                                           Principal principal) {
-        BookDto bookDtoForUpdate = bookService.findById(bookId).orElse(null);
+        BookDto bookDtoForUpdate = bookService.findById(bookId);
 
         ModelAndView modelAndView = getModelAndViewWithCurrentUserFromDb(principal);
         if (bookDtoForUpdate == null) {
@@ -234,7 +233,7 @@ public class AdminBookController {
             prepareModelAndViewForAddAndUpdateBookForm(modelAndView);
         } else {
             bookDto.setAttributes(convertToSimpleMap(bookDto.getAttributes()));
-            Optional<BookDto> optionalAddedBook = bookService.update(bookId, bookDto);
+            Optional<BookDto> optionalAddedBook = bookService.update(bookId, bookDto, file);
             optionalAddedBook.ifPresent(dto -> modelAndView.setViewName("redirect:/books/" + dto.getId()));
         }
         return modelAndView;

@@ -48,9 +48,9 @@ class AuthorServiceTest {
     void whenFindAuthorByIdThenReturnAuthorDto() {
         Optional<Author> author = Optional.of(new Author("Erich Maria Remarque"));
         doReturn(author).when(authorJpaRepository).findById(1);
-        Optional<AuthorDto> optionalAuthor = authorService.findById(1);
-        assertThat(optionalAuthor).isPresent();
-        assertThat(optionalAuthor.get().getAuthorName()).isEqualTo(author.get().getAuthorName());
+        AuthorDto optionalAuthor = authorService.findById(1);
+        assertThat(optionalAuthor).isNotNull();
+        assertThat(optionalAuthor.getAuthorName()).isEqualTo(author.get().getAuthorName());
     }
 }
 

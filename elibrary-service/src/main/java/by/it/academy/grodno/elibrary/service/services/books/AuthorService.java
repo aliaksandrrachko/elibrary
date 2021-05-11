@@ -30,9 +30,8 @@ public class AuthorService implements IAuthorService {
     }
 
     @Override
-    public Optional<AuthorDto> findById(Integer id) {
-        Optional<Author> authorOptional = authorJpaRepository.findById(id);
-        return authorOptional.map(authorMapper::toDto);
+    public AuthorDto findById(Integer id) {
+        return authorMapper.toDto(authorJpaRepository.findById(id).orElse(null));
     }
 
     @Override

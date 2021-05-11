@@ -28,7 +28,7 @@ public class BookRestController {
 
     @GetMapping(value = "/{id}")
     public BookDto findBookById(@PathVariable Long id) {
-        return bookService.findById(id).orElse(null);
+        return bookService.findById(id);
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)

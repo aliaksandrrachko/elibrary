@@ -37,17 +37,17 @@ public class AdminUserController {
         UserDto userDto = optionalUserDto.orElseThrow(NoSuchElementException::new);
 
         Page<UserDto> pageUsersDto;
-        Optional<UserDto> foundUser;
+        UserDto foundUser;
         if (userId != null) {
             foundUser = userService.findById(userId);
         } else if (email != null) {
             foundUser = userService.findUserByEmail(email);
         } else {
-            foundUser = Optional.empty();
+            foundUser = null;
         }
 
-        if (foundUser.isPresent()) {
-            pageUsersDto = new PageImpl<>(Collections.singletonList(foundUser.get()));
+        if (foundUser != null) {
+            pageUsersDto = new PageImpl<>(Collections.singletonList(foundUser));
         } else {
             pageUsersDto = userService.findAll(pageable);
         }

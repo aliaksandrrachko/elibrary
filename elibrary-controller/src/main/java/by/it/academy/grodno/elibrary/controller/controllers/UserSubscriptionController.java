@@ -66,9 +66,9 @@ public class UserSubscriptionController {
     public ModelAndView bookingBook(SubscriptionRequest request,
                                     Principal principal) {
         if (principal != null) {
-            Optional<UserDto> userDtoOptional = userService.findById(principal.getName());
-            if (userDtoOptional.isPresent()) {
-                request.setUserId(userDtoOptional.get().getId());
+            UserDto userDto = userService.findById(principal.getName());
+            if (userDto != null) {
+                request.setUserId(userDto.getId());
                 subscriptionService.booking(request);
             }
         }
@@ -83,9 +83,9 @@ public class UserSubscriptionController {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("redirect:/subscriptions");
         if (principal != null) {
-            Optional<UserDto> userDtoOptional = userService.findById(principal.getName());
-            if (userDtoOptional.isPresent()) {
-                request.setUserId(userDtoOptional.get().getId());
+            UserDto userDto = userService.findById(principal.getName());
+            if (userDto != null) {
+                request.setUserId(userDto.getId());
                 subscriptionService.undoBooking(request).ifPresent(subscriptionDto ->
                         modelAndView.setViewName("redirect:/subscriptions?subscriptionId=" + subscriptionDto.getId()));
             }

@@ -14,6 +14,7 @@ import by.it.academy.grodno.elibrary.entities.users.Role;
 import by.it.academy.grodno.elibrary.entities.users.User;
 import by.it.academy.grodno.elibrary.service.utils.FileUploader;
 import by.it.academy.grodno.elibrary.service.utils.RandomPasswordGenerator;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -30,6 +31,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
+@Slf4j
 public class UserService implements IUserService {
 
     private final PasswordEncoder bCryptPasswordEncoder;
@@ -37,16 +39,14 @@ public class UserService implements IUserService {
     private final UserMapper userMapper;
     private final RoleJpaRepository roleJpaRepository;
     private final IEmailSender emailSender;
-    private final FileUploader fileUploader;
 
     public UserService(PasswordEncoder bCryptPasswordEncoder, UserJpaRepository userJpaRepository, UserMapper userMapper,
-                       RoleJpaRepository roleJpaRepository, IEmailSender emailSender, FileUploader fileUploader) {
+                       RoleJpaRepository roleJpaRepository, IEmailSender emailSender) {
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
         this.userJpaRepository = userJpaRepository;
         this.userMapper = userMapper;
         this.roleJpaRepository = roleJpaRepository;
         this.emailSender = emailSender;
-        this.fileUploader = fileUploader;
     }
 
     @Override
@@ -56,23 +56,21 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public Optional<UserDto> findUserByEmail(String email) {
-        Optional<User> optionalUser = userJpaRepository.findByEmail(email);
-        return optionalUser.map(userMapper::toDto);
+    public UserDto findUserByEmail(String email) {
+        return userMapper.toDto(userJpaRepository.findByEmail(email).orElse(null));
     }
 
     @Override
-    public Optional<UserDto> findById(String userId) {
+    public UserDto findById(String userId) {
         Long userIdNumber = Long.parseLong(userId);
-        Optional<User> optionalUser = userJpaRepository.findById(userIdNumber);
-        return optionalUser.map(userMapper::toDto);
+        return userMapper.toDto(userJpaRepository.findById(userIdNumber).orElse(null));
     }
 
     @Override
     public Optional<UserDto> findUser(Principal principal) {
         Optional<UserDto> optionalUserDto = Optional.empty();
         if (principal != null && StringUtils.hasText(principal.getName())) {
-            optionalUserDto = this.findById(principal.getName());
+            optionalUserDto = Optional.of(this.findById(principal.getName()));
         }
         return optionalUserDto;
     }
@@ -83,11 +81,11 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public Optional<UserDto> findById(Long id) {
+    public UserDto findById(Long id) {
         if (id != null) {
-            return userJpaRepository.findById(id).map(userMapper::toDto);
+            return userMapper.toDto(userJpaRepository.findById(id).orElse(null));
         } else {
-            return Optional.empty();
+            return null;
         }
     }
 
@@ -109,6 +107,7 @@ public class UserService implements IUserService {
             entityDto.getAddressDto().setUpdated(LocalDateTime.now().withNano(0));
             User user = userMapper.toEntity(entityDto);
             user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+            setDefaultAvatarImageIfNot(user);
             user = userJpaRepository.save(user);
             emailSender.sendEmailFromAdmin(user, UserMailMessageType.REGISTERED, null);
             return Optional.of(userMapper.toDto(user));
@@ -127,9 +126,26 @@ public class UserService implements IUserService {
         Set<Role> roleSet = new HashSet<>();
         user.getRoles().forEach(r -> roleJpaRepository.findByRoleName(r.getRoleName()).ifPresent(roleSet::add));
         user.setRoles(roleSet);
+        setDefaultAvatarImageIfNot(user);
         user = userJpaRepository.save(user);
         emailSender.sendEmailFromAdmin(user, UserMailMessageType.REGISTERED_WITH_PASSWORD, Collections.singletonMap("password", randomPassword));
         return Optional.of(user);
+    }
+
+    private static final String DEFAULT_AVATAR_MALE = "http://localhost:8080/img/users/avatars/default_male_avatar.png";
+    private static final String DEFAULT_AVATAR_FEMALE = "http://localhost:8080/img/users/avatars/default_male_female.png";
+    private static final String DEFAULT_AVATAR_UNKNOWN = "http://localhost:8080/img/users/avatars/default_male_unknown.png";
+
+    private void setDefaultAvatarImageIfNot(User user){
+        if (!StringUtils.hasText(user.getAvatarUrl())){
+            switch (user.getGender()){
+                case MALE: user.setAvatarUrl(DEFAULT_AVATAR_MALE);
+                return;
+                case FEMALE: user.setAvatarUrl(DEFAULT_AVATAR_FEMALE);
+                return;
+                default: user.setAvatarUrl(DEFAULT_AVATAR_UNKNOWN);
+            }
+        }
     }
 
     @Override
@@ -148,6 +164,7 @@ public class UserService implements IUserService {
     }
 
     @Override
+    @Transactional
     public Optional<UserDto> update(Long id, UserDto userDto, MultipartFile file) {
         User user = updateUser(id, userDto);
         if (user == null){
@@ -155,11 +172,11 @@ public class UserService implements IUserService {
         }
         if (file != null && !file.isEmpty()){
             try {
-                URL avatarUrl = fileUploader.uploadFile(file, DownloadFileType.USER_AVATAR, String.valueOf(user.getId()));
+                URL avatarUrl = FileUploader.uploadFile(file, DownloadFileType.USER_AVATAR, String.valueOf(user.getId()));
                 user.setAvatarUrl(avatarUrl.toString());
                 user = userJpaRepository.save(user);
             } catch (IOException e) {
-                //do nothing
+                log.error("Error uploading users avatar image : '{}'.", file.getName());
             }
         }
         return Optional.of(userMapper.toDto(user));
@@ -187,6 +204,7 @@ public class UserService implements IUserService {
             setAddressIdIfExists(userFromDb, entityDto);
             User user = userMapper.toEntity(entityDto);
             user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+            setDefaultAvatarImageIfNot(user);
             user = userJpaRepository.save(user);
             return user;
         } else {
@@ -210,7 +228,6 @@ public class UserService implements IUserService {
             userJpaRepository.save(user);
         });
     }
-
 
     @Override
     @Transactional

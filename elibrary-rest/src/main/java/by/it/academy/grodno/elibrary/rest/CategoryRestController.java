@@ -25,7 +25,7 @@ public class CategoryRestController {
 
     @GetMapping(value = "/{id}")
     public CategoryDto findCategory(@PathVariable Integer id) {
-        return categoryService.findById(id).orElse(null);
+        return categoryService.findById(id);
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)

@@ -59,10 +59,11 @@
             <thead class="thead-dark">
             <tr>
                 <th scope="col">#</th>
+                <th scope="col">Avatar</th>
                 <th scope="col">Username</th>
                 <th scope="col">Email</th>
                 <th scope="col">
-                    <a th:href="@{user(size=${pageUsersDto.size}, page=${pageUsersDto.getNumber()}, sort='created,ASC')}" class="text-decoration-none">
+                    <a th:href="@{users(size=${pageUsersDto.size}, page=${pageUsersDto.getNumber()}, sort='created,ASC')}" class="text-decoration-none">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-down-short" viewBox="0 0 16 16">
                         <path fill-rule="evenodd" d="M8 4a.5.5 0 0 1 .5.5v5.793l2.146-2.147a.5.5 0 0 1 .708.708l-3 3a.5.5 0 0 1-.708 0l-3-3a.5.5 0 1 1 .708-.708L7.5 10.293V4.5A.5.5 0 0 1 8 4z"></path>
                     </svg>
@@ -84,6 +85,7 @@
             <tbody>
             <tr class="visually-hidden">
                 <th scope="row">ID</th>
+                <th>No</th>
                 <td>User</td>
                 <td>user@mail.ru</td>
                 <td>2021-03-07T21:26:05</td>
@@ -94,6 +96,10 @@
             </tr>
             <tr th:each="user : ${pageUsersDto.content}">
                 <th scope="row" th:text="*{user.id}"></th>
+                <th scope="row">
+                    <img class="img-thumbnail" src="#" th:src="${user.avatarUrl}"
+                         alt="No avatar" width="70" height="70"/>
+                </th>
                 <td class="p-1" th:text="*{user.username}"></td>
                 <td class="p-1" th:text="*{user.email}"></td>
                 <td class="p-1" th:text="*{user.created}"></td>

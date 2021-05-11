@@ -39,7 +39,7 @@
             <tbody class="text-left">
             <tr><th scope="row" class="text-left">Library card number</th><td th:text="${userDto.id}"></td></tr>
              <tr><th scope="row">Avatar</th><td>
-                <img class="img-thumbnail" src="#" th:src="@{userDto.avatarUrl}"
+                <img class="img-thumbnail" src="#" th:src="${userDto.avatarUrl}"
                      alt="Avatar didn't find" width="200" height="200"/>
             </td></tr>
             <tr><th scope="row">First name</th><td th:text="${userDto.firstName}"></td></tr>
