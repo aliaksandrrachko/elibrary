@@ -132,18 +132,18 @@ public class UserService implements IUserService {
         return Optional.of(user);
     }
 
-    private static final String DEFAULT_AVATAR_MALE = "http://localhost:8080/img/users/avatars/default_male_avatar.png";
-    private static final String DEFAULT_AVATAR_FEMALE = "http://localhost:8080/img/users/avatars/default_male_female.png";
-    private static final String DEFAULT_AVATAR_UNKNOWN = "http://localhost:8080/img/users/avatars/default_male_unknown.png";
+    private static final String DEFAULT_AVATAR_URL_MALE = "/img/users/avatars/default_male_avatar.png";
+    private static final String DEFAULT_AVATAR_URL_FEMALE = "/img/users/avatars/default_male_female.png";
+    private static final String DEFAULT_AVATAR_URL_UNKNOWN = "/img/users/avatars/default_male_unknown.png";
 
     private void setDefaultAvatarImageIfNot(User user){
         if (!StringUtils.hasText(user.getAvatarUrl())){
             switch (user.getGender()){
-                case MALE: user.setAvatarUrl(DEFAULT_AVATAR_MALE);
+                case MALE: user.setAvatarUrl(DEFAULT_AVATAR_URL_MALE);
                 return;
-                case FEMALE: user.setAvatarUrl(DEFAULT_AVATAR_FEMALE);
+                case FEMALE: user.setAvatarUrl(DEFAULT_AVATAR_URL_FEMALE);
                 return;
-                default: user.setAvatarUrl(DEFAULT_AVATAR_UNKNOWN);
+                default: user.setAvatarUrl(DEFAULT_AVATAR_URL_UNKNOWN);
             }
         }
     }

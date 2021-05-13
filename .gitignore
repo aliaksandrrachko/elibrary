@@ -34,3 +34,6 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### Folder of drafts ###
+.drafts

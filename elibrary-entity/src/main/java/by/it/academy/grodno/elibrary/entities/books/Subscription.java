@@ -24,7 +24,7 @@ public class Subscription extends AEntity<Long> {
     @Convert(converter = SubscriptionStatusConverter.class)
     private SubscriptionStatus status;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
 

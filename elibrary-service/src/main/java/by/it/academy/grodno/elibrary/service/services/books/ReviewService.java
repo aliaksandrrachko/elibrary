@@ -67,7 +67,7 @@ public class ReviewService implements IReviewService {
 
     @Override
     public ReviewDto findByBookIdAndUserId(Long bookId, Long userId) {
-        return reviewJpaRepository.findByBookIdAndUserId(bookId, userId).orElse(null);
+        return reviewMapper.toDto(reviewJpaRepository.findByBookIdAndUserId(bookId, userId).orElse(null));
     }
 
     @Override
@@ -89,10 +89,48 @@ public class ReviewService implements IReviewService {
     }
 
     @Override
-    public Page<ReviewDto> findByUserIdAndCreatedBetween(Long userId, LocalDate dateFrom, LocalDate dateTo, Pageable pageable) {
-        return reviewMapper.toPageDto(reviewJpaRepository.findByUserIdAndCreatedBetween(userId,
-                LocalDateTime.of(dateFrom, LocalTime.of(0,0)),
-                LocalDateTime.of(dateTo, LocalTime.of(0,0)),
-                pageable));
+    public Page<ReviewDto> findByUserIdAndUpdatedBetween(Long userId, LocalDate dateFrom, LocalDate dateTo, Pageable pageable) {
+        Page<Review> reviewPage;
+        if (dateFrom == null && dateTo == null){
+            reviewPage = reviewJpaRepository.findByUserId(userId, pageable);
+        } else if (dateFrom == null){
+            reviewPage = reviewJpaRepository.findByUserIdAndUpdatedBefore(userId, LocalDateTime.of(dateTo, LocalTime.of(0,0)), pageable);
+        } else if (dateTo == null){
+            reviewPage = reviewJpaRepository.findByUserIdAndUpdatedAfter(userId, LocalDateTime.of(dateFrom, LocalTime.of(0,0)), pageable);
+        } else {
+            reviewPage = reviewJpaRepository.findByUserIdAndUpdatedBetween(userId,
+                    LocalDateTime.of(dateFrom, LocalTime.of(0,0)),
+                    LocalDateTime.of(dateTo, LocalTime.of(0,0)),
+                    pageable);
+        }
+        return reviewMapper.toPageDto(reviewPage);
+    }
+
+    @Override
+    public Page<ReviewDto> findByBookIdAndUpdatedBetween(Long bookId, LocalDate dateFrom, LocalDate dateTo, Pageable pageable) {
+        Page<Review> reviewPage;
+        if (dateFrom == null && dateTo == null){
+            reviewPage = reviewJpaRepository.findByBookId(bookId, pageable);
+        } else if (dateFrom == null){
+            reviewPage = reviewJpaRepository.findByBookIdAndUpdatedBefore(bookId, LocalDateTime.of(dateTo, LocalTime.of(0,0)), pageable);
+        } else if (dateTo == null){
+            reviewPage = reviewJpaRepository.findByBookIdAndUpdatedAfter(bookId, LocalDateTime.of(dateFrom, LocalTime.of(0,0)), pageable);
+        } else {
+            reviewPage = reviewJpaRepository.findByBookIdAndUpdatedBetween(bookId,
+                    LocalDateTime.of(dateFrom, LocalTime.of(0,0)),
+                    LocalDateTime.of(dateTo, LocalTime.of(0,0)),
+                    pageable);
+        }
+        return reviewMapper.toPageDto(reviewPage);
+    }
+
+    @Override
+    public Page<ReviewDto> findAll(Pageable pageable) {
+        return reviewMapper.toPageDto(reviewJpaRepository.findAll(pageable));
+    }
+
+    @Override
+    public boolean existsByIdAndUserId(Long reviewId, Long userId) {
+        return reviewJpaRepository.existsByIdAndUserId(reviewId, userId);
     }
 }

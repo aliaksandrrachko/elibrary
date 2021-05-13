@@ -3,11 +3,10 @@
                    xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
                    xmlns:pro="http://www.liquibase.org/xml/ns/pro" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-3.10.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.10.xsd">
-    <changeSet author="Ales'" id="2021-03-17--01-initial-triggers-1">
+    <changeSet author="Aliaksandr Rachko" id="2021-05-13--02-initial-triggers-1">
         <sqlFile dbms="mysql"
-                 encoding="UTF-8"
                  endDelimiter=";"
-                 path="trigger-users_story.sql"
+                 path="script-initial-triggers.sql"
                  relativeToChangelogFile="true"
                  splitStatements="true"
                  stripComments="true"/>

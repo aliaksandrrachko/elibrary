@@ -14,10 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -46,7 +43,7 @@ public class CategoryService implements ICategoryService {
 
     @Override
     @Transactional
-    @CacheEvict("categoryList")
+    @CacheEvict(value = "categoryList", allEntries = true)
     public void delete(Integer id) {
         Optional<Category> optionalCategory = categoryJpaRepository.findById(id);
         optionalCategory.ifPresent(categoryJpaRepository::delete);
@@ -54,7 +51,7 @@ public class CategoryService implements ICategoryService {
 
     @Override
     @Transactional
-    @CacheEvict("categoryList")
+    @CacheEvict(value = "categoryList", allEntries = true)
     public Optional<CategoryDto> create(CategoryDto entityDto) {
         String parentCategoryName = entityDto.getParentCategory();
         Integer parentCategoryId = entityDto.getParentId();
@@ -93,7 +90,7 @@ public class CategoryService implements ICategoryService {
 
     @Override
     @Transactional
-    @CacheEvict("categoryList")
+    @CacheEvict(value = "categoryList", allEntries = true)
     public Optional<CategoryDto> update(Integer id, CategoryDto entityDto) {
         Optional<Category> optionalCategory = categoryJpaRepository.findById(id);
         if (entityDto != null &&
@@ -122,6 +119,8 @@ public class CategoryService implements ICategoryService {
     @Override
     public Set<CategoryDto> findAllUnique() {
         Set<Category> categories = new HashSet<>(categoryJpaRepository.findAll());
-        return categories.stream().map(categoryMapper::toDto).collect(Collectors.toSet());
+        return categories.stream().map(categoryMapper::toDto)
+                .sorted(Comparator.comparing(CategoryDto::getCategoryName))
+                .collect(Collectors.toCollection(LinkedHashSet::new));
     }
 }

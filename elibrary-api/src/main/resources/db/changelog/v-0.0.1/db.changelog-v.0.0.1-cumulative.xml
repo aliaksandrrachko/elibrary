@@ -3,9 +3,8 @@
                    xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
                    xmlns:pro="http://www.liquibase.org/xml/ns/pro" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-3.10.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.10.xsd">
-    <!-- This is cumulative changelog file for version 0.0.1 -->
-    <!-- Naming: DATE-DATE_INCR-DESCRIPTION.xml -->
-    <include file="db.changelog-2021-05-03--01-initial-schema.xml" relativeToChangelogFile="true"/>
-    <include file="db.changelog-2021-05-03--02-initial-triggers.xml" relativeToChangelogFile="true"/>
-    <include file="db.changelog-2021-05-17--03-filling-test-data.xml" relativeToChangelogFile="true"/>
+    <include file="db.changelog-2021-05-13--01-initial-schema.xml" relativeToChangelogFile="true"/>
+    <include file="db.changelog-2021-05-13--02-initial-triggers.xml" relativeToChangelogFile="true"/>
+    <include file="db.changelog-2021-05-13--03-filling-data.xml" relativeToChangelogFile="true"/>
+    <include file="db.changelog-2021-05-13--04-filling-test-data.xml" relativeToChangelogFile="true"/>
 </databaseChangeLog>

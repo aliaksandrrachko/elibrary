@@ -9,6 +9,5 @@ import java.util.Set;
 public interface ICategoryService extends IAGenericCrudService<CategoryDto, Integer> {
 
     Optional<CategoryDto> findByCategoryName(String categoryName);
-
     Set<CategoryDto> findAllUnique();
 }

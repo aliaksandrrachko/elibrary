@@ -235,11 +235,11 @@ public class BookService implements IBookService {
         return categorySet;
     }
 
-    private static final String DEFAULT_BOOK_COVER_IMAGE = "http://localhost:8080/img/books/covers/default_book_cover.png";
+    private static final String DEFAULT_BOOK_COVER_PICTURE_URL_IMAGE = "/img/books/covers/default_book_cover.png";
 
     private void setDefaultBookCoverImageIfNot(Book book){
         if (!StringUtils.hasText(book.getPictureUrl())){
-            book.setPictureUrl(DEFAULT_BOOK_COVER_IMAGE);
+            book.setPictureUrl(DEFAULT_BOOK_COVER_PICTURE_URL_IMAGE);
         }
     }
 }

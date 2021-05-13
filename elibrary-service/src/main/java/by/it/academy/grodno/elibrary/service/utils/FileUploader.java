@@ -20,8 +20,6 @@ public class FileUploader {
     @Value("${upload-file-to-source-folder}")
     private static final boolean UPLOAD_FILE_TO_SOURCE_FOLDER = true;
 
-    private static final String STATIC_CONTENT_ROOT_URL = "http://localhost:8080";
-
     private static final String IMAGE_EXTENSION = ".png";
 
     private static final String SYSTEM_SEPARATOR = getSeparator();
@@ -51,7 +49,7 @@ public class FileUploader {
         if (UPLOAD_FILE_TO_SOURCE_FOLDER){
             uploadFile(file, getPathToSourceDirectory(type), fileName);
         }
-        String url = STATIC_CONTENT_ROOT_URL + '/' +  getPathToContent(type) + fileName + IMAGE_EXTENSION;
+        String url = '/' +  getPathToContent(type) + fileName + IMAGE_EXTENSION;
         return new URL(url);
     }
 

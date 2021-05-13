@@ -3,6 +3,7 @@ package by.it.academy.grodno.elibrary.controller.controllers;
 import by.it.academy.grodno.elibrary.api.dto.books.ReviewDto;
 import by.it.academy.grodno.elibrary.api.services.IUserService;
 import by.it.academy.grodno.elibrary.api.services.books.IReviewService;
+import by.it.academy.grodno.elibrary.controller.constants.Template;
 import by.it.academy.grodno.elibrary.controller.utils.PageNumberListCreator;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -15,7 +16,9 @@ import org.springframework.web.servlet.ModelAndView;
 
 import java.security.Principal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Collections;
+import java.util.List;
 
 @RestController
 @RequestMapping(value = "/reviews")
@@ -30,8 +33,6 @@ public class UserReviewController {
     }
 
     private static final String MODEL_ATTRIBUTE_NAME_CURRENT_USER = "currentUser";
-    private static final String MODEL_ATTRIBUTE_NAME_ERROR = "error";
-    private static final String TEMPLATE_ERROR = "error";
 
     @GetMapping
     public ModelAndView findAll(@RequestParam(value = "bookId", required = false) Long bookId,
@@ -42,11 +43,15 @@ public class UserReviewController {
         Page<ReviewDto> reviewDtoPage;
         if (bookId != null){
             ReviewDto reviewDto = reviewService.findByBookIdAndUserId(bookId, Long.valueOf(principal.getName()));
-            reviewDtoPage = new PageImpl<>(Collections.singletonList(reviewDto), pageable, 1L);
-        } else if (dateFrom != null && dateTo != null){
-            reviewDtoPage = reviewService.findByUserIdAndCreatedBetween(Long.valueOf(principal.getName()), dateFrom, dateTo, pageable);
+            List<ReviewDto> reviewDtos;
+            if (reviewDto == null) {
+                reviewDtos = Collections.emptyList();
+            } else {
+                reviewDtos = Collections.singletonList(reviewDto);
+            }
+            reviewDtoPage = new PageImpl<>(reviewDtos, pageable, 1L);
         } else {
-            reviewDtoPage = reviewService.findByUserId(Long.valueOf(principal.getName()), pageable);
+            reviewDtoPage = reviewService.findByUserIdAndUpdatedBetween(Long.valueOf(principal.getName()), dateFrom, dateTo, pageable);
         }
 
         ModelAndView modelAndView = new ModelAndView();
@@ -70,9 +75,9 @@ public class UserReviewController {
             reviewService.delete(reviewId);
             modelAndView.setViewName("redirect:/reviews");
         } else {
-            modelAndView.setViewName(TEMPLATE_ERROR);
-            modelAndView.addObject(MODEL_ATTRIBUTE_NAME_CURRENT_USER, userService.findById(principal.getName()));
-            modelAndView.addObject(MODEL_ATTRIBUTE_NAME_ERROR, "You don't have permission");
+            modelAndView.setViewName(Template.Error.TEMPLATE_NAME);
+            modelAndView.addObject(Template.Error.CURRENT_USER, userService.findById(principal.getName()));
+            modelAndView.addObject(Template.Error.ERROR_TEXT, "You don't have permission");
         }
         return modelAndView;
     }
@@ -82,14 +87,15 @@ public class UserReviewController {
                                      @ModelAttribute ReviewDto reviewDto,
                                      BindingResult result,
                                      Principal principal){
-        ReviewDto reviewDtoFromDb = reviewService.findById(reviewId);
+        boolean userHasReview = reviewService.existsByIdAndUserId(reviewId, Long.valueOf(principal.getName()));
         ModelAndView modelAndView = new ModelAndView();
-        if (result.hasErrors() || !reviewDtoFromDb.getUserId().equals(Long.valueOf(principal.getName()))) {
-            modelAndView.setViewName(TEMPLATE_ERROR);
-            modelAndView.addObject(MODEL_ATTRIBUTE_NAME_CURRENT_USER, userService.findById(principal.getName()));
+        if (result.hasErrors() || !userHasReview) {
+            modelAndView.setViewName(Template.Error.TEMPLATE_NAME);
+            modelAndView.addObject(Template.Error.CURRENT_USER, userService.findById(principal.getName()));
+            modelAndView.addObject(Template.Error.TIMESTAMP, LocalDateTime.now().withNano(0));
             modelAndView.addObject(result.getModel());
         } else {
-            ReviewDto updatedReview = reviewService.update(reviewId, reviewDtoFromDb);
+            ReviewDto updatedReview = reviewService.update(reviewId, reviewDto);
             if (updatedReview != null) {
                 modelAndView.setViewName("redirect:/reviews" + "?bookId=" + updatedReview.getBookId());
             }

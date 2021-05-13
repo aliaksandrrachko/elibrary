@@ -33,15 +33,15 @@
     <a href="subscriptions"
        th:class="'m-0 list-group-item list-group-item-action' + ${statusCode == null ? ' acitve' : ''}">All</a>
     <a href="subscriptions?status=1"
-       th:class="'m-0 list-group-item list-group-item-action' + ${statusCode != null && statusCode.equals(1) ? ' acitve' : ''}">Booking</a>
+       th:class="'m-0 list-group-item list-group-item-action' + ${statusCode != null && statusCode.equals(1) ? ' active' : ''}">Booking</a>
     <a href="subscriptions?status=2"
-       th:class="'m-0 list-group-item list-group-item-action' + ${statusCode != null && statusCode.equals(2) ? ' acitve' : ''}">Reading</a>
+       th:class="'m-0 list-group-item list-group-item-action' + ${statusCode != null && statusCode.equals(2) ? ' active' : ''}">Reading</a>
     <a href="subscriptions?status=3"
-       th:class="'m-0 list-group-item list-group-item-action' + ${statusCode != null && statusCode.equals(3) ? ' acitve' : ''}">Reading extended</a>
+       th:class="'m-0 list-group-item list-group-item-action' + ${statusCode != null && statusCode.equals(3) ? ' active' : ''}">Reading extended</a>
     <a href="subscriptions?status=4"
-       th:class="'m-0 list-group-item list-group-item-action' + ${statusCode != null && statusCode.equals(4) ? ' acitve' : ''}">Completed</a>
+       th:class="'m-0 list-group-item list-group-item-action' + ${statusCode != null && statusCode.equals(4) ? ' active' : ''}">Completed</a>
     <a href="subscriptions?status=5"
-       th:class="'m-0 list-group-item list-group-item-action' + ${statusCode != null && statusCode.equals(5) ? ' acitve' : ''}">Expired</a>
+       th:class="'m-0 list-group-item list-group-item-action' + ${statusCode != null && statusCode.equals(5) ? ' active' : ''}">Expired</a>
 </div>
 
 </body>

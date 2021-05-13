@@ -21,35 +21,35 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form class="input-group m-0 row justify-content-md-center" id="countAuthorsForm" action="#"
+                    <form id="addBook" action="#"
                           th:action="@{/admin/books/add}" th:method="get">
-                        <h6>Fill in the data of the book yourself.</h6>
-                        <div class="col-sm-5 input-group">
-                            <label class="input-group-text" for="countAuthors">Count of authors</label>
-                            <input type="number" name="countAuthors" class="form-control"
-                                   placeholder="Count of authors" aria-label="Count of authors"
-                                   value="5" id="countAuthors">
-                            <label class="input-group-text" for="countAttributes">Count of attributes</label>
-                            <input type="number" name="countAttributes" class="form-control"
-                                   placeholder="Count of attributes" aria-label="Count of attributes"
-                                   value="5" id="countAttributes">
+                        <div class="input-group m-0 row justify-content-md-center">
+                            <h6>Fill in the data of the book yourself.</h6>
+                            <div class="col-sm-5 input-group">
+                                <label class="input-group-text" for="countAuthors">Count of authors</label>
+                                <input type="number" name="countAuthors" class="form-control"
+                                       placeholder="Count of authors" aria-label="Count of authors"
+                                       value="5" id="countAuthors">
+                                <label class="input-group-text" for="countAttributes">Count of attributes</label>
+                                <input type="number" name="countAttributes" class="form-control"
+                                       placeholder="Count of attributes" aria-label="Count of attributes"
+                                       value="5" id="countAttributes">
+                            </div>
                         </div>
-                    </form>
-                    <form class="input-group mt-4 m-0 row justify-content-md-center" id="isbnFormId" action="#"
-                          th:action="@{/admin/books/add}" th:method="get">
-                        <h6>Find book data by ISBN</h6>
-                        <div class="col-sm-5 input-group">
-                            <label class="input-group-text" for="isbnInput">ISBN</label>
-                            <input type="text" name="isbn" class="form-control"
-                                   placeholder="ISBN-10 or ISBN-13" aria-label="ISBN"
-                                   id="isbnInput">
+                        <div class="input-group mt-4 m-0 row justify-content-md-center">
+                            <h6>Find book data by ISBN</h6>
+                            <div class="col-sm-5 input-group">
+                                <label class="input-group-text" for="isbnInput">ISBN</label>
+                                <input type="text" name="isbn" class="form-control"
+                                       placeholder="ISBN-10 or ISBN-13" aria-label="ISBN"
+                                       id="isbnInput">
+                            </div>
                         </div>
                     </form>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary" form="countAuthorsForm">Add book</button>
-                    <button type="submit" class="btn btn-primary" form="isbnFormId">By ISBN</button>
+                    <button type="submit" class="btn btn-primary" form="addBook">Add book</button>
                 </div>
             </div>
         </div>

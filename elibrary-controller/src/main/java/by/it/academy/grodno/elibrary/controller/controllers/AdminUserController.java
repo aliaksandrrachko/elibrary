@@ -47,7 +47,7 @@ public class AdminUserController {
         }
 
         if (foundUser != null) {
-            pageUsersDto = new PageImpl<>(Collections.singletonList(foundUser));
+            pageUsersDto = new PageImpl<>(Collections.singletonList(foundUser), pageable, 1L);
         } else {
             pageUsersDto = userService.findAll(pageable);
         }

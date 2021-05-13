@@ -1,5 +1,6 @@
 package by.it.academy.grodno.elibrary.web.converters;
 
+import by.it.academy.grodno.elibrary.api.utils.IsbnUtils;
 import by.it.academy.grodno.elibrary.entities.books.Book;
 import by.it.academy.grodno.elibrary.entities.books.Publisher;
 import by.it.academy.grodno.elibrary.web.responseentities.OpenLibraryBookResponse;
@@ -15,13 +16,14 @@ public class OpenLibraryResponseBookConverter implements Converter<OpenLibraryBo
     @Override
     public Book convert(OpenLibraryBookResponse source) {
         return Book.builder()
-                .isbn10(getRepresentValueFromList(source.getIsbn10()))
-                .isbn13(getRepresentValueFromList(source.getIsbn13()))
+                .isbn10(getIsbn10(source))
+                .isbn13(getIsbn13(source))
                 .title(source.getTitle())
+                .description(getFirstSentence(source))
                 .datePublishing(source.getDatePublishing())
                 .language(getLanguage(getValueByKeyFromListOfMap(source.getLanguagesPath())))
                 .pictureUrl(buildPictureUri(getRepresentValueFromList(source.getCovers())))
-                .printLength(source.getPrintLength())
+                .printLength(source.getPrintLength() == null ? 0 : source.getPrintLength())
                 .publisher(new Publisher(getRepresentValueFromList(source.getPublishers())))
                 .build();
     }
@@ -57,6 +59,39 @@ public class OpenLibraryResponseBookConverter implements Converter<OpenLibraryBo
     private String buildPictureUri(String coverCode) {
         if (coverCode != null) {
             return String.format(PICTURE_COVER_URI_PATTERN, coverCode);
+        } else {
+            return null;
+        }
+    }
+
+    private String getIsbn10(OpenLibraryBookResponse source){
+        String isbn10 = getRepresentValueFromList(source.getIsbn10());
+        String isbn13 = getRepresentValueFromList(source.getIsbn13());
+        if (StringUtils.hasText(isbn10)){
+            return isbn10;
+        } else if (StringUtils.hasText(isbn13)){
+            return IsbnUtils.toIsbn10(isbn13);
+        } else {
+            return null;
+        }
+    }
+
+    private String getIsbn13(OpenLibraryBookResponse source){
+        String isbn10 = getRepresentValueFromList(source.getIsbn10());
+        String isbn13 = getRepresentValueFromList(source.getIsbn13());
+        if (StringUtils.hasText(isbn13)){
+            return isbn13;
+        } else if (StringUtils.hasText(isbn10)){
+            return IsbnUtils.toIsbn13(isbn10);
+        } else {
+            return null;
+        }
+    }
+
+    private String getFirstSentence(OpenLibraryBookResponse source){
+        Map<String, String> mapFirstSentence = source.getFirstSentence();
+        if (mapFirstSentence != null){
+            return mapFirstSentence.getOrDefault("value", null);
         } else {
             return null;
         }

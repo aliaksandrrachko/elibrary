@@ -16,5 +16,8 @@ public interface IReviewService {
     Page<ReviewDto> findByUserId(Long userId, Pageable pageable);
     Page<ReviewDto> findByBookId(Long bookId, Pageable pageable);
     int totalCountForBook(Long bookId);
-    Page<ReviewDto> findByUserIdAndCreatedBetween(Long userId, LocalDate dateFrom, LocalDate dateTo, Pageable pageable);
+    Page<ReviewDto> findByUserIdAndUpdatedBetween(Long userId, LocalDate dateFrom, LocalDate dateTo, Pageable pageable);
+    Page<ReviewDto> findByBookIdAndUpdatedBetween(Long bookId, LocalDate dateFrom, LocalDate dateTo, Pageable pageable);
+    Page<ReviewDto> findAll(Pageable pageable);
+    boolean existsByIdAndUserId(Long reviewId, Long valueOf);
 }

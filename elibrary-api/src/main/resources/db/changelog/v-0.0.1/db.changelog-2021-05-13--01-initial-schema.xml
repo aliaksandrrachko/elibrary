@@ -1,0 +1,342 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+                   xmlns:pro="http://www.liquibase.org/xml/ns/pro" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-3.10.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.10.xsd">
+    <changeSet author="Aliaksandr Rachko" id="2021-05-13--01-initial-schema-1">
+        <createTable tableName="address">
+            <column autoIncrement="true" name="id" remarks="A surrogate primary key used to uniquely identify each address in the table." type="BIGINT UNSIGNED">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="country" remarks="Country name" type="VARCHAR(50)"/>
+            <column name="region" remarks="The first line of an address." type="VARCHAR(50)"/>
+            <column name="district" remarks="The region of an address, this may be a state, province, prefecture, etc." type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="city" remarks="A foreign key pointing to the city table." type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="street" remarks="The street name" type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="postal_code" remarks="The postal code or ZIP code of the address (where applicable)." type="VARCHAR(32)"/>
+            <column name="house" remarks="The house number" type="VARCHAR(10)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="apt" remarks="Number of room" type="VARCHAR(10)"/>
+            <column defaultValueComputed="CURRENT_TIMESTAMP" name="last_updated" remarks="Date of creating or last updating" type="datetime">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="Aliaksandr Rachko" id="2021-05-13--01-initial-schema-2">
+        <createTable tableName="author">
+            <column autoIncrement="true" name="id" remarks="Author id" type="INT UNSIGNED">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="author_name" remarks="Author name" type="VARCHAR(45)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="Aliaksandr Rachko" id="2021-05-13--01-initial-schema-3">
+        <createTable tableName="book">
+            <column autoIncrement="true" name="id" remarks="Book id" type="BIGINT UNSIGNED">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="title" remarks="Book title" type="VARCHAR(100)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" remarks="Book description" type="TEXT"/>
+            <column name="isbn_10" remarks="Books isbn in format ISBN-10" type="VARCHAR(10)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="isbn_13" remarks="Books isbn in format ISBN-13" type="VARCHAR(13)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="category_id" remarks="Category id" type="INT UNSIGNED">
+                <constraints nullable="false"/>
+            </column>
+            <column name="publisher_id" remarks="Book publisher" type="INT UNSIGNED"/>
+            <column name="language" remarks="Language of book by alpha-3/ISO 639-2 Code" type="VARCHAR(3)"/>
+            <column name="publishing_date" remarks="The year and month of publishing" type="date"/>
+            <column name="print_length" remarks="Count of pages" type="INT UNSIGNED">
+                <constraints nullable="false"/>
+            </column>
+            <column name="picture_url" remarks="Books cover image" type="VARCHAR(2083)"/>
+            <column name="attributes" remarks="Books attributes" type="JSON(1073741824)"/>
+            <column name="total_count" remarks="Total count of books" type="INT UNSIGNED"/>
+            <column name="available_count" remarks="Available count" type="INT UNSIGNED"/>
+            <column defaultValueBoolean="true" name="available" remarks="Available for booking" type="BIT(1)"/>
+            <column defaultValueNumeric="0" name="book_rating" remarks="Book rating, count of viewing" type="INT UNSIGNED">
+                <constraints nullable="false"/>
+            </column>
+            <column defaultValueComputed="CURRENT_TIMESTAMP" name="book_created" remarks="The date of adding book" type="datetime">
+                <constraints nullable="false"/>
+            </column>
+            <column defaultValueComputed="CURRENT_TIMESTAMP" name="book_updated" remarks="The date of adding book" type="datetime">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="Aliaksandr Rachko" id="2021-05-13--01-initial-schema-4">
+        <createTable tableName="book_has_author">
+            <column name="book_id" remarks="Book id from table book" type="BIGINT UNSIGNED">
+                <constraints nullable="false"/>
+            </column>
+            <column name="author_id" remarks="Author id from table author" type="INT UNSIGNED">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="Aliaksandr Rachko" id="2021-05-13--01-initial-schema-5">
+        <createTable tableName="category">
+            <column autoIncrement="true" name="id" remarks="Book category id" type="INT UNSIGNED">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="parent_id" remarks="Parent id" type="INT UNSIGNED"/>
+            <column name="category_name" remarks="Name of book category" type="VARCHAR(45)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="Aliaksandr Rachko" id="2021-05-13--01-initial-schema-6">
+        <createTable tableName="publisher">
+            <column autoIncrement="true" name="id" remarks="Publisher id" type="INT UNSIGNED">
+                <constraints nullable="false" primaryKey="true" unique="true"/>
+            </column>
+            <column name="publisher_name" remarks="Name of books publisher" type="VARCHAR(100)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="Aliaksandr Rachko" id="2021-05-13--01-initial-schema-7">
+        <createTable tableName="review">
+            <column autoIncrement="true" name="id" remarks="Review id" type="BIGINT UNSIGNED">
+                <constraints nullable="false"/>
+            </column>
+            <column name="book_id" remarks="Books id" type="BIGINT UNSIGNED">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_id" remarks="Users id" type="BIGINT UNSIGNED">
+                <constraints nullable="false"/>
+            </column>
+            <column name="review_text" remarks="Review text" type="TEXT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="review_grade" remarks="Review gradle" type="TINYINT(3) UNSIGNED">
+                <constraints nullable="false"/>
+            </column>
+            <column defaultValueComputed="CURRENT_TIMESTAMP" name="review_created" remarks="Date of creating" type="datetime">
+                <constraints nullable="false"/>
+            </column>
+            <column defaultValueComputed="CURRENT_TIMESTAMP" name="review_updated" remarks="Date of updating" type="datetime">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="Aliaksandr Rachko" id="2021-05-13--01-initial-schema-8">
+        <createTable tableName="role">
+            <column autoIncrement="true" name="id" remarks="Roles id" type="INT UNSIGNED">
+                <constraints nullable="false" primaryKey="true" unique="true"/>
+            </column>
+            <column name="role_name" remarks="Roles name" type="VARCHAR(45)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="Aliaksandr Rachko" id="2021-05-13--01-initial-schema-9">
+        <createTable tableName="subscription">
+            <column autoIncrement="true" name="id" remarks="Subscription id" type="BIGINT UNSIGNED">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="status_code" remarks="Status" type="INT UNSIGNED">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_id" remarks="Users id" type="BIGINT UNSIGNED">
+                <constraints nullable="false"/>
+            </column>
+            <column name="book_id" remarks="Book id from table book" type="BIGINT UNSIGNED">
+                <constraints nullable="false"/>
+            </column>
+            <column name="took" remarks="Count of book took" type="INT UNSIGNED">
+                <constraints nullable="false"/>
+            </column>
+            <column defaultValueNumeric="0" name="returned" remarks="Count of book returned" type="INT UNSIGNED">
+                <constraints nullable="false"/>
+            </column>
+            <column defaultValueComputed="CURRENT_TIMESTAMP" name="subscription_created" remarks="Date of creating" type="datetime">
+                <constraints nullable="false"/>
+            </column>
+            <column defaultValueComputed="CURRENT_TIMESTAMP" name="subscription_deadline" remarks="Deadline" type="datetime">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="Aliaksandr Rachko" id="2021-05-13--01-initial-schema-10">
+        <createTable tableName="user">
+            <column autoIncrement="true" name="id" remarks="User id" type="BIGINT UNSIGNED">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="email" remarks="Email" type="VARCHAR(80)"/>
+            <column name="username" remarks="User name" type="VARCHAR(30)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="first_name" remarks="First name" type="VARCHAR(15)"/>
+            <column name="last_name" remarks="Last name" type="VARCHAR(15)"/>
+            <column name="middle_name" remarks="Middle name" type="VARCHAR(15)"/>
+            <column name="phone_number" remarks="User phone number" type="JSON(1073741824)"/>
+            <column name="address_id" remarks="Id of address" type="BIGINT UNSIGNED"/>
+            <column defaultValue="u" name="gender" remarks="Gender: m-male, f-female, u-unknown" type="CHAR(1)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="birthday" remarks="Date of birthday" type="date"/>
+            <column name="password" remarks="Password encoded with using BCryptPasswordEncoder" type="VARCHAR(64)"/>
+            <column defaultValueBoolean="true" name="enabled" remarks="User lock" type="BIT(1)"/>
+            <column name="avatar_url" remarks="Avatars url" type="VARCHAR(2083)"/>
+            <column defaultValueComputed="CURRENT_TIMESTAMP" name="user_created" remarks="Date of creating" type="datetime">
+                <constraints nullable="false"/>
+            </column>
+            <column defaultValueComputed="CURRENT_TIMESTAMP" name="user_updated" remarks="Date of updated" type="datetime">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="Aliaksandr Rachko" id="2021-05-13--01-initial-schema-11">
+        <createTable tableName="user_has_role">
+            <column name="user_id" type="BIGINT UNSIGNED">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="role_id" type="INT UNSIGNED">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="Aliaksandr Rachko" id="2021-05-13--01-initial-schema-12">
+        <createTable tableName="user_social_id">
+            <column name="user_id" remarks="Users id" type="BIGINT UNSIGNED">
+                <constraints nullable="false"/>
+            </column>
+            <column name="social_id" remarks="Users social id (ex. facebook, github, google)" type="BIGINT UNSIGNED">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="Aliaksandr Rachko" id="2021-05-13--01-initial-schema-13">
+        <createIndex indexName="category_name" tableName="category" unique="true">
+            <column name="category_name"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="Aliaksandr Rachko" id="2021-05-13--01-initial-schema-14">
+        <createIndex indexName="email" tableName="user" unique="true">
+            <column name="email"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="Aliaksandr Rachko" id="2021-05-13--01-initial-schema-15">
+        <createIndex indexName="fk_book_category" tableName="book">
+            <column name="category_id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="Aliaksandr Rachko" id="2021-05-13--01-initial-schema-16">
+        <createIndex indexName="fk_book_has_author_author1" tableName="book_has_author">
+            <column name="author_id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="Aliaksandr Rachko" id="2021-05-13--01-initial-schema-17">
+        <createIndex indexName="fk_book_has_author_book1" tableName="book_has_author">
+            <column name="book_id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="Aliaksandr Rachko" id="2021-05-13--01-initial-schema-18">
+        <createIndex indexName="fk_book_publisher" tableName="book">
+            <column name="publisher_id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="Aliaksandr Rachko" id="2021-05-13--01-initial-schema-19">
+        <createIndex indexName="fk_category_category1" tableName="category">
+            <column name="parent_id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="Aliaksandr Rachko" id="2021-05-13--01-initial-schema-20">
+        <createIndex indexName="fk_review_book" tableName="review">
+            <column name="book_id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="Aliaksandr Rachko" id="2021-05-13--01-initial-schema-21">
+        <createIndex indexName="fk_review_user" tableName="review">
+            <column name="user_id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="Aliaksandr Rachko" id="2021-05-13--01-initial-schema-22">
+        <createIndex indexName="fk_subscription_book" tableName="subscription">
+            <column name="book_id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="Aliaksandr Rachko" id="2021-05-13--01-initial-schema-23">
+        <createIndex indexName="fk_subscription_user" tableName="subscription">
+            <column name="user_id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="Aliaksandr Rachko" id="2021-05-13--01-initial-schema-24">
+        <createIndex indexName="fk_user_address" tableName="user">
+            <column name="address_id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="Aliaksandr Rachko" id="2021-05-13--01-initial-schema-25">
+        <createIndex indexName="fk_user_has_role_role1" tableName="user_has_role">
+            <column name="role_id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="Aliaksandr Rachko" id="2021-05-13--01-initial-schema-26">
+        <createIndex indexName="fk_user_user_social_id" tableName="user_social_id">
+            <column name="user_id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="Aliaksandr Rachko" id="2021-05-13--01-initial-schema-27">
+        <createIndex indexName="id" tableName="review" unique="true">
+            <column name="id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="Aliaksandr Rachko" id="2021-05-13--01-initial-schema-28">
+        <createIndex indexName="social_id" tableName="user_social_id" unique="true">
+            <column name="social_id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="Aliaksandr Rachko" id="2021-05-13--01-initial-schema-29">
+        <addForeignKeyConstraint baseColumnNames="category_id" baseTableName="book" constraintName="fk_book_category" deferrable="false" initiallyDeferred="false" onDelete="CASCADE" onUpdate="CASCADE" referencedColumnNames="id" referencedTableName="category" validate="true"/>
+    </changeSet>
+    <changeSet author="Aliaksandr Rachko" id="2021-05-13--01-initial-schema-30">
+        <addForeignKeyConstraint baseColumnNames="author_id" baseTableName="book_has_author" constraintName="fk_book_has_author_author1" deferrable="false" initiallyDeferred="false" onDelete="CASCADE" onUpdate="CASCADE" referencedColumnNames="id" referencedTableName="author" validate="true"/>
+    </changeSet>
+    <changeSet author="Aliaksandr Rachko" id="2021-05-13--01-initial-schema-31">
+        <addForeignKeyConstraint baseColumnNames="book_id" baseTableName="book_has_author" constraintName="fk_book_has_author_book1" deferrable="false" initiallyDeferred="false" onDelete="CASCADE" onUpdate="CASCADE" referencedColumnNames="id" referencedTableName="book" validate="true"/>
+    </changeSet>
+    <changeSet author="Aliaksandr Rachko" id="2021-05-13--01-initial-schema-32">
+        <addForeignKeyConstraint baseColumnNames="publisher_id" baseTableName="book" constraintName="fk_book_publisher" deferrable="false" initiallyDeferred="false" onDelete="CASCADE" onUpdate="CASCADE" referencedColumnNames="id" referencedTableName="publisher" validate="true"/>
+    </changeSet>
+    <changeSet author="Aliaksandr Rachko" id="2021-05-13--01-initial-schema-33">
+        <addForeignKeyConstraint baseColumnNames="parent_id" baseTableName="category" constraintName="fk_category_category1" deferrable="false" initiallyDeferred="false" onDelete="CASCADE" onUpdate="CASCADE" referencedColumnNames="id" referencedTableName="category" validate="true"/>
+    </changeSet>
+    <changeSet author="Aliaksandr Rachko" id="2021-05-13--01-initial-schema-34">
+        <addForeignKeyConstraint baseColumnNames="book_id" baseTableName="review" constraintName="fk_review_book" deferrable="false" initiallyDeferred="false" onDelete="CASCADE" onUpdate="CASCADE" referencedColumnNames="id" referencedTableName="book" validate="true"/>
+    </changeSet>
+    <changeSet author="Aliaksandr Rachko" id="2021-05-13--01-initial-schema-35">
+        <addForeignKeyConstraint baseColumnNames="user_id" baseTableName="review" constraintName="fk_review_user" deferrable="false" initiallyDeferred="false" onDelete="CASCADE" onUpdate="CASCADE" referencedColumnNames="id" referencedTableName="user" validate="true"/>
+    </changeSet>
+    <changeSet author="Aliaksandr Rachko" id="2021-05-13--01-initial-schema-36">
+        <addForeignKeyConstraint baseColumnNames="book_id" baseTableName="subscription" constraintName="fk_subscription_book" deferrable="false" initiallyDeferred="false" onDelete="CASCADE" onUpdate="CASCADE" referencedColumnNames="id" referencedTableName="book" validate="true"/>
+    </changeSet>
+    <changeSet author="Aliaksandr Rachko" id="2021-05-13--01-initial-schema-37">
+        <addForeignKeyConstraint baseColumnNames="user_id" baseTableName="subscription" constraintName="fk_subscription_user" deferrable="false" initiallyDeferred="false" onDelete="CASCADE" onUpdate="CASCADE" referencedColumnNames="id" referencedTableName="user" validate="true"/>
+    </changeSet>
+    <changeSet author="Aliaksandr Rachko" id="2021-05-13--01-initial-schema-38">
+        <addForeignKeyConstraint baseColumnNames="address_id" baseTableName="user" constraintName="fk_user_address" deferrable="false" initiallyDeferred="false" onDelete="CASCADE" onUpdate="CASCADE" referencedColumnNames="id" referencedTableName="address" validate="true"/>
+    </changeSet>
+    <changeSet author="Aliaksandr Rachko" id="2021-05-13--01-initial-schema-39">
+        <addForeignKeyConstraint baseColumnNames="role_id" baseTableName="user_has_role" constraintName="fk_user_has_role_role1" deferrable="false" initiallyDeferred="false" onDelete="CASCADE" onUpdate="CASCADE" referencedColumnNames="id" referencedTableName="role" validate="true"/>
+    </changeSet>
+    <changeSet author="Aliaksandr Rachko" id="2021-05-13--01-initial-schema-40">
+        <addForeignKeyConstraint baseColumnNames="user_id" baseTableName="user_has_role" constraintName="fk_user_has_role_user1" deferrable="false" initiallyDeferred="false" onDelete="CASCADE" onUpdate="CASCADE" referencedColumnNames="id" referencedTableName="user" validate="true"/>
+    </changeSet>
+    <changeSet author="Aliaksandr Rachko" id="2021-05-13--01-initial-schema-41">
+        <addForeignKeyConstraint baseColumnNames="user_id" baseTableName="user_social_id" constraintName="fk_user_user_social_id" deferrable="false" initiallyDeferred="false" onDelete="CASCADE" onUpdate="CASCADE" referencedColumnNames="id" referencedTableName="user" validate="true"/>
+    </changeSet>
+</databaseChangeLog>

@@ -8,8 +8,11 @@ import by.it.academy.grodno.elibrary.api.services.books.IAuthorService;
 import by.it.academy.grodno.elibrary.api.services.books.IBookService;
 import by.it.academy.grodno.elibrary.api.services.books.ICategoryService;
 import by.it.academy.grodno.elibrary.api.services.books.IPublisherService;
+import by.it.academy.grodno.elibrary.api.utils.IsbnUtils;
+import by.it.academy.grodno.elibrary.controller.constants.Template;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
@@ -29,9 +32,7 @@ import java.util.stream.Collectors;
 public class AdminBookController {
 
     private static final String TEMPLATE_INPUT_BOOK_FORM = "admin/inputBookDetailsForm";
-    private static final String TEMPLATE_ERROR = "error";
 
-    private static final String MODEL_ATTRIBUTE_NAME_ERROR = "error";
     private static final String MODEL_ATTRIBUTE_NAME_BOOK_DTO = "bookDto";
 
     private final IUserService userService;
@@ -53,7 +54,7 @@ public class AdminBookController {
     public ModelAndView findAllBook(@RequestParam(value = "categoryId", required = false) Integer categoryId,
                                     @RequestParam(value = "title", required = false) String title,
                                     @RequestParam(value = "author", required = false) String author,
-                                    @PageableDefault Pageable pageable,
+                                    @PageableDefault(sort = {"title"}, direction = Sort.Direction.ASC) Pageable pageable,
                                     Principal principal) {
         Page<BookDto> pageBookDto;
         CategoryDto categoryDto = null;
@@ -92,17 +93,16 @@ public class AdminBookController {
                                        Principal principal) {
         ModelAndView modelAndView = getModelAndViewWithCurrentUserFromDb(principal);
 
-
-        if (isbn != null) {
-            Optional<BookDto> optionalBookDto = bookService.findByIsbnInWeb(isbn);
+        if (isbn != null && IsbnUtils.isValid(isbn)) {
+            Optional<BookDto> optionalBookDto = bookService.findByIsbnInWeb(IsbnUtils.getOnlyDigit(isbn));
             BookDto bookDto;
             if (optionalBookDto.isPresent()) {
                 bookDto = optionalBookDto.get();
                 addEmptyStringToList(bookDto.getAuthors(), countAuthors);
                 convertMapToFormInputFormat(bookDto.getAttributes(), countAttributes);
             } else {
-                modelAndView.setViewName(TEMPLATE_ERROR);
-                modelAndView.addObject(TEMPLATE_ERROR, "Resource didn't find.");
+                modelAndView.setViewName(Template.Error.TEMPLATE_NAME);
+                modelAndView.addObject(Template.Error.ERROR_TEXT, "Resource didn't find.");
                 String message = String.format("Book by isbn: '%s' didn't find. Try few later.", isbn);
                 modelAndView.addObject("message", message);
                 modelAndView.addObject("timestamp", LocalDateTime.now().withNano(0));
@@ -206,8 +206,8 @@ public class AdminBookController {
 
         ModelAndView modelAndView = getModelAndViewWithCurrentUserFromDb(principal);
         if (bookDtoForUpdate == null) {
-            modelAndView.setViewName(TEMPLATE_ERROR);
-            modelAndView.addObject(MODEL_ATTRIBUTE_NAME_ERROR, "Book not exists!");
+            modelAndView.setViewName(Template.Error.TEMPLATE_NAME);
+            modelAndView.addObject(Template.Error.ERROR_TEXT, "Book not exists!");
         } else {
             modelAndView.setViewName(TEMPLATE_INPUT_BOOK_FORM);
             bookDtoForUpdate.setAuthors(addEmptyStringToList(bookDtoForUpdate.getAuthors(), countAuthors));

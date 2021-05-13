@@ -1,5 +1,6 @@
 package by.it.academy.grodno.elibrary.web;
 
+import by.it.academy.grodno.elibrary.api.utils.IsbnUtils;
 import by.it.academy.grodno.elibrary.entities.books.Author;
 import by.it.academy.grodno.elibrary.web.converters.OpenLibraryAuthorResponseConverter;
 import by.it.academy.grodno.elibrary.web.responseentities.OpenLibraryAuthorResponse;
@@ -59,10 +60,15 @@ public class OpenLibraryBookStrategy implements BookDataSearchStrategy {
             if (openLibraryBookResponseBody != null) {
                 Book book = openLibraryResponseBookConverter.convert(openLibraryBookResponseBody);
                 if (book != null) {
-                    Set<String> setOfAuthorPath = openLibraryBookResponseBody.getAuthorPath().get(0)
-                            .values().stream().map(String.class::cast).collect(Collectors.toSet());
-                    book.setAuthors(getAuthors(setOfAuthorPath));
-                    book.setDescription(getDescription((String) openLibraryBookResponseBody.getWorks().get(0).get("key")));
+                    if (openLibraryBookResponseBody.getAuthorPath() != null) {
+                        Set<String> setOfAuthorPath = openLibraryBookResponseBody.getAuthorPath().get(0)
+                                .values().stream().map(String.class::cast).collect(Collectors.toSet());
+                        book.setAuthors(getAuthors(setOfAuthorPath));
+                    }
+                    String description = getDescription((String) openLibraryBookResponseBody.getWorks().get(0).get("key"));
+                    if (description != null) {
+                        book.setDescription(description);
+                    }
                     return Optional.of(book);
                 }
             }

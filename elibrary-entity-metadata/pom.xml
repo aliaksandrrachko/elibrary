@@ -9,7 +9,7 @@
         <version>0.0.1-SNAPSHOT</version>
     </parent>
     <artifactId>elibrary-entity-metadata</artifactId>
-    <name>elibrary-entity</name>
+    <name>elibrary-entity-metadata</name>
     <description>The entities metadata (ex. gender, phone number and converters for it).</description>
     <packaging>jar</packaging>
 

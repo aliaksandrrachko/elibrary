@@ -1,10 +1,14 @@
 package by.it.academy.grodno.elibrary.web.responseentities;
 
 import by.it.academy.grodno.elibrary.api.dto.AEntityDto;
+import by.it.academy.grodno.elibrary.web.converters.CustomOpenLibraryBookResponseLocalDateDeserializer;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -33,7 +37,7 @@ public class OpenLibraryBookResponse extends AEntityDto<Long> {
     @JsonProperty("isbn_13")
     private List<String> isbn13;
     @JsonProperty("publish_date")
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "MMMM d, yyyy", locale = "en")
+    @JsonDeserialize(using = CustomOpenLibraryBookResponseLocalDateDeserializer.class)
     private LocalDate datePublishing;
     private List<Map<String, Object>> works;
     private Map<String, String> type;

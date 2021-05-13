@@ -2,6 +2,7 @@ package by.it.academy.grodno.elibrary.controller.controllers;
 
 import by.it.academy.grodno.elibrary.api.dto.users.UserDto;
 import by.it.academy.grodno.elibrary.api.services.IUserService;
+import by.it.academy.grodno.elibrary.controller.constants.Template;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -25,12 +26,8 @@ public class UserController {
         this.userService = userService;
     }
 
-
     private static final String MODEL_ATTRIBUTE_NAME_CURRENT_USER = "currentUser";
     private static final String MODEL_ATTRIBUTE_NAME_USER_DTO = "userDto";
-    private static final String MODEL_ATTRIBUTE_NAME_ERROR = "error";
-
-    private static final String TEMPLATE_ERROR = "error";
 
     @GetMapping("/info")
     public ModelAndView userInfo(Principal principal) {
@@ -48,8 +45,8 @@ public class UserController {
 
         ModelAndView modelAndView = new ModelAndView();
         if (currentUser == null) {
-            modelAndView.setViewName(TEMPLATE_ERROR);
-            modelAndView.addObject(MODEL_ATTRIBUTE_NAME_ERROR, "Authentication error!");
+            modelAndView.setViewName(Template.Error.TEMPLATE_NAME);
+            modelAndView.addObject(Template.Error.ERROR_TEXT, "Authentication error!");
         } else {
             modelAndView.setViewName("users/userUpdate");
             modelAndView.addObject(MODEL_ATTRIBUTE_NAME_CURRENT_USER, currentUser);
@@ -66,8 +63,8 @@ public class UserController {
         ModelAndView modelAndView;
         if (principal == null) {
             modelAndView = new ModelAndView();
-            modelAndView.setViewName(TEMPLATE_ERROR);
-            modelAndView.addObject(MODEL_ATTRIBUTE_NAME_ERROR, "You don't have permission");
+            modelAndView.setViewName(Template.Error.TEMPLATE_NAME);
+            modelAndView.addObject(Template.Error.ERROR_TEXT, "You don't have permission");
         } else if (result.hasErrors()) {
             modelAndView = new ModelAndView();
             modelAndView.setViewName("users/userUpdate");
