@@ -52,7 +52,7 @@ public class CategoryService implements ICategoryService {
     @Override
     @Transactional
     @CacheEvict(value = "categoryList", allEntries = true)
-    public Optional<CategoryDto> create(CategoryDto entityDto) {
+    public CategoryDto create(CategoryDto entityDto) {
         String parentCategoryName = entityDto.getParentCategory();
         Integer parentCategoryId = entityDto.getParentId();
 
@@ -70,11 +70,11 @@ public class CategoryService implements ICategoryService {
         }
 
 
-        return Optional.of(categoryMapper.toDto(categoryJpaRepository.save(
+        return categoryMapper.toDto(categoryJpaRepository.save(
                 Category.builder()
                         .parentCategory(parentCategory)
                         .categoryName(entityDto.getCategoryName())
-                        .build())));
+                        .build()));
     }
 
     private void matches(Category category, String parentCategoryName, Integer parentCategoryId) {
@@ -91,7 +91,7 @@ public class CategoryService implements ICategoryService {
     @Override
     @Transactional
     @CacheEvict(value = "categoryList", allEntries = true)
-    public Optional<CategoryDto> update(Integer id, CategoryDto entityDto) {
+    public CategoryDto update(Integer id, CategoryDto entityDto) {
         Optional<Category> optionalCategory = categoryJpaRepository.findById(id);
         if (entityDto != null &&
                 optionalCategory.isPresent() &&
@@ -100,20 +100,14 @@ public class CategoryService implements ICategoryService {
             Category category = optionalCategory.get();
             category.setCategoryName(entityDto.getCategoryName());
             category = categoryJpaRepository.save(category);
-            return Optional.of(categoryMapper.toDto(category));
+            return categoryMapper.toDto(category);
         }
-        return optionalCategory.map(categoryMapper::toDto);
+        return categoryMapper.toDto(optionalCategory.orElse(null));
     }
 
     @Override
     public Page<CategoryDto> findAll(Pageable pageable) {
         return categoryMapper.toPageDto(categoryJpaRepository.findAll(pageable));
-    }
-
-    @Override
-    public Optional<CategoryDto> findByCategoryName(String categoryName) {
-        Optional<Category> optionalCategory = categoryJpaRepository.findByCategoryName(categoryName);
-        return optionalCategory.map(categoryMapper::toDto);
     }
 
     @Override

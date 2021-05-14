@@ -13,7 +13,6 @@ public interface IReviewService {
     ReviewDto create(ReviewDto entityDto);
     ReviewDto update(Long id, ReviewDto entityDto);
     ReviewDto findByBookIdAndUserId(Long bookId, Long userId);
-    Page<ReviewDto> findByUserId(Long userId, Pageable pageable);
     Page<ReviewDto> findByBookId(Long bookId, Pageable pageable);
     int totalCountForBook(Long bookId);
     Page<ReviewDto> findByUserIdAndUpdatedBetween(Long userId, LocalDate dateFrom, LocalDate dateTo, Pageable pageable);

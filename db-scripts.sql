@@ -209,6 +209,7 @@ CREATE TABLE IF NOT EXISTS review
     review_grade   TINYINT UNSIGNED                      NOT NULL COMMENT 'Review gradle',
     review_created DATETIME DEFAULT NOW()                NOT NULL COMMENT 'Date of creating',
     review_updated DATETIME DEFAULT NOW()                NOT NULL COMMENT 'Date of updating',
+    CONSTRAINT pk_review PRIMARY KEY (id),
     CONSTRAINT fk_review_book FOREIGN KEY (book_id) REFERENCES book (id) ON DELETE CASCADE ON UPDATE CASCADE,
     CONSTRAINT fk_review_user FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE ON UPDATE CASCADE
 );

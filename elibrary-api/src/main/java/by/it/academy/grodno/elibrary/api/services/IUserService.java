@@ -14,7 +14,7 @@ public interface IUserService extends IAGenericCrudService<UserDto, Long> {
     Page<UserDto> findAll(Pageable pageable);
     UserDto findUserByEmail(String email);
     UserDto findById(String userId);
-    Optional<UserDto> findUser(Principal principal);
+    UserDto findUser(Principal principal);
     Optional<User> createUserFromSocialNetwork(User user);
     Optional<User> findByEmailOrSocialId(String email, Long socialId);
     void deleteRole(long userId, String roleName);

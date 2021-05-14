@@ -42,16 +42,16 @@ public class PublisherService implements IPublisherService {
 
     @Override
     @Transactional
-    public Optional<PublisherDto> create(PublisherDto entityDto) {
-        return Optional.of(publisherMapper.toDto(publisherJpaRepository.save(
+    public PublisherDto create(PublisherDto entityDto) {
+        return publisherMapper.toDto(publisherJpaRepository.save(
                 Publisher.builder()
                         .publisherName(entityDto.getPublisherName())
-                        .build())));
+                        .build()));
     }
 
     @Override
     @Transactional
-    public Optional<PublisherDto> update(Integer id, PublisherDto entityDto) {
+    public PublisherDto update(Integer id, PublisherDto entityDto) {
         Optional<Publisher> optionalPublisher = publisherJpaRepository.findById(id);
         if (entityDto != null &&
                 optionalPublisher.isPresent() &&
@@ -60,9 +60,9 @@ public class PublisherService implements IPublisherService {
             Publisher publisher = optionalPublisher.get();
             publisher.setPublisherName(entityDto.getPublisherName());
             publisher = publisherJpaRepository.save(publisher);
-            return Optional.of(publisherMapper.toDto(publisher));
+            return publisherMapper.toDto(publisher);
         }
-        return optionalPublisher.map(publisherMapper::toDto);
+        return publisherMapper.toDto(optionalPublisher.orElse(null));
     }
 
     @Override

@@ -15,8 +15,6 @@ import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import java.security.Principal;
 import java.util.Collections;
-import java.util.NoSuchElementException;
-import java.util.Optional;
 
 @RestController
 @RequestMapping(value = "/admin/users")
@@ -33,8 +31,7 @@ public class AdminUserController {
                                     @RequestParam(value = "email", required = false) String email,
                                     Principal principal,
                                     @PageableDefault(sort = {"username"}, direction = Sort.Direction.ASC) Pageable pageable) {
-        Optional<UserDto> optionalUserDto = userService.findUser(principal);
-        UserDto userDto = optionalUserDto.orElseThrow(NoSuchElementException::new);
+        UserDto userDto = userService.findUser(principal);
 
         Page<UserDto> pageUsersDto;
         UserDto foundUser;

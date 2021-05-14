@@ -51,10 +51,8 @@ public class BookController {
                                     @RequestParam(value = "author", required = false) String author,
                                     @PageableDefault(sort = {"title"}, direction = Sort.Direction.ASC) Pageable pageable,
                                     Principal principal) {
-        UserDto currentUser = userService.findUser(principal).orElse(null);
-
         Page<BookDto> pageBookDto;
-       CategoryDto categoryDto = null;
+        CategoryDto categoryDto = null;
         if (categoryId != null) {
             pageBookDto = bookService.findAllIncludeSubCategories(categoryId, pageable);
             categoryDto = categoryService.findById(categoryId);
@@ -66,13 +64,13 @@ public class BookController {
             pageBookDto = bookService.findAll(pageable);
         }
 
-        Set<CategoryDto> categoryDtoList = new HashSet<>(categoryService.findAll());
+        Set<CategoryDto> categoryDtoSet = new HashSet<>(categoryService.findAll());
 
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("books/booksList");
-        modelAndView.addObject( MODEL_ATTRIBUTE_NAME_CURRENT_USER, currentUser);
+        modelAndView.addObject(MODEL_ATTRIBUTE_NAME_CURRENT_USER, userService.findUser(principal));
         setBooksViewAttributesToModelAndView(modelAndView, categoryId, title, author, pageBookDto,
-                categoryDto, categoryDtoList);
+                categoryDto, categoryDtoSet);
         return modelAndView;
     }
 
@@ -90,7 +88,7 @@ public class BookController {
 
     @GetMapping(value = "/{id}")
     public ModelAndView bookInfo(Principal principal, @PathVariable Long id) {
-        UserDto currentUser = userService.findUser(principal).orElse(null);
+        UserDto currentUser = userService.findUser(principal);
 
         Set<CategoryDto> categoryDtoList = new HashSet<>(categoryService.findAll());
         int totalCountOfReview = reviewService.totalCountForBook(id);
@@ -150,7 +148,7 @@ public class BookController {
     }
 
     private void setNeedingObjectToModelAndView(ModelAndView modelAndView, Principal principal, Long bookId, Pageable pageable){
-        UserDto currentUser = userService.findUser(principal).orElse(null);
+        UserDto currentUser = userService.findUser(principal);
         modelAndView.addObject( MODEL_ATTRIBUTE_NAME_CURRENT_USER, currentUser);
         BookDto bookDto = bookService.findById(bookId);
         modelAndView.addObject("book", bookDto);

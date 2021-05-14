@@ -1,8 +1,9 @@
 <?xml version="1.1" encoding="UTF-8" standalone="no"?>
-<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
-                   xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
-                   xmlns:pro="http://www.liquibase.org/xml/ns/pro" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-3.10.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.10.xsd">
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
     <changeSet author="Aliaksandr Rachko" id="2021-05-13--01-initial-schema-1">
         <createTable tableName="address">
             <column autoIncrement="true" name="id" remarks="A surrogate primary key used to uniquely identify each address in the table." type="BIGINT UNSIGNED">
@@ -62,7 +63,7 @@
                 <constraints nullable="false"/>
             </column>
             <column name="picture_url" remarks="Books cover image" type="VARCHAR(2083)"/>
-            <column name="attributes" remarks="Books attributes" type="JSON(1073741824)"/>
+            <column name="attributes" remarks="Books attributes" type="JSON"/>
             <column name="total_count" remarks="Total count of books" type="INT UNSIGNED"/>
             <column name="available_count" remarks="Available count" type="INT UNSIGNED"/>
             <column defaultValueBoolean="true" name="available" remarks="Available for booking" type="BIT(1)"/>
@@ -111,7 +112,7 @@
     <changeSet author="Aliaksandr Rachko" id="2021-05-13--01-initial-schema-7">
         <createTable tableName="review">
             <column autoIncrement="true" name="id" remarks="Review id" type="BIGINT UNSIGNED">
-                <constraints nullable="false"/>
+                <constraints nullable="false" primaryKey="true"/>
             </column>
             <column name="book_id" remarks="Books id" type="BIGINT UNSIGNED">
                 <constraints nullable="false"/>
@@ -183,7 +184,7 @@
             <column name="first_name" remarks="First name" type="VARCHAR(15)"/>
             <column name="last_name" remarks="Last name" type="VARCHAR(15)"/>
             <column name="middle_name" remarks="Middle name" type="VARCHAR(15)"/>
-            <column name="phone_number" remarks="User phone number" type="JSON(1073741824)"/>
+            <column name="phone_number" remarks="User phone number" type="JSON"/>
             <column name="address_id" remarks="Id of address" type="BIGINT UNSIGNED"/>
             <column defaultValue="u" name="gender" remarks="Gender: m-male, f-female, u-unknown" type="CHAR(1)">
                 <constraints nullable="false"/>

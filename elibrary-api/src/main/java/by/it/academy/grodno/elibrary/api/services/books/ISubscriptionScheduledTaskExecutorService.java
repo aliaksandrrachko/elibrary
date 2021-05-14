@@ -4,4 +4,5 @@ public interface ISubscriptionScheduledTaskExecutorService {
 
     void findAllExpiredSubscriptionsAndSendEmailToUserAndAdmin();
     void findAllExpiredBookingSubscriptionAndUndoBookingAndBeforeSendEmailToUser();
+    void findAllCompletedMonthAgoSubscriptionsAndDeleteIt();
 }

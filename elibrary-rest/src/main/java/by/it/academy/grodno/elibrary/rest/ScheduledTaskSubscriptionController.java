@@ -9,12 +9,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping(value = "rest/subscriptions/scheduledtask")
-public class ScheduledTaskController {
+public class ScheduledTaskSubscriptionController {
 
     private final ISubscriptionScheduledTaskExecutorService subscriptionScheduledTaskExecutorService;
 
 
-    public ScheduledTaskController(ISubscriptionScheduledTaskExecutorService subscriptionScheduledTaskExecutorService) {
+    public ScheduledTaskSubscriptionController(ISubscriptionScheduledTaskExecutorService subscriptionScheduledTaskExecutorService) {
         this.subscriptionScheduledTaskExecutorService = subscriptionScheduledTaskExecutorService;
     }
 
@@ -28,7 +28,13 @@ public class ScheduledTaskController {
     @PostMapping(value = "warnAboutExpirationPeriod")
     public ResponseEntity<String> findAllExpiredSubscriptingAndSendEmails(){
         subscriptionScheduledTaskExecutorService.findAllExpiredSubscriptionsAndSendEmailToUserAndAdmin();
-        return new  ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PostMapping(value = "deleteCompletedMontAgoSubscriptions")
+    public ResponseEntity<String> findAndDeleteCompletedMonthAgoSubscriptions(){
+        subscriptionScheduledTaskExecutorService.findAllCompletedMonthAgoSubscriptionsAndDeleteIt();
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
 

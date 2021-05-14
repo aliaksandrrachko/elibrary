@@ -6,6 +6,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface IBookService extends IAGenericCrudService<BookDto, Long> {
@@ -19,5 +20,6 @@ public interface IBookService extends IAGenericCrudService<BookDto, Long> {
     Page<BookDto> findAllIncludeSubCategories(Integer categoryId, Pageable pageable);
     Optional<BookDto> create(BookDto bookDto, MultipartFile file);
     Optional<BookDto> update(Long id, BookDto bookDto, MultipartFile file);
+    List<BookDto> findTop6ByRating();
 
 }

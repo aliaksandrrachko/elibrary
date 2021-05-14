@@ -1,9 +1,10 @@
 <?xml version="1.1" encoding="UTF-8" standalone="no"?>
-<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
-                   xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
-                   xmlns:pro="http://www.liquibase.org/xml/ns/pro" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-3.10.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.10.xsd">
-    <changeSet author="Aliaksandr Rachko" id="2021-05-13--03-filling-data-1">
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+    <changeSet author="Aliaksandr Rachko" id="2021-05-13--03-filling-role-data-1">
         <insert tableName="role">
             <column name="id" valueNumeric="1"/>
             <column name="role_name" value="ROLE_USER"/>
@@ -36,21 +37,6 @@
             <column name="postal_code" value="230005"/>
             <column name="house" value="278"/>
             <column name="apt" value="4720"/>
-        </insert>
-    </changeSet>
-    <changeSet author="Aliaksandr Rachko" id="2021-05-13--03-filling-data-admin-1">
-        <insert tableName="user">
-            <column name="email" value="admin@mail.ru"/>
-            <column name="username" value="Admin"/>
-            <column name="first_name" value="Aliaksandr"/>
-            <column name="last_name" value="Petrov"/>
-            <column name="middle_name" value="Petrovich"/>
-            <column name="phone_number" value="{&quot;countryCode&quot;: &quot;375&quot;, &quot;nationalNumber&quot;: &quot;292965416&quot;}"/>
-            <column name="gender" value="m"/>
-            <column name="address_id" value="1"/>
-            <column name="birthday" valueDate="1995-04-05"/>
-            <column name="password" value="$2a$10$Z1/.F4bRuyOGyL7NQrmjhufHf8XrHIEjPfBz9tlPbPcWrLpvPWKfq"/>
-            <column name="avatar_url" value="/img/users/avatars/default_male_avatar.png"/>
         </insert>
     </changeSet>
     <changeSet author="Aliaksandr Rachko" id="2021-05-13--03-filling-data-admin-1">

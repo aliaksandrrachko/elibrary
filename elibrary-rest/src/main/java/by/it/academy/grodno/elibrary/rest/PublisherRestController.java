@@ -30,12 +30,12 @@ public class PublisherRestController {
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public PublisherDto createPublisher(@Valid @RequestBody PublisherDto dto) {
-        return publisherService.create(dto).orElse(null);
+        return publisherService.create(dto);
     }
 
     @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     public PublisherDto updatePublisher(@Valid @RequestBody PublisherDto dto, @PathVariable Integer id) {
-        return publisherService.update(id, dto).orElse(null);
+        return publisherService.update(id, dto);
     }
 
     @DeleteMapping(value = "/{id}")

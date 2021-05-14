@@ -67,12 +67,12 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public Optional<UserDto> findUser(Principal principal) {
-        Optional<UserDto> optionalUserDto = Optional.empty();
+    public UserDto findUser(Principal principal) {
+        UserDto userDto = null;
         if (principal != null && StringUtils.hasText(principal.getName())) {
-            optionalUserDto = Optional.of(this.findById(principal.getName()));
+            userDto = this.findById(principal.getName());
         }
-        return optionalUserDto;
+        return userDto;
     }
 
     @Override
@@ -94,11 +94,19 @@ public class UserService implements IUserService {
     public void delete(Long id) {
         Optional<User> optionalUser = userJpaRepository.findById(id);
         optionalUser.ifPresent(userJpaRepository::delete);
+        optionalUser.ifPresent(user -> {
+            String avatarUrl = user.getAvatarUrl();
+            if (!avatarUrl.equals(DEFAULT_AVATAR_URL_FEMALE) &&
+                    !avatarUrl.equals(DEFAULT_AVATAR_URL_MALE) &&
+                    !avatarUrl.equals(DEFAULT_AVATAR_URL_UNKNOWN)) {
+                FileUploader.deleteFile(avatarUrl);
+            }
+        });
     }
 
     @Override
     @Transactional
-    public Optional<UserDto> create(UserDto entityDto) {
+    public UserDto create(UserDto entityDto) {
         if (entityDto.getPassword().equals(entityDto.getPasswordConfirm())) {
             entityDto.setRoles(Collections.singleton("ROLE_USER"));
             entityDto.setUsername(entityDto.getFirstName() + " " + entityDto.getLastName());
@@ -110,7 +118,7 @@ public class UserService implements IUserService {
             setDefaultAvatarImageIfNot(user);
             user = userJpaRepository.save(user);
             emailSender.sendEmailFromAdmin(user, UserMailMessageType.REGISTERED, null);
-            return Optional.of(userMapper.toDto(user));
+            return userMapper.toDto(user);
         } else {
             throw new PasswordMatchException(entityDto);
         }
@@ -133,8 +141,8 @@ public class UserService implements IUserService {
     }
 
     private static final String DEFAULT_AVATAR_URL_MALE = "/img/users/avatars/default_male_avatar.png";
-    private static final String DEFAULT_AVATAR_URL_FEMALE = "/img/users/avatars/default_male_female.png";
-    private static final String DEFAULT_AVATAR_URL_UNKNOWN = "/img/users/avatars/default_male_unknown.png";
+    private static final String DEFAULT_AVATAR_URL_FEMALE = "/img/users/avatars/default_female_avatar.png";
+    private static final String DEFAULT_AVATAR_URL_UNKNOWN = "/img/users/avatars/default_unknown_avatar.png";
 
     private void setDefaultAvatarImageIfNot(User user){
         if (!StringUtils.hasText(user.getAvatarUrl())){
@@ -155,18 +163,18 @@ public class UserService implements IUserService {
 
     @Override
     @Transactional
-    public Optional<UserDto> update(Long id, UserDto entityDto) {
-        User user = updateUser(id, entityDto);
-        if (user == null){
-            return Optional.empty();
+    public UserDto update(Long id, UserDto entityDto) {
+        User user = prepareUserToUpdating(id, entityDto);
+        if (user != null){
+            user = userJpaRepository.save(user);
         }
-        return Optional.of(userMapper.toDto(user));
+        return userMapper.toDto(user);
     }
 
     @Override
     @Transactional
     public Optional<UserDto> update(Long id, UserDto userDto, MultipartFile file) {
-        User user = updateUser(id, userDto);
+        User user = prepareUserToUpdating(id, userDto);
         if (user == null){
             return Optional.empty();
         }
@@ -174,15 +182,15 @@ public class UserService implements IUserService {
             try {
                 URL avatarUrl = FileUploader.uploadFile(file, DownloadFileType.USER_AVATAR, String.valueOf(user.getId()));
                 user.setAvatarUrl(avatarUrl.toString());
-                user = userJpaRepository.save(user);
             } catch (IOException e) {
                 log.error("Error uploading users avatar image : '{}'.", file.getName());
             }
         }
+        user = userJpaRepository.save(user);
         return Optional.of(userMapper.toDto(user));
     }
 
-    private User updateUser(Long id, UserDto entityDto){
+    private User prepareUserToUpdating(Long id, UserDto entityDto){
         Optional<User> optionalUser = userJpaRepository.findById(id);
         if (!optionalUser.isPresent()) {
             return null;
@@ -205,7 +213,6 @@ public class UserService implements IUserService {
             User user = userMapper.toEntity(entityDto);
             user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
             setDefaultAvatarImageIfNot(user);
-            user = userJpaRepository.save(user);
             return user;
         } else {
             throw new PasswordMatchException(entityDto);

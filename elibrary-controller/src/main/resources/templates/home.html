@@ -23,18 +23,45 @@
 <body>
 <div th:replace="fragments/upperNavbar :: copy"></div>
 
-<main class="container">
+<main>
 
-    <div class="starter-template text-center py-5 px-3">
-        <h1>Final project</h1>
-        <p class="lead">It's final project by lessons "Технологии разработки энтерпрайз-решений на Java" from
-            <a class="stretched-" href="https://www.grodno.it-academy.by/">IT-Academy</a> course.
-            <br>Version: 0.0.1-SNAPSHOT
-            <br>Author: Ales' Rachko
-            <br>There using next technologies: Spring Boot, Spring MVC, Hibernate, Thymeleaf, Spring Security.
-            <br>It's start page.</p>
+    <section class="py-2 text-center container">
+        <div class="row py-lg-2">
+            <div class="col-lg-6 col-md-8 mx-auto">
+                <h1 class="fw-light">E-Library</h1>
+                <p class="lead text-muted">Happy reading!</p>
+            </div>
+        </div>
+    </section>
+
+    <div class="album py-2 bg-light">
+        <div class="container">
+
+            <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+
+                <div th:each="book : ${booksList}" class="col">
+                    <div class="card shadow-sm">
+                        <img th:src="*{book.pictureUrl}" class="bd-placeholder-img card-img-top" width="100%" role="img" focusable="false">
+
+                        <div class="card-body">
+                            <h5 class="text-sm-start mt-2" th:text="${book.title}"></h5>
+                            <p class="text-sm-start mb-2">
+                                <span th:each="authorName : ${book.authors}" th:text="${authorName} + ', '"></span>
+                                <span th:text="${book.datePublishing}"></span>
+                            </p>
+                            <p class="card-text" th:text="${book.description.substring(0, (book.description.length() >= 70 ? 70 : book.description.length())) + '...'}"></p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div class="btn-group">
+                                    <a th:href="'/books/' + ${book.id}" class="btn btn-sm btn-outline-secondary">View</a>
+                                </div>
+                                <small class="text-muted" th:text="'Rating ' + *{book.rating}"></small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-
 </main>
 
 <div th:replace="fragments/footer :: copy"></div>

@@ -38,12 +38,12 @@ public class AuthorRestController {
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public AuthorDto createAuthor(@Valid @RequestBody AuthorDto dto) {
-        return authorService.create(dto).orElse(null);
+        return authorService.create(dto);
     }
 
     @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     public AuthorDto updateAuthor(@Valid @RequestBody AuthorDto dto, @PathVariable Integer id) {
-        return authorService.update(id, dto).orElse(null);
+        return authorService.update(id, dto);
     }
 
     @DeleteMapping(value = "/{id}")

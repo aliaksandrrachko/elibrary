@@ -76,7 +76,7 @@
                             <span th:text="'Total count: ' + ${book.totalCount} + '. '"></span>
                             <span th:text="'Available count: ' + ${book.availableCount} + '. '"></span>
                         </h6>
-                        <div class="text-md-start">
+                        <div class="text-md-start input-group">
                             <a class="btn btn-secondary btn-sm mt-2" th:href="'/books/' + ${book.id}">More info...</a>
                             <div th:replace="fragments/bookingBookModal :: bookingBookModal(thisBook=${book})"></div>
                         </div>

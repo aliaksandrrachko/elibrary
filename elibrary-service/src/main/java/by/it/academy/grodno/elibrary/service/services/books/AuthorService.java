@@ -43,16 +43,16 @@ public class AuthorService implements IAuthorService {
 
     @Override
     @Transactional
-    public Optional<AuthorDto> create(AuthorDto entityDto) {
-        return Optional.of(authorMapper.toDto(authorJpaRepository.save(
+    public AuthorDto create(AuthorDto entityDto) {
+        return authorMapper.toDto(authorJpaRepository.save(
                 Author.builder()
                         .authorName(entityDto.getAuthorName())
-                        .build())));
+                        .build()));
     }
 
     @Override
     @Transactional
-    public Optional<AuthorDto> update(Integer id, AuthorDto entityDto) {
+    public AuthorDto update(Integer id, AuthorDto entityDto) {
         Optional<Author> authorOptional = authorJpaRepository.findById(id);
         if (entityDto != null &&
                 authorOptional.isPresent() &&
@@ -61,9 +61,9 @@ public class AuthorService implements IAuthorService {
             Author author = authorOptional.get();
             author.setAuthorName(entityDto.getAuthorName());
             author = authorJpaRepository.save(author);
-            return Optional.of(authorMapper.toDto(author));
+            return authorMapper.toDto(author);
         }
-        return authorOptional.map(authorMapper::toDto);
+        return authorMapper.toDto(authorOptional.orElse(null));
     }
 
     @Override

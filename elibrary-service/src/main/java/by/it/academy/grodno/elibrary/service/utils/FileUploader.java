@@ -53,6 +53,26 @@ public class FileUploader {
         return new URL(url);
     }
 
+    public void deleteFile(String fileUrl){
+        String pathToFile = ResourceUtils.CLASSPATH_URL_PREFIX + "static" + fileUrl;
+        if (deleteFileIfExists(pathToFile) && UPLOAD_FILE_TO_SOURCE_FOLDER){
+            deleteFileIfExists(SOURCE_STATIC_RESOURCE_DIRECTORY + fileUrl.replace("/", SYSTEM_SEPARATOR));
+        }
+    }
+
+    private boolean deleteFileIfExists(String path){
+        File file;
+        try {
+            file = ResourceUtils.getFile(path);
+            return Files.deleteIfExists(file.toPath());
+        } catch (FileNotFoundException ex){
+            // do noting
+        } catch (IOException e) {
+            log.error("Exception deleting file", e);
+        }
+        return false;
+    }
+
     private static final String UNKNOWN_DOWNLOAD_FILE_TYPE_MESSAGE = "Unknown type of download file";
 
     private String getPathToTargetDirectory(DownloadFileType type) {

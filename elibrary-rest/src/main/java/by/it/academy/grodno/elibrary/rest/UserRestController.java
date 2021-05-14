@@ -30,12 +30,12 @@ public class UserRestController {
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public UserDto createUser(@Valid @RequestBody UserDto dto) {
-        return userService.create(dto).orElse(null);
+        return userService.create(dto);
     }
 
     @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     public UserDto updateUser(@PathVariable Long id, @Valid @RequestBody UserDto dto) {
-        return userService.update(id, dto).orElse(null);
+        return userService.update(id, dto);
     }
 
     @DeleteMapping(value = "/{id}")

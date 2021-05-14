@@ -75,4 +75,13 @@ public class SubscriptionScheduledTaskExecutorService implements ISubscriptionSc
         });
         log.info("Was execute scheduled task: 'undo expired booking' count - {}", subscriptions.size());
     }
+
+    @Override
+    @Scheduled(cron = "0 0 0 1 * *")
+    @Transactional
+    public void findAllCompletedMonthAgoSubscriptionsAndDeleteIt() {
+        Set<Subscription> subscriptions = subscriptionJpaRepository.findByDeadlineBeforeAndStatus(
+                LocalDateTime.now().withNano(0).minusMonths(3), SubscriptionStatus.COMPLETED);
+        subscriptions.forEach(subscriptionJpaRepository::delete);
+    }
 }

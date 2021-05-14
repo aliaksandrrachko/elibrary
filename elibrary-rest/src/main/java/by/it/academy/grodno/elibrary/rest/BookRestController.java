@@ -33,12 +33,12 @@ public class BookRestController {
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public BookDto createBook(@Valid @RequestBody BookDto dto) {
-        return bookService.create(dto).orElse(null);
+        return bookService.create(dto);
     }
 
     @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     public BookDto updateBook(@PathVariable Long id, @Valid @RequestBody BookDto dto) {
-        return bookService.update(id, dto).orElse(null);
+        return bookService.update(id, dto);
     }
 
     @DeleteMapping(value = "/{id}")

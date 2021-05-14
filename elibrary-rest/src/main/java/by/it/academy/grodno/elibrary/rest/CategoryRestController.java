@@ -30,12 +30,12 @@ public class CategoryRestController {
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public CategoryDto createCategory(@Valid @RequestBody CategoryDto dto) {
-        return categoryService.create(dto).orElse(null);
+        return categoryService.create(dto);
     }
 
     @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     public CategoryDto updateCategory(@Valid @RequestBody CategoryDto dto, @PathVariable Integer id) {
-        return categoryService.update(id, dto).orElse(null);
+        return categoryService.update(id, dto);
     }
 
     @DeleteMapping(value = "/{id}")

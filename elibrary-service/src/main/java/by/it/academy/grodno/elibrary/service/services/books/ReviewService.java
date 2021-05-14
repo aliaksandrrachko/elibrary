@@ -71,11 +71,6 @@ public class ReviewService implements IReviewService {
     }
 
     @Override
-    public Page<ReviewDto> findByUserId(Long userId, Pageable pageable) {
-        return reviewMapper.toPageDto(reviewJpaRepository.findByUserId(userId, pageable));
-    }
-
-    @Override
     public Page<ReviewDto> findByBookId(Long bookId, Pageable pageable) {
         return reviewMapper.toPageDto(reviewJpaRepository.findByBookId(bookId, pageable));
     }

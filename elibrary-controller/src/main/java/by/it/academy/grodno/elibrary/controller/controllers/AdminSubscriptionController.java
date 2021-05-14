@@ -37,8 +37,7 @@ public class AdminSubscriptionController {
                                             @RequestParam(value = "subscriptionId", required = false) Long subscriptionId,
                                             @PageableDefault(sort = {"status"}, direction = Sort.Direction.ASC) Pageable pageable,
                                             Principal principal) {
-        Optional<UserDto> optionalUserDto = userService.findUser(principal);
-        UserDto userDto = optionalUserDto.orElseThrow(NoSuchElementException::new);
+        UserDto userDto = userService.findUser(principal);
 
         Page<SubscriptionDto> subscriptionPage;
         Optional<SubscriptionDto> optionalSubscriptionDto;

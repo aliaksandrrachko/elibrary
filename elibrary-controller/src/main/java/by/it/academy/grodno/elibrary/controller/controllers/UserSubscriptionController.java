@@ -18,7 +18,6 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import java.security.Principal;
 import java.util.Collections;
-import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @RestController
@@ -38,8 +37,7 @@ public class UserSubscriptionController {
                                 @RequestParam(value = "subscriptionId", required = false) Long subscriptionId,
                                 @PageableDefault(sort = {"status"}, direction = Sort.Direction.ASC) Pageable pageable,
                                 Principal principal) {
-        Optional<UserDto> optionalUserDto = userService.findUser(principal);
-        UserDto userDto = optionalUserDto.orElseThrow(NoSuchElementException::new);
+        UserDto userDto = userService.findUser(principal);
 
         Page<SubscriptionDto> subscriptionPage;
         if (status != null) {
@@ -47,7 +45,11 @@ public class UserSubscriptionController {
         } else if (subscriptionId != null) {
             Optional<SubscriptionDto> optionalSubscriptionDto =
                     subscriptionService.findBySubscriptionIdAndUserId(subscriptionId, userDto.getId());
-            subscriptionPage = new PageImpl<>(Collections.singletonList(optionalSubscriptionDto.orElse(null)), pageable, 1L);
+            if (optionalSubscriptionDto.isPresent()) {
+                subscriptionPage = new PageImpl<>(Collections.singletonList(optionalSubscriptionDto.get()), pageable, 1L);
+            } else {
+                subscriptionPage = Page.empty(pageable);
+            }
         } else {
             subscriptionPage = subscriptionService.findAllByUserId(userDto.getId(), pageable);
         }
