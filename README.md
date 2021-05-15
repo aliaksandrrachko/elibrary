@@ -5,13 +5,13 @@
 E-Library - the user-friendly general reference tool—delivers designed to support every range of user, including 
 elementary students, college-prep and college-level researchers, and professional educators.
 
-Using this web-application you can:
-* look all available books in the library, search it by a category, author or title
-* booking liked the book (then to pick up at the real library)
-* track the status of your booking (reading)
-* getting email if you remember return the book
+Using this web-application you can/be able to:
+* Check all books available in the library now, look for necessary book using category, author or title and immediately book it
+* Then you can to get selected book pick it up at the real library
+* Track the status of your booking (reading)
+* In case you have forgotten to return the book to the library you will get email, just as kind reminder.
 
-The E-Library application does reading the simplest!
+The E-Library application does reading simple!
 
 ## Installing / Getting started
 
