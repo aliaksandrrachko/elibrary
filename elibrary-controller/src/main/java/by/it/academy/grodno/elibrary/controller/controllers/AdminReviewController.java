@@ -6,18 +6,21 @@ import by.it.academy.grodno.elibrary.api.services.books.IReviewService;
 import by.it.academy.grodno.elibrary.controller.constants.Template;
 import by.it.academy.grodno.elibrary.controller.utils.PageNumberListCreator;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.security.Principal;
 import java.time.LocalDate;
-import java.util.Collections;
-import java.util.List;
 
 @RestController
 @RequestMapping(value = "/admin/reviews")
@@ -42,14 +45,7 @@ public class AdminReviewController {
                                 Principal principal){
         Page<ReviewDto> reviewDtoPage;
         if (bookId != null && userId != null){
-            ReviewDto reviewDto = reviewService.findByBookIdAndUserId(bookId, Long.valueOf(principal.getName()));
-            List<ReviewDto> reviewDtos;
-            if (reviewDto == null) {
-                reviewDtos = Collections.emptyList();
-            } else {
-                reviewDtos = Collections.singletonList(reviewDto);
-            }
-            reviewDtoPage = new PageImpl<>(reviewDtos, pageable, 1L);
+            reviewDtoPage = reviewService.findByBookIdAndUserId(bookId, Long.valueOf(principal.getName()), pageable);
         } else if (bookId != null){
             reviewDtoPage = reviewService.findByBookIdAndUpdatedBetween(bookId, dateFrom, dateTo, pageable);
         } else if (userId != null){
@@ -57,7 +53,6 @@ public class AdminReviewController {
         } else {
             reviewDtoPage = reviewService.findAll(pageable);
         }
-
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("admin/adminReviewsList");
         modelAndView.addObject(MODEL_ATTRIBUTE_NAME_CURRENT_USER, userService.findById(principal.getName()));

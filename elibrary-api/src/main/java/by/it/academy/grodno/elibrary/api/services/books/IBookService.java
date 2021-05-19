@@ -21,5 +21,5 @@ public interface IBookService extends IAGenericCrudService<BookDto, Long> {
     Optional<BookDto> create(BookDto bookDto, MultipartFile file);
     Optional<BookDto> update(Long id, BookDto bookDto, MultipartFile file);
     List<BookDto> findTop6ByRating();
-
+    Page<BookDto> findAllBooks(Integer categoryId, String title, String author, Pageable pageable);
 }

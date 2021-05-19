@@ -12,7 +12,7 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "rest/authors")
+@RequestMapping(value = "/rest/authors")
 public class AuthorRestController {
 
     private final IAuthorService authorService;
@@ -31,7 +31,7 @@ public class AuthorRestController {
         return authorService.findAll(pageable);
     }
 
-    @GetMapping(value = "/{id}")
+    @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public AuthorDto findAuthor(@PathVariable Integer id) {
         return authorService.findById(id);
     }

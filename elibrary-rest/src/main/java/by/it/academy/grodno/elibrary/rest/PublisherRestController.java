@@ -9,7 +9,7 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "rest/publisher")
+@RequestMapping(value = "/rest/publishers")
 public class PublisherRestController {
 
     private final IPublisherService publisherService;
@@ -23,7 +23,7 @@ public class PublisherRestController {
         return publisherService.findAll();
     }
 
-    @GetMapping(value = "/{id}")
+    @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public PublisherDto findPublisher(@PathVariable Integer id) {
         return publisherService.findById(id);
     }

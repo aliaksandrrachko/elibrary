@@ -36,10 +36,10 @@
             <div th:replace="fragments/getAddBookFormModal :: getAddBookForm"></div>
         </div>
         <div class="bd-content ps-lg-4">
-            <div th:if="${currentCategoryDto != null}" class="mt-5">
-                <small class="text-sm-start text-muted m-0" th:text="${currentCategoryDto.getCategoryPath()+ '/'}"></small>
-                <small><a class="text-sm-start m-0 link-primary" th:href="@{books(categoryId=${currentCategoryDto.getId()})}"
-                          th:text="${currentCategoryDto.getCategoryName}"></a></small>
+            <div th:if="${!pageBookDto.getContent().isEmpty() && categoryId != null}" class="mt-5">
+                <small class="text-sm-start text-muted m-0" th:text="${pageBookDto.getContent().get(0).getCategory().getCategoryPath()+ '/'}"></small>
+                <small><a class="text-sm-start m-0 link-primary" th:href="@{books(categoryId=${pageBookDto.getContent().get(0).getCategory().getId()})}"
+                          th:text="${pageBookDto.getContent().get(0).getCategory().getCategoryName}"></a></small>
             </div>
             <table class="table table-striped table-hover">
                 <thead class="thead-dark">

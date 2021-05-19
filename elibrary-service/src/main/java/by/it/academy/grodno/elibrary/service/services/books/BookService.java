@@ -161,6 +161,21 @@ public class BookService implements IBookService {
                 PageRequest.of(0, 6, Sort.Direction.DESC, "rating")).getContent());
     }
 
+    @Override
+    public Page<BookDto> findAllBooks(Integer categoryId, String title, String author, Pageable pageable) {
+        Page<BookDto> pageBookDto;
+        if (categoryId != null) {
+            pageBookDto = findAllIncludeSubCategories(categoryId, pageable);
+        } else if (title != null) {
+            pageBookDto = findAllByTitle(title, pageable);
+        } else if (author != null) {
+            pageBookDto = findAllByAuthorName(author, pageable);
+        } else {
+            pageBookDto = findAll(pageable);
+        }
+        return pageBookDto;
+    }
+
     private Book prepareBookToUpdating(Long id, BookDto entityDto){
         Optional<Book> optionalBook = bookJpaRepository.findById(id);
         if (optionalBook.isPresent()) {

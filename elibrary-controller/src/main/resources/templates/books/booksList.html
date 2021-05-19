@@ -35,10 +35,10 @@
             <h1>Books</h1>
         </div>
         <div class="bd-content ps-lg-4">
-            <div th:if="${currentCategoryDto != null}">
-                <small class="text-sm-start text-muted m-0" th:text="${currentCategoryDto.getCategoryPath()+ '/'}"></small>
-                <small><a class="text-sm-start m-0 link-primary" th:href="@{books(categoryId=${currentCategoryDto.getId()})}"
-                          th:text="${currentCategoryDto.getCategoryName}"></a></small>
+            <div th:if="${!pageBookDto.getContent().isEmpty() && categoryId != null}" class="mt-5">
+                <small class="text-sm-start text-muted m-0" th:text="${pageBookDto.getContent().get(0).getCategory().getCategoryPath()+ '/'}"></small>
+                <small><a class="text-sm-start m-0 link-primary" th:href="@{books(categoryId=${pageBookDto.getContent().get(0).getCategory().getId()})}"
+                          th:text="${pageBookDto.getContent().get(0).getCategory().getCategoryName}"></a></small>
             </div>
             <table class="table">
                 <thead class="thead-dark">
@@ -54,6 +54,7 @@
                         <img class="rounded" src="#" th:src="${book.pictureUrl}" alt="no picture" width="200"/>
                     </th>
                     <th scope="row">
+                        <!--/*@thymesVar id="book" type="by.it.academy.grodno.elibrary.api.dto.books.BookDto"*/-->
                         <h6 class="text-sm-start text-muted m-0" th:text="'N' + ${book.id}"></h6>
                         <span class="text-sm-start m-0" th:text="'(Rating: ' + ${book.rating} + ')'"></span>
                         <a th:href="@{'books/' + ${book.id} + '/reviews'}" th:text="' Review'"></a>
