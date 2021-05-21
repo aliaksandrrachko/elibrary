@@ -4,6 +4,9 @@ target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 
+### Log's folder ###
+/logs/
+
 ### Log's file ###
 *.log
 

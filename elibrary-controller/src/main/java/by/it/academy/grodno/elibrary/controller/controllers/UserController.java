@@ -3,8 +3,10 @@ package by.it.academy.grodno.elibrary.controller.controllers;
 import by.it.academy.grodno.elibrary.api.dto.users.UserDto;
 import by.it.academy.grodno.elibrary.api.services.IUserService;
 import by.it.academy.grodno.elibrary.controller.constants.Template;
+import by.it.academy.grodno.elibrary.entities.users.Role;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -14,7 +16,9 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.validation.Valid;
 import java.security.Principal;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Optional;
+import java.util.Set;
 
 @RestController
 @RequestMapping(value = "users")
@@ -31,7 +35,7 @@ public class UserController {
 
     @GetMapping("/info")
     public ModelAndView userInfo(Principal principal) {
-        UserDto currentUser = userService.findById(principal.getName());
+        UserDto currentUser = this.userService.findById(principal.getName());
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("users/userInfo");
         modelAndView.addObject(MODEL_ATTRIBUTE_NAME_CURRENT_USER, currentUser);
@@ -41,7 +45,7 @@ public class UserController {
 
     @GetMapping("/update")
     public ModelAndView getEditUserProfileForm(Principal principal) {
-        UserDto currentUser = userService.findById(principal.getName());
+        UserDto currentUser = this.userService.findById(principal.getName());
 
         ModelAndView modelAndView = new ModelAndView();
         if (currentUser == null) {
@@ -69,11 +73,11 @@ public class UserController {
             modelAndView = new ModelAndView();
             modelAndView.setViewName("users/userUpdate");
             modelAndView.addAllObjects(result.getModel());
-            UserDto currentUser = userService.findById(principal.getName());
+            UserDto currentUser = this.userService.findById(principal.getName());
             modelAndView.addObject(MODEL_ATTRIBUTE_NAME_USER_DTO, currentUser);
             modelAndView.addObject(MODEL_ATTRIBUTE_NAME_CURRENT_USER, currentUser);
         } else {
-            Optional<UserDto> optionalUpdatedUser = userService.update(Long.valueOf(principal.getName()), userDto, file);
+            Optional<UserDto> optionalUpdatedUser = this.userService.update(Long.valueOf(principal.getName()), userDto, file);
             optionalUpdatedUser.ifPresent(this::changeUserInSecurityContext);
             modelAndView = new ModelAndView();
             modelAndView.setViewName("redirect:/users/info");
@@ -85,11 +89,15 @@ public class UserController {
         Collection<? extends GrantedAuthority> nowAuthorities =
                 SecurityContextHolder.getContext().getAuthentication().getAuthorities();
 
+        Set<SimpleGrantedAuthority> newAuthorities = new HashSet<>();
+        nowAuthorities.forEach(grantedAuthority -> newAuthorities.add(new SimpleGrantedAuthority(grantedAuthority.getAuthority())));
+        updatedUser.getRoles().forEach(role -> newAuthorities.add(new SimpleGrantedAuthority(role)));
+
         UsernamePasswordAuthenticationToken token =
                 new UsernamePasswordAuthenticationToken(
                         String.valueOf(updatedUser.getId()),
                         updatedUser.getPassword(),
-                        nowAuthorities);
+                        newAuthorities);
         SecurityContextHolder.getContext().setAuthentication(token);
     }
 }

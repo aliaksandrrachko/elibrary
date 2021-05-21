@@ -56,7 +56,7 @@ public class AdminBookController extends ABookController{
 
     @PostMapping("/setAvailability")
     public ModelAndView setBookAvailability(@Valid @Min(0) long bookId) {
-        bookService.setAvailability(bookId);
+        this.bookService.setAvailability(bookId);
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("redirect:/admin/books?bookId=" + bookId);
         return modelAndView;
@@ -70,7 +70,7 @@ public class AdminBookController extends ABookController{
         ModelAndView modelAndView = getModelAndViewWithCurrentUserFromDb(principal);
 
         if (isbn != null && IsbnUtils.isValid(isbn)) {
-            Optional<BookDto> optionalBookDto = bookService.findByIsbnInWeb(IsbnUtils.getOnlyDigit(isbn));
+            Optional<BookDto> optionalBookDto = this.bookService.findByIsbnInWeb(IsbnUtils.getOnlyDigit(isbn));
             BookDto bookDto;
             if (optionalBookDto.isPresent()) {
                 bookDto = optionalBookDto.get();
@@ -148,16 +148,16 @@ public class AdminBookController extends ABookController{
     }
 
     private void prepareModelAndViewForAddAndUpdateBookForm(ModelAndView modelAndView) {
-        modelAndView.addObject("categoriesSet", categoryService.findAllUnique());
-        modelAndView.addObject("publishersList", publisherService.findAll());
-        modelAndView.addObject("authorsList", authorService.findAll());
-        Set<CategoryDto> categoryDtoList = new HashSet<>(categoryService.findAll());
+        modelAndView.addObject("categoriesSet", this.categoryService.findAllUnique());
+        modelAndView.addObject("publishersList", this.publisherService.findAll());
+        modelAndView.addObject("authorsList", this.authorService.findAll());
+        Set<CategoryDto> categoryDtoList = new HashSet<>(this.categoryService.findAll());
         modelAndView.addObject("categoryDtoSet", categoryDtoList);
     }
 
     @PostMapping("/delete/{bookId}")
     public ModelAndView deleteBook(@PathVariable @Valid @Min(0) long bookId) {
-        bookService.delete(bookId);
+        this.bookService.delete(bookId);
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("redirect:/admin/books");
         return modelAndView;
@@ -168,7 +168,7 @@ public class AdminBookController extends ABookController{
                                           @RequestParam(value = "countAuthors", defaultValue = "2") int countAuthors,
                                           @RequestParam(value = "countAttributes", required = false, defaultValue = "3") int countAttributes,
                                           Principal principal) {
-        BookDto bookDtoForUpdate = bookService.findById(bookId);
+        BookDto bookDtoForUpdate = this.bookService.findById(bookId);
 
         ModelAndView modelAndView = getModelAndViewWithCurrentUserFromDb(principal);
         if (bookDtoForUpdate == null) {
@@ -198,7 +198,7 @@ public class AdminBookController extends ABookController{
             prepareModelAndViewForAddAndUpdateBookForm(modelAndView);
         } else {
             bookDto.setAttributes(convertToSimpleMap(bookDto.getAttributes()));
-            Optional<BookDto> optionalAddedBook = bookService.update(bookId, bookDto, file);
+            Optional<BookDto> optionalAddedBook = this.bookService.update(bookId, bookDto, file);
             optionalAddedBook.ifPresent(dto -> modelAndView.setViewName("redirect:/books/" + dto.getId()));
         }
         return modelAndView;

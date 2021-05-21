@@ -43,6 +43,7 @@ public class BookDto extends AEntityDto<Long> {
 
     private List<String> authors;
 
+    @Builder.Default
     private Map<String, String> attributes = new HashMap<>();
 
     @Pattern(regexp = "^\\w{3}$", message = "Code by alpha-3/ISO 639-2.")

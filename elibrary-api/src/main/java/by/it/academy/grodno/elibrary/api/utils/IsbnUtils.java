@@ -16,6 +16,7 @@ package by.it.academy.grodno.elibrary.api.utils;
  *         <p>m = ( [a b c d e f g h i j k l] * [1 3 1 3 1 3 1 3 1 3 1 3] ) mod 10</p>
  *     </li>
  * </ul>
+ * <p>Note: The Roman numeral X is used in lieu of 10 where ten would occur as a check digit.</p>
  */
 public final class IsbnUtils {
 
@@ -30,24 +31,33 @@ public final class IsbnUtils {
 
     public static boolean isIsbn10(String isbn10){
         isbn10 = getOnlyDigit(isbn10);
+        int checkNumber = getCheckNumberFromIsbn(isbn10.substring(9));
         return isbn10.length() == 10 &&
-                calculateCheekNumberIsbn10(isbn10.substring(0,9)) == Integer.parseInt(isbn10.substring(9));
+                calculateCheekNumberIsbn10(isbn10.substring(0,9)) == checkNumber;
+    }
+
+    private static int getCheckNumberFromIsbn(String substring) {
+        if (substring.equals("X")){
+            return 10;
+        }
+        return Integer.parseInt(substring);
     }
 
     public static boolean isIsbn13(String isbn13){
         isbn13 = getOnlyDigit(isbn13);
+        int checkNumber = getCheckNumberFromIsbn(isbn13.substring(12));
         return isbn13.length() == 13 &&
                 isbn13.startsWith(CONSTANT_PREFIX_GS1) &&
-                calculateCheekNumberIsbn13(isbn13.substring(0,12)) == Integer.parseInt(isbn13.substring(12));
+                calculateCheekNumberIsbn13(isbn13.substring(0,12)) == checkNumber;
     }
 
     /**
-     * Deletes in given string all no digit characters.
+     * Deletes in given string all no digit characters exclude 'X'.
      * @param string the string
      * @return the cleaning string
      */
     public static String getOnlyDigit(String string){
-            return string.replaceAll("[^\\d.]", "");
+            return string.replaceAll("[^\\dX.]", "");
     }
 
     public static String toIsbn10(String isbn13){
@@ -55,7 +65,8 @@ public final class IsbnUtils {
         if (isIsbn13(cleanerIsbn)) {
             String informationDigits = cleanerIsbn.substring(3, 12);
             int cheekNumber = calculateCheekNumberIsbn10(informationDigits);
-            return informationDigits + cheekNumber;
+            String cheekNumberAsString = cheekNumber == 10 ? "X" : String.valueOf(cheekNumber);
+            return informationDigits + cheekNumberAsString;
         } else if (isIsbn10(cleanerIsbn)){
             return cleanerIsbn;
         } else {
@@ -69,7 +80,8 @@ public final class IsbnUtils {
         if (isIsbn10(cleanerIsbn)) {
             String informationDigits = CONSTANT_PREFIX_GS1 + cleanerIsbn.substring(0, 9);
             int cheekNumber = calculateCheekNumberIsbn13(informationDigits);
-            return informationDigits + cheekNumber;
+            String cheekNumberAsString = cheekNumber == 10 ? "X" : String.valueOf(cheekNumber);
+            return informationDigits + cheekNumberAsString;
         } else if (isIsbn13(cleanerIsbn)) {
             return cleanerIsbn;
         } else {

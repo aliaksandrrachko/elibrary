@@ -49,10 +49,10 @@ public class BookController extends ABookController{
 
     @GetMapping(value = "/{id}")
     public ModelAndView bookInfo(Principal principal, @PathVariable Long id) {
-        UserDto currentUser = userService.findUser(principal);
-        Set<CategoryDto> categoryDtoList = new HashSet<>(categoryService.findAll());
-        int totalCountOfReview = reviewService.totalCountForBook(id);
-        BookDto bookDto = bookService.findById(id);
+        UserDto currentUser = this.userService.findUser(principal);
+        Set<CategoryDto> categoryDtoList = new HashSet<>(this.categoryService.findAll());
+        int totalCountOfReview = this.reviewService.totalCountForBook(id);
+        BookDto bookDto = this.bookService.findById(id);
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("books/bookInfo");
         modelAndView.addObject( MODEL_ATTRIBUTE_NAME_CURRENT_USER, currentUser);

@@ -1,6 +1,5 @@
 package by.it.academy.grodno.elibrary.web;
 
-import by.it.academy.grodno.elibrary.api.utils.IsbnUtils;
 import by.it.academy.grodno.elibrary.entities.books.Author;
 import by.it.academy.grodno.elibrary.web.converters.OpenLibraryAuthorResponseConverter;
 import by.it.academy.grodno.elibrary.web.responseentities.OpenLibraryAuthorResponse;
