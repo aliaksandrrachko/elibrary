@@ -120,7 +120,12 @@ public class BookService implements IBookService {
                 .collect(Collectors.toSet());
         bookDto.getAuthors().forEach(authorName -> {
             if (!booksAuthors.contains(authorName) && StringUtils.hasText(authorName)) {
-                book.getAuthors().add(new Author(authorName));
+                Optional<Author> authorOptional = this.authorJpaRepository.findByAuthorName(authorName);
+                if (authorOptional.isPresent()) {
+                    book.getAuthors().add(authorOptional.get());
+                } else {
+                    book.getAuthors().add(new Author(authorName));
+                }
             }
         });
     }

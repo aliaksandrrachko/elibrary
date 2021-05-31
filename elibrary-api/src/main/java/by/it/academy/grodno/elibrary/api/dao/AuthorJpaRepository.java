@@ -5,9 +5,11 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface AuthorJpaRepository extends JpaRepository<Author, Integer> {
 
     List<Author> findByAuthorNameContaining(String authorName);
+    Optional<Author> findByAuthorName(String authorName);
 }

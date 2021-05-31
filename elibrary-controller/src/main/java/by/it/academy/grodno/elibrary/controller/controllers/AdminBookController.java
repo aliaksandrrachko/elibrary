@@ -69,7 +69,7 @@ public class AdminBookController extends ABookController{
                                        Principal principal) {
         ModelAndView modelAndView = getModelAndViewWithCurrentUserFromDb(principal);
 
-        if (isbn != null && IsbnUtils.isValid(isbn)) {
+        if (isbn != null && StringUtils.hasText(isbn) && IsbnUtils.isValid(isbn)) {
             Optional<BookDto> optionalBookDto = this.bookService.findByIsbnInWeb(IsbnUtils.getOnlyDigit(isbn));
             BookDto bookDto;
             if (optionalBookDto.isPresent()) {
