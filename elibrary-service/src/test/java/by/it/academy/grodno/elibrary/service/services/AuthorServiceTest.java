@@ -17,7 +17,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.stubbing.Answer;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.ArrayList;
@@ -25,7 +24,6 @@ import java.util.List;
 import java.util.Optional;
 
 @ExtendWith(value = {SpringExtension.class})
-@SpringBootTest
 class AuthorServiceTest {
 
     @Mock
