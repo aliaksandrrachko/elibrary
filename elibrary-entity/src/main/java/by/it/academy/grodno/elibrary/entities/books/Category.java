@@ -15,7 +15,7 @@ import java.util.Set;
 @EqualsAndHashCode(callSuper = true, exclude = {"categories", "parentCategory"})
 @SuperBuilder
 @Entity
-@Table(name = ("category"))
+@Table(name = "category")
 public class Category extends AEntity<Integer> {
 
     @Column(name = "category_name", length = 45)

@@ -17,7 +17,7 @@ import java.io.Serializable;
 @Getter
 @Setter
 @SuperBuilder
-@Table(name = ("role"))
+@Table(name = "role")
 public class Role extends AEntity<Integer> implements GrantedAuthority, Serializable {
 
     @Column(name = "role_name", length = 45)

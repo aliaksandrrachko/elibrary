@@ -1,4 +1,4 @@
-# Initial data by_it_academy_grodno_elibrary.address
+-- Initial data elibrary.address
 INSERT INTO address (id, country, region, district, city, street, postal_code, house, apt)
 values (2, 'Беларусь', 'Гродненская', 'Гродненский', 'Kutorejo', 'Gerald', '230005', '07', '4292'),
        (3, 'Беларусь', 'Гродненская', 'Гродненский', 'Shangshuai', 'Prairieview', '230005', '05843', '07'),
@@ -33,9 +33,10 @@ values (2, 'Беларусь', 'Гродненская', 'Гродненский
        (32,  'Беларусь', 'Гродненская', 'Tumaco', 'Division', 'Barnett', '984568', '093', '2'),
        (33, 'Беларусь', 'Madrid', 'Laocheng', 'Victoria', 'Barnett', '898', '81', '4'),
        (34, 'Беларусь', 'Madrid', 'Laocheng', 'Victoria', 'Bar', '898', '747', '3');
+SELECT setval('address_id_seq', (SELECT max(id) FROM address));
 
-## Initial data by_it_academy_grodno_elibrary.user
-INSERT INTO user (email, username, first_name, last_name, middle_name, phone_number, address_id, gender, birthday, password,  avatar_url)
+-- Initial data by_it_academy_grodno_elibrary.user
+INSERT INTO "user" (email, username, first_name, last_name, middle_name, phone_number, address_id, gender, birthday, password,  avatar_url)
 VALUES ('eget.odio@Donec.ca', 'Armand Parrish', 'Cleo', 'Macias', 'Gretchen', '{"countryCode": "375", "nationalNumber": "296908407"}', 2, 'm', '2021-03-01', '$2a$10$Z1/.F4bRuyOGyL7NQrmjhufHf8XrHIEjPfBz9tlPbPcWrLpvPWKfq', '/img/users/avatars/default_male_avatar.png'),
        ('ligula.eu@litoratorquent.net', 'Azalia Rosario', 'Raven', 'Barry', 'Jordan', '{"countryCode": "375", "nationalNumber": "296270309"}', 3, 'm', '2022-02-25', '$2a$10$Z1/.F4bRuyOGyL7NQrmjhufHf8XrHIEjPfBz9tlPbPcWrLpvPWKfq', '/img/users/avatars/default_male_avatar.png'),
        ('id@acarcuNunc.edu', 'Leah Moody', 'Mark', 'Mckinney', 'Dalton', '{"countryCode": "375", "nationalNumber": "339685203"}', 4, 'm', '2020-10-01', '$2a$10$Z1/.F4bRuyOGyL7NQrmjhufHf8XrHIEjPfBz9tlPbPcWrLpvPWKfq', '/img/users/avatars/default_male_avatar.png'),
@@ -69,8 +70,9 @@ VALUES ('eget.odio@Donec.ca', 'Armand Parrish', 'Cleo', 'Macias', 'Gretchen', '{
        ('kmcentagartld@oaic.gov.au', 'kmcentagartld', 'Táng', 'McEntagart', 'Karola', '{"countryCode": "375", "nationalNumber": "9905994967"}', 32, 'm', '2018-11-26', '$2a$10$Z1/.F4bRuyOGyL7NQrmjhufHf8XrHIEjPfBz9tlPbPcWrLpvPWKfq', '/img/users/avatars/default_male_avatar.png'),
        ('bholthamle@theguardian.com', 'bholthamle', 'Kévina', 'Holtham', 'Ben', '{"countryCode": "375", "nationalNumber": "8487738742"}', 33, 'm', '2018-02-13', '$2a$10$Z1/.F4bRuyOGyL7NQrmjhufHf8XrHIEjPfBz9tlPbPcWrLpvPWKfq', '/img/users/avatars/default_male_avatar.png'),
        ('csandhamlf@ftc.gov', 'csandhamlf', 'Réservés', 'Sandham', 'Cal', '{"countryCode": "375", "nationalNumber": "6134745518"}', 34, 'f', '2019-12-24', '$2a$10$Z1/.F4bRuyOGyL7NQrmjhufHf8XrHIEjPfBz9tlPbPcWrLpvPWKfq', '/img/users/avatars/default_female_avatar.png');
+SELECT setval('user_id_seq', (SELECT max(id) FROM "user"));
 
-# Initial data by_it_academy_grodno_elibrary.user_has_role
+-- Initial data elibrary.user_has_role
 INSERT INTO user_has_role (user_id, role_id)
 VALUES (2, 1),
        (3, 1),

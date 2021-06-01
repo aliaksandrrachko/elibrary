@@ -5,8 +5,8 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
 http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
     <changeSet author="Aliaksandr Rachko" id="2021-05-13--02-initial-triggers-1">
-        <sqlFile dbms="mysql"
-                 endDelimiter=";"
+        <sqlFile dbms="postgresql"
+                 endDelimiter=";;"
                  path="script-initial-triggers.sql"
                  relativeToChangelogFile="true"
                  splitStatements="true"

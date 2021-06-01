@@ -2,11 +2,15 @@ package by.it.academy.grodno.elibrary.entities.users;
 
 import by.it.academy.grodno.elibrary.entities.AEntity;
 import by.it.academy.grodno.elibrary.entitymetadata.converters.GenderConverter;
-import by.it.academy.grodno.elibrary.entitymetadata.converters.PhoneNumberJsonConverter;
 import by.it.academy.grodno.elibrary.entitymetadata.users.Gender;
 import by.it.academy.grodno.elibrary.entitymetadata.users.PhoneNumber;
+import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
+import com.vladmihalcea.hibernate.type.json.JsonStringType;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
+import org.hibernate.annotations.Type;
+import org.hibernate.annotations.TypeDef;
+import org.hibernate.annotations.TypeDefs;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -24,10 +28,11 @@ import java.util.Set;
 @EqualsAndHashCode(callSuper = true)
 @SuperBuilder
 @Entity
-@Table(name = ("user"))
+@Table(name = "user", schema = "public")
 @SecondaryTables(value = {
         @SecondaryTable(name = "user_social_id", pkJoinColumns = {@PrimaryKeyJoinColumn(name = "user_id", referencedColumnName = "id")})
 })
+@TypeDefs(value = {@TypeDef(name = "jsonb", typeClass = JsonBinaryType.class)})
 public class User extends AEntity<Long> implements UserDetails, Serializable {
 
     @Column(name = "email", unique = true, length = 80)
@@ -45,7 +50,7 @@ public class User extends AEntity<Long> implements UserDetails, Serializable {
     @Column(name = "middle_name", length = 15)
     private String middleName;
 
-    @Convert(converter = PhoneNumberJsonConverter.class)
+    @Type(type = "jsonb")
     @Column(name = "phone_number", columnDefinition = "json")
     private PhoneNumber phoneNumber;
 
