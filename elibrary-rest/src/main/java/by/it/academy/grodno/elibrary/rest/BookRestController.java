@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
-@RestController
+//@RestController
 @RequestMapping(value = "rest/books")
 public class BookRestController {
 

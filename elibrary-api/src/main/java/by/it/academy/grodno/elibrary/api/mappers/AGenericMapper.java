@@ -1,6 +1,5 @@
 package by.it.academy.grodno.elibrary.api.mappers;
 
-
 import by.it.academy.grodno.elibrary.api.dto.AEntityDto;
 import by.it.academy.grodno.elibrary.entities.AEntity;
 import org.modelmapper.Converter;
