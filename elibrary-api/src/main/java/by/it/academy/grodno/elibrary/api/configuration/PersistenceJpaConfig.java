@@ -21,11 +21,13 @@ import java.util.Properties;
 @EnableJpaRepositories(basePackages = {"by.it.academy.grodno.elibrary.api.dao"})
 public class PersistenceJpaConfig {
 
+    public static final String PACKAGE_ENTITY_TO_SCAN = "by.it.academy.grodno.elibrary.entities";
+
     @Bean
     public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
         LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
         em.setDataSource(dataSource());
-        em.setPackagesToScan("by.it.academy.grodno.elibrary.entities");
+        em.setPackagesToScan(PACKAGE_ENTITY_TO_SCAN);
         JpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
         em.setJpaVendorAdapter(vendorAdapter);
         em.setJpaProperties(additionalProperties());

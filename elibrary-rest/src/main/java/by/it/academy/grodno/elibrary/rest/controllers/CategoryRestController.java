@@ -1,4 +1,4 @@
-package by.it.academy.grodno.elibrary.rest;
+package by.it.academy.grodno.elibrary.rest.controllers;
 
 import by.it.academy.grodno.elibrary.api.dto.books.CategoryDto;
 import by.it.academy.grodno.elibrary.api.services.books.ICategoryService;
@@ -8,8 +8,8 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
 
-//@RestController
-@RequestMapping(value = "rest/categories")
+@RestController
+@RequestMapping(value = "/rest/categories")
 public class CategoryRestController {
 
     private final ICategoryService categoryService;

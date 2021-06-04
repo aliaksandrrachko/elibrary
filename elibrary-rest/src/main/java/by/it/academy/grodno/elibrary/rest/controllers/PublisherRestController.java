@@ -1,4 +1,4 @@
-package by.it.academy.grodno.elibrary.rest;
+package by.it.academy.grodno.elibrary.rest.controllers;
 
 import by.it.academy.grodno.elibrary.api.dto.books.PublisherDto;
 import by.it.academy.grodno.elibrary.api.services.books.IPublisherService;
@@ -8,8 +8,8 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
 
-//@RestController
-@RequestMapping(value = "/rest/publishers")
+@RestController
+@RequestMapping(value = "/rest/publishers/")
 public class PublisherRestController {
 
     private final IPublisherService publisherService;

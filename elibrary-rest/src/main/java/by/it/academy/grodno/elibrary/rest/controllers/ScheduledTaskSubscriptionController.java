@@ -1,4 +1,4 @@
-package by.it.academy.grodno.elibrary.rest;
+package by.it.academy.grodno.elibrary.rest.controllers;
 
 import by.it.academy.grodno.elibrary.api.services.books.ISubscriptionScheduledTaskExecutorService;
 import org.springframework.http.HttpStatus;
@@ -7,8 +7,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-//@RestController
-@RequestMapping(value = "rest/subscriptions/scheduledtask")
+@RestController
+@RequestMapping(value = "/rest/subscriptions/scheduledtask")
 public class ScheduledTaskSubscriptionController {
 
     private final ISubscriptionScheduledTaskExecutorService subscriptionScheduledTaskExecutorService;

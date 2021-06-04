@@ -1,4 +1,4 @@
-package by.it.academy.grodno.elibrary.rest;
+package by.it.academy.grodno.elibrary.rest.controllers;
 
 import by.it.academy.grodno.elibrary.api.dto.books.AuthorDto;
 import by.it.academy.grodno.elibrary.api.services.books.IAuthorService;
@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
 
-//@RestController
+@RestController
 @RequestMapping(value = "/rest/authors")
 public class AuthorRestController {
 

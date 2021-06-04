@@ -1,4 +1,4 @@
-package by.it.academy.grodno.elibrary.rest;
+package by.it.academy.grodno.elibrary.rest.controllers;
 
 import by.it.academy.grodno.elibrary.api.dto.users.UserDto;
 import by.it.academy.grodno.elibrary.api.services.IUserService;
@@ -8,8 +8,8 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
 
-//@RestController
-@RequestMapping(value = "rest/users")
+@RestController
+@RequestMapping(value = "/rest/users")
 public class UserRestController {
 
     private final IUserService userService;

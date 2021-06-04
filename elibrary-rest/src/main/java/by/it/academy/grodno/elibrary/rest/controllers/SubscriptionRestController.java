@@ -1,4 +1,4 @@
-package by.it.academy.grodno.elibrary.rest;
+package by.it.academy.grodno.elibrary.rest.controllers;
 
 import by.it.academy.grodno.elibrary.api.dto.books.SubscriptionDto;
 import by.it.academy.grodno.elibrary.api.dto.books.SubscriptionRequest;
@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
 
-//@RestController
-@RequestMapping(value = "rest/subscriptions")
+@RestController
+@RequestMapping(value = "/rest/subscriptions")
 public class SubscriptionRestController {
 
     private final ISubscriptionService subscriptionService;

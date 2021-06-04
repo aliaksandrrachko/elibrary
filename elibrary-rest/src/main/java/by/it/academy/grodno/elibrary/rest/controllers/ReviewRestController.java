@@ -1,4 +1,4 @@
-package by.it.academy.grodno.elibrary.rest;
+package by.it.academy.grodno.elibrary.rest.controllers;
 
 import by.it.academy.grodno.elibrary.api.dto.books.ReviewDto;
 import by.it.academy.grodno.elibrary.api.services.books.IReviewService;
@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
-//@RestController
-@RequestMapping(value = "rest/reviews")
+@RestController
+@RequestMapping(value = "/rest/reviews")
 public class ReviewRestController {
 
     public final IReviewService reviewService;

@@ -1,4 +1,4 @@
-package by.it.academy.grodno.elibrary.rest;
+package by.it.academy.grodno.elibrary.rest.controllers;
 
 import by.it.academy.grodno.elibrary.api.dto.books.BookDto;
 import by.it.academy.grodno.elibrary.api.services.books.IBookService;
@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
-//@RestController
-@RequestMapping(value = "rest/books")
+@RestController
+@RequestMapping(value = "/rest/books")
 public class BookRestController {
 
     private final IBookService bookService;
