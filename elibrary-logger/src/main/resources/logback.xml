@@ -4,43 +4,44 @@
     <property name="LOG_HOME" value="logs"/>
     <property name="LOG_FILE" value="log"/>
     <property name="LOG_DATE_FORMAT_PATTERN" value="yyyy-MM-dd HH:mm:ss.SSS"/>
-    <property name="LOG_EXCEPTION_CONVERSION_WORD" value="%wEx"/>
-    <property name="LOG_LEVEL_PATTERN" value="%5p"/>
     <timestamp key="bySecond" datePattern="yyyy-MM-dd HH:mm:ss.SSS"/>
 
     <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
         <withJansi>false</withJansi>
         <encoder>
-        <!--   <pattern>[%thread] %highlight(%-5level) %cyan(%logger{15}) - %msg %n</pattern>
-            -->
-            <pattern>
-                %clr(%d{${LOG_DATE_FORMAT_PATTERN}}) {faint}
-                %clr(${LOG_LEVEL_PATTERN:-%5p}) %clr(${PID:- }){magenta}
-                %clr(---){faint} %clr([%15.15t]){faint}
-                %clr(%-40.40logger{39}){cyan}
-                %clr(:){faint}
-                %m%n${LOG_EXCEPTION_CONVERSION_WORD}
-            </pattern>
+            <pattern>[%thread] %highlight(%-5level) %cyan(%logger{15}) - %msg %n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="FILE" class="ch.qos.logback.core.FileAppender">
+        <file>${LOG_HOME}/log-at-${bySecond}.log</file>
+        <append>true</append>
+        <immediateFlush>true</immediateFlush>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>%d{yyyy-MM-dd_HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
         </encoder>
     </appender>
 
     <appender name="ROLLING_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>${LOG_HOME}/${LOG_FILE}.log</file>
+        <file>spring-logger.log</file>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>%d %p %C{1.} [%t] %m%n</pattern>
+        </encoder>
         <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
-            <fileNamePattern>log-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <fileNamePattern>${LOG_HOME}/archived/spring-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
             <maxFileSize>10MB</maxFileSize>
             <maxHistory>7</maxHistory>
             <totalSizeCap>200MB</totalSizeCap>
         </rollingPolicy>
-        <encoder>
-            <pattern>
-                %d{${LOG_DATE_FORMAT_PATTERN}} ${LOG_LEVEL_PATTERN} ${PID:- } --- [%t] %-40.40logger{39} : %m%n${LOG_EXCEPTION_CONVERSION_WORD}
-            </pattern>
-        </encoder>
     </appender>
 
     <root level="INFO">
+        <appender-ref ref="RollingFile" />
         <appender-ref ref="CONSOLE" />
         <appender-ref ref="ROLLING_FILE"/>
     </root>
+
+    <logger name="by.it.academy.grodno.elibrary.rest.controllers" level="debug" additivity="false">
+        <appender-ref ref="FILE"/>
+    </logger>
 </configuration>
