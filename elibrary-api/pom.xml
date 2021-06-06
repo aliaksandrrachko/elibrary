@@ -106,6 +106,10 @@
                     <propertyFile>${project.build.outputDirectory}/liquibase-maven-plugin.properties</propertyFile>
                     <systemProperties>
                         <user.name>Aliaksandr Rachko</user.name>
+                        <property>
+                            <name>file.encoding</name>
+                            <value>UTF-8</value>
+                        </property>
                     </systemProperties>
                     <logging>info</logging>
                 </configuration>

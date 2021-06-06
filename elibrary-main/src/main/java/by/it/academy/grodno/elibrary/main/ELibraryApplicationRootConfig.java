@@ -3,6 +3,7 @@ package by.it.academy.grodno.elibrary.main;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
@@ -11,6 +12,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @Configuration
 @ComponentScan("by.it.academy.grodno.elibrary")
 @EnableScheduling
+@EnableAspectJAutoProxy
 public class ELibraryApplicationRootConfig {
 
     @Bean

@@ -4,18 +4,1570 @@
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
 http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
-    <changeSet author="Aliaksandr Rachko" id="2021-05-13--04-initial-test-data-users-1">
-        <sqlFile dbms="postgresql"
-                 endDelimiter=";"
-                 path="script-insert-test-users.sql"
-                 relativeToChangelogFile="true"
-                 splitStatements="true"
-                 stripComments="true"/>
+    <changeSet author="Aliaksandr Rachko" id="2021-06-06--04-initial-test-data-address-1">
+        <insert tableName="address">
+            <column name="id" valueNumeric="2"/>
+            <column name="country" value="Беларусь"/>
+            <column name="region" value="Гродненская"/>
+            <column name="district" value="Гродненский"/>
+            <column name="city" value="Kutorejo"/>
+            <column name="street" value="Gerald"/>
+            <column name="postal_code" value="230005"/>
+            <column name="house" value="07"/>
+            <column name="apt" value="4292"/>
+            <column name="last_updated" valueDate="2021-06-06T14:34:13.693931"/>
+        </insert>
+        <insert tableName="address">
+            <column name="id" valueNumeric="3"/>
+            <column name="country" value="Беларусь"/>
+            <column name="region" value="Гродненская"/>
+            <column name="district" value="Гродненский"/>
+            <column name="city" value="Shangshuai"/>
+            <column name="street" value="Prairieview"/>
+            <column name="postal_code" value="230005"/>
+            <column name="house" value="05843"/>
+            <column name="apt" value="07"/>
+            <column name="last_updated" valueDate="2021-06-06T14:34:13.693931"/>
+        </insert>
+        <insert tableName="address">
+            <column name="id" valueNumeric="4"/>
+            <column name="country" value="Беларусь"/>
+            <column name="region" value="Гродненская"/>
+            <column name="district" value="Щучинский"/>
+            <column name="city" value="Valbonë"/>
+            <column name="street" value="Talmadge"/>
+            <column name="postal_code" value="230005"/>
+            <column name="house" value="1"/>
+            <column name="apt" value="6"/>
+            <column name="last_updated" valueDate="2021-06-06T14:34:13.693931"/>
+        </insert>
+        <insert tableName="address">
+            <column name="id" valueNumeric="5"/>
+            <column name="country" value="Беларусь"/>
+            <column name="region" value="Гродненская"/>
+            <column name="district" value="Гродненский"/>
+            <column name="city" value="Montes Claros"/>
+            <column name="street" value="Kensington"/>
+            <column name="postal_code" value="39400-000"/>
+            <column name="house" value="78523"/>
+            <column name="apt" value="77"/>
+            <column name="last_updated" valueDate="2021-06-06T14:34:13.693931"/>
+        </insert>
+        <insert tableName="address">
+            <column name="id" valueNumeric="6"/>
+            <column name="country" value="Беларусь"/>
+            <column name="region" value="Гродненская"/>
+            <column name="district" value="Гродненский"/>
+            <column name="city" value="Yanhe"/>
+            <column name="street" value="Heffernan"/>
+            <column name="postal_code" value="230005"/>
+            <column name="house" value="49220"/>
+            <column name="apt" value="1096"/>
+            <column name="last_updated" valueDate="2021-06-06T14:34:13.693931"/>
+        </insert>
+        <insert tableName="address">
+            <column name="id" valueNumeric="7"/>
+            <column name="country" value="Беларусь"/>
+            <column name="region" value="Гродненская"/>
+            <column name="district" value="Гродненский"/>
+            <column name="city" value="Matagami"/>
+            <column name="street" value="Barnett"/>
+            <column name="postal_code" value="N2M"/>
+            <column name="house" value="0866"/>
+            <column name="apt" value="245"/>
+            <column name="last_updated" valueDate="2021-06-06T14:34:13.693931"/>
+        </insert>
+        <insert tableName="address">
+            <column name="id" valueNumeric="8"/>
+            <column name="country" value="Беларусь"/>
+            <column name="region" value="Гродненская"/>
+            <column name="district" value="Гродненский"/>
+            <column name="city" value="Moñitos"/>
+            <column name="street" value="Stuart"/>
+            <column name="postal_code" value="231008"/>
+            <column name="house" value="114"/>
+            <column name="apt" value="0"/>
+            <column name="last_updated" valueDate="2021-06-06T14:34:13.693931"/>
+        </insert>
+        <insert tableName="address">
+            <column name="id" valueNumeric="9"/>
+            <column name="country" value="Беларусь"/>
+            <column name="region" value="Гродненская"/>
+            <column name="district" value="Гродненский"/>
+            <column name="city" value="Tongqiao"/>
+            <column name="street" value="International"/>
+            <column name="postal_code" value="230005"/>
+            <column name="house" value="88"/>
+            <column name="apt" value="83"/>
+            <column name="last_updated" valueDate="2021-06-06T14:34:13.693931"/>
+        </insert>
+        <insert tableName="address">
+            <column name="id" valueNumeric="10"/>
+            <column name="country" value="Беларусь"/>
+            <column name="region" value="Гродненская"/>
+            <column name="district" value="Гродненский"/>
+            <column name="city" value="San Marcos"/>
+            <column name="street" value="Armistice"/>
+            <column name="postal_code" value="704038"/>
+            <column name="house" value="387"/>
+            <column name="apt" value="578"/>
+            <column name="last_updated" valueDate="2021-06-06T14:34:13.693931"/>
+        </insert>
+        <insert tableName="address">
+            <column name="id" valueNumeric="11"/>
+            <column name="country" value="Беларусь"/>
+            <column name="region" value="Гродненская"/>
+            <column name="district" value="Гродненский"/>
+            <column name="city" value="Shuicha"/>
+            <column name="street" value="Fulton"/>
+            <column name="postal_code" value="230005"/>
+            <column name="house" value="8546"/>
+            <column name="apt" value="702"/>
+            <column name="last_updated" valueDate="2021-06-06T14:34:13.693931"/>
+        </insert>
+        <insert tableName="address">
+            <column name="id" valueNumeric="12"/>
+            <column name="country" value="Беларусь"/>
+            <column name="region" value="Гродненская"/>
+            <column name="district" value="Гродненский"/>
+            <column name="city" value="Sangumata"/>
+            <column name="street" value="American"/>
+            <column name="postal_code" value="230005"/>
+            <column name="house" value="22"/>
+            <column name="apt" value="031"/>
+            <column name="last_updated" valueDate="2021-06-06T14:34:13.693931"/>
+        </insert>
+        <insert tableName="address">
+            <column name="id" valueNumeric="13"/>
+            <column name="country" value="Беларусь"/>
+            <column name="region" value="Гродненская"/>
+            <column name="district" value="Вороновский"/>
+            <column name="city" value="Вороново"/>
+            <column name="street" value="International"/>
+            <column name="postal_code" value="230005"/>
+            <column name="house" value="88"/>
+            <column name="apt" value="753"/>
+            <column name="last_updated" valueDate="2021-06-06T14:34:13.693931"/>
+        </insert>
+        <insert tableName="address">
+            <column name="id" valueNumeric="14"/>
+            <column name="country" value="Беларусь"/>
+            <column name="region" value="Гродненская"/>
+            <column name="district" value="Щучинский"/>
+            <column name="city" value="Мосты"/>
+            <column name="street" value="International"/>
+            <column name="postal_code" value="230005"/>
+            <column name="house" value="1"/>
+            <column name="apt" value="53"/>
+            <column name="last_updated" valueDate="2021-06-06T14:34:13.693931"/>
+        </insert>
+        <insert tableName="address">
+            <column name="id" valueNumeric="15"/>
+            <column name="country" value="Беларусь"/>
+            <column name="region" value="Гродненская"/>
+            <column name="district" value="Гродненский"/>
+            <column name="city" value="Гродно"/>
+            <column name="street" value="International"/>
+            <column name="postal_code" value="230005"/>
+            <column name="house" value="11"/>
+            <column name="apt" value="45"/>
+            <column name="last_updated" valueDate="2021-06-06T14:34:13.693931"/>
+        </insert>
+        <insert tableName="address">
+            <column name="id" valueNumeric="16"/>
+            <column name="country" value="Беларусь"/>
+            <column name="region" value="Гродненская"/>
+            <column name="district" value="Гродненский"/>
+            <column name="city" value="Гродно"/>
+            <column name="street" value="Dominicnaskaya"/>
+            <column name="postal_code" value="230005"/>
+            <column name="house" value="58"/>
+            <column name="apt" value="76"/>
+            <column name="last_updated" valueDate="2021-06-06T14:34:13.693931"/>
+        </insert>
+        <insert tableName="address">
+            <column name="id" valueNumeric="17"/>
+            <column name="country" value="Беларусь"/>
+            <column name="region" value="Гродненская"/>
+            <column name="district" value="Гродненский"/>
+            <column name="city" value="Гродно"/>
+            <column name="street" value="Dominicnaskaya"/>
+            <column name="postal_code" value="23705"/>
+            <column name="house" value="67"/>
+            <column name="apt" value="786"/>
+            <column name="last_updated" valueDate="2021-06-06T14:34:13.693931"/>
+        </insert>
+        <insert tableName="address">
+            <column name="id" valueNumeric="18"/>
+            <column name="country" value="Беларусь"/>
+            <column name="region" value="Гродненская"/>
+            <column name="district" value="Гродненский"/>
+            <column name="city" value="Гродно"/>
+            <column name="street" value="Dominicnaskaya"/>
+            <column name="postal_code" value="28785"/>
+            <column name="house" value="12"/>
+            <column name="apt" value="94"/>
+            <column name="last_updated" valueDate="2021-06-06T14:34:13.693931"/>
+        </insert>
+        <insert tableName="address">
+            <column name="id" valueNumeric="19"/>
+            <column name="country" value="Беларусь"/>
+            <column name="region" value="Гродненская"/>
+            <column name="district" value="Щучинский"/>
+            <column name="city" value="Василишки"/>
+            <column name="street" value="International"/>
+            <column name="postal_code" value="29885"/>
+            <column name="house" value="10"/>
+            <column name="apt" value="90"/>
+            <column name="last_updated" valueDate="2021-06-06T14:34:13.693931"/>
+        </insert>
+        <insert tableName="address">
+            <column name="id" valueNumeric="20"/>
+            <column name="country" value="Беларусь"/>
+            <column name="region" value="Гродненская"/>
+            <column name="district" value="Щучинский"/>
+            <column name="city" value="Василишки"/>
+            <column name="street" value="International"/>
+            <column name="postal_code" value="29885"/>
+            <column name="house" value="9"/>
+            <column name="apt" value="95"/>
+            <column name="last_updated" valueDate="2021-06-06T14:34:13.693931"/>
+        </insert>
+        <insert tableName="address">
+            <column name="id" valueNumeric="21"/>
+            <column name="country" value="Беларусь"/>
+            <column name="region" value="Гродненская"/>
+            <column name="district" value="Щучинский"/>
+            <column name="city" value="Василишки"/>
+            <column name="street" value="International"/>
+            <column name="postal_code" value="29885"/>
+            <column name="house" value="87"/>
+            <column name="apt" value="100"/>
+            <column name="last_updated" valueDate="2021-06-06T14:34:13.693931"/>
+        </insert>
+        <insert tableName="address">
+            <column name="id" valueNumeric="22"/>
+            <column name="country" value="Stockholm"/>
+            <column name="region" value="Гродненская"/>
+            <column name="district" value="Hägersten"/>
+            <column name="city" value="Alpine"/>
+            <column name="street" value="International"/>
+            <column name="postal_code" value="126-36"/>
+            <column name="house" value="47"/>
+            <column name="apt" value="1"/>
+            <column name="last_updated" valueDate="2021-06-06T14:34:13.693931"/>
+        </insert>
+        <insert tableName="address">
+            <column name="id" valueNumeric="23"/>
+            <column name="country" value="Беларусь"/>
+            <column name="region" value="Гродненская"/>
+            <column name="district" value="Filipowice"/>
+            <column name="city" value="Autumn Leaf"/>
+            <column name="street" value="Fulton"/>
+            <column name="postal_code" value="32-327"/>
+            <column name="house" value="42"/>
+            <column name="apt" value="11605"/>
+            <column name="last_updated" valueDate="2021-06-06T14:34:13.693931"/>
+        </insert>
+        <insert tableName="address">
+            <column name="id" valueNumeric="24"/>
+            <column name="country" value="Беларусь"/>
+            <column name="region" value="Гродненская"/>
+            <column name="district" value="Semanding"/>
+            <column name="city" value="Aberg"/>
+            <column name="street" value="Fulton"/>
+            <column name="postal_code" value="23056"/>
+            <column name="house" value="96"/>
+            <column name="apt" value="01"/>
+            <column name="last_updated" valueDate="2021-06-06T14:34:13.693931"/>
+        </insert>
+        <insert tableName="address">
+            <column name="id" valueNumeric="25"/>
+            <column name="country" value="Беларусь"/>
+            <column name="region" value="Гродненская"/>
+            <column name="district" value="Kamenka"/>
+            <column name="city" value="Schurz"/>
+            <column name="street" value="Stuart"/>
+            <column name="postal_code" value="654sfa"/>
+            <column name="house" value="93"/>
+            <column name="apt" value="021"/>
+            <column name="last_updated" valueDate="2021-06-06T14:34:13.693931"/>
+        </insert>
+        <insert tableName="address">
+            <column name="id" valueNumeric="26"/>
+            <column name="country" value="Беларусь"/>
+            <column name="region" value="Гродненская"/>
+            <column name="district" value="Allkaj"/>
+            <column name="city" value="Mosinee"/>
+            <column name="street" value="Stuart"/>
+            <column name="postal_code" value="64165"/>
+            <column name="house" value="76"/>
+            <column name="apt" value="60491"/>
+            <column name="last_updated" valueDate="2021-06-06T14:34:13.693931"/>
+        </insert>
+        <insert tableName="address">
+            <column name="id" valueNumeric="27"/>
+            <column name="country" value="Беларусь"/>
+            <column name="region" value="Гродненская"/>
+            <column name="district" value="Breu"/>
+            <column name="city" value="Bluejay"/>
+            <column name="street" value="Armistice"/>
+            <column name="postal_code" value="a248dsf"/>
+            <column name="house" value="4"/>
+            <column name="apt" value="1"/>
+            <column name="last_updated" valueDate="2021-06-06T14:34:13.693931"/>
+        </insert>
+        <insert tableName="address">
+            <column name="id" valueNumeric="28"/>
+            <column name="country" value="Беларусь"/>
+            <column name="region" value="Гродненская"/>
+            <column name="district" value="Constanza"/>
+            <column name="city" value="Montana"/>
+            <column name="street" value="Armistice"/>
+            <column name="postal_code" value="11154"/>
+            <column name="house" value="0692"/>
+            <column name="apt" value="3097"/>
+            <column name="last_updated" valueDate="2021-06-06T14:34:13.693931"/>
+        </insert>
+        <insert tableName="address">
+            <column name="id" valueNumeric="29"/>
+            <column name="country" value="Беларусь"/>
+            <column name="region" value="Veracruz Llave"/>
+            <column name="district" value="Paleran"/>
+            <column name="city" value="Swallow"/>
+            <column name="street" value="Dominicnaskaya"/>
+            <column name="postal_code" value="16541"/>
+            <column name="house" value="046"/>
+            <column name="apt" value="2"/>
+            <column name="last_updated" valueDate="2021-06-06T14:34:13.693931"/>
+        </insert>
+        <insert tableName="address">
+            <column name="id" valueNumeric="30"/>
+            <column name="country" value="Беларусь"/>
+            <column name="region" value="Гродненская"/>
+            <column name="district" value="Dana"/>
+            <column name="city" value="Gina"/>
+            <column name="street" value="Dominicnaskaya"/>
+            <column name="postal_code" value="6545498"/>
+            <column name="house" value="7750"/>
+            <column name="apt" value="51045"/>
+            <column name="last_updated" valueDate="2021-06-06T14:34:13.693931"/>
+        </insert>
+        <insert tableName="address">
+            <column name="id" valueNumeric="31"/>
+            <column name="country" value="Беларусь"/>
+            <column name="region" value="Гродненская"/>
+            <column name="district" value="Pirapora"/>
+            <column name="city" value="7th"/>
+            <column name="street" value="Barnett"/>
+            <column name="postal_code" value="874-408"/>
+            <column name="house" value="2"/>
+            <column name="apt" value="18"/>
+            <column name="last_updated" valueDate="2021-06-06T14:34:13.693931"/>
+        </insert>
+        <insert tableName="address">
+            <column name="id" valueNumeric="32"/>
+            <column name="country" value="Беларусь"/>
+            <column name="region" value="Гродненская"/>
+            <column name="district" value="Tumaco"/>
+            <column name="city" value="Division"/>
+            <column name="street" value="Barnett"/>
+            <column name="postal_code" value="984568"/>
+            <column name="house" value="093"/>
+            <column name="apt" value="2"/>
+            <column name="last_updated" valueDate="2021-06-06T14:34:13.693931"/>
+        </insert>
+        <insert tableName="address">
+            <column name="id" valueNumeric="33"/>
+            <column name="country" value="Беларусь"/>
+            <column name="region" value="Madrid"/>
+            <column name="district" value="Laocheng"/>
+            <column name="city" value="Victoria"/>
+            <column name="street" value="Barnett"/>
+            <column name="postal_code" value="898"/>
+            <column name="house" value="81"/>
+            <column name="apt" value="4"/>
+            <column name="last_updated" valueDate="2021-06-06T14:34:13.693931"/>
+        </insert>
+        <insert tableName="address">
+            <column name="id" valueNumeric="34"/>
+            <column name="country" value="Беларусь"/>
+            <column name="region" value="Madrid"/>
+            <column name="district" value="Laocheng"/>
+            <column name="city" value="Victoria"/>
+            <column name="street" value="Bar"/>
+            <column name="postal_code" value="898"/>
+            <column name="house" value="747"/>
+            <column name="apt" value="3"/>
+            <column name="last_updated" valueDate="2021-06-06T14:34:13.693931"/>
+        </insert>
+    </changeSet>
+    <changeSet author="Aliaksandr Rachko" id="2021-06-06--04-initial-test-data-user-2">
+        <insert tableName="user">
+            <column name="id" valueNumeric="2"/>
+            <column name="email" value="eget.odio@Donec.ca"/>
+            <column name="username" value="Armand Parrish"/>
+            <column name="first_name" value="Cleo"/>
+            <column name="last_name" value="Macias"/>
+            <column name="middle_name" value="Gretchen"/>
+            <column name="phone_number" value="{&quot;countryCode&quot;: &quot;375&quot;, &quot;nationalNumber&quot;: &quot;296908407&quot;}"/>
+            <column name="address_id" valueNumeric="2"/>
+            <column name="gender" value="m"/>
+            <column name="birthday" valueDate="2021-03-01"/>
+            <column name="password" value="$2a$10$Z1/.F4bRuyOGyL7NQrmjhufHf8XrHIEjPfBz9tlPbPcWrLpvPWKfq"/>
+            <column name="enabled" valueBoolean="true"/>
+            <column name="avatar_url" value="/img/users/avatars/default_male_avatar.png"/>
+            <column name="user_created" valueDate="2021-06-06T14:34:14.486389"/>
+            <column name="user_updated" valueDate="2021-06-06T14:34:14.486389"/>
+        </insert>
+        <insert tableName="user">
+            <column name="id" valueNumeric="3"/>
+            <column name="email" value="ligula.eu@litoratorquent.net"/>
+            <column name="username" value="Azalia Rosario"/>
+            <column name="first_name" value="Raven"/>
+            <column name="last_name" value="Barry"/>
+            <column name="middle_name" value="Jordan"/>
+            <column name="phone_number" value="{&quot;countryCode&quot;: &quot;375&quot;, &quot;nationalNumber&quot;: &quot;296270309&quot;}"/>
+            <column name="address_id" valueNumeric="3"/>
+            <column name="gender" value="m"/>
+            <column name="birthday" valueDate="2022-02-25"/>
+            <column name="password" value="$2a$10$Z1/.F4bRuyOGyL7NQrmjhufHf8XrHIEjPfBz9tlPbPcWrLpvPWKfq"/>
+            <column name="enabled" valueBoolean="true"/>
+            <column name="avatar_url" value="/img/users/avatars/default_male_avatar.png"/>
+            <column name="user_created" valueDate="2021-06-06T14:34:14.486389"/>
+            <column name="user_updated" valueDate="2021-06-06T14:34:14.486389"/>
+        </insert>
+        <insert tableName="user">
+            <column name="id" valueNumeric="4"/>
+            <column name="email" value="id@acarcuNunc.edu"/>
+            <column name="username" value="Leah Moody"/>
+            <column name="first_name" value="Mark"/>
+            <column name="last_name" value="Mckinney"/>
+            <column name="middle_name" value="Dalton"/>
+            <column name="phone_number" value="{&quot;countryCode&quot;: &quot;375&quot;, &quot;nationalNumber&quot;: &quot;339685203&quot;}"/>
+            <column name="address_id" valueNumeric="4"/>
+            <column name="gender" value="m"/>
+            <column name="birthday" valueDate="2020-10-01"/>
+            <column name="password" value="$2a$10$Z1/.F4bRuyOGyL7NQrmjhufHf8XrHIEjPfBz9tlPbPcWrLpvPWKfq"/>
+            <column name="enabled" valueBoolean="true"/>
+            <column name="avatar_url" value="/img/users/avatars/default_male_avatar.png"/>
+            <column name="user_created" valueDate="2021-06-06T14:34:14.486389"/>
+            <column name="user_updated" valueDate="2021-06-06T14:34:14.486389"/>
+        </insert>
+        <insert tableName="user">
+            <column name="id" valueNumeric="5"/>
+            <column name="email" value="urna.Vivamus.molestie@suscipitest.ca"/>
+            <column name="username" value="Isabella Ford"/>
+            <column name="first_name" value="Keefe"/>
+            <column name="last_name" value="Terry"/>
+            <column name="middle_name" value="Celeste"/>
+            <column name="phone_number" value="{&quot;countryCode&quot;: &quot;375&quot;, &quot;nationalNumber&quot;: &quot;443526222&quot;}"/>
+            <column name="address_id" valueNumeric="5"/>
+            <column name="gender" value="m"/>
+            <column name="birthday" valueDate="2021-08-23"/>
+            <column name="password" value="$2a$10$Z1/.F4bRuyOGyL7NQrmjhufHf8XrHIEjPfBz9tlPbPcWrLpvPWKfq"/>
+            <column name="enabled" valueBoolean="true"/>
+            <column name="avatar_url" value="/img/users/avatars/default_male_avatar.png"/>
+            <column name="user_created" valueDate="2021-06-06T14:34:14.486389"/>
+            <column name="user_updated" valueDate="2021-06-06T14:34:14.486389"/>
+        </insert>
+        <insert tableName="user">
+            <column name="id" valueNumeric="6"/>
+            <column name="email" value="dictum@mus.net"/>
+            <column name="username" value="Jaime Castillo"/>
+            <column name="first_name" value="Fredericka"/>
+            <column name="last_name" value="York"/>
+            <column name="middle_name" value="Armand"/>
+            <column name="phone_number" value="{&quot;countryCode&quot;: &quot;375&quot;, &quot;nationalNumber&quot;: &quot;338526313&quot;}"/>
+            <column name="address_id" valueNumeric="6"/>
+            <column name="gender" value="f"/>
+            <column name="birthday" valueDate="2022-04-04"/>
+            <column name="password" value="$2a$10$Z1/.F4bRuyOGyL7NQrmjhufHf8XrHIEjPfBz9tlPbPcWrLpvPWKfq"/>
+            <column name="enabled" valueBoolean="true"/>
+            <column name="avatar_url" value="/img/users/avatars/default_female_avatar.png"/>
+            <column name="user_created" valueDate="2021-06-06T14:34:14.486389"/>
+            <column name="user_updated" valueDate="2021-06-06T14:34:14.486389"/>
+        </insert>
+        <insert tableName="user">
+            <column name="id" valueNumeric="7"/>
+            <column name="email" value="nec@dolorsit.co.uk"/>
+            <column name="username" value="Hollee Mejia"/>
+            <column name="first_name" value="Winter"/>
+            <column name="last_name" value="Vasquez"/>
+            <column name="middle_name" value="Brenda"/>
+            <column name="phone_number" value="{&quot;countryCode&quot;: &quot;375&quot;, &quot;nationalNumber&quot;: &quot;337728818&quot;}"/>
+            <column name="address_id" valueNumeric="7"/>
+            <column name="gender" value="f"/>
+            <column name="birthday" valueDate="2020-12-07"/>
+            <column name="password" value="$2a$10$Z1/.F4bRuyOGyL7NQrmjhufHf8XrHIEjPfBz9tlPbPcWrLpvPWKfq"/>
+            <column name="enabled" valueBoolean="true"/>
+            <column name="avatar_url" value="/img/users/avatars/default_female_avatar.png"/>
+            <column name="user_created" valueDate="2021-06-06T14:34:14.486389"/>
+            <column name="user_updated" valueDate="2021-06-06T14:34:14.486389"/>
+        </insert>
+        <insert tableName="user">
+            <column name="id" valueNumeric="8"/>
+            <column name="email" value="ac.mattis.ornare@elementumat.org"/>
+            <column name="username" value="Octavius Case"/>
+            <column name="first_name" value="Phyllis"/>
+            <column name="last_name" value="Christian"/>
+            <column name="middle_name" value="Luke"/>
+            <column name="phone_number" value="{&quot;countryCode&quot;: &quot;375&quot;, &quot;nationalNumber&quot;: &quot;299467819&quot;}"/>
+            <column name="address_id" valueNumeric="8"/>
+            <column name="gender" value="u"/>
+            <column name="birthday" valueDate="2021-04-02"/>
+            <column name="password" value="$2a$10$Z1/.F4bRuyOGyL7NQrmjhufHf8XrHIEjPfBz9tlPbPcWrLpvPWKfq"/>
+            <column name="enabled" valueBoolean="true"/>
+            <column name="avatar_url" value="/img/users/avatars/default_unknown_avatar.png"/>
+            <column name="user_created" valueDate="2021-06-06T14:34:14.486389"/>
+            <column name="user_updated" valueDate="2021-06-06T14:34:14.486389"/>
+        </insert>
+        <insert tableName="user">
+            <column name="id" valueNumeric="9"/>
+            <column name="email" value="erat.Sed.nunc@temporbibendum.org"/>
+            <column name="username" value="Xena Albert"/>
+            <column name="first_name" value="Fulton"/>
+            <column name="last_name" value="Mcbride"/>
+            <column name="middle_name" value="Marny"/>
+            <column name="phone_number" value="{&quot;countryCode&quot;: &quot;375&quot;, &quot;nationalNumber&quot;: &quot;344555666&quot;}"/>
+            <column name="address_id" valueNumeric="9"/>
+            <column name="gender" value="u"/>
+            <column name="birthday" valueDate="2022-03-22"/>
+            <column name="password" value="$2a$10$Z1/.F4bRuyOGyL7NQrmjhufHf8XrHIEjPfBz9tlPbPcWrLpvPWKfq"/>
+            <column name="enabled" valueBoolean="true"/>
+            <column name="avatar_url" value="/img/users/avatars/default_unknown_avatar.png"/>
+            <column name="user_created" valueDate="2021-06-06T14:34:14.486389"/>
+            <column name="user_updated" valueDate="2021-06-06T14:34:14.486389"/>
+        </insert>
+        <insert tableName="user">
+            <column name="id" valueNumeric="10"/>
+            <column name="email" value="dolor.nonummy.ac@neque.com"/>
+            <column name="username" value="Ivy Whitfield"/>
+            <column name="first_name" value="Lara"/>
+            <column name="last_name" value="Forbes"/>
+            <column name="middle_name" value="Anjolie"/>
+            <column name="phone_number" value="{&quot;countryCode&quot;: &quot;375&quot;, &quot;nationalNumber&quot;: &quot;294574811&quot;}"/>
+            <column name="address_id" valueNumeric="10"/>
+            <column name="gender" value="f"/>
+            <column name="birthday" valueDate="2022-03-21"/>
+            <column name="password" value="$2a$10$Z1/.F4bRuyOGyL7NQrmjhufHf8XrHIEjPfBz9tlPbPcWrLpvPWKfq"/>
+            <column name="enabled" valueBoolean="true"/>
+            <column name="avatar_url" value="/img/users/avatars/default_unknown_avatar.png"/>
+            <column name="user_created" valueDate="2021-06-06T14:34:14.486389"/>
+            <column name="user_updated" valueDate="2021-06-06T14:34:14.486389"/>
+        </insert>
+        <insert tableName="user">
+            <column name="id" valueNumeric="11"/>
+            <column name="email" value="mauris@malesuada.org"/>
+            <column name="username" value="Claire Contreras"/>
+            <column name="first_name" value="Kimberly"/>
+            <column name="last_name" value="Castaneda"/>
+            <column name="middle_name" value="Darryl"/>
+            <column name="phone_number" value="{&quot;countryCode&quot;: &quot;375&quot;, &quot;nationalNumber&quot;: &quot;292424054&quot;}"/>
+            <column name="address_id" valueNumeric="11"/>
+            <column name="gender" value="m"/>
+            <column name="birthday" valueDate="2021-10-23"/>
+            <column name="password" value="$2a$10$Z1/.F4bRuyOGyL7NQrmjhufHf8XrHIEjPfBz9tlPbPcWrLpvPWKfq"/>
+            <column name="enabled" valueBoolean="true"/>
+            <column name="avatar_url" value="/img/users/avatars/default_unknown_avatar.png"/>
+            <column name="user_created" valueDate="2021-06-06T14:34:14.486389"/>
+            <column name="user_updated" valueDate="2021-06-06T14:34:14.486389"/>
+        </insert>
+        <insert tableName="user">
+            <column name="id" valueNumeric="12"/>
+            <column name="email" value="wnewellkt@taobao.com"/>
+            <column name="username" value="wnewellkt"/>
+            <column name="first_name" value="Léa"/>
+            <column name="last_name" value="Newell"/>
+            <column name="middle_name" value="Weber"/>
+            <column name="phone_number" value="{&quot;countryCode&quot;: &quot;375&quot;, &quot;nationalNumber&quot;: &quot;7915400347&quot;}"/>
+            <column name="address_id" valueNumeric="12"/>
+            <column name="gender" value="u"/>
+            <column name="birthday" valueDate="2018-04-29"/>
+            <column name="password" value="$2a$10$Z1/.F4bRuyOGyL7NQrmjhufHf8XrHIEjPfBz9tlPbPcWrLpvPWKfq"/>
+            <column name="enabled" valueBoolean="true"/>
+            <column name="avatar_url" value="/img/users/avatars/default_unknown_avatar.png"/>
+            <column name="user_created" valueDate="2021-06-06T14:34:14.486389"/>
+            <column name="user_updated" valueDate="2021-06-06T14:34:14.486389"/>
+        </insert>
+        <insert tableName="user">
+            <column name="id" valueNumeric="13"/>
+            <column name="email" value="cjaquemeku@apple.com"/>
+            <column name="username" value="cjaquemeku"/>
+            <column name="first_name" value="Magdalène"/>
+            <column name="last_name" value="Jaqueme"/>
+            <column name="middle_name" value="Christie"/>
+            <column name="phone_number" value="{&quot;countryCode&quot;: &quot;375&quot;, &quot;nationalNumber&quot;: &quot;4306703018&quot;}"/>
+            <column name="address_id" valueNumeric="13"/>
+            <column name="gender" value="u"/>
+            <column name="birthday" valueDate="2020-07-14"/>
+            <column name="password" value="$2a$10$Z1/.F4bRuyOGyL7NQrmjhufHf8XrHIEjPfBz9tlPbPcWrLpvPWKfq"/>
+            <column name="enabled" valueBoolean="true"/>
+            <column name="avatar_url" value="/img/users/avatars/default_unknown_avatar.png"/>
+            <column name="user_created" valueDate="2021-06-06T14:34:14.486389"/>
+            <column name="user_updated" valueDate="2021-06-06T14:34:14.486389"/>
+        </insert>
+        <insert tableName="user">
+            <column name="id" valueNumeric="14"/>
+            <column name="email" value="gcantillonkv@youtube.com"/>
+            <column name="username" value="gcantillonkv"/>
+            <column name="first_name" value="Ruò"/>
+            <column name="last_name" value="Cantillon"/>
+            <column name="middle_name" value="Gardiner"/>
+            <column name="phone_number" value="{&quot;countryCode&quot;: &quot;375&quot;, &quot;nationalNumber&quot;: &quot;9769507984&quot;}"/>
+            <column name="address_id" valueNumeric="14"/>
+            <column name="gender" value="u"/>
+            <column name="birthday" valueDate="2018-06-29"/>
+            <column name="password" value="$2a$10$Z1/.F4bRuyOGyL7NQrmjhufHf8XrHIEjPfBz9tlPbPcWrLpvPWKfq"/>
+            <column name="enabled" valueBoolean="true"/>
+            <column name="avatar_url" value="/img/users/avatars/default_unknown_avatar.png"/>
+            <column name="user_created" valueDate="2021-06-06T14:34:14.486389"/>
+            <column name="user_updated" valueDate="2021-06-06T14:34:14.486389"/>
+        </insert>
+        <insert tableName="user">
+            <column name="id" valueNumeric="15"/>
+            <column name="email" value="evaninkw@godaddy.com"/>
+            <column name="username" value="evaninkw"/>
+            <column name="first_name" value="Mélinda"/>
+            <column name="last_name" value="Vanin"/>
+            <column name="middle_name" value="Evita"/>
+            <column name="phone_number" value="{&quot;countryCode&quot;: &quot;375&quot;, &quot;nationalNumber&quot;: &quot;5178815966&quot;}"/>
+            <column name="address_id" valueNumeric="15"/>
+            <column name="gender" value="u"/>
+            <column name="birthday" valueDate="2020-05-23"/>
+            <column name="password" value="$2a$10$Z1/.F4bRuyOGyL7NQrmjhufHf8XrHIEjPfBz9tlPbPcWrLpvPWKfq"/>
+            <column name="enabled" valueBoolean="true"/>
+            <column name="avatar_url" value="/img/users/avatars/default_unknown_avatar.png"/>
+            <column name="user_created" valueDate="2021-06-06T14:34:14.486389"/>
+            <column name="user_updated" valueDate="2021-06-06T14:34:14.486389"/>
+        </insert>
+        <insert tableName="user">
+            <column name="id" valueNumeric="16"/>
+            <column name="email" value="zwillcottkx@mapy.cz"/>
+            <column name="username" value="zwillcottkx"/>
+            <column name="first_name" value="Vérane"/>
+            <column name="last_name" value="Willcott"/>
+            <column name="middle_name" value="Zorina"/>
+            <column name="phone_number" value="{&quot;countryCode&quot;: &quot;375&quot;, &quot;nationalNumber&quot;: &quot;4145688080&quot;}"/>
+            <column name="address_id" valueNumeric="16"/>
+            <column name="gender" value="u"/>
+            <column name="birthday" valueDate="2019-02-21"/>
+            <column name="password" value="$2a$10$Z1/.F4bRuyOGyL7NQrmjhufHf8XrHIEjPfBz9tlPbPcWrLpvPWKfq"/>
+            <column name="enabled" valueBoolean="true"/>
+            <column name="avatar_url" value="/img/users/avatars/default_unknown_avatar.png"/>
+            <column name="user_created" valueDate="2021-06-06T14:34:14.486389"/>
+            <column name="user_updated" valueDate="2021-06-06T14:34:14.486389"/>
+        </insert>
+        <insert tableName="user">
+            <column name="id" valueNumeric="17"/>
+            <column name="email" value="rborthramky@goo.gl"/>
+            <column name="username" value="rborthramky"/>
+            <column name="first_name" value="Marie-hélène"/>
+            <column name="last_name" value="Borthram"/>
+            <column name="middle_name" value="Ryun"/>
+            <column name="phone_number" value="{&quot;countryCode&quot;: &quot;375&quot;, &quot;nationalNumber&quot;: &quot;3589254689&quot;}"/>
+            <column name="address_id" valueNumeric="17"/>
+            <column name="gender" value="f"/>
+            <column name="birthday" valueDate="2019-10-26"/>
+            <column name="password" value="$2a$10$Z1/.F4bRuyOGyL7NQrmjhufHf8XrHIEjPfBz9tlPbPcWrLpvPWKfq"/>
+            <column name="enabled" valueBoolean="true"/>
+            <column name="avatar_url" value="/img/users/avatars/default_female_avatar.png"/>
+            <column name="user_created" valueDate="2021-06-06T14:34:14.486389"/>
+            <column name="user_updated" valueDate="2021-06-06T14:34:14.486389"/>
+        </insert>
+        <insert tableName="user">
+            <column name="id" valueNumeric="18"/>
+            <column name="email" value="lsinnattkz@blogspot.com"/>
+            <column name="username" value="lsinnattkz"/>
+            <column name="first_name" value="Dà"/>
+            <column name="last_name" value="Sinnatt"/>
+            <column name="middle_name" value="Luke"/>
+            <column name="phone_number" value="{&quot;countryCode&quot;: &quot;375&quot;, &quot;nationalNumber&quot;: &quot;9478276926&quot;}"/>
+            <column name="address_id" valueNumeric="18"/>
+            <column name="gender" value="f"/>
+            <column name="birthday" valueDate="2021-04-11"/>
+            <column name="password" value="$2a$10$Z1/.F4bRuyOGyL7NQrmjhufHf8XrHIEjPfBz9tlPbPcWrLpvPWKfq"/>
+            <column name="enabled" valueBoolean="true"/>
+            <column name="avatar_url" value="/img/users/avatars/default_female_avatar.png"/>
+            <column name="user_created" valueDate="2021-06-06T14:34:14.486389"/>
+            <column name="user_updated" valueDate="2021-06-06T14:34:14.486389"/>
+        </insert>
+        <insert tableName="user">
+            <column name="id" valueNumeric="19"/>
+            <column name="email" value="asydenhaml0@elegantthemes.com"/>
+            <column name="username" value="asydenhaml0"/>
+            <column name="first_name" value="Mélissandre"/>
+            <column name="last_name" value="Sydenham"/>
+            <column name="middle_name" value="Alaster"/>
+            <column name="phone_number" value="{&quot;countryCode&quot;: &quot;375&quot;, &quot;nationalNumber&quot;: &quot;2652629456&quot;}"/>
+            <column name="address_id" valueNumeric="19"/>
+            <column name="gender" value="f"/>
+            <column name="birthday" valueDate="2020-08-13"/>
+            <column name="password" value="$2a$10$Z1/.F4bRuyOGyL7NQrmjhufHf8XrHIEjPfBz9tlPbPcWrLpvPWKfq"/>
+            <column name="enabled" valueBoolean="true"/>
+            <column name="avatar_url" value="/img/users/avatars/default_female_avatar.png"/>
+            <column name="user_created" valueDate="2021-06-06T14:34:14.486389"/>
+            <column name="user_updated" valueDate="2021-06-06T14:34:14.486389"/>
+        </insert>
+        <insert tableName="user">
+            <column name="id" valueNumeric="20"/>
+            <column name="email" value="pgiannasil1@dmoz.org"/>
+            <column name="username" value="pgiannasil1"/>
+            <column name="first_name" value="Geneviève"/>
+            <column name="last_name" value="Giannasi"/>
+            <column name="middle_name" value="Paulie"/>
+            <column name="phone_number" value="{&quot;countryCode&quot;: &quot;375&quot;, &quot;nationalNumber&quot;: &quot;9948997234&quot;}"/>
+            <column name="address_id" valueNumeric="20"/>
+            <column name="gender" value="f"/>
+            <column name="birthday" valueDate="2020-03-08"/>
+            <column name="password" value="$2a$10$Z1/.F4bRuyOGyL7NQrmjhufHf8XrHIEjPfBz9tlPbPcWrLpvPWKfq"/>
+            <column name="enabled" valueBoolean="true"/>
+            <column name="avatar_url" value="/img/users/avatars/default_female_avatar.png"/>
+            <column name="user_created" valueDate="2021-06-06T14:34:14.486389"/>
+            <column name="user_updated" valueDate="2021-06-06T14:34:14.486389"/>
+        </insert>
+        <insert tableName="user">
+            <column name="id" valueNumeric="21"/>
+            <column name="email" value="kkentishl2@ted.com"/>
+            <column name="username" value="kkentishl2"/>
+            <column name="first_name" value="Léandre"/>
+            <column name="last_name" value="Kentish"/>
+            <column name="middle_name" value="Kass"/>
+            <column name="phone_number" value="{&quot;countryCode&quot;: &quot;375&quot;, &quot;nationalNumber&quot;: &quot;7911654280&quot;}"/>
+            <column name="address_id" valueNumeric="21"/>
+            <column name="gender" value="f"/>
+            <column name="birthday" valueDate="2018-11-08"/>
+            <column name="password" value="$2a$10$Z1/.F4bRuyOGyL7NQrmjhufHf8XrHIEjPfBz9tlPbPcWrLpvPWKfq"/>
+            <column name="enabled" valueBoolean="true"/>
+            <column name="avatar_url" value="/img/users/avatars/default_female_avatar.png"/>
+            <column name="user_created" valueDate="2021-06-06T14:34:14.486389"/>
+            <column name="user_updated" valueDate="2021-06-06T14:34:14.486389"/>
+        </insert>
+        <insert tableName="user">
+            <column name="id" valueNumeric="22"/>
+            <column name="email" value="ainchboardl3@cyberchimps.com"/>
+            <column name="username" value="ainchboardl3"/>
+            <column name="first_name" value="Göran"/>
+            <column name="last_name" value="Inchboard"/>
+            <column name="middle_name" value="Andeee"/>
+            <column name="phone_number" value="{&quot;countryCode&quot;: &quot;375&quot;, &quot;nationalNumber&quot;: &quot;5875670233&quot;}"/>
+            <column name="address_id" valueNumeric="22"/>
+            <column name="gender" value="f"/>
+            <column name="birthday" valueDate="2018-09-08"/>
+            <column name="password" value="$2a$10$Z1/.F4bRuyOGyL7NQrmjhufHf8XrHIEjPfBz9tlPbPcWrLpvPWKfq"/>
+            <column name="enabled" valueBoolean="true"/>
+            <column name="avatar_url" value="/img/users/avatars/default_female_avatar.png"/>
+            <column name="user_created" valueDate="2021-06-06T14:34:14.486389"/>
+            <column name="user_updated" valueDate="2021-06-06T14:34:14.486389"/>
+        </insert>
+        <insert tableName="user">
+            <column name="id" valueNumeric="23"/>
+            <column name="email" value="kfourcadel4@reverbnation.com"/>
+            <column name="username" value="kfourcadel4"/>
+            <column name="first_name" value="Aloïs"/>
+            <column name="last_name" value="Fourcade"/>
+            <column name="middle_name" value="Keslie"/>
+            <column name="phone_number" value="{&quot;countryCode&quot;: &quot;375&quot;, &quot;nationalNumber&quot;: &quot;5878816423&quot;}"/>
+            <column name="address_id" valueNumeric="23"/>
+            <column name="gender" value="f"/>
+            <column name="birthday" valueDate="2018-06-30"/>
+            <column name="password" value="$2a$10$Z1/.F4bRuyOGyL7NQrmjhufHf8XrHIEjPfBz9tlPbPcWrLpvPWKfq"/>
+            <column name="enabled" valueBoolean="true"/>
+            <column name="avatar_url" value="/img/users/avatars/default_female_avatar.png"/>
+            <column name="user_created" valueDate="2021-06-06T14:34:14.486389"/>
+            <column name="user_updated" valueDate="2021-06-06T14:34:14.486389"/>
+        </insert>
+        <insert tableName="user">
+            <column name="id" valueNumeric="24"/>
+            <column name="email" value="ddorninl5@angelfire.com"/>
+            <column name="username" value="ddorninl5"/>
+            <column name="first_name" value="Intéressant"/>
+            <column name="last_name" value="Dornin"/>
+            <column name="middle_name" value="Dannel"/>
+            <column name="phone_number" value="{&quot;countryCode&quot;: &quot;375&quot;, &quot;nationalNumber&quot;: &quot;7583032901&quot;}"/>
+            <column name="address_id" valueNumeric="24"/>
+            <column name="gender" value="f"/>
+            <column name="birthday" valueDate="2020-07-01"/>
+            <column name="password" value="$2a$10$Z1/.F4bRuyOGyL7NQrmjhufHf8XrHIEjPfBz9tlPbPcWrLpvPWKfq"/>
+            <column name="enabled" valueBoolean="true"/>
+            <column name="avatar_url" value="/img/users/avatars/default_female_avatar.png"/>
+            <column name="user_created" valueDate="2021-06-06T14:34:14.486389"/>
+            <column name="user_updated" valueDate="2021-06-06T14:34:14.486389"/>
+        </insert>
+        <insert tableName="user">
+            <column name="id" valueNumeric="25"/>
+            <column name="email" value="gmollenl6@drupal.org"/>
+            <column name="username" value="gmollenl6"/>
+            <column name="first_name" value="Håkan"/>
+            <column name="last_name" value="Mollen"/>
+            <column name="middle_name" value="Gwyneth"/>
+            <column name="phone_number" value="{&quot;countryCode&quot;: &quot;375&quot;, &quot;nationalNumber&quot;: &quot;9558773126&quot;}"/>
+            <column name="address_id" valueNumeric="25"/>
+            <column name="gender" value="f"/>
+            <column name="birthday" valueDate="2020-10-10"/>
+            <column name="password" value="$2a$10$Z1/.F4bRuyOGyL7NQrmjhufHf8XrHIEjPfBz9tlPbPcWrLpvPWKfq"/>
+            <column name="enabled" valueBoolean="true"/>
+            <column name="avatar_url" value="/img/users/avatars/default_female_avatar.png"/>
+            <column name="user_created" valueDate="2021-06-06T14:34:14.486389"/>
+            <column name="user_updated" valueDate="2021-06-06T14:34:14.486389"/>
+        </insert>
+        <insert tableName="user">
+            <column name="id" valueNumeric="26"/>
+            <column name="email" value="imellyl7@cisco.com"/>
+            <column name="username" value="imellyl7"/>
+            <column name="first_name" value="Thérèse"/>
+            <column name="last_name" value="Melly"/>
+            <column name="middle_name" value="Irvin"/>
+            <column name="phone_number" value="{&quot;countryCode&quot;: &quot;375&quot;, &quot;nationalNumber&quot;: &quot;7127396057&quot;}"/>
+            <column name="address_id" valueNumeric="26"/>
+            <column name="gender" value="m"/>
+            <column name="birthday" valueDate="2020-08-10"/>
+            <column name="password" value="$2a$10$Z1/.F4bRuyOGyL7NQrmjhufHf8XrHIEjPfBz9tlPbPcWrLpvPWKfq"/>
+            <column name="enabled" valueBoolean="true"/>
+            <column name="avatar_url" value="/img/users/avatars/default_male_avatar.png"/>
+            <column name="user_created" valueDate="2021-06-06T14:34:14.486389"/>
+            <column name="user_updated" valueDate="2021-06-06T14:34:14.486389"/>
+        </insert>
+        <insert tableName="user">
+            <column name="id" valueNumeric="27"/>
+            <column name="email" value="zkerrichl8@auda.org.au"/>
+            <column name="username" value="zkerrichl8"/>
+            <column name="first_name" value="Marie-josée"/>
+            <column name="last_name" value="Kerrich"/>
+            <column name="middle_name" value="Zed"/>
+            <column name="phone_number" value="{&quot;countryCode&quot;: &quot;375&quot;, &quot;nationalNumber&quot;: &quot;7807417723&quot;}"/>
+            <column name="address_id" valueNumeric="27"/>
+            <column name="gender" value="m"/>
+            <column name="birthday" valueDate="2018-04-26"/>
+            <column name="password" value="$2a$10$Z1/.F4bRuyOGyL7NQrmjhufHf8XrHIEjPfBz9tlPbPcWrLpvPWKfq"/>
+            <column name="enabled" valueBoolean="true"/>
+            <column name="avatar_url" value="/img/users/avatars/default_male_avatar.png"/>
+            <column name="user_created" valueDate="2021-06-06T14:34:14.486389"/>
+            <column name="user_updated" valueDate="2021-06-06T14:34:14.486389"/>
+        </insert>
+        <insert tableName="user">
+            <column name="id" valueNumeric="28"/>
+            <column name="email" value="mspanswickl9@redcross.org"/>
+            <column name="username" value="mspanswickl9"/>
+            <column name="first_name" value="Rébecca"/>
+            <column name="last_name" value="Spanswick"/>
+            <column name="middle_name" value="Mathias"/>
+            <column name="phone_number" value="{&quot;countryCode&quot;: &quot;375&quot;, &quot;nationalNumber&quot;: &quot;2194902207&quot;}"/>
+            <column name="address_id" valueNumeric="28"/>
+            <column name="gender" value="m"/>
+            <column name="birthday" valueDate="2020-04-03"/>
+            <column name="password" value="$2a$10$Z1/.F4bRuyOGyL7NQrmjhufHf8XrHIEjPfBz9tlPbPcWrLpvPWKfq"/>
+            <column name="enabled" valueBoolean="true"/>
+            <column name="avatar_url" value="/img/users/avatars/default_male_avatar.png"/>
+            <column name="user_created" valueDate="2021-06-06T14:34:14.486389"/>
+            <column name="user_updated" valueDate="2021-06-06T14:34:14.486389"/>
+        </insert>
+        <insert tableName="user">
+            <column name="id" valueNumeric="29"/>
+            <column name="email" value="hkediela@ca.gov"/>
+            <column name="username" value="hkediela"/>
+            <column name="first_name" value="Göran"/>
+            <column name="last_name" value="Kedie"/>
+            <column name="middle_name" value="Hal"/>
+            <column name="phone_number" value="{&quot;countryCode&quot;: &quot;375&quot;, &quot;nationalNumber&quot;: &quot;8775028030&quot;}"/>
+            <column name="address_id" valueNumeric="29"/>
+            <column name="gender" value="m"/>
+            <column name="birthday" valueDate="2020-01-16"/>
+            <column name="password" value="$2a$10$Z1/.F4bRuyOGyL7NQrmjhufHf8XrHIEjPfBz9tlPbPcWrLpvPWKfq"/>
+            <column name="enabled" valueBoolean="true"/>
+            <column name="avatar_url" value="/img/users/avatars/default_male_avatar.png"/>
+            <column name="user_created" valueDate="2021-06-06T14:34:14.486389"/>
+            <column name="user_updated" valueDate="2021-06-06T14:34:14.486389"/>
+        </insert>
+        <insert tableName="user">
+            <column name="id" valueNumeric="30"/>
+            <column name="email" value="rcouttslb@techcrunch.com"/>
+            <column name="username" value="rcouttslb"/>
+            <column name="first_name" value="Maëlle"/>
+            <column name="last_name" value="Coutts"/>
+            <column name="middle_name" value="Roseann"/>
+            <column name="phone_number" value="{&quot;countryCode&quot;: &quot;375&quot;, &quot;nationalNumber&quot;: &quot;3787034170&quot;}"/>
+            <column name="address_id" valueNumeric="30"/>
+            <column name="gender" value="m"/>
+            <column name="birthday" valueDate="2020-05-16"/>
+            <column name="password" value="$2a$10$Z1/.F4bRuyOGyL7NQrmjhufHf8XrHIEjPfBz9tlPbPcWrLpvPWKfq"/>
+            <column name="enabled" valueBoolean="true"/>
+            <column name="avatar_url" value="/img/users/avatars/default_male_avatar.png"/>
+            <column name="user_created" valueDate="2021-06-06T14:34:14.486389"/>
+            <column name="user_updated" valueDate="2021-06-06T14:34:14.486389"/>
+        </insert>
+        <insert tableName="user">
+            <column name="id" valueNumeric="31"/>
+            <column name="email" value="dlewislc@blog.com"/>
+            <column name="username" value="dlewislc"/>
+            <column name="first_name" value="Marieève"/>
+            <column name="last_name" value="Lewis"/>
+            <column name="middle_name" value="Diandra"/>
+            <column name="phone_number" value="{&quot;countryCode&quot;: &quot;375&quot;, &quot;nationalNumber&quot;: &quot;5628160203&quot;}"/>
+            <column name="address_id" valueNumeric="31"/>
+            <column name="gender" value="m"/>
+            <column name="birthday" valueDate="2020-04-08"/>
+            <column name="password" value="$2a$10$Z1/.F4bRuyOGyL7NQrmjhufHf8XrHIEjPfBz9tlPbPcWrLpvPWKfq"/>
+            <column name="enabled" valueBoolean="true"/>
+            <column name="avatar_url" value="/img/users/avatars/default_male_avatar.png"/>
+            <column name="user_created" valueDate="2021-06-06T14:34:14.486389"/>
+            <column name="user_updated" valueDate="2021-06-06T14:34:14.486389"/>
+        </insert>
+        <insert tableName="user">
+            <column name="id" valueNumeric="32"/>
+            <column name="email" value="kmcentagartld@oaic.gov.au"/>
+            <column name="username" value="kmcentagartld"/>
+            <column name="first_name" value="Táng"/>
+            <column name="last_name" value="McEntagart"/>
+            <column name="middle_name" value="Karola"/>
+            <column name="phone_number" value="{&quot;countryCode&quot;: &quot;375&quot;, &quot;nationalNumber&quot;: &quot;9905994967&quot;}"/>
+            <column name="address_id" valueNumeric="32"/>
+            <column name="gender" value="m"/>
+            <column name="birthday" valueDate="2018-11-26"/>
+            <column name="password" value="$2a$10$Z1/.F4bRuyOGyL7NQrmjhufHf8XrHIEjPfBz9tlPbPcWrLpvPWKfq"/>
+            <column name="enabled" valueBoolean="true"/>
+            <column name="avatar_url" value="/img/users/avatars/default_male_avatar.png"/>
+            <column name="user_created" valueDate="2021-06-06T14:34:14.486389"/>
+            <column name="user_updated" valueDate="2021-06-06T14:34:14.486389"/>
+        </insert>
+        <insert tableName="user">
+            <column name="id" valueNumeric="33"/>
+            <column name="email" value="bholthamle@theguardian.com"/>
+            <column name="username" value="bholthamle"/>
+            <column name="first_name" value="Kévina"/>
+            <column name="last_name" value="Holtham"/>
+            <column name="middle_name" value="Ben"/>
+            <column name="phone_number" value="{&quot;countryCode&quot;: &quot;375&quot;, &quot;nationalNumber&quot;: &quot;8487738742&quot;}"/>
+            <column name="address_id" valueNumeric="33"/>
+            <column name="gender" value="m"/>
+            <column name="birthday" valueDate="2018-02-13"/>
+            <column name="password" value="$2a$10$Z1/.F4bRuyOGyL7NQrmjhufHf8XrHIEjPfBz9tlPbPcWrLpvPWKfq"/>
+            <column name="enabled" valueBoolean="true"/>
+            <column name="avatar_url" value="/img/users/avatars/default_male_avatar.png"/>
+            <column name="user_created" valueDate="2021-06-06T14:34:14.486389"/>
+            <column name="user_updated" valueDate="2021-06-06T14:34:14.486389"/>
+        </insert>
+        <insert tableName="user">
+            <column name="id" valueNumeric="34"/>
+            <column name="email" value="csandhamlf@ftc.gov"/>
+            <column name="username" value="csandhamlf"/>
+            <column name="first_name" value="Réservés"/>
+            <column name="last_name" value="Sandham"/>
+            <column name="middle_name" value="Cal"/>
+            <column name="phone_number" value="{&quot;countryCode&quot;: &quot;375&quot;, &quot;nationalNumber&quot;: &quot;6134745518&quot;}"/>
+            <column name="address_id" valueNumeric="34"/>
+            <column name="gender" value="f"/>
+            <column name="birthday" valueDate="2019-12-24"/>
+            <column name="password" value="$2a$10$Z1/.F4bRuyOGyL7NQrmjhufHf8XrHIEjPfBz9tlPbPcWrLpvPWKfq"/>
+            <column name="enabled" valueBoolean="true"/>
+            <column name="avatar_url" value="/img/users/avatars/default_female_avatar.png"/>
+            <column name="user_created" valueDate="2021-06-06T14:34:14.486389"/>
+            <column name="user_updated" valueDate="2021-06-06T14:34:14.486389"/>
+        </insert>
+    </changeSet>
+    <changeSet author="Aliaksandr Rachko" id="2021-06-06--04-initial-test-data-user-has-role-3">
+        <insert tableName="user_has_role">
+            <column name="user_id" valueNumeric="2"/>
+            <column name="role_id" valueNumeric="1"/>
+        </insert>
+        <insert tableName="user_has_role">
+            <column name="user_id" valueNumeric="3"/>
+            <column name="role_id" valueNumeric="1"/>
+        </insert>
+        <insert tableName="user_has_role">
+            <column name="user_id" valueNumeric="4"/>
+            <column name="role_id" valueNumeric="1"/>
+        </insert>
+        <insert tableName="user_has_role">
+            <column name="user_id" valueNumeric="5"/>
+            <column name="role_id" valueNumeric="1"/>
+        </insert>
+        <insert tableName="user_has_role">
+            <column name="user_id" valueNumeric="6"/>
+            <column name="role_id" valueNumeric="1"/>
+        </insert>
+        <insert tableName="user_has_role">
+            <column name="user_id" valueNumeric="7"/>
+            <column name="role_id" valueNumeric="1"/>
+        </insert>
+        <insert tableName="user_has_role">
+            <column name="user_id" valueNumeric="8"/>
+            <column name="role_id" valueNumeric="1"/>
+        </insert>
+        <insert tableName="user_has_role">
+            <column name="user_id" valueNumeric="9"/>
+            <column name="role_id" valueNumeric="1"/>
+        </insert>
+        <insert tableName="user_has_role">
+            <column name="user_id" valueNumeric="10"/>
+            <column name="role_id" valueNumeric="1"/>
+        </insert>
+        <insert tableName="user_has_role">
+            <column name="user_id" valueNumeric="11"/>
+            <column name="role_id" valueNumeric="1"/>
+        </insert>
+        <insert tableName="user_has_role">
+            <column name="user_id" valueNumeric="12"/>
+            <column name="role_id" valueNumeric="1"/>
+        </insert>
+        <insert tableName="user_has_role">
+            <column name="user_id" valueNumeric="13"/>
+            <column name="role_id" valueNumeric="1"/>
+        </insert>
+        <insert tableName="user_has_role">
+            <column name="user_id" valueNumeric="14"/>
+            <column name="role_id" valueNumeric="1"/>
+        </insert>
+        <insert tableName="user_has_role">
+            <column name="user_id" valueNumeric="15"/>
+            <column name="role_id" valueNumeric="1"/>
+        </insert>
+        <insert tableName="user_has_role">
+            <column name="user_id" valueNumeric="16"/>
+            <column name="role_id" valueNumeric="1"/>
+        </insert>
+        <insert tableName="user_has_role">
+            <column name="user_id" valueNumeric="17"/>
+            <column name="role_id" valueNumeric="1"/>
+        </insert>
+        <insert tableName="user_has_role">
+            <column name="user_id" valueNumeric="18"/>
+            <column name="role_id" valueNumeric="1"/>
+        </insert>
+        <insert tableName="user_has_role">
+            <column name="user_id" valueNumeric="19"/>
+            <column name="role_id" valueNumeric="1"/>
+        </insert>
+        <insert tableName="user_has_role">
+            <column name="user_id" valueNumeric="20"/>
+            <column name="role_id" valueNumeric="1"/>
+        </insert>
+        <insert tableName="user_has_role">
+            <column name="user_id" valueNumeric="21"/>
+            <column name="role_id" valueNumeric="1"/>
+        </insert>
+        <insert tableName="user_has_role">
+            <column name="user_id" valueNumeric="22"/>
+            <column name="role_id" valueNumeric="1"/>
+        </insert>
+        <insert tableName="user_has_role">
+            <column name="user_id" valueNumeric="23"/>
+            <column name="role_id" valueNumeric="1"/>
+        </insert>
+        <insert tableName="user_has_role">
+            <column name="user_id" valueNumeric="24"/>
+            <column name="role_id" valueNumeric="1"/>
+        </insert>
+        <insert tableName="user_has_role">
+            <column name="user_id" valueNumeric="25"/>
+            <column name="role_id" valueNumeric="1"/>
+        </insert>
+        <insert tableName="user_has_role">
+            <column name="user_id" valueNumeric="26"/>
+            <column name="role_id" valueNumeric="1"/>
+        </insert>
+        <insert tableName="user_has_role">
+            <column name="user_id" valueNumeric="27"/>
+            <column name="role_id" valueNumeric="1"/>
+        </insert>
+        <insert tableName="user_has_role">
+            <column name="user_id" valueNumeric="28"/>
+            <column name="role_id" valueNumeric="1"/>
+        </insert>
+        <insert tableName="user_has_role">
+            <column name="user_id" valueNumeric="29"/>
+            <column name="role_id" valueNumeric="1"/>
+        </insert>
+        <insert tableName="user_has_role">
+            <column name="user_id" valueNumeric="30"/>
+            <column name="role_id" valueNumeric="1"/>
+        </insert>
+        <insert tableName="user_has_role">
+            <column name="user_id" valueNumeric="31"/>
+            <column name="role_id" valueNumeric="1"/>
+        </insert>
+        <insert tableName="user_has_role">
+            <column name="user_id" valueNumeric="32"/>
+            <column name="role_id" valueNumeric="1"/>
+        </insert>
+        <insert tableName="user_has_role">
+            <column name="user_id" valueNumeric="33"/>
+            <column name="role_id" valueNumeric="1"/>
+        </insert>
+        <insert tableName="user_has_role">
+            <column name="user_id" valueNumeric="34"/>
+            <column name="role_id" valueNumeric="1"/>
+        </insert>
+    </changeSet>
+    <changeSet author="Aliaksandr Rachko" id="2021-06-06--04-initial-test-data-category-4">
+        <insert tableName="category">
+            <column name="id" valueNumeric="1"/>
+            <column name="parent_id"/>
+            <column name="category_name" value="Художественная литература"/>
+        </insert>
+        <insert tableName="category">
+            <column name="id" valueNumeric="2"/>
+            <column name="parent_id"/>
+            <column name="category_name" value="Нехудожественная литература"/>
+        </insert>
+        <insert tableName="category">
+            <column name="id" valueNumeric="3"/>
+            <column name="parent_id"/>
+            <column name="category_name" value="Учебная, методическая литература и словари"/>
+        </insert>
+        <insert tableName="category">
+            <column name="id" valueNumeric="4"/>
+            <column name="parent_id"/>
+            <column name="category_name" value="Билингвы и книги на иностранных языках"/>
+        </insert>
+        <insert tableName="category">
+            <column name="id" valueNumeric="5"/>
+            <column name="parent_id"/>
+            <column name="category_name" value="Комиксы, Манга, Артбуки"/>
+        </insert>
+        <insert tableName="category">
+            <column name="id" valueNumeric="6"/>
+            <column name="parent_id"/>
+            <column name="category_name" value="Периодические издания"/>
+        </insert>
+        <insert tableName="category">
+            <column name="id" valueNumeric="7"/>
+            <column name="parent_id"/>
+            <column name="category_name" value="Книги для детей"/>
+        </insert>
+        <insert tableName="category">
+            <column name="id" valueNumeric="8"/>
+            <column name="parent_id" valueNumeric="1"/>
+            <column name="category_name" value="Современная литература"/>
+        </insert>
+        <insert tableName="category">
+            <column name="id" valueNumeric="9"/>
+            <column name="parent_id" valueNumeric="1"/>
+            <column name="category_name" value="Басни"/>
+        </insert>
+        <insert tableName="category">
+            <column name="id" valueNumeric="10"/>
+            <column name="parent_id" valueNumeric="1"/>
+            <column name="category_name" value="Детективы"/>
+        </insert>
+        <insert tableName="category">
+            <column name="id" valueNumeric="11"/>
+            <column name="parent_id" valueNumeric="1"/>
+            <column name="category_name" value="Драматургия"/>
+        </insert>
+        <insert tableName="category">
+            <column name="id" valueNumeric="12"/>
+            <column name="parent_id" valueNumeric="1"/>
+            <column name="category_name" value="Историческая проза"/>
+        </insert>
+        <insert tableName="category">
+            <column name="id" valueNumeric="13"/>
+            <column name="parent_id" valueNumeric="1"/>
+            <column name="category_name" value="Классическая проза"/>
+        </insert>
+        <insert tableName="category">
+            <column name="id" valueNumeric="14"/>
+            <column name="parent_id" valueNumeric="1"/>
+            <column name="category_name" value="Поэзия"/>
+        </insert>
+        <insert tableName="category">
+            <column name="id" valueNumeric="15"/>
+            <column name="parent_id" valueNumeric="1"/>
+            <column name="category_name" value="Приключения"/>
+        </insert>
+        <insert tableName="category">
+            <column name="id" valueNumeric="16"/>
+            <column name="parent_id" valueNumeric="1"/>
+            <column name="category_name" value="Сентиментальная проза"/>
+        </insert>
+        <insert tableName="category">
+            <column name="id" valueNumeric="17"/>
+            <column name="parent_id" valueNumeric="1"/>
+            <column name="category_name" value="Современная проза"/>
+        </insert>
+        <insert tableName="category">
+            <column name="id" valueNumeric="18"/>
+            <column name="parent_id" valueNumeric="1"/>
+            <column name="category_name" value="Фантастика"/>
+        </insert>
+        <insert tableName="category">
+            <column name="id" valueNumeric="19"/>
+            <column name="parent_id" valueNumeric="1"/>
+            <column name="category_name" value="Фэнтези"/>
+        </insert>
+        <insert tableName="category">
+            <column name="id" valueNumeric="20"/>
+            <column name="parent_id" valueNumeric="1"/>
+            <column name="category_name" value="Эпос и фольклор"/>
+        </insert>
+        <insert tableName="category">
+            <column name="id" valueNumeric="21"/>
+            <column name="parent_id" valueNumeric="2"/>
+            <column name="category_name" value="Бизнес. Экономика"/>
+        </insert>
+        <insert tableName="category">
+            <column name="id" valueNumeric="22"/>
+            <column name="parent_id" valueNumeric="2"/>
+            <column name="category_name" value="Естественные науки"/>
+        </insert>
+        <insert tableName="category">
+            <column name="id" valueNumeric="23"/>
+            <column name="parent_id" valueNumeric="2"/>
+            <column name="category_name" value="История. Исторические науки"/>
+        </insert>
+        <insert tableName="category">
+            <column name="id" valueNumeric="24"/>
+            <column name="parent_id" valueNumeric="2"/>
+            <column name="category_name" value="Компьютеры и Интернет"/>
+        </insert>
+        <insert tableName="category">
+            <column name="id" valueNumeric="25"/>
+            <column name="parent_id" valueNumeric="2"/>
+            <column name="category_name" value="Научно-популярная литература"/>
+        </insert>
+        <insert tableName="category">
+            <column name="id" valueNumeric="26"/>
+            <column name="parent_id" valueNumeric="2"/>
+            <column name="category_name" value="Красота, спорт, питание"/>
+        </insert>
+        <insert tableName="category">
+            <column name="id" valueNumeric="27"/>
+            <column name="parent_id" valueNumeric="2"/>
+            <column name="category_name" value="Научная и специальная литература"/>
+        </insert>
+        <insert tableName="category">
+            <column name="id" valueNumeric="28"/>
+            <column name="parent_id" valueNumeric="2"/>
+            <column name="category_name" value="Творчество, саморазвитие, хобби"/>
+        </insert>
+        <insert tableName="category">
+            <column name="id" valueNumeric="29"/>
+            <column name="parent_id" valueNumeric="3"/>
+            <column name="category_name" value="Вспомогательные материалы для студентов"/>
+        </insert>
+        <insert tableName="category">
+            <column name="id" valueNumeric="30"/>
+            <column name="parent_id" valueNumeric="3"/>
+            <column name="category_name" value="Демонстрационные материалы"/>
+        </insert>
+        <insert tableName="category">
+            <column name="id" valueNumeric="31"/>
+            <column name="parent_id" valueNumeric="3"/>
+            <column name="category_name" value="Дополнительное образование для детей"/>
+        </insert>
+        <insert tableName="category">
+            <column name="id" valueNumeric="32"/>
+            <column name="parent_id" valueNumeric="4"/>
+            <column name="category_name" value="Билингвы"/>
+        </insert>
+        <insert tableName="category">
+            <column name="id" valueNumeric="33"/>
+            <column name="parent_id" valueNumeric="4"/>
+            <column name="category_name" value="Литература на иностранном языке"/>
+        </insert>
+        <insert tableName="category">
+            <column name="id" valueNumeric="34"/>
+            <column name="parent_id" valueNumeric="4"/>
+            <column name="category_name" value="Литература на иностранном языке для детей"/>
+        </insert>
+        <insert tableName="category">
+            <column name="id" valueNumeric="35"/>
+            <column name="parent_id" valueNumeric="5"/>
+            <column name="category_name" value="Артбуки. Игровые миры. Вселенные"/>
+        </insert>
+        <insert tableName="category">
+            <column name="id" valueNumeric="36"/>
+            <column name="parent_id" valueNumeric="5"/>
+            <column name="category_name" value="Комиксы"/>
+        </insert>
+        <insert tableName="category">
+            <column name="id" valueNumeric="37"/>
+            <column name="parent_id" valueNumeric="5"/>
+            <column name="category_name" value="Комиксы для детей"/>
+        </insert>
+        <insert tableName="category">
+            <column name="id" valueNumeric="38"/>
+            <column name="parent_id" valueNumeric="5"/>
+            <column name="category_name" value="Манга"/>
+        </insert>
+        <insert tableName="category">
+            <column name="id" valueNumeric="39"/>
+            <column name="parent_id" valueNumeric="5"/>
+            <column name="category_name" value="Манга для детей"/>
+        </insert>
+        <insert tableName="category">
+            <column name="id" valueNumeric="40"/>
+            <column name="parent_id" valueNumeric="5"/>
+            <column name="category_name" value="Новеллизации"/>
+        </insert>
+        <insert tableName="category">
+            <column name="id" valueNumeric="41"/>
+            <column name="parent_id" valueNumeric="6"/>
+            <column name="category_name" value="Газеты"/>
+        </insert>
+        <insert tableName="category">
+            <column name="id" valueNumeric="42"/>
+            <column name="parent_id" valueNumeric="6"/>
+            <column name="category_name" value="Журналы"/>
+        </insert>
+        <insert tableName="category">
+            <column name="id" valueNumeric="43"/>
+            <column name="parent_id" valueNumeric="6"/>
+            <column name="category_name" value="Научные журналы"/>
+        </insert>
+        <insert tableName="category">
+            <column name="id" valueNumeric="44"/>
+            <column name="parent_id" valueNumeric="7"/>
+            <column name="category_name" value="Детская художественная литература"/>
+        </insert>
+        <insert tableName="category">
+            <column name="id" valueNumeric="45"/>
+            <column name="parent_id" valueNumeric="7"/>
+            <column name="category_name" value="Детский досуг"/>
+        </insert>
+        <insert tableName="category">
+            <column name="id" valueNumeric="46"/>
+            <column name="parent_id" valueNumeric="7"/>
+            <column name="category_name" value="Познавательная литература"/>
+        </insert>
+        <insert tableName="category">
+            <column name="id" valueNumeric="47"/>
+            <column name="parent_id" valueNumeric="13"/>
+            <column name="category_name" value="Классическая зарубежная проза"/>
+        </insert>
+        <insert tableName="category">
+            <column name="id" valueNumeric="48"/>
+            <column name="parent_id" valueNumeric="13"/>
+            <column name="category_name" value="Классическая отечественная проза"/>
+        </insert>
+        <insert tableName="category">
+            <column name="id" valueNumeric="49"/>
+            <column name="parent_id" valueNumeric="10"/>
+            <column name="category_name" value="Современный зарубежный детектив"/>
+        </insert>
+        <insert tableName="category">
+            <column name="id" valueNumeric="50"/>
+            <column name="parent_id" valueNumeric="10"/>
+            <column name="category_name" value="Классический отечественный детектив"/>
+        </insert>
+        <insert tableName="category">
+            <column name="id" valueNumeric="51"/>
+            <column name="parent_id" valueNumeric="10"/>
+            <column name="category_name" value="Классический зарубежный детектив"/>
+        </insert>
+    </changeSet>
+    <changeSet author="Aliaksandr Rachko" id="2021-06-06--04-initial-test-data-author-5">
+        <insert tableName="author">
+            <column name="id" valueNumeric="1"/>
+            <column name="author_name" value="Александр Сергеевич Пушкин"/>
+        </insert>
+        <insert tableName="author">
+            <column name="id" valueNumeric="2"/>
+            <column name="author_name" value="Arthur Conan Doyle"/>
+        </insert>
+        <insert tableName="author">
+            <column name="id" valueNumeric="3"/>
+            <column name="author_name" value="Elisabeth Robson"/>
+        </insert>
+        <insert tableName="author">
+            <column name="id" valueNumeric="4"/>
+            <column name="author_name" value="Eric Freeman"/>
+        </insert>
+        <insert tableName="author">
+            <column name="id" valueNumeric="5"/>
+            <column name="author_name" value="Paul Barry"/>
+        </insert>
+        <insert tableName="author">
+            <column name="id" valueNumeric="6"/>
+            <column name="author_name" value="Stephen King"/>
+        </insert>
+        <insert tableName="author">
+            <column name="id" valueNumeric="7"/>
+            <column name="author_name" value="Scott Pratt"/>
+        </insert>
+        <insert tableName="author">
+            <column name="id" valueNumeric="8"/>
+            <column name="author_name" value="Федор Михайлович Достоевский"/>
+        </insert>
+        <insert tableName="author">
+            <column name="id" valueNumeric="9"/>
+            <column name="author_name" value="Иван Александрович Гончаров"/>
+        </insert>
+        <insert tableName="author">
+            <column name="id" valueNumeric="10"/>
+            <column name="author_name" value="Николай Васильевич Гоголь"/>
+        </insert>
+        <insert tableName="author">
+            <column name="id" valueNumeric="11"/>
+            <column name="author_name" value="Лев Николаевич Толстой"/>
+        </insert>
+        <insert tableName="author">
+            <column name="id" valueNumeric="12"/>
+            <column name="author_name" value="Михаил Афанасьевич Булгаков"/>
+        </insert>
+        <insert tableName="author">
+            <column name="id" valueNumeric="13"/>
+            <column name="author_name" value="Антон Павлович чехов"/>
+        </insert>
+        <insert tableName="author">
+            <column name="id" valueNumeric="14"/>
+            <column name="author_name" value="Иван Алексеевич Бунин"/>
+        </insert>
+        <insert tableName="author">
+            <column name="id" valueNumeric="15"/>
+            <column name="author_name" value="George Orwell"/>
+        </insert>
+        <insert tableName="author">
+            <column name="id" valueNumeric="16"/>
+            <column name="author_name" value="Станислав Герман Лем"/>
+        </insert>
+        <insert tableName="author">
+            <column name="id" valueNumeric="17"/>
+            <column name="author_name" value="Ray Bradbury"/>
+        </insert>
+    </changeSet>
+    <changeSet author="Aliaksandr Rachko" id="2021-06-06--04-initial-test-data-publisher-6">
+        <insert tableName="publisher">
+            <column name="id" valueNumeric="1"/>
+            <column name="publisher_name" value="AST"/>
+        </insert>
+        <insert tableName="publisher">
+            <column name="id" valueNumeric="2"/>
+            <column name="publisher_name" value="TEXT"/>
+        </insert>
+        <insert tableName="publisher">
+            <column name="id" valueNumeric="3"/>
+            <column name="publisher_name" value="Эксмо-Пресс"/>
+        </insert>
+    </changeSet>
+    <changeSet author="Aliaksandr Rachko" id="2021-06-06--04-initial-test-data-book-has-author-7">
+        <insert tableName="book">
+            <column name="id" valueNumeric="1"/>
+            <column name="title" value="Voyna i mir. Kniga 1"/>
+            <column name="description" value="Издательство АСТ Серия Лучшая мировая классика Год издания 2018 ISBN 9785171123857 Кол-во страниц 736 Формат 20.6 x 13.5 x 3 Тип обложки Твердая бумажная Тираж 10000 Вес, г 500 Возрастные ограничения 12+ Аннотация &quot;Война и мир&quot; — роман-эпопея Льва Толстого, одно из крупнейших произведений мировой литературы, описывающее жизнь русского общества в эпоху Наполеоновских войн. &quot;Война и мир&quot; — это масштабная картина жизни России, взятая во всех ее социальных слоях (от крестьян до императора Александра I), и детальное описание хода военных действий, и осмысление поведения человека на войне, но главное — это глубокое философское осмысление и исследование жизни как таковой — в быту, в семье, в мирное время, на войне. Именно поэтому &quot;Войну и мир&quot; можно читать и перечитывать всю жизнь — этот роман никогда не потеряет своей актуальности."/>
+            <column name="isbn_10" value="5171123853"/>
+            <column name="isbn_13" value="9785171123857"/>
+            <column name="category_id" valueNumeric="48"/>
+            <column name="publisher_id" valueNumeric="1"/>
+            <column name="language" value="rus"/>
+            <column name="publishing_date" valueDate="2018-01-01"/>
+            <column name="print_length" valueNumeric="736"/>
+            <column name="picture_url" value="https://m.media-amazon.com/images/I/513ZIFMK6VL.jpg"/>
+            <column name="attributes"/>
+            <column name="total_count" valueNumeric="2"/>
+            <column name="available_count" valueNumeric="2"/>
+            <column name="available" valueBoolean="true"/>
+            <column name="book_rating" valueNumeric="0"/>
+            <column name="book_created" valueDate="2021-06-06T14:34:18.165593"/>
+            <column name="book_updated" valueDate="2021-06-06T14:34:18.165593"/>
+        </insert>
+        <insert tableName="book">
+            <column name="id" valueNumeric="2"/>
+            <column name="title" value="Джордж Оруэлл: Да здравствует фикус!"/>
+            <column name="description" value="Роман &quot;Да здравствует фикус!&quot; Джорджа Оруэлла (1903- 1950), автора знаменитой антиутопии &quot;1984&quot;, во многом автобиографичен. Главный герой, талантливый и непризнанный поэт, презирает материальное благополучие и пошлость обыденной жизни, символом которой служит фикус. Только любовь и стремление к земному счастью и благополучию заставляют его понять, что помимо высокого искусства существуют простые радости, а в стремлении заработать деньги нет ничего постыдного."/>
+            <column name="isbn_10" value="5751616804"/>
+            <column name="isbn_13" value="9785751616809"/>
+            <column name="category_id" valueNumeric="47"/>
+            <column name="publisher_id" valueNumeric="2"/>
+            <column name="language" value="rus"/>
+            <column name="publishing_date" valueDate="2021-01-01"/>
+            <column name="print_length" valueNumeric="256"/>
+            <column name="picture_url" value="https://img4.labirint.ru/rc/9ef51d4cefee60b3906bae41a47d7c02/220x340/books79/786912/cover.png?1616581505"/>
+            <column name="attributes"/>
+            <column name="total_count" valueNumeric="2"/>
+            <column name="available_count" valueNumeric="2"/>
+            <column name="available" valueBoolean="true"/>
+            <column name="book_rating" valueNumeric="0"/>
+            <column name="book_created" valueDate="2021-06-06T14:34:18.226504"/>
+            <column name="book_updated" valueDate="2021-06-06T14:34:18.226504"/>
+        </insert>
+        <insert tableName="book">
+            <column name="id" valueNumeric="3"/>
+            <column name="title" value="Джордж Оруэлл: 1984"/>
+            <column name="description" value="Прошло всего три года после окончания Второй мировой войны, когда Джордж Оруэлл (1903-1950) написал самое знаменитое свое произведение - роман-антиутопию &quot;1984&quot;. Многое из того, о чем писал Джордж Оруэлл, покажется вам до безумия знакомым. Некоторые исследователи считают, что ни один западный читатель не постигнет суть &quot;1984&quot; так глубоко, как человек родом из Советского Союза."/>
+            <column name="isbn_10" value="5751616790"/>
+            <column name="isbn_13" value="9785751616793"/>
+            <column name="category_id" valueNumeric="47"/>
+            <column name="publisher_id" valueNumeric="1"/>
+            <column name="language" value="rus"/>
+            <column name="publishing_date" valueDate="2021-01-01"/>
+            <column name="print_length" valueNumeric="320"/>
+            <column name="picture_url" value="https://img4.labirint.ru/rc/6b0e6c27a90bf6b792d1b8363df35293/220x340/books80/790566/cover.png?1618316737"/>
+            <column name="attributes"/>
+            <column name="total_count" valueNumeric="2"/>
+            <column name="available_count" valueNumeric="2"/>
+            <column name="available" valueBoolean="true"/>
+            <column name="book_rating" valueNumeric="0"/>
+            <column name="book_created" valueDate="2021-06-06T14:34:18.273446"/>
+            <column name="book_updated" valueDate="2021-06-06T14:34:18.273446"/>
+        </insert>
+        <insert tableName="book">
+            <column name="id" valueNumeric="4"/>
+            <column name="title" value="Станислав Лем: Фиаско"/>
+            <column name="description" value="Космос - пространство загадки, пространство вечного поиска, и любая ошибка, продиктованная небрежностью или неверной логической посылкой, способна привести исследователя к краху. Экспедиция &quot;Гермеса&quot;, призванная установить контакт с обитателями планеты Квинта, совершает ряд промахов, цена которых слишком высока…"/>
+            <column name="isbn_10" value="5171350728"/>
+            <column name="isbn_13" value="9785171350727"/>
+            <column name="category_id" valueNumeric="47"/>
+            <column name="publisher_id" valueNumeric="1"/>
+            <column name="language" value="rus"/>
+            <column name="publishing_date" valueDate="2021-01-01"/>
+            <column name="print_length" valueNumeric="448"/>
+            <column name="picture_url" value="https://img3.labirint.ru/rc/ce8a22290d7021c1308f1b75b3b9edaa/220x340/books81/800623/cover.jpg?1618550720"/>
+            <column name="attributes"/>
+            <column name="total_count" valueNumeric="2"/>
+            <column name="available_count" valueNumeric="2"/>
+            <column name="available" valueBoolean="true"/>
+            <column name="book_rating" valueNumeric="0"/>
+            <column name="book_created" valueDate="2021-06-06T14:34:18.316918"/>
+            <column name="book_updated" valueDate="2021-06-06T14:34:18.316918"/>
+        </insert>
+        <insert tableName="book">
+            <column name="id" valueNumeric="5"/>
+            <column name="title" value="Рэй Брэдбери: Вино из одуванчиков"/>
+            <column name="description" value="Яркое, фантастическое лето 1928 года: двенадцатилетний Дуглас Сполдинг ведет записи о событиях того лета, которые складываются в отдельные истории, гротескные искажения ординарных будней маленького городка, где живут Дуглас и его семья. Там все кажется не тем, чем является, а сила детского воображения создает новую реальность, которую не отличить от вымысла. Выросший из отдельных рассказов, филигранных в своей лиричности, роман &quot;Вино из одуванчиков&quot; — классическая хроника детства Рэя Брэдбери, окно в творческий мир писателя, создавшего такие шедевры мировой литературы, как &quot;Марсианские хроники&quot; и &quot;451 градус по Фаренгейту&quot;."/>
+            <column name="isbn_10" value="5171350728"/>
+            <column name="isbn_13" value="9785040988358"/>
+            <column name="category_id" valueNumeric="48"/>
+            <column name="publisher_id" valueNumeric="3"/>
+            <column name="language" value="rus"/>
+            <column name="publishing_date" valueDate="2019-01-01"/>
+            <column name="print_length" valueNumeric="256"/>
+            <column name="picture_url" value="https://img3.labirint.ru/rc/3ed50890722042ff78db15eb83c84530/220x340/books73/720915/cover.jpg?1617258303"/>
+            <column name="attributes"/>
+            <column name="total_count" valueNumeric="2"/>
+            <column name="available_count" valueNumeric="2"/>
+            <column name="available" valueBoolean="true"/>
+            <column name="book_rating" valueNumeric="0"/>
+            <column name="book_created" valueDate="2021-06-06T14:34:19.239429"/>
+            <column name="book_updated" valueDate="2021-06-06T14:34:19.239429"/>
+        </insert>
+    </changeSet>
+    <changeSet author="Aliaksandr Rachko" id="2021-06-06--04-initial-test-data-book-has-author-8">
+        <insert tableName="book_has_author">
+            <column name="book_id" valueNumeric="1"/>
+            <column name="author_id" valueNumeric="11"/>
+        </insert>
+        <insert tableName="book_has_author">
+            <column name="book_id" valueNumeric="2"/>
+            <column name="author_id" valueNumeric="15"/>
+        </insert>
+        <insert tableName="book_has_author">
+            <column name="book_id" valueNumeric="3"/>
+            <column name="author_id" valueNumeric="15"/>
+        </insert>
+        <insert tableName="book_has_author">
+            <column name="book_id" valueNumeric="4"/>
+            <column name="author_id" valueNumeric="16"/>
+        </insert>
+        <insert tableName="book_has_author">
+            <column name="book_id" valueNumeric="5"/>
+            <column name="author_id" valueNumeric="17"/>
+        </insert>
     </changeSet>
     <changeSet author="Aliaksandr Rachko" id="2021-05-13--04-initial-test-data-1">
         <sqlFile dbms="postgresql"
                  endDelimiter=";"
-                 path="script-insert-test-data.sql"
+                 path="script-set-val-to-seq.sql"
                  relativeToChangelogFile="true"
                  splitStatements="true"
                  stripComments="true"/>
