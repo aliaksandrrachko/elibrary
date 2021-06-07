@@ -3,6 +3,7 @@ package by.it.academy.grodno.elibrary.api.configuration;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
@@ -19,6 +20,7 @@ import java.util.Properties;
 @Configuration
 @EnableTransactionManagement
 @EnableJpaRepositories(basePackages = {"by.it.academy.grodno.elibrary.api.dao"})
+@PropertySource("classpath:application.properties")
 public class PersistenceJpaConfig {
 
     public static final String PACKAGE_ENTITY_TO_SCAN = "by.it.academy.grodno.elibrary.entities";

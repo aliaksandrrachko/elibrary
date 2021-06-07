@@ -1,11 +1,6 @@
 package by.it.academy.grodno.elibrary.rest;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.verify;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 
 import by.it.academy.grodno.elibrary.api.dto.books.PublisherDto;
 import by.it.academy.grodno.elibrary.api.services.books.IPublisherService;
@@ -110,5 +105,4 @@ class PublisherRestControllerTest {
         testPublisherDtoList.add(new PublisherDto("SUNRISE"));
         return testPublisherDtoList;
     }
-
 }

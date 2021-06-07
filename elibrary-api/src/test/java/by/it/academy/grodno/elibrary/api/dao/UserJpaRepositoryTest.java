@@ -1,39 +1,26 @@
 package by.it.academy.grodno.elibrary.api.dao;
 
-import by.it.academy.grodno.elibrary.entities.users.*;
+import static org.assertj.core.api.Assertions.assertThat;
+
+import by.it.academy.grodno.elibrary.entities.users.Address;
+import by.it.academy.grodno.elibrary.entities.users.User;
 import by.it.academy.grodno.elibrary.entitymetadata.users.Gender;
 import by.it.academy.grodno.elibrary.entitymetadata.users.PhoneNumber;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.annotation.Rollback;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import javax.persistence.EntityManager;
 import javax.sql.DataSource;
-
 import java.time.LocalDate;
 import java.util.Optional;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
-@ExtendWith(SpringExtension.class)
-@ComponentScan(basePackages = "by.it.academy.grodno.elibrary.dao")
-@EnableJpaRepositories
-// Its for ignore intellij IDEA warnings
-@ContextConfiguration(classes = {UserJpaRepository.class})
-class UserJpaRepositoryTest {
+class UserJpaRepositoryTest extends ATestJpaRepositories {
 
     @Autowired
     @Qualifier("dataSource")
     private DataSource dataSource;
-    @Autowired
-    private JdbcTemplate jdbcTemplate;
     @Autowired
     private EntityManager entityManager;
     @Autowired
@@ -42,7 +29,6 @@ class UserJpaRepositoryTest {
     @Test
     void injectedComponentsAreNotNull() {
         assertThat(dataSource).isNotNull();
-        assertThat(jdbcTemplate).isNotNull();
         assertThat(entityManager).isNotNull();
         assertThat(userJpaRepository).isNotNull();
     }

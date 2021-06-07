@@ -3,8 +3,8 @@
 
     <property name="LOG_HOME" value="logs"/>
     <property name="LOG_FILE" value="log"/>
-    <property name="LOG_DATE_FORMAT_PATTERN" value="yyyy-MM-dd HH:mm:ss.SSS"/>
-    <timestamp key="bySecond" datePattern="yyyy-MM-dd HH:mm:ss.SSS"/>
+    <property name="LOG_DATE_FORMAT_PATTERN" value="yyyy-MM-dd"/>
+    <timestamp key="LOG_DATE_TIME_FORMAT_PATTERN" datePattern="yyyy-MM-dd'T'HH-mm-ss.SSS"/>
 
     <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
         <withJansi>false</withJansi>
@@ -14,7 +14,7 @@
     </appender>
 
     <appender name="FILE" class="ch.qos.logback.core.FileAppender">
-        <file>${LOG_HOME}/log-at-${bySecond}.log</file>
+        <file>${LOG_HOME}/log-at-${LOG_DATE_TIME_FORMAT_PATTERN}.log</file>
         <append>true</append>
         <immediateFlush>true</immediateFlush>
         <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
@@ -23,12 +23,12 @@
     </appender>
 
     <appender name="ROLLING_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>spring-logger.log</file>
+        <file>${LOG_HOME}/spring-logger.log</file>
         <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
             <pattern>%d %p %C{1.} [%t] %m%n</pattern>
         </encoder>
         <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
-            <fileNamePattern>${LOG_HOME}/archived/spring-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <fileNamePattern>${LOG_HOME}/archived/%d{yyyy-MM}/log-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
             <maxFileSize>10MB</maxFileSize>
             <maxHistory>7</maxHistory>
             <totalSizeCap>200MB</totalSizeCap>
@@ -36,9 +36,9 @@
     </appender>
 
     <root level="INFO">
-        <appender-ref ref="RollingFile" />
         <appender-ref ref="CONSOLE" />
         <appender-ref ref="ROLLING_FILE"/>
+        <appender-ref ref="FILE"/>
     </root>
 
     <logger name="by.it.academy.grodno.elibrary.rest.controllers" level="debug" additivity="false">
