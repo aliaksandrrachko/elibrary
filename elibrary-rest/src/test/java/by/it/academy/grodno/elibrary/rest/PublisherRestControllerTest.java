@@ -1,27 +1,48 @@
 package by.it.academy.grodno.elibrary.rest;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import static org.springframework.http.MediaType.APPLICATION_JSON;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 
 import by.it.academy.grodno.elibrary.api.dto.books.PublisherDto;
 import by.it.academy.grodno.elibrary.api.services.books.IPublisherService;
+import by.it.academy.grodno.elibrary.rest.configuration.TestContextConfig;
+import by.it.academy.grodno.elibrary.rest.configuration.WebMvcConfig;
 import by.it.academy.grodno.elibrary.rest.controllers.PublisherRestController;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mockito;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.mock.web.MockHttpServletResponse;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.context.WebApplicationContext;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@ExtendWith(SpringExtension.class)
+@ContextConfiguration(classes = {PublisherRestController.class, WebMvcConfig.class, TestContextConfig.class})
+@WebAppConfiguration
 class PublisherRestControllerTest {
 
     private MockMvc mockMvc;
-    @Mock
+
+    @Autowired
     private IPublisherService publisherService;
-    @InjectMocks
+    @Autowired
     private PublisherRestController publisherRestController;
+    @Autowired
+    private WebApplicationContext wac;
 
     @Test
     void injectedComponentsAreNotNull() {
@@ -31,9 +52,10 @@ class PublisherRestControllerTest {
 
     @BeforeEach
     public void setup() {
-        mockMvc = MockMvcBuilders.standaloneSetup(publisherRestController).build();
+        Mockito.reset(publisherService);
+        mockMvc = MockMvcBuilders.webAppContextSetup(wac).build();
+        //mockMvc = MockMvcBuilders.standaloneSetup(publisherRestController).build();
     }
-/*
 
     @Test
     void findPublisherById() throws Exception {
@@ -47,6 +69,8 @@ class PublisherRestControllerTest {
         //assertThat(response.getContentAsString()).isEqualTo(jsonPublisherDto.write(publisherDto).getJson());
         verify(publisherService, times(1)).findById(any(Integer.class));
     }
+
+    /*
 
     @Test
     void updatePublisher() throws Exception {
