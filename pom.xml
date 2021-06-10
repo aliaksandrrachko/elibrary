@@ -29,6 +29,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <org.springframework.version>5.2.15.RELEASE</org.springframework.version>
+        <org.springframework.security.version>5.3.9.RELEASE</org.springframework.security.version>
     </properties>
 
     <dependencies>
@@ -168,10 +169,21 @@
                 <version>2.2</version>
             </dependency>
 
+            <!-- Add Spring Security -->
             <dependency>
                 <groupId>org.springframework.security</groupId>
                 <artifactId>spring-security-core</artifactId>
-                <version>5.2.10.RELEASE</version>
+                <version>${org.springframework.security.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.security</groupId>
+                <artifactId>spring-security-web</artifactId>
+                <version>${org.springframework.security.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.security</groupId>
+                <artifactId>spring-security-config</artifactId>
+                <version>${org.springframework.security.version}</version>
             </dependency>
 
             <dependency>
