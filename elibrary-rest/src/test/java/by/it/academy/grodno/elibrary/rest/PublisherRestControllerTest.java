@@ -1,22 +1,29 @@
 package by.it.academy.grodno.elibrary.rest;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import by.it.academy.grodno.elibrary.api.dto.books.PublisherDto;
 import by.it.academy.grodno.elibrary.api.services.books.IPublisherService;
 import by.it.academy.grodno.elibrary.rest.configuration.TestContextConfig;
 import by.it.academy.grodno.elibrary.rest.configuration.WebMvcConfig;
 import by.it.academy.grodno.elibrary.rest.controllers.PublisherRestController;
+import by.it.academy.grodno.elibrary.rest.utils.EntityJsonConverter;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
+import org.mockito.stubbing.Answer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.mock.web.MockHttpServletResponse;
@@ -43,6 +50,8 @@ class PublisherRestControllerTest {
     private PublisherRestController publisherRestController;
     @Autowired
     private WebApplicationContext wac;
+    @Autowired
+    private EntityJsonConverter jsonConverter;
 
     @Test
     void injectedComponentsAreNotNull() {
@@ -54,7 +63,6 @@ class PublisherRestControllerTest {
     public void setup() {
         Mockito.reset(publisherService);
         mockMvc = MockMvcBuilders.webAppContextSetup(wac).build();
-        //mockMvc = MockMvcBuilders.standaloneSetup(publisherRestController).build();
     }
 
     @Test
@@ -62,26 +70,25 @@ class PublisherRestControllerTest {
         final PublisherDto publisherDto = getTestsPublisherDto();
         final int publisherId = 15;
         when(publisherService.findById(any())).thenReturn(publisherDto);
-        MockHttpServletResponse response = mockMvc.perform(get("/rest/publishers/" + publisherId)
-                .accept(APPLICATION_JSON))
-                .andReturn().getResponse();
-        assertThat(response.getStatus()).isEqualTo(HttpStatus.OK.value());
-        //assertThat(response.getContentAsString()).isEqualTo(jsonPublisherDto.write(publisherDto).getJson());
+        mockMvc.perform(get("/rest/publishers/{publisherId}", publisherId))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.publisherName", is(publisherDto.getPublisherName())))
+                .andExpect(jsonPath("$.id", is(publisherDto.getId())));
         verify(publisherService, times(1)).findById(any(Integer.class));
     }
-
-    /*
 
     @Test
     void updatePublisher() throws Exception {
         final PublisherDto publisherDtoForUpdate = new PublisherDto("AST");
         final int publisherId = 23;
         when(publisherService.update(any(Integer.class), any(PublisherDto.class))).thenReturn(getTestsPublisherDto());
-        MockHttpServletResponse response = mockMvc.perform(put("/rest/publishers/" + publisherId)
+        MockHttpServletResponse response = mockMvc.perform(put("/rest/publishers/{publisherId}", publisherId)
                         .contentType(APPLICATION_JSON)
-                        .content("")).andReturn().getResponse();
+                        .content(jsonConverter.getObjectJsonString(publisherDtoForUpdate)))
+                .andReturn().getResponse();
         assertThat(response.getStatus()).isEqualTo(HttpStatus.OK.value());
-        //assertThat(response.getContentAsString()).isEqualTo(jsonPublisherDto.write(getTestsPublisherDto()).getJson());
+        assertThat(jsonConverter.jsonStringToObject(response.getContentAsString(), PublisherDto.class).getPublisherName())
+                .isEqualTo(getTestsPublisherDto().getPublisherName());
         verify(publisherService, times(1)).update(any(Integer.class), any(PublisherDto.class));
     }
 
@@ -95,8 +102,8 @@ class PublisherRestControllerTest {
         });
         MockHttpServletResponse response = mockMvc.perform(post("/rest/publishers")
         .contentType(APPLICATION_JSON)
-        .content(""
-                //jsonPublisherDto.write(publisherForCreating).getJson()
+        .content(
+                jsonConverter.getObjectJsonString(publisherForCreating)
         )).andReturn().getResponse();
         assertThat(response.getStatus()).isEqualTo(HttpStatus.OK.value());
         assertThat(response.getContentAsString()).isNotNull();
@@ -114,7 +121,6 @@ class PublisherRestControllerTest {
         assertThat(response.getContentAsString()).isNotNull();
         verify(publisherService, times(1)).findAll();
     }
-*/
 
     private PublisherDto getTestsPublisherDto() {
         PublisherDto publisherDto = new PublisherDto("AST");
