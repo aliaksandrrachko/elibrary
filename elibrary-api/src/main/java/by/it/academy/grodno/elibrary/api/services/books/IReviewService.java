@@ -20,4 +20,6 @@ public interface IReviewService {
     Page<ReviewDto> findByBookIdAndUpdatedBetween(Long bookId, LocalDate dateFrom, LocalDate dateTo, Pageable pageable);
     Page<ReviewDto> findAll(Pageable pageable);
     boolean existsByIdAndUserId(Long reviewId, Long valueOf);
+    ReviewDto update(Long id, ReviewDto dto, Long currentUserId);
+    void delete(Long id, Long valueOf);
 }

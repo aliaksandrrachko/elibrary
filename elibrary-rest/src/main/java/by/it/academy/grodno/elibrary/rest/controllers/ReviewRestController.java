@@ -1,5 +1,8 @@
 package by.it.academy.grodno.elibrary.rest.controllers;
 
+import static by.it.academy.grodno.elibrary.api.constants.Routes.Review.REVIEWS;
+import static by.it.academy.grodno.elibrary.api.constants.Routes.Review.REVIEWS_ID;
+
 import by.it.academy.grodno.elibrary.api.dto.books.ReviewDto;
 import by.it.academy.grodno.elibrary.api.services.books.IReviewService;
 import org.springframework.data.domain.Page;
@@ -7,13 +10,20 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
+import java.security.Principal;
 import java.time.LocalDate;
 
 @RestController
-@RequestMapping(value = "/rest/reviews")
 public class ReviewRestController {
 
     public final IReviewService reviewService;
@@ -22,12 +32,7 @@ public class ReviewRestController {
         this.reviewService = reviewService;
     }
 
-    @GetMapping("/forbook/{bookId}")
-    public Page<ReviewDto> findAllReviewForBook(@PathVariable Long bookId, @PageableDefault Pageable pageable) {
-        return reviewService.findByBookId(bookId, pageable);
-    }
-
-    @GetMapping
+    @GetMapping(value = REVIEWS)
     public Page<ReviewDto> findAll(@RequestParam(value = "bookId", required = false) Long bookId,
                                 @RequestParam(value = "userId", required = false) Long userId,
                                 @RequestParam(value = "dateFrom", required = false) LocalDate dateFrom,
@@ -46,23 +51,24 @@ public class ReviewRestController {
         return reviewDtoPage;
     }
 
-    @GetMapping(value = "/{id}")
+    @GetMapping(value = REVIEWS_ID)
     public ReviewDto findById(@PathVariable Long id) {
         return reviewService.findById(id);
     }
 
-    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ReviewDto createReview(@Valid @RequestBody ReviewDto dto) {
+    @PostMapping(value = REVIEWS, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ReviewDto createReview(@Valid @RequestBody ReviewDto dto, Principal principal) {
+        dto.setUserId(Long.valueOf(principal.getName()));
         return reviewService.create(dto);
     }
 
-    @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ReviewDto updateReview(@Valid @RequestBody ReviewDto dto, @PathVariable Long id) {
-        return reviewService.update(id, dto);
+    @PutMapping(value = REVIEWS_ID, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ReviewDto updateReview(@Valid @RequestBody ReviewDto dto, @PathVariable Long id, Principal principal) {
+        return reviewService.update(id, dto, Long.valueOf(principal.getName()));
     }
 
-    @DeleteMapping(value = "/{id}")
-    public void deleteReview(@PathVariable Long id) {
-        reviewService.delete(id);
+    @DeleteMapping(value = REVIEWS_ID)
+    public void deleteReview(@PathVariable Long id, Principal principal) {
+        reviewService.delete(id, Long.valueOf(principal.getName()));
     }
 }

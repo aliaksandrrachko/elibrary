@@ -1,18 +1,22 @@
 package by.it.academy.grodno.elibrary.rest.controllers;
 
+import static by.it.academy.grodno.elibrary.api.constants.Routes.Author.ADMIN_AUTHORS;
+import static by.it.academy.grodno.elibrary.api.constants.Routes.Author.ADMIN_AUTHORS_ID;
+import static by.it.academy.grodno.elibrary.api.constants.Routes.Author.AUTHORS;
+import static by.it.academy.grodno.elibrary.api.constants.Routes.Author.AUTHORS_ID;
+
 import by.it.academy.grodno.elibrary.api.dto.books.AuthorDto;
 import by.it.academy.grodno.elibrary.api.services.books.IAuthorService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.List;
 
 @RestController
-@RequestMapping(value = "/rest/authors")
 public class AuthorRestController {
 
     private final IAuthorService authorService;
@@ -21,32 +25,27 @@ public class AuthorRestController {
         this.authorService = authorService;
     }
 
-    @GetMapping()
-    public List<AuthorDto> findAllAuthors() {
-        return authorService.findAll();
-    }
-
-    @GetMapping("/pages")
-    public Page<AuthorDto> findAllAuthors(@PageableDefault Pageable pageable) {
+    @GetMapping(AUTHORS)
+    public Page<AuthorDto> findAllAuthors(@PageableDefault(sort = {"authorName"}, direction = Sort.Direction.ASC) Pageable pageable) {
         return authorService.findAll(pageable);
     }
 
-    @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = AUTHORS_ID, produces = MediaType.APPLICATION_JSON_VALUE)
     public AuthorDto findAuthor(@PathVariable Integer id) {
         return authorService.findById(id);
     }
 
-    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = ADMIN_AUTHORS, consumes = MediaType.APPLICATION_JSON_VALUE)
     public AuthorDto createAuthor(@Valid @RequestBody AuthorDto dto) {
         return authorService.create(dto);
     }
 
-    @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(value = ADMIN_AUTHORS_ID, consumes = MediaType.APPLICATION_JSON_VALUE)
     public AuthorDto updateAuthor(@Valid @RequestBody AuthorDto dto, @PathVariable Integer id) {
         return authorService.update(id, dto);
     }
 
-    @DeleteMapping(value = "/{id}")
+    @DeleteMapping(value = ADMIN_AUTHORS_ID)
     public void deleteAuthor(@PathVariable Integer id) {
         authorService.delete(id);
     }
