@@ -18,12 +18,12 @@ import org.springframework.stereotype.Component;
 import java.util.Optional;
 
 @Component
-public class CustomAuthenticationProvider implements AuthenticationProvider {
+public class CustomUserJpaRepositoryAuthenticationProvider implements AuthenticationProvider {
 
     private final PasswordEncoder bCryptPasswordEncoder;
     private final UserJpaRepository userJpaRepository;
 
-    public CustomAuthenticationProvider(PasswordEncoder bCryptPasswordEncoder, UserJpaRepository userJpaRepository) {
+    public CustomUserJpaRepositoryAuthenticationProvider(PasswordEncoder bCryptPasswordEncoder, UserJpaRepository userJpaRepository) {
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
         this.userJpaRepository = userJpaRepository;
     }

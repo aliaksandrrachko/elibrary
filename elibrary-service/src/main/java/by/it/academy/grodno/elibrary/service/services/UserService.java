@@ -17,6 +17,7 @@ import by.it.academy.grodno.elibrary.service.utils.RandomPasswordGenerator;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -254,5 +255,11 @@ public class UserService implements IUserService {
             user.setEnabled(!user.isEnabled());
             userJpaRepository.save(user);
         });
+    }
+
+    @Override
+    public User loadUserByUsername(String username) throws UsernameNotFoundException {
+        return userJpaRepository.findByEmail(username).orElseThrow(() -> new UsernameNotFoundException(
+                String.format("User '%s' not found in database", username)));
     }
 }

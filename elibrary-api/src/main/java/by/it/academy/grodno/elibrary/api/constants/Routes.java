@@ -1,5 +1,7 @@
 package by.it.academy.grodno.elibrary.api.constants;
 
+import org.springframework.security.core.Authentication;
+
 /**
  * Class containing routes Rest API constants
  */
@@ -94,5 +96,12 @@ public final class Routes {
         public static final String ADMIN_USERS = REST + "/users";
         public static final String ADMIN_USERS_ID = ADMIN_USERS + ID;
         public static final String ADMIN_USERS_EMAIL = ADMIN_USERS + "/email/{email}";
+    }
+
+    public static final class Auth {
+        private Auth(){}
+
+        public static final String LOGIN = REST + "/login";
+        public static final String SIGN_UP = REST + "/signup";
     }
 }
