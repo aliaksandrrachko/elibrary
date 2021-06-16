@@ -9,6 +9,7 @@ import io.jsonwebtoken.SignatureException;
 import io.jsonwebtoken.UnsupportedJwtException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
@@ -19,15 +20,17 @@ import java.util.Date;
 @Slf4j
 public class JwtTokenUtil {
 
-    private final String jwtSecret = "zdtlD3JK56m6wTTgsNFhqzjqP";
-    private final String jwtIssuer = "example.io";
+    @Value("${jwt.secret}")
+    private final String jwtSecret;
+    @Value("${jwt.issuer}")
+    private final String jwtIssuer;
 
     public String generateAccessToken(Authentication authentication) {
         return Jwts.builder()
                 .setSubject(authentication.getName())
                 .setIssuer(jwtIssuer)
                 .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + 7 * 24 * 60 * 60 * 1000)) // 1 week
+                .setExpiration(new Date(System.currentTimeMillis() + 3 * 60 * 60 * 1000)) // 3 hours
                 .signWith(SignatureAlgorithm.HS512, jwtSecret)
                 .compact();
     }

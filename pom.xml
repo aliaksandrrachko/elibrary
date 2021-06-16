@@ -314,7 +314,12 @@
                 <version>2.4.0</version>
                 <scope>test</scope>
             </dependency>
-
+            <dependency>
+                <groupId>org.springframework.security</groupId>
+                <artifactId>spring-security-test</artifactId>
+                <version>5.3.9.RELEASE</version>
+                <scope>test</scope>
+            </dependency>
 
             <dependency>
                 <groupId>javax.validation</groupId>

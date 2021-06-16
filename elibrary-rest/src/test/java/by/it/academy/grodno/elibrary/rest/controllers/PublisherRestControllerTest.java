@@ -1,4 +1,4 @@
-package by.it.academy.grodno.elibrary.rest;
+package by.it.academy.grodno.elibrary.rest.controllers;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.is;
@@ -13,23 +13,17 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import by.it.academy.grodno.elibrary.api.constants.Routes;
 import by.it.academy.grodno.elibrary.api.dto.books.PublisherDto;
 import by.it.academy.grodno.elibrary.api.services.books.IPublisherService;
-import by.it.academy.grodno.elibrary.rest.configuration.TestContextConfig;
-import by.it.academy.grodno.elibrary.rest.configuration.WebMvcConfig;
-import by.it.academy.grodno.elibrary.rest.controllers.PublisherRestController;
 import by.it.academy.grodno.elibrary.rest.utils.EntityJsonConverter;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
 import org.mockito.stubbing.Answer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.mock.web.MockHttpServletResponse;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
@@ -37,10 +31,7 @@ import org.springframework.web.context.WebApplicationContext;
 import java.util.ArrayList;
 import java.util.List;
 
-@ExtendWith(SpringExtension.class)
-@ContextConfiguration(classes = {PublisherRestController.class, WebMvcConfig.class, TestContextConfig.class})
-@WebAppConfiguration
-class PublisherRestControllerTest {
+class PublisherRestControllerTest extends ARestControllerTest{
 
     private MockMvc mockMvc;
 
@@ -70,7 +61,7 @@ class PublisherRestControllerTest {
         final PublisherDto publisherDto = getTestsPublisherDto();
         final int publisherId = 15;
         when(publisherService.findById(any())).thenReturn(publisherDto);
-        mockMvc.perform(get("/rest/publishers/{publisherId}", publisherId))
+        mockMvc.perform(get(Routes.Publisher.PUBLISHERS_ID, publisherId))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.publisherName", is(publisherDto.getPublisherName())))
                 .andExpect(jsonPath("$.id", is(publisherDto.getId())));
@@ -82,7 +73,7 @@ class PublisherRestControllerTest {
         final PublisherDto publisherDtoForUpdate = new PublisherDto("AST");
         final int publisherId = 23;
         when(publisherService.update(any(Integer.class), any(PublisherDto.class))).thenReturn(getTestsPublisherDto());
-        MockHttpServletResponse response = mockMvc.perform(put("/rest/publishers/{publisherId}", publisherId)
+        MockHttpServletResponse response = mockMvc.perform(put(Routes.Publisher.ADMIN_PUBLISHERS_ID, publisherId)
                         .contentType(APPLICATION_JSON)
                         .content(jsonConverter.getObjectJsonString(publisherDtoForUpdate)))
                 .andReturn().getResponse();
@@ -100,7 +91,7 @@ class PublisherRestControllerTest {
             publisherDto.setId((int) (Math.random() * 100));
             return publisherDto;
         });
-        MockHttpServletResponse response = mockMvc.perform(post("/rest/publishers")
+        MockHttpServletResponse response = mockMvc.perform(post(Routes.Publisher.ADMIN_PUBLISHERS)
         .contentType(APPLICATION_JSON)
         .content(
                 jsonConverter.getObjectJsonString(publisherForCreating)
@@ -114,7 +105,7 @@ class PublisherRestControllerTest {
     void findAllPublisher() throws Exception {
         final List<PublisherDto> testPublisherDtoList = getTestPublisherDtoList();
         when(publisherService.findAll()).thenReturn(testPublisherDtoList);
-        MockHttpServletResponse response = mockMvc.perform(get("/rest/publishers")
+        MockHttpServletResponse response = mockMvc.perform(get(Routes.Publisher.PUBLISHERS)
                 .accept(APPLICATION_JSON))
                 .andReturn().getResponse();
         assertThat(response.getStatus()).isEqualTo(HttpStatus.OK.value());
