@@ -21,9 +21,9 @@ import java.util.Date;
 public class JwtTokenUtil {
 
     @Value("${jwt.secret}")
-    private final String jwtSecret;
+    private String jwtSecret;
     @Value("${jwt.issuer}")
-    private final String jwtIssuer;
+    private String jwtIssuer;
 
     public String generateAccessToken(Authentication authentication) {
         return Jwts.builder()
