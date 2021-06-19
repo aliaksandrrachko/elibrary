@@ -21,6 +21,23 @@ mvn spring-boot:run
 
 When you execute the code above the application will run.
 
+### Using docker
+
+1. Create a docker container for MySQL
+```shell
+docker run --name mysql-docker-container -e MYSQL_ROOT_PASSWORD=1234 -d mysql:8.0.22
+```
+
+2. Building the docker image from project
+```shell
+docker build -f Dockerfile -t elibrary-spring-boot .
+```
+
+3. Running the built docker image
+```shell
+docker run -t --name elibrary-spring-boot-container --link mysql-docker-container:mysql -p 8080:8080 elibrary-spring-boot
+```
+
 ## Developing
 
 ### Modules
