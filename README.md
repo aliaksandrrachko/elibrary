@@ -15,8 +15,16 @@ The E-Library application does reading simple!
 
 ## Installing / Getting started
 
+### With docker
+
+1. Build image
 ```shell
-mvn spring-boot:run
+docker build -t elibrary-spring-framework .
+```
+
+2. Run application with docker-compose.yml
+```shell
+docker-compose up
 ```
 
 When you execute the code above the application will run.
@@ -28,7 +36,7 @@ When you execute the code above the application will run.
 * elibrary-entity
 * elibrary-service
 * elibrary-api
-* elibrary-controller
+* elibrary-logger 
 * elibrary-rest
 * elibrary-web
 * elibrary-utils
@@ -36,7 +44,7 @@ When you execute the code above the application will run.
 
 ### Built With
 * Java 1.8
-* Spring Boot 2.4.2
+* Spring framework 5.2.15.RELEASE
 * Spring Data JPA
 * Spring Web
 * OAuth2 Client
@@ -54,7 +62,7 @@ When you execute the code above the application will run.
 
 ## Tests
 
-There is test some JpaRepositories and AuthorService
+There is test some JpaRepositories and RestControllers
 
 ```shell
 mvn test

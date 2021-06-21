@@ -1,0 +1,25 @@
+version: '3.1'
+
+services:
+  elibrary:
+    image: elibrary-spring-framework:latest
+    build:
+      context: .
+    container_name: elibrary
+    depends_on:
+      - postgres-data
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres-data:5432/elibrary
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=1234
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=none
+    ports:
+    - 8080:8080
+
+  postgres-data:
+    image: postgres:13.1-alpine
+    container_name: postgres-data
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=1234
+      - POSTGRES_DB=elibrary

@@ -1,4 +1,4 @@
-package by.it.academy.grodno.elibrary.main;
+package by.it.academy.grodno.elibrary.main.configuration;
 
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.EnableCaching;

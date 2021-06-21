@@ -1,4 +1,4 @@
-package by.it.academy.grodno.elibrary.main;
+package by.it.academy.grodno.elibrary.main.configuration;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -13,7 +13,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @ComponentScan("by.it.academy.grodno.elibrary")
 @EnableScheduling
 @EnableAspectJAutoProxy
-public class ELibraryApplicationRootConfig {
+public class ApplicationRootConfig {
 
     @Bean
     public static PropertySourcesPlaceholderConfigurer properties(){

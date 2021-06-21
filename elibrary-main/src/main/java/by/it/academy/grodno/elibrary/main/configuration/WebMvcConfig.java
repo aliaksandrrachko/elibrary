@@ -1,4 +1,4 @@
-package by.it.academy.grodno.elibrary.main;
+package by.it.academy.grodno.elibrary.main.configuration;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
@@ -22,6 +22,5 @@ public class WebMvcConfig implements WebMvcConfigurer {
     public void configureDefaultServletHandling(DefaultServletHandlerConfigurer configurer) {
         configurer.enable();
     }
-
 
 }
