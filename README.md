@@ -15,19 +15,35 @@ The E-Library application does reading simple!
 
 ## Installing / Getting started
 
-### With docker
+### Method 1: Docker Compose
+Using file *docker-compose.yaml*
 
-1. Build image
+1. Build image from Dockerfile in source project
 ```shell
-docker build -t elibrary-spring-framework .
+docker-compose build
 ```
-
+or pull docker image
+```shell
+pull aliaksandrrachko/elibrary-spring-framework
+```
 2. Run application with docker-compose.yml
 ```shell
 docker-compose up
 ```
 
-When you execute the code above the application will run.
+### Method 2: No Docker Compose
+1. Pull docker image
+```shell
+pull aliaksandrrachko/elibrary-spring-framework
+```
+2. Create PostgreSQL database container
+```shell
+docker run --name elibrary-postgres -v elibrary-postgres-data:/var/lib/mysql -e POSTGRES_PASSWORD=1234 -e POSTGRES_DB=elibrary -dp 5432:5432 postgres:13.1-alpine
+```
+3. Create elibrary application container
+```shell
+docker run -dp 8085:8085 --name elibrary-spring-framework -v elibrary-app-data:/var/lib/app -e SPRING_DATASOURCE_URL=jdbc:postgresql://elibrary-postgres:5432/elibrary -e SPRING_DATASOURCE_USERNAME=postgres -e SPRING_DATASOURCE_PASSWORD=1234 -e SPRING_JPA_HIBERNATE_DDL_AUTO=none --link elibrary-postgres:postgresql elibrary-spring-framework:latest
+```
 
 ## Developing
 
@@ -74,7 +90,7 @@ mvn test
 
 ## Database
 
-Has been used MySQL Community Server 8.0.25
+Has been used PostgresSQL 13
 
 Track, version, and deploy database changes with Liquibase
 

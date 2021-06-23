@@ -1,19 +1,21 @@
 package by.it.academy.grodno.elibrary.main.server;
 
-import by.it.academy.grodno.elibrary.main.configuration.ApplicationRootConfig;
+import by.it.academy.grodno.elibrary.main.ElibraryApplication;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.catalina.Context;
 import org.apache.catalina.LifecycleException;
-import org.apache.catalina.core.StandardContext;
 import org.apache.catalina.startup.Tomcat;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StopWatch;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.servlet.ServletException;
 import java.io.File;
 import java.io.IOException;
-import java.util.Date;
+import java.nio.file.Files;
+import java.time.LocalDateTime;
 
 /**
  * Define a class which would create, start and stop Tomcat Server.
@@ -32,32 +34,40 @@ public class EmbeddedTomcat {
     private final Tomcat tomcat = new Tomcat();
 
     @PostConstruct
-    public void start() throws ServletException, LifecycleException {
+    public void start() throws ServletException, LifecycleException, IOException {
         System.setProperty("org.apache.catalina.startup.EXIT_ON_INIT_FAILURE", "true");
-        tomcat.setBaseDir(webBaseFolder);
+        StopWatch clock = new StopWatch(tomcat.toString());
+        clock.start(tomcat.toString());
+        log.info("Tomcat StartUp {}.", LocalDateTime.now());
+        tomcat.setBaseDir(createTempDir());
         tomcat.setPort(serverPort);
-        StandardContext ctx = (StandardContext) tomcat.addWebapp("", new File(".").getAbsolutePath());
-        ctx.setParentClassLoader(ApplicationRootConfig.class.getClassLoader());
+        tomcat.getHost().setAppBase(webBaseFolder);
+        Context context = tomcat.addWebapp("", webContentFolder);
+        context.setParentClassLoader(ElibraryApplication.class.getClassLoader());
         tomcat.start();
-        log.info("Tomcat Server Started at " + new Date());
+        log.info("Tomcat Server Started at {} ms.", clock.getTotalTimeMillis());
         tomcat.getServer().await();
     }
 
-    private String createTempDir() {
+    private String createTempDir() throws IOException {
         try {
             File tempDir = File.createTempFile("tomcat.", "." + serverPort);
-            tempDir.delete();
-            tempDir.mkdir();
+            Files.deleteIfExists(tempDir.toPath());
+            Files.createDirectory(tempDir.toPath());
             tempDir.deleteOnExit();
             return tempDir.getAbsolutePath();
         } catch (IOException ex) {
-            throw new RuntimeException(
-                    "Unable to create tempDir. java.io.tmpdir is set to " + System.getProperty("java.io.tmpdir"), ex);
+            log.warn("Unable to create tempDir", ex);
+            throw new IOException(
+                    String.format( "Unable to create tempDir. java.io.tmpdir is set to %s",
+                            System.getProperty("java.io.tmpdir")),
+                    ex);
         }
     }
 
     @PreDestroy
     public void stop() throws LifecycleException {
         tomcat.stop();
+        log.info("Tomcat Server Stop at {}", LocalDateTime.now());
     }
 }

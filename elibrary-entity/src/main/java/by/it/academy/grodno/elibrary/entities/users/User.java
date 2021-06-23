@@ -70,7 +70,7 @@ public class User extends AEntity<Long> implements UserDetails, Serializable {
     @Column(name = "phone_number", columnDefinition = "json")
     private PhoneNumber phoneNumber;
 
-    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "address_id", referencedColumnName = "id")
     private Address address;
 

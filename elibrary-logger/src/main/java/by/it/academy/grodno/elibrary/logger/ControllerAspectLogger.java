@@ -10,7 +10,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StopWatch;
 
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.stream.Collectors;
@@ -33,7 +32,7 @@ public class ControllerAspectLogger {
         try {
             clock.start(call.toShortString());
             methodResult = call.proceed();
-            return call.proceed();
+            return methodResult;
         } finally {
             clock.stop();
             log.info(getFormattedString(call, methodResult, clock.getTotalTimeMillis()));
@@ -42,7 +41,7 @@ public class ControllerAspectLogger {
 
     private static final String FORMAT_PATTERN_METHOD_PERFORMANCE = "around %s.%s(), args=[%s], return=[%s], startup in %d millis.}";
 
-    private String getFormattedString(ProceedingJoinPoint call, Object methodResult, long millis) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+    private String getFormattedString(ProceedingJoinPoint call, Object methodResult, long millis) {
         Method method = ((MethodSignature) call.getSignature()).getMethod();
         return String.format(FORMAT_PATTERN_METHOD_PERFORMANCE,
                 method.getDeclaringClass().getName(),

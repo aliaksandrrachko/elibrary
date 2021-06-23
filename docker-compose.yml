@@ -9,16 +9,16 @@ services:
     depends_on:
       - postgres-data
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres-data:5432/elibrary
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://elibrary-postgres-data:5432/elibrary
       - SPRING_DATASOURCE_USERNAME=postgres
       - SPRING_DATASOURCE_PASSWORD=1234
       - SPRING_JPA_HIBERNATE_DDL_AUTO=none
     ports:
-    - 8080:8080
+    - 8085:8085
 
   postgres-data:
     image: postgres:13.1-alpine
-    container_name: postgres-data
+    container_name: elibrary-postgres-data
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=1234

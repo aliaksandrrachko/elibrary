@@ -1,7 +1,5 @@
 package by.it.academy.grodno.elibrary.api.constants;
 
-import org.springframework.security.core.Authentication;
-
 /**
  * Class containing routes Rest API constants
  */

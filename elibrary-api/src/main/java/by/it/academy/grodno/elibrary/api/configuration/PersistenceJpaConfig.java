@@ -53,6 +53,7 @@ public class PersistenceJpaConfig {
 
     @Value("${spring.jpa.hibernate.ddl-auto}") String ddlAuto;
     @Value("${spring.jpa.properties.hibernate.dialect}") String dialect;
+    @Value("${spring.jpa.properties.hibernate.id.new_generator_mappings}") boolean newGeneratorMappings;
     @Value("${spring.jpa.show-sql}") boolean showSql;
     @Value("${spring.jpa.properties.hibernate.format_sql}") boolean formatSql;
 
@@ -62,6 +63,7 @@ public class PersistenceJpaConfig {
         properties.setProperty("hibernate.dialect", dialect);
         properties.put("hibernate.show_sql", showSql);
         properties.put("hibernate.format_sql", formatSql);
+        properties.put("hibernate.id.new_generator_mappings", newGeneratorMappings);
         return properties;
     }
 

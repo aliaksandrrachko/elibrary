@@ -12,7 +12,7 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 public class ElibraryApplication {
 
     public static void main(String[] ars) {
-        AnnotationConfigApplicationContext ctx = null;
+        AnnotationConfigApplicationContext ctx;
         try {
             ctx = new AnnotationConfigApplicationContext();
             ctx.register(ServerConfig.class);
@@ -21,6 +21,5 @@ public class ElibraryApplication {
         } catch (Exception e) {
             log.error(e.getMessage(), e);
         }
-
     }
 }
