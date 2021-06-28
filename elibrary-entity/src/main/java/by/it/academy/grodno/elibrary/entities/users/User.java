@@ -2,15 +2,35 @@ package by.it.academy.grodno.elibrary.entities.users;
 
 import by.it.academy.grodno.elibrary.entities.AEntity;
 import by.it.academy.grodno.elibrary.entitymetadata.converters.GenderConverter;
-import by.it.academy.grodno.elibrary.entitymetadata.converters.PhoneNumberJsonConverter;
 import by.it.academy.grodno.elibrary.entitymetadata.users.Gender;
 import by.it.academy.grodno.elibrary.entitymetadata.users.PhoneNumber;
-import lombok.*;
+import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.experimental.SuperBuilder;
+import org.hibernate.annotations.Type;
+import org.hibernate.annotations.TypeDef;
+import org.hibernate.annotations.TypeDefs;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Convert;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.OneToOne;
+import javax.persistence.PrimaryKeyJoinColumn;
+import javax.persistence.SecondaryTable;
+import javax.persistence.SecondaryTables;
+import javax.persistence.Table;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -24,10 +44,11 @@ import java.util.Set;
 @EqualsAndHashCode(callSuper = true)
 @SuperBuilder
 @Entity
-@Table(name = ("user"))
+@Table(name = "user", schema = "public")
 @SecondaryTables(value = {
         @SecondaryTable(name = "user_social_id", pkJoinColumns = {@PrimaryKeyJoinColumn(name = "user_id", referencedColumnName = "id")})
 })
+@TypeDefs(value = {@TypeDef(name = "jsonb", typeClass = JsonBinaryType.class)})
 public class User extends AEntity<Long> implements UserDetails, Serializable {
 
     @Column(name = "email", unique = true, length = 80)
@@ -45,11 +66,11 @@ public class User extends AEntity<Long> implements UserDetails, Serializable {
     @Column(name = "middle_name", length = 15)
     private String middleName;
 
-    @Convert(converter = PhoneNumberJsonConverter.class)
+    @Type(type = "jsonb")
     @Column(name = "phone_number", columnDefinition = "json")
     private PhoneNumber phoneNumber;
 
-    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "address_id", referencedColumnName = "id")
     private Address address;
 

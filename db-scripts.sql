@@ -1,73 +1,67 @@
 -- -----------------------------------------------------
--- Schema by_it_academy_grodno_elibrary
+-- Schema elibrary
 -- -----------------------------------------------------
-DROP SCHEMA IF EXISTS by_it_academy_grodno_elibrary;
-CREATE SCHEMA IF NOT EXISTS by_it_academy_grodno_elibrary;
-USE by_it_academy_grodno_elibrary;
+--DROP DATABASE elibrary;
+--CREATE DATABASE elibrary;
 
 -- -----------------------------------------------------
--- Table by_it_academy_grodno_elibrary.user
+-- Table elibrary.user
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS user
+CREATE TABLE IF NOT EXISTS "user"
 (
-    id           BIGINT UNSIGNED        NOT NULL AUTO_INCREMENT UNIQUE COMMENT 'User id',
-    email        VARCHAR(80) UNIQUE NULL COMMENT 'Email',
-    username     VARCHAR(30)            NOT NULL COMMENT 'User name',
-    first_name   VARCHAR(15) COMMENT 'First name',
-    last_name    VARCHAR(15) COMMENT 'Last name',
-    middle_name  VARCHAR(15) COMMENT 'Middle name',
-    phone_number JSON COMMENT 'User phone number',
-    address_id   BIGINT UNSIGNED        NUll COMMENT 'Id of address',
-    gender       CHAR(1)                NOT NULL DEFAULT 'u' COMMENT 'Gender: m-male, f-female, u-unknown',
-    birthday     DATE COMMENT 'Date of birthday',
-    password     VARCHAR(64) COMMENT 'Password encoded with using BCryptPasswordEncoder',
-    enabled      BOOLEAN  DEFAULT TRUE COMMENT 'User lock',
-    avatar_url   VARCHAR(2083) COMMENT 'Avatars url',
-    user_created DATETIME DEFAULT NOW() NOT NULL COMMENT 'Date of creating',
-    user_updated DATETIME DEFAULT NOW() NOT NULL COMMENT 'Date of updated',
+    id           BIGSERIAL,
+    email        VARCHAR(80) UNIQUE,
+    username     VARCHAR(30) NOT NULL,
+    first_name   VARCHAR(15),
+    last_name    VARCHAR(15),
+    middle_name  VARCHAR(15),
+    phone_number JSON,
+    address_id   BIGINT CHECK (address_id > 0),
+    gender       CHAR(1) NOT NULL DEFAULT 'u',
+    birthday     DATE,
+    password     VARCHAR(64),
+    enabled      BOOLEAN  DEFAULT TRUE,
+    avatar_url   VARCHAR(2083),
+    user_created TIMESTAMP WITH TIME ZONE DEFAULT NOW() NOT NULL,
+    user_updated TIMESTAMP WITH TIME ZONE DEFAULT NOW() NOT NULL,
     CONSTRAINT pk_user PRIMARY KEY (id)
 );
 
+COMMENT ON COLUMN "user".gender IS 'Gender: m-male, f-female, u-unknown';
+COMMENT ON COLUMN "user".password IS 'Password encoded with using BCryptPasswordEncoder';
+
 -- -----------------------------------------------------
--- Table by_it_academy_grodno_elibrary.user_social_id
+-- Table elibrary.user_social_id
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS user_social_id
 (
-    user_id   BIGINT UNSIGNED NOT NULL COMMENT 'Users id',
-    social_id BIGINT UNSIGNED NOT NULL UNIQUE COMMENT 'Users social id (ex. facebook, github, google)',
-    CONSTRAINT fk_user_user_social_id FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE ON UPDATE CASCADE
+    user_id   BIGINT NOT NULL CHECK (user_id > 0),
+    social_id BIGINT NOT NULL UNIQUE CHECK (social_id > 0),
+    CONSTRAINT fk_user_user_social_id FOREIGN KEY (user_id) REFERENCES "user" (id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
--- -----------------------------------------------------
--- Trigger on update user
--- -----------------------------------------------------
-CREATE
-    TRIGGER p_user_update
-    BEFORE UPDATE
-    ON user
-    FOR EACH ROW
-    SET NEW.user_updated = NOW();
+COMMENT ON COLUMN user_social_id.social_id IS 'Users social id (ex. facebook, github, google)';
 
 -- -----------------------------------------------------
--- Table by_it_academy_grodno_elibrary.role
+-- Table elibrary.role
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS role
 (
-    id        INT UNSIGNED NOT NULL AUTO_INCREMENT UNIQUE COMMENT 'Roles id',
-    role_name VARCHAR(45)  NOT NULL UNIQUE COMMENT 'Roles name',
+    id        SERIAL,
+    role_name VARCHAR(45)  NOT NULL UNIQUE,
     CONSTRAINT pk_role PRIMARY KEY (id)
 );
 
 -- -----------------------------------------------------
--- Table by_it_academy_grodno_elibrary.user_has_role
+-- Table elibrary.user_has_role
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS user_has_role
 (
-    user_id BIGINT UNSIGNED NOT NULL,
-    role_id INT UNSIGNED    NOT NULL,
+    user_id BIGINT NOT NULL CHECK(user_id > 0),
+    role_id INT NOT NULL CHECK (role_id > 0),
     PRIMARY KEY (user_id, role_id),
     CONSTRAINT fk_user_has_role_role1 FOREIGN KEY (role_id) REFERENCES role (id) ON DELETE CASCADE ON UPDATE CASCADE,
-    CONSTRAINT fk_user_has_role_user1 FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE ON UPDATE CASCADE
+    CONSTRAINT fk_user_has_role_user1 FOREIGN KEY (user_id) REFERENCES "user" (id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 -- -----------------------------------------------------
@@ -75,18 +69,25 @@ CREATE TABLE IF NOT EXISTS user_has_role
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS address
 (
-    id           BIGINT UNSIGNED        NOT NULL AUTO_INCREMENT UNIQUE COMMENT 'A surrogate primary key used to uniquely identify each address in the table.',
-    country      VARCHAR(50) COMMENT 'Country name',
-    region       VARCHAR(50) COMMENT 'The first line of an address.',
-    district     VARCHAR(50)            NOT NULL COMMENT 'The region of an address, this may be a state, province, prefecture, etc.',
-    city         VARCHAR(50)            NOT NULL COMMENT 'A foreign key pointing to the city table.',
-    street       VARCHAR(50)            NOT NULL COMMENT 'The street name',
-    postal_code  VARCHAR(32) COMMENT 'The postal code or ZIP code of the address (where applicable).',
-    house        VARCHAR(10)            NOT NULL COMMENT 'The house number',
-    apt          VARCHAR(10) COMMENT 'Number of room',
-    last_updated DATETIME DEFAULT NOW() NOT NULL COMMENT 'Date of creating or last updating',
+    id           BIGSERIAL,
+    country      VARCHAR(50),
+    region       VARCHAR(50),
+    district     VARCHAR(50) NOT NULL,
+    city         VARCHAR(50) NOT NULL,
+    street       VARCHAR(50) NOT NULL,
+    postal_code  VARCHAR(32),
+    house        VARCHAR(10) NOT NULL,
+    apt          VARCHAR(10),
+    last_updated TIMESTAMP WITH TIME ZONE DEFAULT NOW() NOT NULL,
     CONSTRAINT pk_address PRIMARY KEY (id)
 );
+
+CREATE FUNCTION f_address_update_last_updated() RETURNS TRIGGER AS $$
+BEGIN
+    NEW.last_updated=NOW();
+RETURN NEW;
+END; $$
+    LANGUAGE plpgsql;
 
 -- -----------------------------------------------------
 -- Trigger by insert or update address
@@ -96,7 +97,7 @@ CREATE
     BEFORE UPDATE
     ON address
     FOR EACH ROW
-    SET NEW.last_updated = NOW();
+    EXECUTE PROCEDURE f_address_update_last_updated();
 
 -- -----------------------------------------------------
 -- Trigger by insert or insert address
@@ -106,113 +107,134 @@ CREATE
     BEFORE INSERT
     ON address
     FOR EACH ROW
-    SET NEW.last_updated = NOW();
+    EXECUTE PROCEDURE f_address_update_last_updated();
 
 -- -----------------------------------------------------
 -- Alter table user add FK key
 -- -----------------------------------------------------
-ALTER TABLE user
+ALTER TABLE "user"
     ADD
         CONSTRAINT fk_user_address
             FOREIGN KEY (address_id) REFERENCES address (id) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- -----------------------------------------------------
--- Table by_it_academy_grodno_elibrary.category
+-- Table elibrary.category
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS category
 (
-    id            INT UNSIGNED NOT NULL AUTO_INCREMENT UNIQUE COMMENT 'Book category id',
-    parent_id     INT UNSIGNED COMMENT 'Parent id',
-    category_name VARCHAR(45)  NOT NULL UNIQUE COMMENT 'Name of book category',
+    id            SERIAL,
+    parent_id     INT CHECK (parent_id > 0),
+    category_name VARCHAR(45)  NOT NULL UNIQUE,
     CONSTRAINT pk_category PRIMARY KEY (id),
     CONSTRAINT fk_category_category1 FOREIGN KEY (parent_id) REFERENCES category (id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 -- -----------------------------------------------------
--- Table by_it_academy_grodno_elibrary.publisher
+-- Table elibrary.publisher
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS publisher
 (
-    id             INT UNSIGNED NOT NULL AUTO_INCREMENT UNIQUE COMMENT 'Publisher id',
-    publisher_name VARCHAR(100) NOT NULL UNIQUE COMMENT 'Name of books publisher',
+    id             SERIAL,
+    publisher_name VARCHAR(100) NOT NULL UNIQUE,
     CONSTRAINT pk_publisher PRIMARY KEY (id)
 );
 
 -- -----------------------------------------------------
--- Table by_it_academy_grodno_elibrary.author
+-- Table elibrary.author
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS author
 (
-    id          INT UNSIGNED NOT NULL AUTO_INCREMENT UNIQUE COMMENT 'Author id',
-    author_name VARCHAR(45) COMMENT 'Author name',
+    id          SERIAL,
+    author_name VARCHAR(45) UNIQUE,
     CONSTRAINT pk_author PRIMARY KEY (id)
 );
 
 -- -----------------------------------------------------
--- Table by_it_academy_grodno_elibrary.book
+-- Table elibrary.book
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS book
 (
-    id              BIGINT UNSIGNED            NOT NULL AUTO_INCREMENT UNIQUE COMMENT 'Book id',
-    title           VARCHAR(100)               NOT NULL COMMENT 'Book title',
-    description     TEXT COMMENT 'Book description',
-    isbn_10         VARCHAR(10)                NOT NULL COMMENT 'Books isbn in format ISBN-10',
-    isbn_13         VARCHAR(13)                NOT NULL COMMENT 'Books isbn in format ISBN-13',
-    category_id      INT UNSIGNED               NOT NULL COMMENT 'Category id',
-    publisher_id    INT UNSIGNED COMMENT 'Book publisher',
-    language        VARCHAR(3) COMMENT 'Language of book by alpha-3/ISO 639-2 Code',
-    publishing_date DATE COMMENT 'The year and month of publishing',
-    print_length    INT UNSIGNED               NOT NULL COMMENT 'Count of pages',
-    picture_url     VARCHAR(2083) COMMENT 'Books cover image',
-    attributes      JSON COMMENT 'Books attributes',
-    total_count     INT UNSIGNED COMMENT 'Total count of books',
-    available_count INT UNSIGNED COMMENT 'Available count',
-    available       BOOLEAN      DEFAULT TRUE COMMENT 'Available for booking',
-    book_rating     INT UNSIGNED DEFAULT 0 NOT NULL COMMENT 'Book rating, count of viewing',
-    book_created    DATETIME     DEFAULT NOW() NOT NULL COMMENT 'The date of adding book',
-    book_updated    DATETIME     DEFAULT NOW() NOT NULL COMMENT 'The date of adding book',
+    id              BIGSERIAL,
+    title           VARCHAR(100)                           NOT NULL,
+    description     TEXT,
+    isbn_10         VARCHAR(10)                            NOT NULL,
+    isbn_13         VARCHAR(13)                            NOT NULL,
+    category_id     INT                                    NOT NULL CHECK (category_id > 0),
+    publisher_id    INT CHECK ( publisher_id > 0 ),
+    language        VARCHAR(3),
+    publishing_date DATE,
+    print_length    INT                                    NOT NULL CHECK (print_length > 0),
+    picture_url     VARCHAR(2083),
+    attributes      JSON,
+    total_count     INT CHECK ( total_count >= 0 ),
+    available_count INT CHECK ( 0 <= available_count AND available_count <= total_count ),
+    available       BOOLEAN                  DEFAULT TRUE,
+    book_rating     INT                      DEFAULT 0     NOT NULL CHECK ( book_rating >= 0 ),
+    book_created    TIMESTAMP WITH TIME ZONE DEFAULT NOW() NOT NULL,
+    book_updated    TIMESTAMP WITH TIME ZONE DEFAULT NOW() NOT NULL,
     CONSTRAINT pk_book PRIMARY KEY (id),
     CONSTRAINT fk_book_category FOREIGN KEY (category_id) REFERENCES category (id) ON DELETE CASCADE ON UPDATE CASCADE,
     CONSTRAINT fk_book_publisher FOREIGN KEY (publisher_id) REFERENCES publisher (id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
+COMMENT ON COLUMN book.language IS 'Language of book by alpha-3/ISO 639-2 Code';
+COMMENT ON COLUMN book.book_rating IS 'Book rating, count of booking';
+
+
+CREATE FUNCTION f_book_update_book_updated() RETURNS TRIGGER AS $$
+BEGIN
+    NEW.book_updated=NOW();
+RETURN NEW;
+END; $$
+    LANGUAGE plpgsql;
+
 -- -----------------------------------------------------
--- Trigger on update user
+-- Trigger on update book
 -- -----------------------------------------------------
 CREATE
     TRIGGER p_book_update
     BEFORE UPDATE
     ON book
     FOR EACH ROW
-    SET NEW.book_updated = NOW();
+    EXECUTE PROCEDURE f_book_update_book_updated();
 
 -- -----------------------------------------------------
--- Table by_it_academy_grodno_elibrary.book_has_author
+-- Table elibrary.book_has_author
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS book_has_author
 (
-    book_id   BIGINT UNSIGNED NOT NULL COMMENT 'Book id from table book',
-    author_id INT UNSIGNED    NOT NULL COMMENT 'Author id from table author',
+    book_id   BIGINT NOT NULL CHECK ( book_id > 0 ),
+    author_id INT    NOT NULL CHECK ( author_id > 0 ),
     CONSTRAINT fk_book_has_author_book1 FOREIGN KEY (book_id) REFERENCES book (id) ON DELETE CASCADE ON UPDATE CASCADE,
     CONSTRAINT fk_book_has_author_author1 FOREIGN KEY (author_id) REFERENCES author (id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 -- -----------------------------------------------------
--- Table by_it_academy_grodno_elibrary.review
+-- Table elibrary.review
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS review
 (
-    id             BIGINT UNSIGNED AUTO_INCREMENT UNIQUE NOT NULL COMMENT 'Review id',
-    book_id        BIGINT UNSIGNED                       NOT NULL COMMENT 'Books id',
-    user_id        BIGINT UNSIGNED                       NOT NULL COMMENT 'Users id',
-    review_text    TEXT                                  NOT NULL COMMENT 'Review text',
-    review_grade   TINYINT UNSIGNED                      NOT NULL COMMENT 'Review gradle',
-    review_created DATETIME DEFAULT NOW()                NOT NULL COMMENT 'Date of creating',
-    review_updated DATETIME DEFAULT NOW()                NOT NULL COMMENT 'Date of updating',
+    id             BIGSERIAL,
+    book_id        BIGINT                                 NOT NULL CHECK ( book_id > 0 ),
+    user_id        BIGINT                                 NOT NULL CHECK ( user_id > 0 ),
+    review_text    TEXT                                   NOT NULL,
+    review_grade   SMALLINT                               NOT NULL CHECK ( 0 <= review_grade AND review_grade <= 5),
+    review_created TIMESTAMP WITH TIME ZONE DEFAULT NOW() NOT NULL,
+    review_updated TIMESTAMP WITH TIME ZONE DEFAULT NOW() NOT NULL,
     CONSTRAINT pk_review PRIMARY KEY (id),
     CONSTRAINT fk_review_book FOREIGN KEY (book_id) REFERENCES book (id) ON DELETE CASCADE ON UPDATE CASCADE,
-    CONSTRAINT fk_review_user FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE ON UPDATE CASCADE
+    CONSTRAINT fk_review_user FOREIGN KEY (user_id) REFERENCES "user" (id) ON DELETE CASCADE ON UPDATE CASCADE
 );
+
+-- -----------------------------------------------------
+-- Function for update review.review_updated
+-- -----------------------------------------------------
+CREATE FUNCTION f_review_update_review_updated() RETURNS TRIGGER AS $$
+BEGIN
+    NEW.review_updated=NOW();
+RETURN NEW;
+END; $$
+    LANGUAGE plpgsql;
 
 -- -----------------------------------------------------
 -- Trigger on update review
@@ -222,29 +244,28 @@ CREATE
     BEFORE UPDATE
     ON review
     FOR EACH ROW
-    SET NEW.review_updated = NOW();
+    EXECUTE PROCEDURE f_review_update_review_updated();
 
 -- -----------------------------------------------------
 -- Table by_it_academy_grodno_elibrary.subscription
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS subscription
 (
-    id                    BIGINT UNSIGNED AUTO_INCREMENT UNIQUE NOT NULL COMMENT 'Subscription id',
-    status_code           INT UNSIGNED    NOT NULL COMMENT 'Status',
-    user_id               BIGINT UNSIGNED NOT NULL COMMENT 'Users id',
-    book_id               BIGINT UNSIGNED NOT NULL COMMENT 'Book id from table book',
-    took                  INT UNSIGNED    NOT NULL COMMENT 'Count of book took',
-    returned              INT UNSIGNED    NOT NULL DEFAULT 0 COMMENT 'Count of book returned',
-    subscription_created  DATETIME        NOT NULL DEFAULT NOW() COMMENT 'Date of creating',
-    subscription_deadline DATETIME        NOT NULL DEFAULT NOW() COMMENT 'Deadline',
+    id                    BIGSERIAL,
+    status_code           INT                      NOT NULL,
+    user_id               BIGINT                   NOT NULL CHECK ( user_id > 0 ),
+    book_id               BIGINT                   NOT NULL CHECK (book_id > 0),
+    took                  INT                      NOT NULL CHECK (took > 0),
+    returned              INT                      NOT NULL DEFAULT 0 CHECK (0 <= returned AND returned <= took),
+    subscription_created  TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW(),
+    subscription_deadline TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW(),
     CONSTRAINT pk_subscription PRIMARY KEY (id),
-    CONSTRAINT fk_subscription_user FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT fk_subscription_user FOREIGN KEY (user_id) REFERENCES "user" (id) ON DELETE CASCADE ON UPDATE CASCADE,
     CONSTRAINT fk_subscription_book FOREIGN KEY (book_id) REFERENCES book (id) ON DELETE CASCADE ON UPDATE CASCADE
-    #CONSTRAINT fk_subscription_status FOREIGN KEY (status_code) REFERENCES status (status_code) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 -- -----------------------------------------------------
--- Initial data by_it_academy_grodno_elibrary.role
+-- Initial data elibrary.role
 -- -----------------------------------------------------
 INSERT INTO role (id, role_name)
 VALUES (1, 'ROLE_USER'),
@@ -252,9 +273,10 @@ VALUES (1, 'ROLE_USER'),
        (3, 'ROLE_USER_FACEBOOK'),
        (4, 'ROLE_USER_GITHUB'),
        (5, 'ROLE_USER_GOOGLE');
+SELECT setval('role_id_seq', (SELECT max(id) FROM role));
 
 -- -----------------------------------------------------
--- Initial data by_it_academy_grodno_elibrary.address
+-- Initial data elibrary.address
 -- -----------------------------------------------------
 INSERT INTO address (id, country, region, district, city, street, postal_code, house, apt)
 values (1, 'Беларусь', 'Гродненская', 'Гродненский', 'Kuangyuan', 'Erie', '230005', '278', '4720'),
@@ -291,14 +313,16 @@ values (1, 'Беларусь', 'Гродненская', 'Гродненский
        (32,  'Беларусь', 'Гродненская', 'Tumaco', 'Division', 'Barnett', '984568', '093', '2'),
        (33, 'Беларусь', 'Madrid', 'Laocheng', 'Victoria', 'Barnett', '898', '81', '4'),
        (34, 'Беларусь', 'Madrid', 'Laocheng', 'Victoria', 'Bar', '898', '747', '3');
+SELECT setval('address_id_seq', (SELECT max(id) FROM address));
+
 
 -- -----------------------------------------------------
--- Initial data by_it_academy_grodno_elibrary.user
+-- Initial data elibrary.user
 -- -----------------------------------------------------
-INSERT INTO user (email, username, first_name, last_name, middle_name, phone_number, address_id, gender, birthday, password, avatar_url)
+INSERT INTO "user" (email, username, first_name, last_name, middle_name, phone_number, address_id, gender, birthday, password, avatar_url)
 VALUES ('admin@mail.ru', 'Admin', 'Dima', 'Petrov', 'Petrovich', '{"countryCode": "375", "nationalNumber": "292965416"}', 1, 'm', '1995-04-05', '$2a$10$Z1/.F4bRuyOGyL7NQrmjhufHf8XrHIEjPfBz9tlPbPcWrLpvPWKfq', '/img/users/avatars/default_male_avatar.png'); /*12345*/
 
-INSERT INTO user (email, username, first_name, last_name, middle_name, phone_number, address_id, gender, birthday, password,  avatar_url)
+INSERT INTO "user" (email, username, first_name, last_name, middle_name, phone_number, address_id, gender, birthday, password,  avatar_url)
 VALUES ('eget.odio@Donec.ca', 'Armand Parrish', 'Cleo', 'Macias', 'Gretchen', '{"countryCode": "375", "nationalNumber": "296908407"}', 2, 'm', '2021-03-01', '$2a$10$Z1/.F4bRuyOGyL7NQrmjhufHf8XrHIEjPfBz9tlPbPcWrLpvPWKfq', '/img/users/avatars/default_male_avatar.png'),
        ('ligula.eu@litoratorquent.net', 'Azalia Rosario', 'Raven', 'Barry', 'Jordan', '{"countryCode": "375", "nationalNumber": "296270309"}', 3, 'm', '2022-02-25', '$2a$10$Z1/.F4bRuyOGyL7NQrmjhufHf8XrHIEjPfBz9tlPbPcWrLpvPWKfq', '/img/users/avatars/default_male_avatar.png'),
        ('id@acarcuNunc.edu', 'Leah Moody', 'Mark', 'Mckinney', 'Dalton', '{"countryCode": "375", "nationalNumber": "339685203"}', 4, 'm', '2020-10-01', '$2a$10$Z1/.F4bRuyOGyL7NQrmjhufHf8XrHIEjPfBz9tlPbPcWrLpvPWKfq', '/img/users/avatars/default_male_avatar.png'),
@@ -309,32 +333,32 @@ VALUES ('eget.odio@Donec.ca', 'Armand Parrish', 'Cleo', 'Macias', 'Gretchen', '{
        ('erat.Sed.nunc@temporbibendum.org', 'Xena Albert', 'Fulton', 'Mcbride', 'Marny', '{"countryCode": "375", "nationalNumber": "344555666"}', 9, 'u', '2022-03-22', '$2a$10$Z1/.F4bRuyOGyL7NQrmjhufHf8XrHIEjPfBz9tlPbPcWrLpvPWKfq', '/img/users/avatars/default_unknown_avatar.png'),
        ('dolor.nonummy.ac@neque.com', 'Ivy Whitfield', 'Lara', 'Forbes', 'Anjolie', '{"countryCode": "375", "nationalNumber": "294574811"}', 10, 'f', '2022-03-21', '$2a$10$Z1/.F4bRuyOGyL7NQrmjhufHf8XrHIEjPfBz9tlPbPcWrLpvPWKfq', '/img/users/avatars/default_unknown_avatar.png'),
        ('mauris@malesuada.org', 'Claire Contreras', 'Kimberly', 'Castaneda', 'Darryl', '{"countryCode": "375", "nationalNumber": "292424054"}', 11, 'm', '2021-10-23', '$2a$10$Z1/.F4bRuyOGyL7NQrmjhufHf8XrHIEjPfBz9tlPbPcWrLpvPWKfq', '/img/users/avatars/default_unknown_avatar.png'),
-        ('wnewellkt@taobao.com', 'wnewellkt', 'Léa', 'Newell', 'Weber', '{"countryCode": "375", "nationalNumber": "7915400347"}', 12, 'u', '2018-04-29', '$2a$10$Z1/.F4bRuyOGyL7NQrmjhufHf8XrHIEjPfBz9tlPbPcWrLpvPWKfq' , '/img/users/avatars/default_unknown_avatar.png'),
-        ('cjaquemeku@apple.com', 'cjaquemeku', 'Magdalène', 'Jaqueme', 'Christie', '{"countryCode": "375", "nationalNumber": "4306703018"}', 13, 'u', '2020-07-14', '$2a$10$Z1/.F4bRuyOGyL7NQrmjhufHf8XrHIEjPfBz9tlPbPcWrLpvPWKfq', '/img/users/avatars/default_unknown_avatar.png'),
-        ('gcantillonkv@youtube.com', 'gcantillonkv', 'Ruò', 'Cantillon', 'Gardiner', '{"countryCode": "375", "nationalNumber": "9769507984"}', 14, 'u', '2018-06-29', '$2a$10$Z1/.F4bRuyOGyL7NQrmjhufHf8XrHIEjPfBz9tlPbPcWrLpvPWKfq', '/img/users/avatars/default_unknown_avatar.png'),
-        ('evaninkw@godaddy.com', 'evaninkw', 'Mélinda', 'Vanin', 'Evita', '{"countryCode": "375", "nationalNumber": "5178815966"}', 15, 'u', '2020-05-23', '$2a$10$Z1/.F4bRuyOGyL7NQrmjhufHf8XrHIEjPfBz9tlPbPcWrLpvPWKfq', '/img/users/avatars/default_unknown_avatar.png'),
-        ('zwillcottkx@mapy.cz', 'zwillcottkx', 'Vérane', 'Willcott', 'Zorina', '{"countryCode": "375", "nationalNumber": "4145688080"}', 16, 'u', '2019-02-21', '$2a$10$Z1/.F4bRuyOGyL7NQrmjhufHf8XrHIEjPfBz9tlPbPcWrLpvPWKfq' , '/img/users/avatars/default_unknown_avatar.png'),
-        ('rborthramky@goo.gl', 'rborthramky', 'Marie-hélène', 'Borthram', 'Ryun', '{"countryCode": "375", "nationalNumber": "3589254689"}', 17, 'f', '2019-10-26', '$2a$10$Z1/.F4bRuyOGyL7NQrmjhufHf8XrHIEjPfBz9tlPbPcWrLpvPWKfq', '/img/users/avatars/default_female_avatar.png'),
-        ('lsinnattkz@blogspot.com', 'lsinnattkz', 'Dà', 'Sinnatt', 'Luke', '{"countryCode": "375", "nationalNumber": "9478276926"}', 18, 'f', '2021-04-11', '$2a$10$Z1/.F4bRuyOGyL7NQrmjhufHf8XrHIEjPfBz9tlPbPcWrLpvPWKfq', '/img/users/avatars/default_female_avatar.png'),
-        ('asydenhaml0@elegantthemes.com', 'asydenhaml0', 'Mélissandre', 'Sydenham', 'Alaster', '{"countryCode": "375", "nationalNumber": "2652629456"}', 19, 'f', '2020-08-13', '$2a$10$Z1/.F4bRuyOGyL7NQrmjhufHf8XrHIEjPfBz9tlPbPcWrLpvPWKfq', '/img/users/avatars/default_female_avatar.png'),
-        ('pgiannasil1@dmoz.org', 'pgiannasil1', 'Geneviève', 'Giannasi', 'Paulie', '{"countryCode": "375", "nationalNumber": "9948997234"}', 20, 'f', '2020-03-08', '$2a$10$Z1/.F4bRuyOGyL7NQrmjhufHf8XrHIEjPfBz9tlPbPcWrLpvPWKfq' ,'/img/users/avatars/default_female_avatar.png'),
-        ('kkentishl2@ted.com', 'kkentishl2', 'Léandre', 'Kentish', 'Kass', '{"countryCode": "375", "nationalNumber": "7911654280"}', 21, 'f', '2018-11-08','$2a$10$Z1/.F4bRuyOGyL7NQrmjhufHf8XrHIEjPfBz9tlPbPcWrLpvPWKfq', '/img/users/avatars/default_female_avatar.png'),
-        ('ainchboardl3@cyberchimps.com', 'ainchboardl3', 'Göran', 'Inchboard', 'Andeee', '{"countryCode": "375", "nationalNumber": "5875670233"}', 22, 'f', '2018-09-08', '$2a$10$Z1/.F4bRuyOGyL7NQrmjhufHf8XrHIEjPfBz9tlPbPcWrLpvPWKfq', '/img/users/avatars/default_female_avatar.png'),
-        ('kfourcadel4@reverbnation.com', 'kfourcadel4', 'Aloïs', 'Fourcade', 'Keslie', '{"countryCode": "375", "nationalNumber": "5878816423"}', 23, 'f', '2018-06-30', '$2a$10$Z1/.F4bRuyOGyL7NQrmjhufHf8XrHIEjPfBz9tlPbPcWrLpvPWKfq' , '/img/users/avatars/default_female_avatar.png'),
-        ('ddorninl5@angelfire.com', 'ddorninl5', 'Intéressant', 'Dornin', 'Dannel', '{"countryCode": "375", "nationalNumber": "7583032901"}', 24, 'f', '2020-07-01', '$2a$10$Z1/.F4bRuyOGyL7NQrmjhufHf8XrHIEjPfBz9tlPbPcWrLpvPWKfq', '/img/users/avatars/default_female_avatar.png'),
-        ('gmollenl6@drupal.org', 'gmollenl6', 'Håkan', 'Mollen', 'Gwyneth', '{"countryCode": "375", "nationalNumber": "9558773126"}', 25, 'f', '2020-10-10', '$2a$10$Z1/.F4bRuyOGyL7NQrmjhufHf8XrHIEjPfBz9tlPbPcWrLpvPWKfq', '/img/users/avatars/default_female_avatar.png'),
-        ('imellyl7@cisco.com', 'imellyl7', 'Thérèse', 'Melly', 'Irvin', '{"countryCode": "375", "nationalNumber": "7127396057"}', 26, 'm', '2020-08-10', '$2a$10$Z1/.F4bRuyOGyL7NQrmjhufHf8XrHIEjPfBz9tlPbPcWrLpvPWKfq', '/img/users/avatars/default_male_avatar.png'),
-        ('zkerrichl8@auda.org.au', 'zkerrichl8', 'Marie-josée', 'Kerrich', 'Zed', '{"countryCode": "375", "nationalNumber": "7807417723"}', 27, 'm', '2018-04-26', '$2a$10$Z1/.F4bRuyOGyL7NQrmjhufHf8XrHIEjPfBz9tlPbPcWrLpvPWKfq', '/img/users/avatars/default_male_avatar.png'),
-        ('mspanswickl9@redcross.org', 'mspanswickl9', 'Rébecca', 'Spanswick', 'Mathias', '{"countryCode": "375", "nationalNumber": "2194902207"}', 28, 'm', '2020-04-03', '$2a$10$Z1/.F4bRuyOGyL7NQrmjhufHf8XrHIEjPfBz9tlPbPcWrLpvPWKfq', '/img/users/avatars/default_male_avatar.png'),
-        ('hkediela@ca.gov', 'hkediela', 'Göran', 'Kedie', 'Hal', '{"countryCode": "375", "nationalNumber": "8775028030"}', 29, 'm', '2020-01-16', '$2a$10$Z1/.F4bRuyOGyL7NQrmjhufHf8XrHIEjPfBz9tlPbPcWrLpvPWKfq', '/img/users/avatars/default_male_avatar.png'),
-        ('rcouttslb@techcrunch.com', 'rcouttslb', 'Maëlle', 'Coutts', 'Roseann', '{"countryCode": "375", "nationalNumber": "3787034170"}', 30, 'm', '2020-05-16', '$2a$10$Z1/.F4bRuyOGyL7NQrmjhufHf8XrHIEjPfBz9tlPbPcWrLpvPWKfq', '/img/users/avatars/default_male_avatar.png'),
-        ('dlewislc@blog.com', 'dlewislc', 'Marieève', 'Lewis', 'Diandra', '{"countryCode": "375", "nationalNumber": "5628160203"}', 31, 'm', '2020-04-08', '$2a$10$Z1/.F4bRuyOGyL7NQrmjhufHf8XrHIEjPfBz9tlPbPcWrLpvPWKfq', '/img/users/avatars/default_male_avatar.png'),
-        ('kmcentagartld@oaic.gov.au', 'kmcentagartld', 'Táng', 'McEntagart', 'Karola', '{"countryCode": "375", "nationalNumber": "9905994967"}', 32, 'm', '2018-11-26', '$2a$10$Z1/.F4bRuyOGyL7NQrmjhufHf8XrHIEjPfBz9tlPbPcWrLpvPWKfq', '/img/users/avatars/default_male_avatar.png'),
-        ('bholthamle@theguardian.com', 'bholthamle', 'Kévina', 'Holtham', 'Ben', '{"countryCode": "375", "nationalNumber": "8487738742"}', 33, 'm', '2018-02-13', '$2a$10$Z1/.F4bRuyOGyL7NQrmjhufHf8XrHIEjPfBz9tlPbPcWrLpvPWKfq', '/img/users/avatars/default_male_avatar.png'),
-        ('csandhamlf@ftc.gov', 'csandhamlf', 'Réservés', 'Sandham', 'Cal', '{"countryCode": "375", "nationalNumber": "6134745518"}', 34, 'f', '2019-12-24', '$2a$10$Z1/.F4bRuyOGyL7NQrmjhufHf8XrHIEjPfBz9tlPbPcWrLpvPWKfq', '/img/users/avatars/default_female_avatar.png');
+       ('wnewellkt@taobao.com', 'wnewellkt', 'Léa', 'Newell', 'Weber', '{"countryCode": "375", "nationalNumber": "7915400347"}', 12, 'u', '2018-04-29', '$2a$10$Z1/.F4bRuyOGyL7NQrmjhufHf8XrHIEjPfBz9tlPbPcWrLpvPWKfq' , '/img/users/avatars/default_unknown_avatar.png'),
+       ('cjaquemeku@apple.com', 'cjaquemeku', 'Magdalène', 'Jaqueme', 'Christie', '{"countryCode": "375", "nationalNumber": "4306703018"}', 13, 'u', '2020-07-14', '$2a$10$Z1/.F4bRuyOGyL7NQrmjhufHf8XrHIEjPfBz9tlPbPcWrLpvPWKfq', '/img/users/avatars/default_unknown_avatar.png'),
+       ('gcantillonkv@youtube.com', 'gcantillonkv', 'Ruò', 'Cantillon', 'Gardiner', '{"countryCode": "375", "nationalNumber": "9769507984"}', 14, 'u', '2018-06-29', '$2a$10$Z1/.F4bRuyOGyL7NQrmjhufHf8XrHIEjPfBz9tlPbPcWrLpvPWKfq', '/img/users/avatars/default_unknown_avatar.png'),
+       ('evaninkw@godaddy.com', 'evaninkw', 'Mélinda', 'Vanin', 'Evita', '{"countryCode": "375", "nationalNumber": "5178815966"}', 15, 'u', '2020-05-23', '$2a$10$Z1/.F4bRuyOGyL7NQrmjhufHf8XrHIEjPfBz9tlPbPcWrLpvPWKfq', '/img/users/avatars/default_unknown_avatar.png'),
+       ('zwillcottkx@mapy.cz', 'zwillcottkx', 'Vérane', 'Willcott', 'Zorina', '{"countryCode": "375", "nationalNumber": "4145688080"}', 16, 'u', '2019-02-21', '$2a$10$Z1/.F4bRuyOGyL7NQrmjhufHf8XrHIEjPfBz9tlPbPcWrLpvPWKfq' , '/img/users/avatars/default_unknown_avatar.png'),
+       ('rborthramky@goo.gl', 'rborthramky', 'Marie-hélène', 'Borthram', 'Ryun', '{"countryCode": "375", "nationalNumber": "3589254689"}', 17, 'f', '2019-10-26', '$2a$10$Z1/.F4bRuyOGyL7NQrmjhufHf8XrHIEjPfBz9tlPbPcWrLpvPWKfq', '/img/users/avatars/default_female_avatar.png'),
+       ('lsinnattkz@blogspot.com', 'lsinnattkz', 'Dà', 'Sinnatt', 'Luke', '{"countryCode": "375", "nationalNumber": "9478276926"}', 18, 'f', '2021-04-11', '$2a$10$Z1/.F4bRuyOGyL7NQrmjhufHf8XrHIEjPfBz9tlPbPcWrLpvPWKfq', '/img/users/avatars/default_female_avatar.png'),
+       ('asydenhaml0@elegantthemes.com', 'asydenhaml0', 'Mélissandre', 'Sydenham', 'Alaster', '{"countryCode": "375", "nationalNumber": "2652629456"}', 19, 'f', '2020-08-13', '$2a$10$Z1/.F4bRuyOGyL7NQrmjhufHf8XrHIEjPfBz9tlPbPcWrLpvPWKfq', '/img/users/avatars/default_female_avatar.png'),
+       ('pgiannasil1@dmoz.org', 'pgiannasil1', 'Geneviève', 'Giannasi', 'Paulie', '{"countryCode": "375", "nationalNumber": "9948997234"}', 20, 'f', '2020-03-08', '$2a$10$Z1/.F4bRuyOGyL7NQrmjhufHf8XrHIEjPfBz9tlPbPcWrLpvPWKfq' ,'/img/users/avatars/default_female_avatar.png'),
+       ('kkentishl2@ted.com', 'kkentishl2', 'Léandre', 'Kentish', 'Kass', '{"countryCode": "375", "nationalNumber": "7911654280"}', 21, 'f', '2018-11-08','$2a$10$Z1/.F4bRuyOGyL7NQrmjhufHf8XrHIEjPfBz9tlPbPcWrLpvPWKfq', '/img/users/avatars/default_female_avatar.png'),
+       ('ainchboardl3@cyberchimps.com', 'ainchboardl3', 'Göran', 'Inchboard', 'Andeee', '{"countryCode": "375", "nationalNumber": "5875670233"}', 22, 'f', '2018-09-08', '$2a$10$Z1/.F4bRuyOGyL7NQrmjhufHf8XrHIEjPfBz9tlPbPcWrLpvPWKfq', '/img/users/avatars/default_female_avatar.png'),
+       ('kfourcadel4@reverbnation.com', 'kfourcadel4', 'Aloïs', 'Fourcade', 'Keslie', '{"countryCode": "375", "nationalNumber": "5878816423"}', 23, 'f', '2018-06-30', '$2a$10$Z1/.F4bRuyOGyL7NQrmjhufHf8XrHIEjPfBz9tlPbPcWrLpvPWKfq' , '/img/users/avatars/default_female_avatar.png'),
+       ('ddorninl5@angelfire.com', 'ddorninl5', 'Intéressant', 'Dornin', 'Dannel', '{"countryCode": "375", "nationalNumber": "7583032901"}', 24, 'f', '2020-07-01', '$2a$10$Z1/.F4bRuyOGyL7NQrmjhufHf8XrHIEjPfBz9tlPbPcWrLpvPWKfq', '/img/users/avatars/default_female_avatar.png'),
+       ('gmollenl6@drupal.org', 'gmollenl6', 'Håkan', 'Mollen', 'Gwyneth', '{"countryCode": "375", "nationalNumber": "9558773126"}', 25, 'f', '2020-10-10', '$2a$10$Z1/.F4bRuyOGyL7NQrmjhufHf8XrHIEjPfBz9tlPbPcWrLpvPWKfq', '/img/users/avatars/default_female_avatar.png'),
+       ('imellyl7@cisco.com', 'imellyl7', 'Thérèse', 'Melly', 'Irvin', '{"countryCode": "375", "nationalNumber": "7127396057"}', 26, 'm', '2020-08-10', '$2a$10$Z1/.F4bRuyOGyL7NQrmjhufHf8XrHIEjPfBz9tlPbPcWrLpvPWKfq', '/img/users/avatars/default_male_avatar.png'),
+       ('zkerrichl8@auda.org.au', 'zkerrichl8', 'Marie-josée', 'Kerrich', 'Zed', '{"countryCode": "375", "nationalNumber": "7807417723"}', 27, 'm', '2018-04-26', '$2a$10$Z1/.F4bRuyOGyL7NQrmjhufHf8XrHIEjPfBz9tlPbPcWrLpvPWKfq', '/img/users/avatars/default_male_avatar.png'),
+       ('mspanswickl9@redcross.org', 'mspanswickl9', 'Rébecca', 'Spanswick', 'Mathias', '{"countryCode": "375", "nationalNumber": "2194902207"}', 28, 'm', '2020-04-03', '$2a$10$Z1/.F4bRuyOGyL7NQrmjhufHf8XrHIEjPfBz9tlPbPcWrLpvPWKfq', '/img/users/avatars/default_male_avatar.png'),
+       ('hkediela@ca.gov', 'hkediela', 'Göran', 'Kedie', 'Hal', '{"countryCode": "375", "nationalNumber": "8775028030"}', 29, 'm', '2020-01-16', '$2a$10$Z1/.F4bRuyOGyL7NQrmjhufHf8XrHIEjPfBz9tlPbPcWrLpvPWKfq', '/img/users/avatars/default_male_avatar.png'),
+       ('rcouttslb@techcrunch.com', 'rcouttslb', 'Maëlle', 'Coutts', 'Roseann', '{"countryCode": "375", "nationalNumber": "3787034170"}', 30, 'm', '2020-05-16', '$2a$10$Z1/.F4bRuyOGyL7NQrmjhufHf8XrHIEjPfBz9tlPbPcWrLpvPWKfq', '/img/users/avatars/default_male_avatar.png'),
+       ('dlewislc@blog.com', 'dlewislc', 'Marieève', 'Lewis', 'Diandra', '{"countryCode": "375", "nationalNumber": "5628160203"}', 31, 'm', '2020-04-08', '$2a$10$Z1/.F4bRuyOGyL7NQrmjhufHf8XrHIEjPfBz9tlPbPcWrLpvPWKfq', '/img/users/avatars/default_male_avatar.png'),
+       ('kmcentagartld@oaic.gov.au', 'kmcentagartld', 'Táng', 'McEntagart', 'Karola', '{"countryCode": "375", "nationalNumber": "9905994967"}', 32, 'm', '2018-11-26', '$2a$10$Z1/.F4bRuyOGyL7NQrmjhufHf8XrHIEjPfBz9tlPbPcWrLpvPWKfq', '/img/users/avatars/default_male_avatar.png'),
+       ('bholthamle@theguardian.com', 'bholthamle', 'Kévina', 'Holtham', 'Ben', '{"countryCode": "375", "nationalNumber": "8487738742"}', 33, 'm', '2018-02-13', '$2a$10$Z1/.F4bRuyOGyL7NQrmjhufHf8XrHIEjPfBz9tlPbPcWrLpvPWKfq', '/img/users/avatars/default_male_avatar.png'),
+       ('csandhamlf@ftc.gov', 'csandhamlf', 'Réservés', 'Sandham', 'Cal', '{"countryCode": "375", "nationalNumber": "6134745518"}', 34, 'f', '2019-12-24', '$2a$10$Z1/.F4bRuyOGyL7NQrmjhufHf8XrHIEjPfBz9tlPbPcWrLpvPWKfq', '/img/users/avatars/default_female_avatar.png');
 
 -- -----------------------------------------------------
--- Initial data by_it_academy_grodno_elibrary.user_has_role
+-- Initial data elibrary.user_has_role
 -- -----------------------------------------------------
 INSERT INTO user_has_role (user_id, role_id)
 VALUES (1, 2),
@@ -374,7 +398,7 @@ VALUES (1, 2),
        (34, 1);
 
 -- -----------------------------------------------------
--- Filing data by_it_academy_grodno_elibrary.category
+-- Filing data elibrary.category
 -- -----------------------------------------------------
 INSERT INTO category (id, parent_id, category_name)
 VALUES (1, null, 'Художественная литература'),
@@ -386,7 +410,7 @@ VALUES (1, null, 'Художественная литература'),
        (7, null, 'Книги для детей');
 
 -- -----------------------------------------------------
--- Filing data by_it_academy_grodno_elibrary.category1
+-- Filing data elibrary.category1
 -- -----------------------------------------------------
 INSERT INTO category (id, parent_id, category_name)
 VALUES (8, 1,  'Современная литература'),
@@ -436,7 +460,7 @@ VALUES (8, 1,  'Современная литература'),
        (46, 7, 'Познавательная литература');
 
 -- -----------------------------------------------------
--- Filing data by_it_academy_grodno_elibrary.category2
+-- Filing data elibrary.category2
 -- -----------------------------------------------------
 INSERT INTO category (id, parent_id, category_name)
 VALUES (47, 13, 'Классическая зарубежная проза'),
@@ -447,7 +471,7 @@ VALUES (47, 13, 'Классическая зарубежная проза'),
        (51, 10, 'Классический зарубежный детектив');
 
 -- -----------------------------------------------------
--- Filing data by_it_academy_grodno_elibrary.author
+-- Filing data elibrary.author
 -- -----------------------------------------------------
 INSERT INTO author (id, author_name)
 VALUES (1, 'Александр Сергеевич Пушкин'),
@@ -467,26 +491,29 @@ VALUES (1, 'Александр Сергеевич Пушкин'),
        (15, 'George Orwell'),
        (16, 'Станислав Герман Лем'),
        (17, 'Ray Bradbury');
+SELECT setval('author_id_seq', (SELECT max(id) FROM author));
 
 -- -----------------------------------------------------
--- Filing data by_it_academy_grodno_elibrary.publisher
+-- Filing data elibrary.publisher
 -- -----------------------------------------------------
 INSERT INTO publisher (id, publisher_name)
 VALUES (1, 'AST'),
-        (2, 'TEXT'),
-        (3, 'Эксмо-Пресс');
+       (2, 'TEXT'),
+       (3, 'Эксмо-Пресс');
+SELECT setval('publisher_id_seq', (SELECT max(id) FROM publisher));
+
 
 -- -----------------------------------------------------
--- Filing data by_it_academy_grodno_elibrary.book
+-- Filing data elibrary.book
 -- -----------------------------------------------------
 INSERT INTO book (id, title, description, isbn_10, isbn_13, category_id, publisher_id, language, publishing_date, print_length, picture_url, total_count, available_count, available)
- VALUES (1, 'Voyna i mir. Kniga 1',
-         'Издательство АСТ Серия Лучшая мировая классика Год издания 2018 ISBN 9785171123857 Кол-во страниц 736 Формат 20.6 x 13.5 x 3 Тип обложки Твердая бумажная Тираж 10000 Вес, г 500 Возрастные ограничения 12+ Аннотация "Война и мир" — роман-эпопея Льва Толстого, одно из крупнейших произведений мировой литературы, описывающее жизнь русского общества в эпоху Наполеоновских войн. "Война и мир" — это масштабная картина жизни России, взятая во всех ее социальных слоях (от крестьян до императора Александра I), и детальное описание хода военных действий, и осмысление поведения человека на войне, но главное — это глубокое философское осмысление и исследование жизни как таковой — в быту, в семье, в мирное время, на войне. Именно поэтому "Войну и мир" можно читать и перечитывать всю жизнь — этот роман никогда не потеряет своей актуальности.',
-         '5171123853',
-         '9785171123857',
-         48, 1, 'rus', '2018-01-01', 736,
-         'https://m.media-amazon.com/images/I/513ZIFMK6VL.jpg',
-         2, 2, TRUE);
+VALUES (1, 'Voyna i mir. Kniga 1',
+        'Издательство АСТ Серия Лучшая мировая классика Год издания 2018 ISBN 9785171123857 Кол-во страниц 736 Формат 20.6 x 13.5 x 3 Тип обложки Твердая бумажная Тираж 10000 Вес, г 500 Возрастные ограничения 12+ Аннотация "Война и мир" — роман-эпопея Льва Толстого, одно из крупнейших произведений мировой литературы, описывающее жизнь русского общества в эпоху Наполеоновских войн. "Война и мир" — это масштабная картина жизни России, взятая во всех ее социальных слоях (от крестьян до императора Александра I), и детальное описание хода военных действий, и осмысление поведения человека на войне, но главное — это глубокое философское осмысление и исследование жизни как таковой — в быту, в семье, в мирное время, на войне. Именно поэтому "Войну и мир" можно читать и перечитывать всю жизнь — этот роман никогда не потеряет своей актуальности.',
+        '5171123853',
+        '9785171123857',
+        48, 1, 'rus', '2018-01-01', 736,
+        'https://m.media-amazon.com/images/I/513ZIFMK6VL.jpg',
+        2, 2, TRUE);
 INSERT INTO book_has_author (book_id, author_id)
 VALUES (1, 11);
 
@@ -533,3 +560,5 @@ VALUES (5, 'Рэй Брэдбери: Вино из одуванчиков',
         2, 2, TRUE);
 INSERT INTO book_has_author (book_id, author_id)
 VALUES (5, 17);
+SELECT setval('book_id_seq', (SELECT max(id) FROM book));
+

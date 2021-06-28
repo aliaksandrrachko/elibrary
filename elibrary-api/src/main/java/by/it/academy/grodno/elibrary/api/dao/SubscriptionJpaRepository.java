@@ -5,12 +5,14 @@ import by.it.academy.grodno.elibrary.entitymetadata.books.SubscriptionStatus;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Optional;
 import java.util.Set;
 
+@Repository
 public interface SubscriptionJpaRepository extends JpaRepository<Subscription, Long> {
 
     Page<Subscription> findAllByStatusIn(Collection<SubscriptionStatus> status, Pageable pageable);

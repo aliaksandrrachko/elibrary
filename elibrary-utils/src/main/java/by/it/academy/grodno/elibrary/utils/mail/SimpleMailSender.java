@@ -1,9 +1,12 @@
 package by.it.academy.grodno.elibrary.utils.mail;
 
-import by.it.academy.grodno.elibrary.api.utils.mail.*;
+import by.it.academy.grodno.elibrary.api.utils.mail.AdminMailMessageType;
+import by.it.academy.grodno.elibrary.api.utils.mail.IAdminMessageTextCreator;
+import by.it.academy.grodno.elibrary.api.utils.mail.IEmailSender;
+import by.it.academy.grodno.elibrary.api.utils.mail.IUserMessageTextCreator;
+import by.it.academy.grodno.elibrary.api.utils.mail.UserMailMessageType;
 import by.it.academy.grodno.elibrary.entities.users.User;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -30,7 +33,7 @@ public class SimpleMailSender implements IEmailSender {
     private final IUserMessageTextCreator userMessageTextCreator;
     private final IAdminMessageTextCreator adminMessageTextCreator;
 
-    public SimpleMailSender(@Qualifier("applicationMailSender") JavaMailSender mailSender,
+    public SimpleMailSender(JavaMailSender mailSender,
                             IUserMessageTextCreator userMessageTextCreator,
                             IAdminMessageTextCreator adminMessageTextCreator) {
         this.mailSender = mailSender;

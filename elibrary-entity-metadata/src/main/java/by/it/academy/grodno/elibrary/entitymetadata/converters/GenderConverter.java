@@ -1,6 +1,5 @@
 package by.it.academy.grodno.elibrary.entitymetadata.converters;
 
-
 import by.it.academy.grodno.elibrary.entitymetadata.users.Gender;
 
 import javax.persistence.AttributeConverter;

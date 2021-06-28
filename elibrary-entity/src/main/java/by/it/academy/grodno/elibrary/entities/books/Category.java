@@ -15,17 +15,17 @@ import java.util.Set;
 @EqualsAndHashCode(callSuper = true, exclude = {"categories", "parentCategory"})
 @SuperBuilder
 @Entity
-@Table(name = ("category"))
+@Table(name = "category")
 public class Category extends AEntity<Integer> {
 
     @Column(name = "category_name", length = 45)
     private String categoryName;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "parent_id")
     private Category parentCategory;
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = {CascadeType.REMOVE, CascadeType.MERGE})
+    @OneToMany(fetch = FetchType.EAGER, cascade = {CascadeType.REMOVE, CascadeType.MERGE})
     @JoinColumn(name = "parent_id", referencedColumnName = "id")
     private Set<Category> categories;
 

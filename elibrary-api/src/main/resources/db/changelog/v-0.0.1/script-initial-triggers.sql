@@ -1,39 +1,48 @@
-# Trigger on update user
-CREATE
-    TRIGGER p_user_update
-    BEFORE UPDATE
-    ON user
-    FOR EACH ROW
-    SET NEW.user_updated = NOW();
+CREATE FUNCTION f_address_update_last_updated() RETURNS TRIGGER AS $x$
+BEGIN
+    NEW.last_updated=NOW();
+RETURN NEW;
+END; $x$
+    LANGUAGE plpgsql;
 
-# Trigger by insert or update address
 CREATE
     TRIGGER p_address_update
     BEFORE UPDATE
     ON address
     FOR EACH ROW
-    SET NEW.last_updated = NOW();
+    EXECUTE PROCEDURE f_address_update_last_updated();
 
-# Trigger by insert or insert address
 CREATE
     TRIGGER p_address_insert
     BEFORE INSERT
     ON address
     FOR EACH ROW
-    SET NEW.last_updated = NOW();
+    EXECUTE PROCEDURE f_address_update_last_updated();
 
-# Trigger on update user
+CREATE FUNCTION f_book_update_book_updated() RETURNS TRIGGER AS $x$
+BEGIN
+    NEW.book_updated=NOW();
+RETURN NEW;
+END; $x$
+    LANGUAGE plpgsql;
+
 CREATE
     TRIGGER p_book_update
     BEFORE UPDATE
     ON book
     FOR EACH ROW
-    SET NEW.book_updated = NOW();
+    EXECUTE PROCEDURE f_book_update_book_updated();
 
-# Trigger on update review
+CREATE FUNCTION f_review_update_review_updated() RETURNS TRIGGER AS $x$
+BEGIN
+    NEW.review_updated=NOW();
+RETURN NEW;
+END; $x$
+    LANGUAGE plpgsql;
+
 CREATE
     TRIGGER p_review_update
     BEFORE UPDATE
     ON review
     FOR EACH ROW
-    SET NEW.review_updated = NOW();
+    EXECUTE PROCEDURE f_review_update_review_updated();

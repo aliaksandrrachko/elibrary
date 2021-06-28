@@ -17,7 +17,7 @@ import java.time.LocalDateTime;
 @EqualsAndHashCode(callSuper = true)
 @SuperBuilder
 @Entity
-@Table(name = ("subscription"))
+@Table(name = "subscription")
 public class Subscription extends AEntity<Long> {
 
     @Column(name = "status_code")

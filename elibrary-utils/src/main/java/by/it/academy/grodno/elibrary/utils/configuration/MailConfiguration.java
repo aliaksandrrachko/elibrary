@@ -3,19 +3,24 @@ package by.it.academy.grodno.elibrary.utils.configuration;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
+import org.thymeleaf.TemplateEngine;
+import org.thymeleaf.spring5.SpringTemplateEngine;
+import org.thymeleaf.templatemode.TemplateMode;
+import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
+import org.thymeleaf.templateresolver.ITemplateResolver;
 
 import java.util.Base64;
+import java.util.Collections;
 import java.util.Properties;
 import java.util.concurrent.Executor;
 
 @Configuration
-@ComponentScan("by.it.academy.grodno.elibrary.utils")
 @EnableAsync
 @Slf4j
 public class MailConfiguration {
@@ -30,7 +35,7 @@ public class MailConfiguration {
     @Value("${spring.mail.port}") private int mailPortProperty;
     @Value("${spring.mail.default-encoding}") private String defaultEncoding;
 
-    @Bean("applicationMailSender")
+    @Bean
     public JavaMailSender mailSender() {
         JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
 
@@ -57,5 +62,35 @@ public class MailConfiguration {
 
     private static String getDecryptPassword(String data){
         return new String(Base64.getDecoder().decode(data));
+    }
+
+    @Bean
+    public ResourceBundleMessageSource emailMessageSource() {
+        final ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
+        messageSource.setBasename("mail/MailMessages");
+        return messageSource;
+    }
+
+    @Value("${input.encoding}")
+    private String emailTemplateEncoding;
+
+    @Bean
+    public TemplateEngine emailTemplateEngine() {
+        final SpringTemplateEngine templateEngine = new SpringTemplateEngine();
+        templateEngine.addTemplateResolver(htmlTemplateResolver());
+        templateEngine.setTemplateEngineMessageSource(emailMessageSource());
+        return templateEngine;
+    }
+
+    private ITemplateResolver htmlTemplateResolver() {
+        final ClassLoaderTemplateResolver templateResolver = new ClassLoaderTemplateResolver();
+        templateResolver.setOrder(2);
+        templateResolver.setResolvablePatterns(Collections.singleton("html/*"));
+        templateResolver.setPrefix("/mail/");
+        templateResolver.setSuffix(".html");
+        templateResolver.setTemplateMode(TemplateMode.HTML);
+        templateResolver.setCharacterEncoding(emailTemplateEncoding);
+        templateResolver.setCacheable(false);
+        return templateResolver;
     }
 }

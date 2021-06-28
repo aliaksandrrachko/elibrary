@@ -1,24 +1,19 @@
 package by.it.academy.grodno.elibrary.api.mappers;
 
 import by.it.academy.grodno.elibrary.api.dao.BookJpaRepository;
-import by.it.academy.grodno.elibrary.api.dao.CategoryJpaRepository;
 import by.it.academy.grodno.elibrary.api.dao.UserJpaRepository;
 import by.it.academy.grodno.elibrary.api.dto.books.BookDetailsDto;
-import by.it.academy.grodno.elibrary.api.dto.books.CategoryDto;
 import by.it.academy.grodno.elibrary.api.dto.books.ReviewDto;
 import by.it.academy.grodno.elibrary.entities.books.Author;
 import by.it.academy.grodno.elibrary.entities.books.Book;
-import by.it.academy.grodno.elibrary.entities.books.Category;
 import by.it.academy.grodno.elibrary.entities.books.Review;
 import by.it.academy.grodno.elibrary.entities.users.User;
-import com.fasterxml.jackson.core.JsonGenerationException;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import java.util.NoSuchElementException;
 import java.util.Optional;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @Component
