@@ -56,6 +56,7 @@ public class PersistenceJpaConfig {
     @Value("${spring.jpa.properties.hibernate.id.new_generator_mappings}") boolean newGeneratorMappings;
     @Value("${spring.jpa.show-sql}") boolean showSql;
     @Value("${spring.jpa.properties.hibernate.format_sql}") boolean formatSql;
+    @Value(("${spring.jpa.hibernate.enable_lazy_load_no_trans}")) boolean enableLazyLoadNoTrans;
 
     Properties additionalProperties() {
         Properties properties = new Properties();
@@ -64,6 +65,7 @@ public class PersistenceJpaConfig {
         properties.put("hibernate.show_sql", showSql);
         properties.put("hibernate.format_sql", formatSql);
         properties.put("hibernate.id.new_generator_mappings", newGeneratorMappings);
+        properties.put("hibernate.enable_lazy_load_no_trans", enableLazyLoadNoTrans);
         return properties;
     }
 

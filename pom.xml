@@ -20,6 +20,7 @@
         <module>elibrary-utils</module>
         <module>elibrary-entity-metadata</module>
         <module>elibrary-logger</module>
+        <module>elibrary-dao</module>
     </modules>
 
     <properties>
@@ -31,6 +32,7 @@
         <org.springframework.version>5.2.15.RELEASE</org.springframework.version>
         <org.springframework.security.version>5.3.9.RELEASE</org.springframework.security.version>
         <tomcat.version>8.5.2</tomcat.version>
+        <org.hibernate.version>5.5.3.Final</org.hibernate.version>
     </properties>
 
     <dependencies>
@@ -140,6 +142,12 @@
             </dependency>
 
             <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-jdbc</artifactId>
+                <version>${org.springframework.version}</version>
+            </dependency>
+
+            <dependency>
                 <groupId>org.aspectj</groupId>
                 <artifactId>aspectjrt</artifactId>
                 <version>1.9.7.M3</version>
@@ -212,12 +220,12 @@
             <dependency>
                 <groupId>org.hibernate</groupId>
                 <artifactId>hibernate-core</artifactId>
-                <version>5.4.29.Final</version>
+                <version>${org.hibernate.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.hibernate</groupId>
                 <artifactId>hibernate-entitymanager</artifactId>
-                <version>5.2.3.Final</version>
+                <version>${org.hibernate.version}</version>
             </dependency>
 
             <dependency>

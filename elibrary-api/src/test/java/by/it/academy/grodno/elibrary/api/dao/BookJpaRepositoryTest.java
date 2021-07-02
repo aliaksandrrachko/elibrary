@@ -45,7 +45,7 @@ class BookJpaRepositoryTest extends ATestJpaRepositories {
             new Category("Художественная литература",null, null),
             new Publisher("TEXT"),
             Collections.singleton(new Author("George Orwell")),
-            Collections.singletonMap("ke1", "value1"),
+          null,
             "rus",
             LocalDate.of(2019, 1,1),
             256,

@@ -38,7 +38,7 @@ class UserJpaRepositoryTest extends ATestJpaRepositories {
             "Alex",
             "Smirnov",
             "Petrovich",
-            new PhoneNumber("375", "292205641"),
+           null,
             new Address("Беларусь", "Гродненская", "Гродненский район", "Гродно",
                     "Терешковой", "230005", "50", "1a", null),
             Gender.MALE,
