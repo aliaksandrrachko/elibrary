@@ -2,7 +2,6 @@ package by.it.academy.grodno.elibrary.entities.books;
 
 import by.it.academy.grodno.elibrary.entities.AEntity;
 import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
-import com.vladmihalcea.hibernate.type.json.JsonStringType;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.Type;
@@ -24,7 +23,7 @@ import java.util.Set;
 @SuperBuilder
 @Entity
 @Table(name = "book")
-@TypeDef(name = "jsonb", typeClass = JsonStringType.class)
+@TypeDef(name = "jsonb", typeClass = JsonBinaryType.class)
 public class Book extends AEntity<Long> {
     @Column(name = "isbn_10", length = 10)
     private String isbn10;

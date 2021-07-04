@@ -12,6 +12,7 @@ import org.springframework.util.StopWatch;
 
 import java.lang.reflect.Method;
 import java.util.Arrays;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Aspect
@@ -46,7 +47,7 @@ public class ControllerAspectLogger {
         return String.format(FORMAT_PATTERN_METHOD_PERFORMANCE,
                 method.getDeclaringClass().getName(),
                 method.getName(),
-                Arrays.stream(call.getArgs()).map(Object::toString).collect(Collectors.joining(",")),
+                Arrays.stream(call.getArgs()).filter(Objects::nonNull).map(Object::toString).collect(Collectors.joining(",")),
                 methodResult,
                 millis);
     }
