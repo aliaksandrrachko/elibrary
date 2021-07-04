@@ -18,6 +18,7 @@ public final class Routes {
         public static final String AUTHORS = REST + "/authors";
         public static final String AUTHORS_ID = AUTHORS + ID;
         public static final String AUTHORS_ANY = AUTHORS + ANY;
+        public static final String AUTHORS_HAS_THE_MOST_BOOK = AUTHORS + "/whohasmostbook";
 
         public static final String ADMIN_AUTHORS = REST + ADMIN + "/authors";
         public static final String ADMIN_AUTHORS_ID = ADMIN_AUTHORS + ID;
@@ -61,6 +62,7 @@ public final class Routes {
 
         public static final String REVIEWS = REST + "/reviews";
         public static final String REVIEWS_ID = REVIEWS + ID;
+        public static final String REVIEWS_ID_AVERAGE_GRADE = REVIEWS_ID + "/averagegrade";
         public static final String REVIEWS_ANY = REVIEWS + ANY;
     }
 

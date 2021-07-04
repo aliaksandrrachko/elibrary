@@ -70,4 +70,9 @@ public class AuthorService implements IAuthorService {
     public Page<AuthorDto> findAll(Pageable pageable) {
         return authorMapper.toPageDto(authorJpaRepository.findAll(pageable));
     }
+
+    @Override
+    public List<AuthorDto> findWhoHasTheMostBooks() {
+        return authorMapper.toDtos(authorJpaRepository.findWhoHasTheMostBooks());
+    }
 }

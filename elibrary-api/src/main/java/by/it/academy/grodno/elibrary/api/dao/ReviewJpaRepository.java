@@ -4,6 +4,8 @@ import by.it.academy.grodno.elibrary.entities.books.Review;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
@@ -24,4 +26,7 @@ public interface ReviewJpaRepository extends JpaRepository<Review, Long> {
     Page<Review> findByBookIdAndUpdatedAfter(Long bookId, LocalDateTime updated, Pageable pageable);
     Page<Review> findByBookIdAndUpdatedBetween(Long bookId, LocalDateTime updated, LocalDateTime updated2, Pageable pageable);
     boolean existsByIdAndUserId(Long id, Long userId);
+
+    @Query(value = "SELECT AVG(r.grade) FROM Review r WHERE r.book.id = :bookId")
+    Integer countAverageGradeByBookId(@Param("bookId") Long bookId);
 }

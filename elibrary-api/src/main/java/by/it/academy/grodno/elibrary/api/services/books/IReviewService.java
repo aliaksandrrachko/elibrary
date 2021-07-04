@@ -22,4 +22,6 @@ public interface IReviewService {
     boolean existsByIdAndUserId(Long reviewId, Long valueOf);
     ReviewDto update(Long id, ReviewDto dto, Long currentUserId);
     void delete(Long id, Long valueOf);
+
+    Integer getAverageGrade(Long bookId);
 }

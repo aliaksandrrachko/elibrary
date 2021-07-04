@@ -2,6 +2,7 @@ package by.it.academy.grodno.elibrary.rest.controllers;
 
 import static by.it.academy.grodno.elibrary.api.constants.Routes.Review.REVIEWS;
 import static by.it.academy.grodno.elibrary.api.constants.Routes.Review.REVIEWS_ID;
+import static by.it.academy.grodno.elibrary.api.constants.Routes.Review.REVIEWS_ID_AVERAGE_GRADE;
 
 import by.it.academy.grodno.elibrary.api.dto.books.ReviewDto;
 import by.it.academy.grodno.elibrary.api.services.books.IReviewService;
@@ -54,6 +55,11 @@ public class ReviewRestController {
     @GetMapping(value = REVIEWS_ID)
     public ReviewDto findById(@PathVariable Long id) {
         return reviewService.findById(id);
+    }
+
+    @GetMapping(value = REVIEWS_ID_AVERAGE_GRADE)
+    public Integer getAverageGrade(@PathVariable Long id){
+        return reviewService.getAverageGrade(id);
     }
 
     @PostMapping(value = REVIEWS, consumes = MediaType.APPLICATION_JSON_VALUE)

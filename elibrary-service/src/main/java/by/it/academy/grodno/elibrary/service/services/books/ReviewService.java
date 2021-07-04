@@ -57,6 +57,11 @@ public class ReviewService implements IReviewService {
     }
 
     @Override
+    public Integer getAverageGrade(Long bookId) {
+        return reviewJpaRepository.countAverageGradeByBookId(bookId);
+    }
+
+    @Override
     public ReviewDto create(ReviewDto entityDto) {
         if (reviewJpaRepository.existsByUserIdAndBookId(entityDto.getUserId(), entityDto.getBookId())){
             throw new UserTryCreateMoreThanOneReviewForBookException(entityDto.getUserId(), entityDto.getBookId());

@@ -18,7 +18,7 @@ import javax.sql.DataSource;
 import java.util.Properties;
 
 @Configuration
-@EnableTransactionManagement
+@EnableTransactionManagement(proxyTargetClass = true)
 @EnableJpaRepositories(basePackages = {"by.it.academy.grodno.elibrary.api.dao"})
 @PropertySource("classpath:application.properties")
 public class PersistenceJpaConfig {

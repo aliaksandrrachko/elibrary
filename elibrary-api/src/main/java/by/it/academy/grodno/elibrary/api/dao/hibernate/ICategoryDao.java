@@ -8,6 +8,6 @@ import java.util.Optional;
 public interface ICategoryDao extends IAGenericDao<Category, Integer> {
 
     Optional<Category> findByCategoryName(String categoryName);
-
     List<Category> findAllByParentCategoryIsNull();
+    Optional<Category> findOnlyCategory(Integer id);
 }

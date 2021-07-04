@@ -3,6 +3,7 @@ package by.it.academy.grodno.elibrary.rest.controllers;
 import static by.it.academy.grodno.elibrary.api.constants.Routes.Author.ADMIN_AUTHORS;
 import static by.it.academy.grodno.elibrary.api.constants.Routes.Author.ADMIN_AUTHORS_ID;
 import static by.it.academy.grodno.elibrary.api.constants.Routes.Author.AUTHORS;
+import static by.it.academy.grodno.elibrary.api.constants.Routes.Author.AUTHORS_HAS_THE_MOST_BOOK;
 import static by.it.academy.grodno.elibrary.api.constants.Routes.Author.AUTHORS_ID;
 
 import by.it.academy.grodno.elibrary.api.dto.books.AuthorDto;
@@ -15,6 +16,7 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 public class AuthorRestController {
@@ -33,6 +35,11 @@ public class AuthorRestController {
     @GetMapping(value = AUTHORS_ID, produces = MediaType.APPLICATION_JSON_VALUE)
     public AuthorDto findAuthor(@PathVariable Integer id) {
         return authorService.findById(id);
+    }
+
+    @GetMapping(value = AUTHORS_HAS_THE_MOST_BOOK, produces = MediaType.APPLICATION_JSON_VALUE)
+    public List<AuthorDto> findAllAuthorWhoHasTheMostBooks(){
+        return authorService.findWhoHasTheMostBooks();
     }
 
     @PostMapping(value = ADMIN_AUTHORS, consumes = MediaType.APPLICATION_JSON_VALUE)

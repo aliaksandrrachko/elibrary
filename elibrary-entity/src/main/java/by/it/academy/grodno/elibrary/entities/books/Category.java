@@ -16,6 +16,11 @@ import java.util.Set;
 @SuperBuilder
 @Entity
 @Table(name = "category")
+// if you wand user entityGraph change fetch eager to lazy
+@NamedEntityGraphs(value = {
+        @NamedEntityGraph(name = "category-only-entity-graph"),
+        @NamedEntityGraph(name = "category-categories-entity-graph")
+})
 public class Category extends AEntity<Integer> {
 
     @Column(name = "category_name", length = 45)
