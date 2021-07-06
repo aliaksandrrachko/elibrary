@@ -24,7 +24,7 @@ public class OpenLibraryResponseBookConverter implements Converter<OpenLibraryBo
                 .language(getLanguage(getValueByKeyFromListOfMap(source.getLanguagesPath())))
                 .pictureUrl(buildPictureUri(getRepresentValueFromList(source.getCovers())))
                 .printLength(source.getPrintLength() == null ? 0 : source.getPrintLength())
-                .publisher(new Publisher(getRepresentValueFromList(source.getPublishers())))
+                .publisher(Publisher.builder().publisherName(getRepresentValueFromList(source.getPublishers())).build())
                 .build();
     }
 

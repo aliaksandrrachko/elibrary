@@ -2,6 +2,8 @@ package by.it.academy.grodno.elibrary.service.services;
 
 import by.it.academy.grodno.elibrary.api.dao.RoleJpaRepository;
 import by.it.academy.grodno.elibrary.api.dao.UserJpaRepository;
+import by.it.academy.grodno.elibrary.api.dao.specifications.UserSpecification;
+import by.it.academy.grodno.elibrary.api.dto.users.PublicUserDetailsDto;
 import by.it.academy.grodno.elibrary.api.dto.users.UserDto;
 import by.it.academy.grodno.elibrary.api.exceptions.PasswordMatchException;
 import by.it.academy.grodno.elibrary.api.mappers.UserMapper;
@@ -261,5 +263,20 @@ public class UserService implements IUserService {
     public User loadUserByUsername(String username) throws UsernameNotFoundException {
         return userJpaRepository.findByEmail(username).orElseThrow(() -> new UsernameNotFoundException(
                 String.format("User '%s' not found in database", username)));
+    }
+
+    @Override
+    public Page<UserDto> getAllUserHaveBirthdayToday(Pageable pageable) {
+        return userMapper.toPageDto(userJpaRepository.findAll(UserSpecification.userHasBirthday(), pageable));
+    }
+
+    @Override
+    public Page<UserDto> getAllUserIsLongTermUser(Pageable pageable) {
+        return userMapper.toPageDto(userJpaRepository.findAll(UserSpecification.isLongTermUser(), pageable));
+    }
+
+    @Override
+    public Page<PublicUserDetailsDto> findPublicUserDetailsDto(Pageable pageable) {
+        return userJpaRepository.findPublicUserDetailsDto(pageable);
     }
 }

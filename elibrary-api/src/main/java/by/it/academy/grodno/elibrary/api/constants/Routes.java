@@ -39,6 +39,7 @@ public final class Routes {
         public static final String PUBLISHERS = REST + "/publishers";
         public static final String PUBLISHERS_ID = PUBLISHERS + ID;
         public static final String PUBLISHERS_ANY = PUBLISHERS + ANY;
+        public static final String PUBLISHERS_NAME_LIKE = PUBLISHERS + "/{publisherName}";
 
         public static final String ADMIN_PUBLISHERS = REST + ADMIN + "/publishers";
         public static final String ADMIN_PUBLISHERS_ID = ADMIN_PUBLISHERS + ID;
@@ -94,6 +95,9 @@ public final class Routes {
 
         public static final String USER_PROFILE = REST + "/profile";
         public static final String ADMIN_USERS = REST + "/users";
+        public static final String USERS_PUBLIC_PROFILE = REST + "/users/public";
+        public static final String ADMIN_USERS_HAS_BIRTHDAY = ADMIN_USERS + "/havebirthday";
+        public static final String ADMIN_USERS_HAS_LONGER_TERM = ADMIN_USERS + "/havelongerterm";
         public static final String ADMIN_USERS_ID = ADMIN_USERS + ID;
         public static final String ADMIN_USERS_EMAIL = ADMIN_USERS + "/email/{email}";
     }

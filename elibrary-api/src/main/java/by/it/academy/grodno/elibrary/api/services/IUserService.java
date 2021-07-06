@@ -1,5 +1,6 @@
 package by.it.academy.grodno.elibrary.api.services;
 
+import by.it.academy.grodno.elibrary.api.dto.users.PublicUserDetailsDto;
 import by.it.academy.grodno.elibrary.api.dto.users.UserDto;
 import by.it.academy.grodno.elibrary.entities.users.User;
 import org.springframework.data.domain.Page;
@@ -22,4 +23,10 @@ public interface IUserService extends IAGenericCrudService<UserDto, Long>, UserD
     void addRole(long userId, String roleName);
     void setAvailability(long userId);
     Optional<UserDto> update(Long valueOf, UserDto userDto, MultipartFile file);
+
+    Page<UserDto> getAllUserHaveBirthdayToday(Pageable pageable);
+
+    Page<UserDto> getAllUserIsLongTermUser(Pageable pageable);
+
+    Page<PublicUserDetailsDto> findPublicUserDetailsDto(Pageable pageable);
 }

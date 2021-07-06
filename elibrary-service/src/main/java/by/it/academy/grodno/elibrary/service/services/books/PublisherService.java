@@ -69,4 +69,9 @@ public class PublisherService implements IPublisherService {
     public Page<PublisherDto> findAll(Pageable pageable) {
         return publisherMapper.toPageDto(publisherJpaRepository.findAll(pageable));
     }
+
+    @Override
+    public Page<PublisherDto> findAllPublisherWithBookByPublisherNameLike(String publisherName, Pageable pageable){
+        return publisherMapper.toPageDto(publisherJpaRepository.findPublisherWithBookByPublisherNameLike(publisherName, pageable));
+    }
 }

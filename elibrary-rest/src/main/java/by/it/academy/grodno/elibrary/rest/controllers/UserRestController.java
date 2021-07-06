@@ -1,6 +1,7 @@
 package by.it.academy.grodno.elibrary.rest.controllers;
 
 import by.it.academy.grodno.elibrary.api.constants.Routes;
+import by.it.academy.grodno.elibrary.api.dto.users.PublicUserDetailsDto;
 import by.it.academy.grodno.elibrary.api.dto.users.UserDto;
 import by.it.academy.grodno.elibrary.api.services.IUserService;
 import org.springframework.data.domain.Page;
@@ -43,6 +44,23 @@ public class UserRestController {
     @GetMapping(value = Routes.User.USER_PROFILE)
     public UserDto findCurrentUser(Principal principal){
         return userService.findById(principal.getName());
+    }
+
+    @GetMapping(value = Routes.User.ADMIN_USERS_HAS_BIRTHDAY)
+    public Page<UserDto> getAllUserHaveBirthdayToday(
+            @PageableDefault(sort = {"username"}, direction = Sort.Direction.ASC) Pageable pageable) {
+        return userService.getAllUserHaveBirthdayToday(pageable);
+    }
+
+    @GetMapping(value = Routes.User.ADMIN_USERS_HAS_LONGER_TERM)
+    public Page<UserDto> getAllUserIsLongTermUser(
+            @PageableDefault(sort = {"username"}, direction = Sort.Direction.ASC) Pageable pageable){
+        return userService.getAllUserIsLongTermUser(pageable);
+    }
+
+    @GetMapping(value = Routes.User.USERS_PUBLIC_PROFILE)
+    public Page<PublicUserDetailsDto> findPublicUserDetailsDto(@PageableDefault Pageable pageable){
+        return userService.findPublicUserDetailsDto(pageable);
     }
 
     @PutMapping(value = Routes.User.USER_PROFILE)

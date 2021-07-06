@@ -4,9 +4,13 @@ import static by.it.academy.grodno.elibrary.api.constants.Routes.Publisher.ADMIN
 import static by.it.academy.grodno.elibrary.api.constants.Routes.Publisher.ADMIN_PUBLISHERS_ID;
 import static by.it.academy.grodno.elibrary.api.constants.Routes.Publisher.PUBLISHERS;
 import static by.it.academy.grodno.elibrary.api.constants.Routes.Publisher.PUBLISHERS_ID;
+import static by.it.academy.grodno.elibrary.api.constants.Routes.Publisher.PUBLISHERS_NAME_LIKE;
 
 import by.it.academy.grodno.elibrary.api.dto.books.PublisherDto;
 import by.it.academy.grodno.elibrary.api.services.books.IPublisherService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,6 +34,12 @@ public class PublisherRestController {
     @GetMapping(value = PUBLISHERS_ID, produces = MediaType.APPLICATION_JSON_VALUE)
     public PublisherDto findPublisher(@PathVariable Integer id) {
         return publisherService.findById(id);
+    }
+
+    @GetMapping(value = PUBLISHERS_NAME_LIKE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public Page<PublisherDto> findPublisherWithBookByPublisherNameLike(@PathVariable String publisherName,
+                                                                 @PageableDefault Pageable pageable){
+        return publisherService.findAllPublisherWithBookByPublisherNameLike(publisherName, pageable);
     }
 
     @PostMapping(value = ADMIN_PUBLISHERS, consumes = MediaType.APPLICATION_JSON_VALUE)

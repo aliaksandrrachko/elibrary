@@ -110,7 +110,7 @@ public class BookService implements IBookService {
 
     private void createAndSetPublisherIfNotExists(Book book, BookDto bookDto) {
         if (book.getPublisher() == null) {
-            Publisher publisher = new Publisher(bookDto.getPublisher());
+            Publisher publisher = Publisher.builder().publisherName(bookDto.getPublisher()).build();
             book.setPublisher(publisher);
         }
     }
