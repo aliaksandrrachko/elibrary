@@ -30,6 +30,7 @@
 
     <properties>
         <java.version>1.8</java.version>
+        <io.springfox.swagger2>3.0.0</io.springfox.swagger2>
     </properties>
 
     <dependencies>
@@ -131,6 +132,23 @@
                 <artifactId>annotations</artifactId>
                 <version>13.0</version>
                 <scope>compile</scope>
+            </dependency>
+
+            <!--  SWAGGER  -->
+            <dependency>
+                <groupId>io.springfox</groupId>
+                <artifactId>springfox-swagger2</artifactId>
+                <version>${io.springfox.swagger2}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.springfox</groupId>
+                <artifactId>springfox-swagger-ui</artifactId>
+                <version>${io.springfox.swagger2}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.springfox</groupId>
+                <artifactId>springfox-bean-validators</artifactId>
+                <version>${io.springfox.swagger2}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

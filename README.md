@@ -21,6 +21,12 @@ mvn spring-boot:run
 
 When you execute the code above the application will run.
 
+## Api code-contract (generated with swagger framework)
+
+```shell
+/v2/api-docs
+```
+
 ### Using docker
 
 1. Create a docker container for MySQL
