@@ -57,7 +57,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         // Set permissions on endpoints
         http.authorizeRequests()
                 // Public endpoints
-                .antMatchers("/", "/signup/**", "/signin/**", Routes.Auth.LOGIN, Routes.Auth.SIGN_UP, "/auth").permitAll()
+                .antMatchers("/", "/v2/api-docs", Routes.Auth.LOGIN, Routes.Auth.SIGN_UP, "/auth").permitAll()
                 // Authentication endpoints
                 .antMatchers(
                         Routes.Author.AUTHORS_ANY,
