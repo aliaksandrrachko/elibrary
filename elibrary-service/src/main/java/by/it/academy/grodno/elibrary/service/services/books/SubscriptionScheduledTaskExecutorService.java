@@ -22,6 +22,7 @@ import java.util.Set;
 
 @Service
 @Slf4j
+@Transactional(readOnly = true)
 public class SubscriptionScheduledTaskExecutorService implements ISubscriptionScheduledTaskExecutorService {
 
     private static final String SUBSCRIPTION = "subscription";

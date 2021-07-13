@@ -27,6 +27,7 @@ import java.util.*;
 
 @Component
 @Slf4j
+@Transactional(readOnly = true)
 public class SubscriptionService implements ISubscriptionService {
 
     static final String SUBSCRIPTION = "subscription";

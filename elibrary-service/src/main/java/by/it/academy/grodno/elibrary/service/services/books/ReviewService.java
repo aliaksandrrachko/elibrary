@@ -13,6 +13,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -22,6 +23,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@Transactional(readOnly = true)
 public class ReviewService implements IReviewService {
 
     private final ReviewJpaRepository reviewJpaRepository;
@@ -32,7 +34,6 @@ public class ReviewService implements IReviewService {
         this.reviewMapper = reviewMapper;
     }
 
-
     @Override
     public ReviewDto findById(Long id) {
         Optional<Review> reviewOptional = reviewJpaRepository.findById(id);
@@ -40,12 +41,14 @@ public class ReviewService implements IReviewService {
     }
 
     @Override
+    @Transactional
     public void delete(Long id) {
         Optional<Review> reviewOptional = reviewJpaRepository.findById(id);
         reviewOptional.ifPresent(reviewJpaRepository::delete);
     }
 
     @Override
+    @Transactional
     public void delete(Long id, Long currentUserId) {
         Optional<Review> reviewOptional = reviewJpaRepository.findById(id);
         if (reviewOptional.isPresent()){
@@ -62,6 +65,7 @@ public class ReviewService implements IReviewService {
     }
 
     @Override
+    @Transactional
     public ReviewDto create(ReviewDto entityDto) {
         if (reviewJpaRepository.existsByUserIdAndBookId(entityDto.getUserId(), entityDto.getBookId())){
             throw new UserTryCreateMoreThanOneReviewForBookException(entityDto.getUserId(), entityDto.getBookId());
@@ -74,6 +78,7 @@ public class ReviewService implements IReviewService {
     }
 
     @Override
+    @Transactional
     public ReviewDto update(Long id, ReviewDto entityDto) {
         Review review = prepareReviewToUpdate(id, entityDto);
         if (review == null){
@@ -84,6 +89,7 @@ public class ReviewService implements IReviewService {
     }
 
     @Override
+    @Transactional
     public ReviewDto update(Long id, ReviewDto dto, Long currentUserId) {
         Review reviewForUpdate = prepareReviewToUpdate(id, dto);
         if (reviewForUpdate == null){

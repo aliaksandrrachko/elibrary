@@ -26,11 +26,11 @@ public class Category extends AEntity<Integer> {
     @Column(name = "category_name", length = 45)
     private String categoryName;
 
-    @OneToOne(fetch = FetchType.EAGER)
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "parent_id")
     private Category parentCategory;
 
-    @OneToMany(fetch = FetchType.EAGER, cascade = {CascadeType.REMOVE, CascadeType.MERGE})
+    @OneToMany(fetch = FetchType.LAZY, cascade = {CascadeType.REMOVE, CascadeType.MERGE})
     @JoinColumn(name = "parent_id", referencedColumnName = "id")
     private Set<Category> categories;
 

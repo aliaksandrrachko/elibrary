@@ -24,7 +24,7 @@ public class Subscription extends AEntity<Long> {
     @Convert(converter = SubscriptionStatusConverter.class)
     private SubscriptionStatus status;
 
-    @OneToOne(fetch = FetchType.EAGER)
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
 
@@ -34,7 +34,7 @@ public class Subscription extends AEntity<Long> {
     @Column(name = "returned")
     private int returned;
 
-    @OneToOne(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE})
+    @OneToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE})
     @JoinColumn(name = "book_id", referencedColumnName = "id")
     private Book book;
 

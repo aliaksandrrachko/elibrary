@@ -19,6 +19,7 @@ import java.util.stream.Collectors;
 
 @Service
 @Slf4j
+@Transactional(readOnly = true)
 public class CategoryService implements ICategoryService {
 
     private final CategoryMapper categoryMapper;

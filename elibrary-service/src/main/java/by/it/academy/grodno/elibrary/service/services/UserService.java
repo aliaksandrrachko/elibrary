@@ -35,6 +35,7 @@ import java.util.stream.Collectors;
 
 @Service
 @Slf4j
+@Transactional
 public class UserService implements IUserService {
 
     private final PasswordEncoder bCryptPasswordEncoder;
