@@ -19,7 +19,9 @@ import java.util.Set;
 // if you wand user entityGraph change fetch eager to lazy
 @NamedEntityGraphs(value = {
         @NamedEntityGraph(name = "category-only-entity-graph"),
-        @NamedEntityGraph(name = "category-categories-entity-graph")
+        @NamedEntityGraph(name = "category-categories-parentCategory-entity-graph",
+            attributeNodes = {@NamedAttributeNode(value = "categories"),
+            @NamedAttributeNode(value = "parentCategory")})
 })
 public class Category extends AEntity<Integer> {
 

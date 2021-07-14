@@ -41,7 +41,9 @@ import java.util.Set;
 @NamedEntityGraphs(value = {
         @NamedEntityGraph(name = "use-only-entity-graph"),
         @NamedEntityGraph(name = "user-address-entity-graph",
-                attributeNodes = {@NamedAttributeNode(value = "address")})
+                attributeNodes = {@NamedAttributeNode(value = "address")}),
+        @NamedEntityGraph(name = "user-address-roles-entity-graph",
+                attributeNodes = {@NamedAttributeNode(value = "address"), @NamedAttributeNode(value = "roles")})
 })
 public class User extends AEntity<Long> implements UserDetails, Serializable {
 

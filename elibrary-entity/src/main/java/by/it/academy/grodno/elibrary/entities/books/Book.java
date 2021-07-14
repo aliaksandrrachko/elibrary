@@ -24,6 +24,13 @@ import java.util.Set;
 @Entity
 @Table(name = "book")
 @TypeDef(name = "jsonb", typeClass = JsonBinaryType.class)
+@NamedEntityGraphs(value = {
+        @NamedEntityGraph(name = "book-category-publisher-authors-entity-graph",
+                attributeNodes = {
+                @NamedAttributeNode(value = "category"),
+                @NamedAttributeNode(value = "publisher"),
+                @NamedAttributeNode(value = "authors")})
+})
 public class Book extends AEntity<Long> {
     @Column(name = "isbn_10", length = 10)
     private String isbn10;

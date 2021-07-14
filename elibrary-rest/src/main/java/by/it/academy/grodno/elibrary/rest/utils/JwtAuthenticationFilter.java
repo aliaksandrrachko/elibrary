@@ -17,6 +17,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Collections;
+import java.util.Optional;
 
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
@@ -49,15 +50,18 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
 
         // Get user identity and set it on the spring security context
-        User user = userJpaRepository.findById(Long.valueOf(jwtTokenUtil.getUserId(token))).orElse(null);
+        Optional<User> userOptional = userJpaRepository.findById(Long.valueOf(jwtTokenUtil.getUserId(token)));
 
-        UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
-                user == null ? null : String.valueOf(user.getId()),
-                user == null ? null : user.getPassword(),
-                user == null ? Collections.emptyList(): user.getAuthorities());
+        if (userOptional.isPresent()) {
+            final User user = userOptional.get();
+            UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
+                    String.valueOf(user.getId()),
+                    user.getPassword(),
+                    user.getAuthorities());
 
-        authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-        chain.doFilter(request, response);
+            authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+            chain.doFilter(request, response);
+        }
     }
 }
