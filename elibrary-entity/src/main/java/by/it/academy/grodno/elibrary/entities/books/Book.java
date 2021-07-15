@@ -29,7 +29,9 @@ import java.util.Set;
                 attributeNodes = {
                 @NamedAttributeNode(value = "category"),
                 @NamedAttributeNode(value = "publisher"),
-                @NamedAttributeNode(value = "authors")})
+                @NamedAttributeNode(value = "authors")}),
+        @NamedEntityGraph(name = "book-authors-entity-graph",
+                attributeNodes = {@NamedAttributeNode(value = "authors")})
 })
 public class Book extends AEntity<Long> {
     @Column(name = "isbn_10", length = 10)

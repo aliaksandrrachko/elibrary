@@ -39,7 +39,7 @@ import java.util.Set;
 })
 @TypeDefs(value = {@TypeDef(name = "jsonb", typeClass = JsonBinaryType.class)})
 @NamedEntityGraphs(value = {
-        @NamedEntityGraph(name = "use-only-entity-graph"),
+        @NamedEntityGraph(name = "user-only-entity-graph"),
         @NamedEntityGraph(name = "user-address-entity-graph",
                 attributeNodes = {@NamedAttributeNode(value = "address")}),
         @NamedEntityGraph(name = "user-address-roles-entity-graph",
