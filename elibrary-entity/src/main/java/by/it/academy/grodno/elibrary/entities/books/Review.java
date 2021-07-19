@@ -16,13 +16,18 @@ import java.time.LocalDateTime;
 @SuperBuilder
 @Entity
 @Table(name = "review")
+@NamedEntityGraphs(value = {
+        @NamedEntityGraph(name = "review-user-book-entity-graph",
+                attributeNodes = {@NamedAttributeNode(value = "user", subgraph = "user-only-entity-graph"),
+                    @NamedAttributeNode(value = "book", subgraph = "book-authors-entity-graph")})
+})
 public class Review extends AEntity<Long> {
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
 
-    @OneToOne()
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "book_id", referencedColumnName = "id")
     private Book book;
 

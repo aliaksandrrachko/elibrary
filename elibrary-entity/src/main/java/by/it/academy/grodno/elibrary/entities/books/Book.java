@@ -24,6 +24,15 @@ import java.util.Set;
 @Entity
 @Table(name = "book")
 @TypeDef(name = "jsonb", typeClass = JsonBinaryType.class)
+@NamedEntityGraphs(value = {
+        @NamedEntityGraph(name = "book-category-publisher-authors-entity-graph",
+                attributeNodes = {
+                @NamedAttributeNode(value = "category"),
+                @NamedAttributeNode(value = "publisher"),
+                @NamedAttributeNode(value = "authors")}),
+        @NamedEntityGraph(name = "book-authors-entity-graph",
+                attributeNodes = {@NamedAttributeNode(value = "authors")})
+})
 public class Book extends AEntity<Long> {
     @Column(name = "isbn_10", length = 10)
     private String isbn10;
@@ -37,15 +46,15 @@ public class Book extends AEntity<Long> {
     @Column(name = "description", columnDefinition = "TEXT")
     private String description;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id", referencedColumnName = "id", nullable = false)
     private Category category;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JoinColumn(name = "publisher_id", referencedColumnName = "id")
     private Publisher publisher;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JoinTable(name = "book_has_author",
             joinColumns = @JoinColumn(name = "book_id"),
             inverseJoinColumns = @JoinColumn(name = "author_id"))

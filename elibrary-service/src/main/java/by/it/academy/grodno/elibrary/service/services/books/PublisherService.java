@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Component
+@Transactional(readOnly = true)
 public class PublisherService implements IPublisherService {
 
     private final PublisherMapper publisherMapper;

@@ -34,13 +34,16 @@ import java.util.Set;
 @Entity
 @Table(name = "user", schema = "public")
 @SecondaryTables(value = {
-        @SecondaryTable(name = "user_social_id", pkJoinColumns = {@PrimaryKeyJoinColumn(name = "user_id", referencedColumnName = "id")})
+        @SecondaryTable(name = "user_social_id",
+                pkJoinColumns = {@PrimaryKeyJoinColumn(name = "user_id", referencedColumnName = "id")})
 })
 @TypeDefs(value = {@TypeDef(name = "jsonb", typeClass = JsonBinaryType.class)})
 @NamedEntityGraphs(value = {
-        @NamedEntityGraph(name = "use-only-entity-graph"),
+        @NamedEntityGraph(name = "user-only-entity-graph"),
         @NamedEntityGraph(name = "user-address-entity-graph",
-                attributeNodes = {@NamedAttributeNode(value = "address")})
+                attributeNodes = {@NamedAttributeNode(value = "address")}),
+        @NamedEntityGraph(name = "user-address-roles-entity-graph",
+                attributeNodes = {@NamedAttributeNode(value = "address"), @NamedAttributeNode(value = "roles")})
 })
 public class User extends AEntity<Long> implements UserDetails, Serializable {
 
@@ -93,7 +96,7 @@ public class User extends AEntity<Long> implements UserDetails, Serializable {
     @Column(name = "social_id", table = "user_social_id")
     private Long socialId;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "user_has_role",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))

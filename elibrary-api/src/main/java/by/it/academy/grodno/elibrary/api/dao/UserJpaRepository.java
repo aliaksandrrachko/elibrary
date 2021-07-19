@@ -3,6 +3,7 @@ package by.it.academy.grodno.elibrary.api.dao;
 import by.it.academy.grodno.elibrary.api.dto.users.PublicUserDetailsDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import by.it.academy.grodno.elibrary.entities.users.User;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
@@ -14,8 +15,15 @@ import java.util.Optional;
 @Repository
 public interface UserJpaRepository extends JpaRepository<User, Long>, JpaSpecificationExecutor<User> {
 
+
     Optional<User> findByEmailOrSocialId(String email, Long socialId);
+
+    @EntityGraph(value = "user-address-roles-entity-graph")
     Optional<User> findByEmail(String email);
+
+    @Override
+    @EntityGraph(value = "user-address-roles-entity-graph")
+    Optional<User> findById(Long id);
 
     @Query(value = "SELECT u.id as userId, " +
             "u.email as email, " +

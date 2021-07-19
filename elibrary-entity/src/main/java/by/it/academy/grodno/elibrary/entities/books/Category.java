@@ -19,18 +19,20 @@ import java.util.Set;
 // if you wand user entityGraph change fetch eager to lazy
 @NamedEntityGraphs(value = {
         @NamedEntityGraph(name = "category-only-entity-graph"),
-        @NamedEntityGraph(name = "category-categories-entity-graph")
+        @NamedEntityGraph(name = "category-categories-parentCategory-entity-graph",
+            attributeNodes = {@NamedAttributeNode(value = "categories"),
+            @NamedAttributeNode(value = "parentCategory")})
 })
 public class Category extends AEntity<Integer> {
 
     @Column(name = "category_name", length = 45)
     private String categoryName;
 
-    @OneToOne(fetch = FetchType.EAGER)
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "parent_id")
     private Category parentCategory;
 
-    @OneToMany(fetch = FetchType.EAGER, cascade = {CascadeType.REMOVE, CascadeType.MERGE})
+    @OneToMany(fetch = FetchType.LAZY, cascade = {CascadeType.REMOVE, CascadeType.MERGE})
     @JoinColumn(name = "parent_id", referencedColumnName = "id")
     private Set<Category> categories;
 
