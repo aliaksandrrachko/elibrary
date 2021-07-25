@@ -11,6 +11,7 @@ import java.util.Optional;
 
 public interface IBookService extends IAGenericCrudService<BookDto, Long> {
 
+    Page<BookDto> findAllByLanguage(String language, Pageable pageable);
     Page<BookDto> findAllByCategoryId(Integer categoryId, Pageable pageable);
     Page<BookDto> findAll(Integer categoryId, Pageable pageable);
     Page<BookDto> findAllByTitle(String title, Pageable pageable);
