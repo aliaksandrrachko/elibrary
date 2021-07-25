@@ -5,11 +5,13 @@ import static by.it.academy.grodno.elibrary.api.constants.Routes.Book.ADMIN_BOOK
 import static by.it.academy.grodno.elibrary.api.constants.Routes.Book.BOOKS;
 import static by.it.academy.grodno.elibrary.api.constants.Routes.Book.BOOKS_ID;
 import static by.it.academy.grodno.elibrary.api.constants.Routes.Book.BOOKS_ISBN;
+import static by.it.academy.grodno.elibrary.api.constants.Routes.Book.BOOKS_LANGUAGE;
 
 import by.it.academy.grodno.elibrary.api.dto.books.BookDto;
 import by.it.academy.grodno.elibrary.api.services.books.IBookService;
 import by.it.academy.grodno.elibrary.api.utils.IsbnUtils;
 import org.hibernate.validator.constraints.ISBN;
+import org.hibernate.validator.constraints.Length;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -25,6 +27,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
 
 @RestController
 public class BookRestController {
@@ -51,6 +54,12 @@ public class BookRestController {
     @GetMapping(value = BOOKS_ISBN)
     public BookDto findBookByIsbnInWeb(@PathVariable @Valid @ISBN(type = ISBN.Type.ANY) String isbn) {
         return this.bookService.findByIsbnInWeb(IsbnUtils.getOnlyDigit(isbn)).orElse(null);
+    }
+
+    @GetMapping(value = BOOKS_LANGUAGE)
+    public Page<BookDto> findBookByLanguage(@PathVariable @Valid @NotBlank @Length(min = 3, max = 3) String language,
+                                            @PageableDefault Pageable pageable){
+        return this.bookService.findAllByLanguage(language, pageable);
     }
 
     @PostMapping(value = ADMIN_BOOKS, consumes = MediaType.APPLICATION_JSON_VALUE)

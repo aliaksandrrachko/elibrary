@@ -53,6 +53,7 @@ public final class Routes {
         public static final String BOOKS_ID = BOOKS + ID;
         public static final String BOOKS_ANY = BOOKS + ANY;
         public static final String BOOKS_ISBN = BOOKS + ISBN;
+        public static final String BOOKS_LANGUAGE = BOOKS + "/language/{language}";
 
         public static final String ADMIN_BOOKS = REST + ADMIN + "/books";
         public static final String ADMIN_BOOKS_ID = ADMIN_BOOKS + ID;

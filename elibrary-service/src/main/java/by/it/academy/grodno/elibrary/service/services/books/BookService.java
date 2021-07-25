@@ -181,6 +181,11 @@ public class BookService implements IBookService {
         return pageBookDto;
     }
 
+    @Override
+    public Page<BookDto> findAllByLanguage(String language, Pageable pageable) {
+        return bookMapper.toPageDto(bookJpaRepository.findAllByLanguage(language, pageable));
+    }
+
     private Book prepareBookToUpdating(Long id, BookDto entityDto){
         Optional<Book> optionalBook = bookJpaRepository.findById(id);
         if (optionalBook.isPresent()) {
