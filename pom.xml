@@ -26,6 +26,8 @@
         <module>elibrary-web</module>
         <module>elibrary-utils</module>
         <module>elibrary-entity-metadata</module>
+        <module>elibrary-jms-log-handler</module>
+        <module>elibrary-jms-sender</module>
     </modules>
 
     <properties>
@@ -91,6 +93,16 @@
             <dependency>
                 <groupId>by.it.academy.grodno.elibrary</groupId>
                 <artifactId>elibrary-web</artifactId>
+                <version>0.0.1-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>by.it.academy.grodno.elibrary</groupId>
+                <artifactId>elibrary-jms-sender</artifactId>
+                <version>0.0.1-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>by.it.academy.grodno.elibrary</groupId>
+                <artifactId>elibrary-jms-log-handler</artifactId>
                 <version>0.0.1-SNAPSHOT</version>
             </dependency>
 

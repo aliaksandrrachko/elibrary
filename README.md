@@ -33,6 +33,7 @@ When you execute the code above the application will run.
 ```shell
 docker run --name mysql-docker-container -e MYSQL_ROOT_PASSWORD=1234 -d mysql:8.0.22
 ```
+[comment]: <> (sudo docker run --name elibrary-mysql -e MYSQL_ROOT_PASSWORD=1234 -e MYSQL_DATABASE=by_it_academy_grodno_elibrary -dp 3306:3306 mysql:8.0.22)
 
 2. Building the docker image from project
 ```shell
