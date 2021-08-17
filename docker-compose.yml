@@ -13,6 +13,7 @@ services:
       - SPRING_DATASOURCE_USERNAME=postgres
       - SPRING_DATASOURCE_PASSWORD=1234
       - SPRING_JPA_HIBERNATE_DDL_AUTO=none
+      - SPRING_CONFIG_LOCATION=file:./application.properties,file:./server.properties
     ports:
     - 8085:8085
 
