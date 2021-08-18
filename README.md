@@ -29,10 +29,12 @@ When you execute the code above the application will run.
 
 ### Using docker
 
+#### Simple docker
 1. Create a docker container for MySQL
 ```shell
 docker run --name mysql-docker-container -e MYSQL_ROOT_PASSWORD=1234 -d mysql:8.0.22
 ```
+[comment]: <> (docker run --name elibrary-mysql-data -v elibrary-mysql-data:/var/lib/mysql -e MYSQL_ROOT_PASSWORD=1234 -dp 3306:3306 mysql:latest)
 
 2. Building the docker image from project
 ```shell
@@ -42,6 +44,13 @@ docker build -f Dockerfile -t elibrary-spring-boot .
 3. Running the built docker image
 ```shell
 docker run -t --name elibrary-spring-boot-container --link mysql-docker-container:mysql -p 8080:8080 elibrary-spring-boot
+```
+[comment]: <> (docker run -t --name elibrary-spring-boot --link elibrary-mysql-data:mysql -p 8080:8080 elibrary-spring-boot)
+
+#### Using docker compose
+
+```shell
+docker-compose up
 ```
 
 ## Developing
