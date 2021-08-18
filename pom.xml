@@ -26,11 +26,13 @@
         <module>elibrary-web</module>
         <module>elibrary-utils</module>
         <module>elibrary-entity-metadata</module>
+        <module>elibrary-logger</module>
     </modules>
 
     <properties>
         <java.version>1.8</java.version>
         <io.springfox.swagger2>3.0.0</io.springfox.swagger2>
+        <net.logstash.logback.version>6.6</net.logstash.logback.version>
     </properties>
 
     <dependencies>
@@ -93,6 +95,11 @@
                 <artifactId>elibrary-web</artifactId>
                 <version>0.0.1-SNAPSHOT</version>
             </dependency>
+            <dependency>
+                <groupId>by.it.academy.grodno.elibrary</groupId>
+                <artifactId>elibrary-logger</artifactId>
+                <version>0.0.1-SNAPSHOT</version>
+            </dependency>
 
             <dependency>
                 <groupId>javax.persistence</groupId>
@@ -149,6 +156,13 @@
                 <groupId>io.springfox</groupId>
                 <artifactId>springfox-bean-validators</artifactId>
                 <version>${io.springfox.swagger2}</version>
+            </dependency>
+
+            <!--  ELK STACK  -->
+            <dependency>
+                <groupId>net.logstash.logback</groupId>
+                <artifactId>logstash-logback-encoder</artifactId>
+                <version>${net.logstash.logback.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
