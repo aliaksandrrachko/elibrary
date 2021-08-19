@@ -44,11 +44,17 @@
         </rollingPolicy>
     </appender>
 
+    <appender name="LOGSTASH" class="net.logstash.logback.appender.LogstashTcpSocketAppender">
+        <destination>127.0.0.1:4560</destination>
+        <encoder charset="UTF-8" class="net.logstash.logback.encoder.LogstashEncoder" />
+    </appender>
+
     <root level="INFO">
         <appender-ref ref="CONSOLE" />
         <appender-ref ref="ROLLING_FILE"/>
         <appender-ref ref="FILE"/>
         <appender-ref ref="FILEBEAT_APPENDER"/>
+        <appender-ref ref="LOGSTASH"/>
     </root>
 
     <logger name="by.it.academy.grodno.elibrary.rest.controllers" level="debug" additivity="false">

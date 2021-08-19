@@ -1,10 +1,31 @@
 version: '3.1'
 
 services:
+
+#  elk:
+#    image: sebp/elk
+#    ports:
+#      - "5601:5601"
+#      - "9200:9200"
+#      - "5044:5044"
+
+  elk:
+    image: elibrary-spring-boot-elk:latest
+    build:
+      context: elk
+      dockerfile: Dockerfile
+    ports:
+      - "5601:5601"
+      - "9200:9200"
+      # Ports unused for access from the host so far
+      #- "5044:5044"
+      #- "4560:4560"
+
   elibrary:
     image: elibrary-spring-boot:latest
     build:
       context: .
+      dockerfile: Dockerfile
     container_name: elibrary-spring-boot
     depends_on:
       - elibrary-mysql-data
@@ -15,6 +36,8 @@ services:
       - SPRING_JPA_HIBERNATE_DDL_AUTO=none
     ports:
       - "8080:8080"
+    volumes:
+      - app-logs:/logs
 
   elibrary-mysql-data:
     image: mysql:latest
@@ -28,3 +51,6 @@ services:
       test: [ "CMD", "mysqladmin" ,"ping", "-h", "localhost" ]
       timeout: 20s
       retries: 10
+
+volumes:
+  app-logs:

@@ -40,3 +40,7 @@ build/
 
 ### Folder of drafts ###
 .drafts
+
+.mvn
+mvnw
+mvnw.cmd

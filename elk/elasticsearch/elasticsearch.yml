@@ -1,0 +1,17 @@
+---
+## Default Elasticsearch configuration from Elasticsearch base image.
+## https://github.com/elastic/elasticsearch/blob/master/distribution/docker/src/docker/config/elasticsearch.yml
+#
+cluster.name: "docker-cluster"
+# 모든 네트워크 접근 허용
+network.host: 0.0.0.0
+
+  ## X-Pack settings
+  ## see https://www.elastic.co/guide/en/elasticsearch/reference/current/setup-xpack.html
+  # X-Pack은 보안, 알림, 모니터링, 보고, 그래프 기능을 설치하기 편리한 단일 패키지로 번들 구성한 Elastic Stack 확장 프로그램
+
+# 30일 동안 x-pack 모든 기능 사용 가능
+xpack.license.self_generated.type: trial
+# 6.8 버전부터 시큐리티 기능 제공, 활성화 시 request에 id,pw를 파라미터로 담아서 보내주어야 한다.
+xpack.security.enabled: true
+xpack.monitoring.collection.enabled: true
