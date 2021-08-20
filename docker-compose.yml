@@ -1,60 +1,174 @@
-version: '3.1'
+version: '3.2'
 
 services:
 
-#  elasticsearch:
-#    image: docker.elastic.co/elasticsearch/elasticsearch:7.2.0
-#    ports:
-#      - "9200:9200"
-#    environment:
-#      - "discovery.type=single-node"
-#    volumes:
-#      - ./elk/elasticsearch/data:/usr/share/elasticsearch/data:rw              # Persistence data
-#
-#  logstash:
-#    image: docker.elastic.co/logstash/logstash:7.2.0
-#    ports:
-#      - "25826:25826"
-#      - "5044:5044"
-#    volumes:
-#      - ./elk/logstash/pipeline:/usr/share/logstash/pipeline:ro                # Pipeline configuration
-#    restart: on-failure
-#    depends_on:
-#      - elasticsearch
-#
-#  kibana:
-#    image: docker.elastic.co/kibana/kibana:7.2.0
-#    ports:
-#      - "5601:5601"
-#    restart: on-failure
-#    depends_on:
-#      - elasticsearch
-#
+  # https://github.com/elastic/stack-docker.git
+  # https://github.com/deviantony/docker-elk.git  # working except logstash appender!!!
+
+  elasticsearch:
+    build:
+      context: elk/elasticsearch
+      args:
+        ELK_VERSION: $ELK_VERSION
+    volumes:
+      - type: bind
+        source: ./elk/elasticsearch/config/elasticsearch.yml
+        target: /usr/share/elasticsearch/config/elasticsearch.yml
+        read_only: true
+#   I don't know why it don't work.
+#      - type: volume
+#        source: ./elk/elasticsearch/data
+#        target: /usr/share/elasticsearch/data
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    environment:
+      ES_JAVA_OPTS: "-Xmx256m -Xms256m"
+      ELASTIC_PASSWORD: changeme
+      # Use single node discovery in order to disable production mode and avoid bootstrap checks.
+      # see: https://www.elastic.co/guide/en/elasticsearch/reference/current/bootstrap-checks.html
+      discovery.type: single-node
+    networks:
+      - elk
+    healthcheck:
+      test: curl --cacert /usr/share/elasticsearch/config/certs/ca/ca.crt -s https://localhost:9200 >/dev/null; if [[ $$? == 52 ]]; then echo 0; else echo 1; fi
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  logstash:
+    build:
+      context: elk/logstash
+      args:
+        ELK_VERSION: $ELK_VERSION
+    volumes:
+      - type: bind
+        source: ./elk/logstash/config/logstash.yml
+        target: /usr/share/logstash/config/logstash.yml
+        read_only: true
+      - type: bind
+        source: ./elk/logstash/pipeline
+        target: /usr/share/logstash/pipeline
+        read_only: true
+    ports:
+      - "5044:5044"
+      - "5000:5000/tcp"
+      - "5000:5000/udp"
+      - "9600:9600"
+    environment:
+      LS_JAVA_OPTS: "-Xmx256m -Xms256m"
+    networks:
+      - elk
+    depends_on:
+      - elasticsearch
+    healthcheck:
+      test: bin/logstash -t
+      interval: 60s
+      timeout: 50s
+      retries: 5
+
+  kibana:
+    build:
+      context: elk/kibana
+      args:
+        ELK_VERSION: $ELK_VERSION
+    volumes:
+      - type: bind
+        source: ./elk/kibana/config/kibana.yml
+        target: /usr/share/kibana/config/kibana.yml
+        read_only: true
+    ports:
+      - "5601:5601"
+    networks:
+      - elk
+    depends_on:
+      - elasticsearch
+    healthcheck:
+      test: curl --cacert /usr/share/elasticsearch/config/certs/ca/ca.crt -s https://localhost:5601 >/dev/null; if [[ $$? == 52 ]]; then echo 0; else echo 1; fi
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
 #  filebeat:
-#    image: docker.elastic.co/beats/filebeat:7.2.0
+#    build:
+#      context: elk/filebeat
+#    #command: --strict.perms=false -e  # -e flag to log to stderr and disable syslog/file output
+#    # If the host system has logs at "/var/log", mount them at "/mnt/log"
+#    # inside the container, where Filebeat can find them.
+#    # volumes: ['/var/log:/mnt/log:ro']
+##    secrets:
+##      - source: ./elk/filebeat.yml
+##        target: /usr/share/filebeat/filebeat.yml
+##      - source: filebeat.keystore
+##        target: /usr/share/filebeat/filebeat.keystore
+##      - source: ca.crt
+##        target: /usr/share/filebeat/certs/ca/ca.crt
 #    volumes:
-#      - ./elk/filebeat/filebeat.docker.yml:/usr/share/filebeat/filebeat.yml:ro # Configuration file
-#      - /var/lib/docker/containers:/var/lib/docker/containers:ro               # Docker logs
-#      - /var/run/docker.sock:/var/run/docker.sock:ro                           # Additional information about containers
-#      - ./elk/filebeat/data:/usr/share/filebeat/data:rw                        # Persistence data
-#    user: root                                                                 # Allow access to log files and docker.sock
-#    restart: on-failure
+#      - type: bind
+#        source: ./elk/filebeat/filebeat.yml
+#        target: /usr/share/filebeat/filebeat.yml
+##      - './scripts/setup-beat.sh:/usr/local/bin/setup-beat.sh:ro'
+#    networks:
+#      - elk
 #    depends_on:
-#      - logstash
+#      - elasticsearch
+#      - kibana
+#    healthcheck:
+#      test: filebeat test config
+#      interval: 30s
+#      timeout: 15s
+#      retries: 5
+
+#  filebeat:
+#    image: docker.elastic.co/beats/filebeat:${ELASTIC_VERSION:-7.9.1}
+#    # https://github.com/docker/swarmkit/issues/1951
+#    hostname: "{{.Node.Hostname}}-filebeat"
+#    # Need to override user so we can access the log files, and docker.sock
+#    user: root
+#    networks:
+#      - elastic
+#    configs:
+#      - source: fb_config
+#        target: /usr/share/filebeat/filebeat.yml
+#    volumes:
+#      - filebeat:/usr/share/filebeat/data
+#      - /var/run/docker.sock:/var/run/docker.sock
+#      # This is needed for filebeat to load container log path as specified in filebeat.yml
+#      - /var/lib/docker/containers/:/var/lib/docker/containers/:ro
+#
+#      # # This is needed for filebeat to load jenkins build log path as specified in filebeat.yml
+#      # - /var/lib/docker/volumes/jenkins_home/_data/jobs/:/var/lib/docker/volumes/jenkins_home/_data/jobs/:ro
+#
+#      # This is needed for filebeat to load logs for system and auth modules
+#      - /var/log/:/var/log/:ro
+#      # This is needed for filebeat to load logs for auditd module. you might have to install audit system
+#      # on ubuntu first (sudo apt-get install -y auditd audispd-plugins)
+#      - /var/log/audit/:/var/log/audit/:ro
+#    environment:
+#      - ELASTICSEARCH_HOST=${ELASTICSEARCH_HOST:-node1}
+#      - KIBANA_HOST=${KIBANA_HOST:-node1}
+#      - ELASTICSEARCH_USERNAME=${ELASTICSEARCH_USERNAME:-elastic}
+#      - ELASTICSEARCH_PASSWORD=${ELASTICSEARCH_PASSWORD:-changeme}
+#    # disable strict permission checks
+#    command: [ "--strict.perms=false" ]
+#    deploy:
+#      mode: global
 
   elibrary:
     image: elibrary-spring-boot:latest
     build:
+      # The docker build command builds an image from a Dockerfile and a context.
       context: .
+      # The build’s context is the set of files at a specified location PATH or URL
+      # So, a PATH includes any subdirectories and the URL includes the repository and its submodules.
       dockerfile: Dockerfile
     container_name: elibrary-spring-boot
     depends_on:
       - elibrary-mysql-data
+      - elasticsearch
+      - kibana
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:mysql://elibrary-mysql-data:3306/by_it_academy_grodno_elibrary
-      - SPRING_DATASOURCE_USERNAME=root
-      - SPRING_DATASOURCE_PASSWORD=1234
-      - SPRING_JPA_HIBERNATE_DDL_AUTO=none
+      - SPRING_PROFILES_ACTIVE=dev
     ports:
       - "8080:8080"
     volumes:
@@ -73,5 +187,10 @@ services:
       timeout: 20s
       retries: 10
 
+networks:
+  elk:
+    driver: bridge
+
 volumes:
   app-logs:
+  elasticsearch:
