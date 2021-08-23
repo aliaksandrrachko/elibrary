@@ -1,7 +1,11 @@
+First conflict line 1
+Second line
+Third conflict line
 First conflict line in second branch
 Second conflict line in second branch
 
 
+Fifth line
 
 
 Third conflict line in second branch
