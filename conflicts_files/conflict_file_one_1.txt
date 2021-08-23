@@ -1,0 +1,7 @@
+First conflict line in second branch
+Second conflict line in second branch
+
+
+
+
+Third conflict line in second branch
