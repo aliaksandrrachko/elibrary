@@ -3,7 +3,9 @@ package by.it.academy.grodno.elibrary.controller.constants;
 public final class Template {
     private Template() { }
 
-    public interface Error{
+    public static final class Error{
+        private Error(){}
+
         public static final String TEMPLATE_NAME = "error";
         public static final String ERROR_TEXT = "error";
         public static final String TIMESTAMP = "timestamp";
