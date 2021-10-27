@@ -139,3 +139,12 @@ Track, version, and deploy database changes with Liquibase
 ## Licensing
 
 No license
+
+### OAuth2 debug stack
+
+* OAuth2AuthorizationRequestRedirectFilter -> 
+(endpoint: /oauth2/authorization/{provider} 
+ex. /oauth2/authorization/google) redirect to provider's authorization page;
+* Some unknown class whose receive authorization_code and exchange it to access_token. 
+Maybe it DefaultAuthorizationCodeTokenResponseClient;
+* DefaultOAuth2UserService -> load user using OAuth2AccessToken (exchange it to data);
