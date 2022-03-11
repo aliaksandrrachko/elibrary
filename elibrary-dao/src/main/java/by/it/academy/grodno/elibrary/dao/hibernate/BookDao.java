@@ -7,10 +7,14 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaDelete;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.CriteriaUpdate;
 import javax.persistence.criteria.Order;
+import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -49,6 +53,32 @@ public class BookDao extends AGenericDao<Book, Long> implements IBookDao {
         return new PageImpl<>(bookList, pageable, total);
     }
 
+    @Override
+    public int deleteByIsbn(String isbn){
+        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+        CriteriaDelete<Book> dCb = cb.createCriteriaDelete(getGenericClass());
+        Root<Book> root = dCb.from(getGenericClass());
+
+        dCb.where(cb.or(cb.equal(root.get("isbn13"), isbn), cb.equal(root.get("isbn10"), isbn)));
+
+        Query deleteQuery = entityManager.createQuery(dCb);
+        return deleteQuery.executeUpdate();
+    }
+
+    @Override
+    public void updateDescription(Book book){
+        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+        CriteriaUpdate<Book> uCb = cb.createCriteriaUpdate(getGenericClass());
+        Root<Book> root = uCb.from(getGenericClass());
+
+        uCb.set("description", book.getDescription());
+        uCb.where(cb.equal(root.get("id"), book.getId()));
+
+        Query query = entityManager.createQuery(uCb);
+        query.executeUpdate();
+    }
+
+    @Override
     public Page<Book> findAllBetween(LocalDateTime from, LocalDateTime to, Pageable pageable) {
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();
         CriteriaQuery<Book> cq = cb.createQuery(getGenericClass());
